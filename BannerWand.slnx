@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Release-1.2.12" />
+    <BuildType Name="Release-1.3" />
+  </Configurations>
+  <Project Path="BannerWand-1.2.12/BannerWand-1.2.12.csproj" Id="a62f2de8-d222-4353-aa42-df7c5d345905">
+    <BuildType Solution="Debug|*" Project="Debug" />
+    <BuildType Solution="Release|*" Project="Release-1.2.12" />
+    <BuildType Solution="Release-1.2.12|*" Project="Release-1.2.12" />
+  </Project>
+  <Project Path="BannerWand-1.3/BannerWand-1.3.csproj" Id="4aa06df7-57fa-46aa-b6e2-980d6cdfe41b">
+    <BuildType Solution="Debug|*" Project="Debug" />
+    <BuildType Solution="Release|*" Project="Release-1.3" />
+    <BuildType Solution="Release-1.3|*" Project="Release-1.3" />
+  </Project>
+</Solution>

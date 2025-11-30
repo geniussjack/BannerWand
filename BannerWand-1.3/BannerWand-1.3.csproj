@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4AA06DF7-57FA-46AA-B6E2-980D6CDFE41B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BannerWand</RootNamespace>
+    <AssemblyName>BannerWand</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <LangVersion>14.0</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\Win64_Shipping_Client\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-1.3|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release-1.3\Win64_Shipping_Client\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\Bannerlord.Harmony\bin\Win64_Shipping_Client\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MCMv5">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\Bannerlord.MBOptionScreen\bin\Win64_Shipping_Client\MCMv5.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.CampaignSystem">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.CampaignSystem.ViewModelCollection">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Core">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.DotNet">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.DotNet.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Engine">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Engine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.InputSystem">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Library">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Library.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Localization">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.Localization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.ObjectSystem">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.ObjectSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Behaviors\CombatCheatBehavior.cs" />
+    <Compile Include="Behaviors\FoodCheatBehavior.cs" />
+    <Compile Include="Behaviors\NPCCheatBehavior.cs" />
+    <Compile Include="Behaviors\PlayerCheatBehavior.cs" />
+    <Compile Include="Behaviors\SkillXPCheatBehavior.cs" />
+    <Compile Include="Behaviors\SmithingUnlockBehavior.cs" />
+    <Compile Include="Constants\GameConstants.cs" />
+    <Compile Include="Constants\LogConstants.cs" />
+    <Compile Include="Constants\MessageConstants.cs" />
+    <Compile Include="Core\CheatManager.cs" />
+    <Compile Include="Core\HarmonyManager.cs" />
+    <Compile Include="Core\HarmonyManagerWrapper.cs" />
+    <Compile Include="Core\SubModule.cs" />
+    <Compile Include="Interfaces\ICampaignDataCache.cs" />
+    <Compile Include="Interfaces\IHarmonyManager.cs" />
+    <Compile Include="Interfaces\IModLogger.cs" />
+    <Compile Include="Interfaces\ITargetFilter.cs" />
+    <Compile Include="Models\CustomBarterModel.cs" />
+    <Compile Include="Models\CustomBuildingConstructionModel.cs" />
+    <Compile Include="Models\CustomGenericXpModel.cs" />
+    <Compile Include="Models\CustomMobilePartyFoodConsumptionModel.cs" />
+    <Compile Include="Models\CustomPartyMoraleModel.cs" />
+    <Compile Include="Models\CustomPartySpeedModel.cs" />
+    <Compile Include="Models\CustomPersuasionModel.cs" />
+    <Compile Include="Models\CustomSiegeEventModel.cs" />
+    <Compile Include="Models\CustomSmithingModel.cs" />
+    <Compile Include="Patches\BarterableValuePatch.cs" />
+    <Compile Include="Patches\InventoryCapacityPatch.cs" />
+    <Compile Include="Patches\ItemBarterablePatch.cs" />
+    <Compile Include="Patches\RelationshipBoostPatch.cs" />
+    <Compile Include="Patches\RenownMultiplierPatch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\CheatSettings.cs" />
+    <Compile Include="Settings\CheatTargetSettings.cs" />
+    <Compile Include="Utils\CampaignDataCache.cs" />
+    <Compile Include="Utils\CampaignDataCacheWrapper.cs" />
+    <Compile Include="Utils\CheatExtensions.cs" />
+    <Compile Include="Utils\DictionaryPool.cs" />
+    <Compile Include="Utils\ModLogger.cs" />
+    <Compile Include="Utils\ModLoggerWrapper.cs" />
+    <Compile Include="Utils\TargetFilter.cs" />
+    <Compile Include="Utils\TargetFilterWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SubModule.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ModuleData\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <PreBuildEvent>
+REM Очищаем старые папки bin перед сборкой
+if exist "$(ProjectDir)bin\Debug" rmdir /S /Q "$(ProjectDir)bin\Debug" 2&gt;nul
+if exist "$(ProjectDir)bin\Release" rmdir /S /Q "$(ProjectDir)bin\Release" 2&gt;nul
+if exist "$(ProjectDir)bin\Release-1.3" rmdir /S /Q "$(ProjectDir)bin\Release-1.3" 2&gt;nul
+    </PreBuildEvent>
+    <PostBuildEvent>
+REM Удаляем лишние файлы из Win64_Shipping_Client
+del /F /Q "$(TargetDir)*.pdb" 2&gt;nul
+del /F /Q "$(TargetDir)*.xml" 2&gt;nul
+del /F /Q "$(TargetDir)TaleWorlds.*.dll" 2&gt;nul
+REM Очищаем старую папку bin/BannerWand перед копированием
+if exist "$(ProjectDir)bin\BannerWand" rmdir /S /Q "$(ProjectDir)bin\BannerWand" 2&gt;nul
+REM Создаём структуру папок в bin/BannerWand
+if not exist "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client" mkdir "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client"
+if not exist "$(ProjectDir)bin\BannerWand\ModuleData\Languages" mkdir "$(ProjectDir)bin\BannerWand\ModuleData\Languages"
+REM Копируем DLL
+copy /Y "$(TargetDir)BannerWand.dll" "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll"
+REM Копируем SubModule.xml из папки проекта
+copy /Y "$(MSBuildProjectDirectory)\SubModule.xml" "$(MSBuildProjectDirectory)\bin\BannerWand\SubModule.xml"
+REM Копируем ModuleData
+xcopy /Y /E /I "$(ProjectDir)ModuleData\Languages" "$(ProjectDir)bin\BannerWand\ModuleData\Languages\"
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release-1.3'">
+    <PostBuildEvent>
+REM Удаляем лишние файлы из Win64_Shipping_Client
+del /F /Q "$(TargetDir)*.pdb" 2&gt;nul
+del /F /Q "$(TargetDir)*.xml" 2&gt;nul
+del /F /Q "$(TargetDir)TaleWorlds.*.dll" 2&gt;nul
+REM Создаём структуру папок
+if not exist "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\bin\Win64_Shipping_Client" mkdir "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\bin\Win64_Shipping_Client"
+if not exist "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\ModuleData\Languages" mkdir "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\ModuleData\Languages"
+REM Копируем DLL
+copy /Y "$(TargetDir)BannerWand.dll" "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll"
+REM Копируем SubModule.xml из папки проекта
+copy /Y "$(MSBuildProjectDirectory)\SubModule.xml" "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\SubModule.xml"
+REM Копируем ModuleData
+xcopy /Y /E /I "$(ProjectDir)ModuleData\Languages" "D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\ModuleData\Languages\"
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

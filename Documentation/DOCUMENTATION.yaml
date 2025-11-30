@@ -1,0 +1,74 @@
+﻿id: BannerWand
+name: BannerWand
+version: 1.0.0
+author: geniussjack
+description: |
+  Comprehensive cheat mod for Mount & Blade II: Bannerlord with configurable options.
+  Inspired by WeMod (Wand) cheats and integrated directly into the game.
+
+features:
+  player:
+    - Unlimited Health
+    - Unlimited Stamina
+    - One Hit Kill
+    - Instant Skill Leveling
+    - Unlimited Gold
+    - Unlimited Influence
+    - Unlimited Renown
+    - Max Relations with Everyone
+    - Unlimited Party Morale
+    - Unlimited Party Movement Speed
+    - Instant Recruitment
+    - Instant Prisoner Recruitment
+    - Instant Building Construction
+    - Free Crafting (No Materials Required)
+    - Free Shop Purchases
+    - Unlimited Inventory Weight
+    
+  npc:
+    - Freeze Enemy Movement Speed
+    - Weaken Enemy Troops
+    - Instant Enemy Defeat in Sieges
+    
+  game:
+    - Stop Time (Pause Campaign Time)
+    - Fast Time (Speed Up Campaign Time)
+    - Auto-Win Persuasion
+    - Instant Prisoner Recruitment (Global)
+    - Instant Building Construction (Global)
+
+configuration:
+  - All features can be enabled/disabled individually via MCM (Mod Configuration Menu)
+  - Separate settings for player and NPC cheats
+  - Target filtering options (apply cheats to player only, all heroes, specific clans, kingdoms, etc.)
+
+dependencies:
+  required:
+    - Bannerlord.Harmony: ">=2.3.3"
+    - Bannerlord.ButterLib: ">=2.10.0"
+    - Bannerlord.UIExtenderEx: ">=2.13.0"
+    - Bannerlord.MBOptionScreen (MCMv5): ">=5.10.1"
+
+compatibility:
+  game_version: "v1.2.12"
+  platform: "PC (Steam/Epic/GOG)"
+  
+installation:
+  - Extract the mod folder to "Mount & Blade II Bannerlord/Modules/"
+  - Enable the mod in the game launcher
+  - Ensure all dependencies are installed and loaded before this mod
+  
+logs:
+  location: "C:/ProgramData/Mount and Blade II Bannerlord/logs/"
+  files:
+    - "rgl_log_[date].txt - Main game log with mod messages"
+    - "error_log_[date].txt - Error log if crashes occur"
+
+feedback:
+  - Bug reports and feature requests are welcome
+  - Please include log files when reporting issues
+  - Report issues via Nexus Mods comment section or bug tracker
+
+credits:
+  inspiration: "WeMod (Wand) cheats"
+  framework: "MCMv5 for configuration interface"

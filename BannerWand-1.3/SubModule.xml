@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Module>
+	<Name value="BannerWand"/>
+	<Id value="BannerWand"/>
+	<Version value="v1.0.7"/>
+	<SingleplayerModule value="true"/>
+	<MultiplayerModule value="false"/>
+	<Official value="false"/>
+	<DependedModules>
+		<!-- Core game modules -->
+		<DependedModule Id="Native"/>
+		<DependedModule Id="SandBoxCore"/>
+		<DependedModule Id="Sandbox"/>
+		<DependedModule Id="CustomBattle"/>
+		<DependedModule Id="StoryMode"/>
+		<!-- MCM dependencies -->
+		<DependedModule Id="Bannerlord.Harmony"/>
+		<DependedModule Id="Bannerlord.MBOptionScreen"/>
+	</DependedModules>
+	<SubModules>
+		<SubModule>
+			<Name value="BannerWand"/>
+			<DLLName value="BannerWand.dll"/>
+			<SubModuleClassType value="BannerWand.Core.SubModule"/>
+			<Tags>
+				<Tag key="DedicatedServerType" value="none"/>
+				<Tag key="IsNoRenderModeElement" value="false"/>
+			</Tags>
+		</SubModule>
+	</SubModules>
+</Module>
+
