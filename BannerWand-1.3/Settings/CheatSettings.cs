@@ -152,6 +152,14 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool MaxAllCharacterRelationships { get; set; } = false;
 
+        /// <summary>
+        /// Makes player completely invisible and undetectable in stealth missions.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/> and <see cref="Patches.StealthInvisibilityPatch"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_StealthInvisibility}Stealth Invisibility", Order = 10, RequireRestart = false, HintText = "{=BW_Player_StealthInvisibility_Hint}Player is completely invisible and undetectable in stealth missions.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool StealthInvisibility { get; set; } = false;
+
         #endregion
 
         #region Inventory Category

@@ -59,6 +59,9 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Relaciones Máximas con Todos" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Establece instantáneamente la relación a 100 con todos los personajes." />
 
+		<string id="BW_Player_StealthInvisibility" text="Invisibilidad Sigilosa" />
+		<string id="BW_Player_StealthInvisibility_Hint" text="El jugador es completamente invisible e indetectable en misiones sigilosas." />
+
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Modificar Oro" />
 		<string id="BW_Inventory_EditGold_Hint" text="Agregar o quitar oro (se aplica una vez por clic)." />

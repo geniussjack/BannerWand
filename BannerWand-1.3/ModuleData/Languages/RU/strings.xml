@@ -59,6 +59,9 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
 
+		<string id="BW_Player_StealthInvisibility" text="Невидимость в стелс-миссиях" />
+		<string id="BW_Player_StealthInvisibility_Hint" text="Игрок полностью невидим и незаметен в стелс-миссиях." />
+
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Изменить золото" />
 		<string id="BW_Inventory_EditGold_Hint" text="Добавить или удалить золото (применяется один раз при нажатии кнопки)." />

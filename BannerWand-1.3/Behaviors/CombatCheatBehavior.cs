@@ -105,6 +105,7 @@ namespace BannerWand.Behaviors
                 ApplyUnlimitedHorseHealth();
                 ApplyOneHitKills();
                 ApplyUnlimitedAmmo();
+                ApplyStealthInvisibility();
 
                 // Note: Movement speed for campaign map is handled in CustomPartySpeedModel
 
@@ -486,6 +487,109 @@ namespace BannerWand.Behaviors
                 {
                     agent.Health = GameConstants.OneHitKillHealthThreshold;
                 }
+            }
+        }
+
+        #endregion
+
+        #region Stealth Invisibility
+
+        /// <summary>
+        /// Applies stealth invisibility to player agent in stealth missions.
+        /// Attempts to use native API if available, otherwise relies on Harmony patches.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method attempts to use native Bannerlord API to make the player invisible.
+        /// If the API is not available or doesn't work, the Harmony patches will handle detection prevention.
+        /// </para>
+        /// <para>
+        /// Native API attempts:
+        /// - SetVisibilityLevel: If available, sets player visibility to minimum
+        /// - SetVisibility: Alternative method for setting visibility
+        /// </para>
+        /// <para>
+        /// Performance: Only runs when cheat is enabled and player agent exists.
+        /// Uses reflection to check for API availability, so minimal overhead when disabled.
+        /// </para>
+        /// </remarks>
+        private static void ApplyStealthInvisibility()
+        {
+            // Early returns for disabled cheat or missing agent
+            if (!Settings.StealthInvisibility || !TargetSettings.ApplyToPlayer)
+            {
+                return;
+            }
+
+            Agent? playerAgent = Mission.Current?.MainAgent;
+            if (playerAgent?.IsActive() != true)
+            {
+                return;
+            }
+
+            try
+            {
+                // Attempt to use native API for invisibility (if available)
+                // This uses reflection to check for methods that may not exist in all game versions
+                System.Type agentType = typeof(Agent);
+                System.Reflection.MethodInfo? setVisibilityMethod = null;
+
+                // Try SetVisibilityLevel method (if available)
+                setVisibilityMethod = agentType.GetMethod("SetVisibilityLevel", 
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+                if (setVisibilityMethod != null)
+                {
+                    // Set visibility to minimum (0 or false depending on API)
+                    object? visibilityValue = 0; // Try integer first
+                    try
+                    {
+                        setVisibilityMethod.Invoke(playerAgent, new object[] { visibilityValue });
+                        ModLogger.Debug("[Stealth] Applied invisibility via SetVisibilityLevel API");
+                        return;
+                    }
+                    catch
+                    {
+                        // Try with float value
+                        visibilityValue = 0f;
+                        try
+                        {
+                            setVisibilityMethod.Invoke(playerAgent, new object[] { visibilityValue });
+                            ModLogger.Debug("[Stealth] Applied invisibility via SetVisibilityLevel API (float)");
+                            return;
+                        }
+                        catch
+                        {
+                            // API call failed, continue to Harmony patch fallback
+                        }
+                    }
+                }
+
+                // Try alternative SetVisibility method
+                setVisibilityMethod = agentType.GetMethod("SetVisibility", 
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+                if (setVisibilityMethod != null)
+                {
+                    try
+                    {
+                        setVisibilityMethod.Invoke(playerAgent, new object[] { false });
+                        ModLogger.Debug("[Stealth] Applied invisibility via SetVisibility API");
+                        return;
+                    }
+                    catch
+                    {
+                        // API call failed, continue to Harmony patch fallback
+                    }
+                }
+
+                // Native API not available - Harmony patches will handle detection prevention
+                // This is expected behavior if the API doesn't exist in this game version
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't break the game - Harmony patches will still work
+                ModLogger.Debug($"[Stealth] Native API not available or failed: {ex.Message}. Using Harmony patches instead.");
             }
         }
 

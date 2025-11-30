@@ -59,6 +59,9 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Max All Character Relationships" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Instantly sets relationship to 100 with all characters." />
 
+		<string id="BW_Player_StealthInvisibility" text="Stealth Invisibility" />
+		<string id="BW_Player_StealthInvisibility_Hint" text="Player is completely invisible and undetectable in stealth missions." />
+
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edit Gold" />
 		<string id="BW_Inventory_EditGold_Hint" text="Add or remove gold (applied once per button press)." />

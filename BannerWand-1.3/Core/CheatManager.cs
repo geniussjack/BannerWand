@@ -634,6 +634,11 @@ namespace BannerWand.Core
                     activeCheatCount++;
                 }
 
+                if (Settings.StealthInvisibility)
+                {
+                    activeCheatCount++;
+                }
+
                 if (Settings.UnlimitedFood)
                 {
                     activeCheatCount++;
@@ -793,6 +798,7 @@ namespace BannerWand.Core
                         Settings.BarterAlwaysAccepted ||
                         Settings.UnlimitedSmithyStamina ||
                         Settings.MaxCharacterRelationship ||
+                        Settings.StealthInvisibility ||
                         Settings.UnlimitedFood ||
                         Settings.TradeItemsNoDecrease ||
                         Settings.MaxCarryingCapacity ||
