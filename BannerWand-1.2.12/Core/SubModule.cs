@@ -6,6 +6,7 @@ using BannerWandRetro.Utils;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
@@ -28,7 +29,7 @@ namespace BannerWandRetro.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.2.12 ONLY
-    /// This is the retro version for Bannerlord 1.2.12
+    /// Mod Version: 1.0.8
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
@@ -48,7 +49,8 @@ namespace BannerWandRetro.Core
             // Initialize logger first - critical for all subsequent operations
             ModLogger.Initialize();
             ModLogger.Log("=== BannerWand Initialization ===");
-            ModLogger.Log("Mod Version: 1.2.12-Retro");
+            string modVersion = VersionReader.GetModVersion();
+            ModLogger.Log($"Mod Version: {modVersion}");
             try
             {
                 // In Bannerlord 1.2.12, ApplicationVersion API differs from 1.3
@@ -162,10 +164,22 @@ namespace BannerWandRetro.Core
 
             using (ModLogger.BeginPerformanceScope("Game Start Initialization"))
             {
+                // Step 0: Show initialization message on first game launch (only once)
+                try
+                {
+                    string modVersion = VersionReader.GetModVersion();
+                    string initMessage = string.Format(MessageConstants.ModInitializedSuccessfullyFormat, modVersion);
+                    InformationManager.DisplayMessage(new InformationMessage(initMessage, GameConstants.SuccessColor));
+                }
+                catch (Exception imEx)
+                {
+                    ModLogger.Error($"Failed to display initialization message: {imEx.Message}");
+                }
+
                 // Step 1: Auto-reset dangerous settings (safety feature)
                 AutoResetDangerousSettings();
 
-                // Step 2: Initialize cheat manager
+                // Step 2: Initialize cheat manager (will show active cheats count)
                 CheatManager.Initialize();
                 ModLogger.Log("CheatManager initialized successfully");
 
@@ -442,8 +456,8 @@ namespace BannerWandRetro.Core
                     return;
                 }
 
-                // Re-initialize cheat manager for loaded game (silently, no duplicate logs)
-                CheatManager.Initialize();
+                // Re-initialize cheat manager for loaded game (silently, no duplicate messages)
+                CheatManager.Initialize(showMessage: false);
 
             }
             catch (Exception ex)
