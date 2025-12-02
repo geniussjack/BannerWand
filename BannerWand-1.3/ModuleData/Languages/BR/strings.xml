@@ -45,7 +45,7 @@
 		<string id="BW_Player_MaxMorale_Hint" text="O grupo do jogador sempre tem moral máxima." />
 
 		<string id="BW_Player_MovementSpeed" text="Definir Velocidade de Movimento" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Define o multiplicador de velocidade de movimento do jogador (0 = desativado)." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Define o multiplicador de velocidade de movimento do jogador (0 = desativado). As alterações são aplicadas no próximo dia do jogo." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Ofertas de Escambo Sempre Aceitas" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Todas as ofertas de escambo são automaticamente aceitas." />
@@ -173,5 +173,3 @@
 		<string id="BW_Target_InfoText" text="Múltiplas opções podem ser combinadas. Aplicações duplicadas são automaticamente prevenidas." />
 	</strings>
 </base>
-
-
