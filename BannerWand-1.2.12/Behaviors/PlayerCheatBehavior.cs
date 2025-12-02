@@ -144,10 +144,13 @@ namespace BannerWandRetro.Behaviors
 
         /// <summary>
         /// Called every in-game hour (approximately every 3-4 real-time seconds).
-        /// Handles frequent updates: food, smithing materials, time freeze, and game speed.
+        /// Handles frequent updates: food, smithing materials, time freeze, game speed, and INSTANT gold/influence.
         /// </summary>
         private void OnHourlyTick()
         {
+            // FIXED: Apply gold/influence HOURLY for near-instant response when user changes settings
+            ApplyGoldAndInfluence();
+
             // Smithing materials - ensure player has enough for unlimited smithing
             ApplyUnlimitedSmithyMaterials();
 
@@ -160,18 +163,14 @@ namespace BannerWandRetro.Behaviors
 
         /// <summary>
         /// Called every in-game day (approximately every minute of real time).
-        /// Handles less frequent updates: gold, influence, relationships.
+        /// Handles less frequent updates: relationships.
         /// </summary>
         private void OnDailyTick()
         {
-            // Apply one-time gold and influence changes
-            ApplyGoldAndInfluence();
-
             // Relationship management - instantly max all relationships
             ApplyMaxAllCharacterRelationships();
 
-            // Smithing materials - restore to 9999 daily
-            ApplyUnlimitedSmithyMaterials();
+            // Note: Smithing materials are now applied hourly in OnHourlyTick() for faster response
         }
 
         #endregion

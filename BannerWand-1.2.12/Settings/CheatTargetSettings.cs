@@ -259,7 +259,8 @@ namespace BannerWandRetro.Settings
                         {
                             foreach (Clan clan in kingdom.Clans)
                             {
-                                if (clan != null)
+                                // Exclude player clan - it's handled by ApplyToPlayerClanMembers
+                                if (clan != null && clan != Clan.PlayerClan)
                                 {
                                     foreach (Hero hero in clan.Heroes)
                                     {
@@ -281,7 +282,8 @@ namespace BannerWandRetro.Settings
                     {
                         foreach (Clan clan in playerKingdom.Clans)
                         {
-                            if (clan != null)
+                            // Exclude player clan - it's handled by ApplyToPlayerClanMembers
+                            if (clan != null && clan != Clan.PlayerClan)
                             {
                                 foreach (Hero hero in clan.Heroes)
                                 {

@@ -52,12 +52,12 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Tracks whether gold has been applied to prevent repeated application.
         /// </summary>
-        private bool _goldApplied;
+        private bool _goldApplied = false;
 
         /// <summary>
         /// Tracks whether influence has been applied to prevent repeated application.
         /// </summary>
-        private bool _influenceApplied;
+        private bool _influenceApplied = false;
 
         /// <summary>
         /// Stores the last time of day for freeze daytime feature.
@@ -144,10 +144,13 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called every in-game hour (approximately every 3-4 real-time seconds).
-        /// Handles frequent updates: food, smithing materials, time freeze, and game speed.
+        /// Handles frequent updates: food, smithing materials, time freeze, game speed, and INSTANT gold/influence.
         /// </summary>
         private void OnHourlyTick()
         {
+            // FIXED: Apply gold/influence HOURLY for near-instant response when user changes settings
+            ApplyGoldAndInfluence();
+
             // Smithing materials - ensure player has enough for unlimited smithing
             ApplyUnlimitedSmithyMaterials();
 
@@ -160,18 +163,14 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called every in-game day (approximately every minute of real time).
-        /// Handles less frequent updates: gold, influence, relationships.
+        /// Handles less frequent updates: relationships.
         /// </summary>
         private void OnDailyTick()
         {
-            // Apply one-time gold and influence changes
-            ApplyGoldAndInfluence();
-
             // Relationship management - instantly max all relationships
             ApplyMaxAllCharacterRelationships();
 
-            // Smithing materials - restore to 9999 daily
-            ApplyUnlimitedSmithyMaterials();
+            // Note: Gold/influence and smithing materials are now applied hourly in OnHourlyTick() for faster response
         }
 
         #endregion
@@ -180,14 +179,15 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Applies gold and influence changes to player only (no NPCs).
-        /// Uses a flag system to ensure one-time application.
+        /// Uses a flag system to ensure one-time application, but applies immediately when value changes from 0.
         /// </summary>
         /// <remarks>
         /// <para>
         /// The flag system works as follows:
-        /// - When setting changes from 0 to non-zero, apply the change and set flag
-        /// - When setting returns to 0, clear the flag
-        /// - This allows multiple applications by toggling: 0 → value → 0 → value
+        /// - When setting changes from 0 to non-zero, apply the change immediately and set flag
+        /// - When setting returns to 0, clear the flag (ready for next application)
+        /// - This allows immediate application: 0 → value applies immediately
+        /// - To apply again: value → 0 → newValue applies immediately
         /// </para>
         /// </remarks>
         private void ApplyGoldAndInfluence()
@@ -205,7 +205,7 @@ namespace BannerWand.Behaviors
             }
             else if (Settings.EditGold == 0)
             {
-                // Reset flag when setting returns to zero
+                // Reset flag when setting returns to zero (ready for next application)
                 _goldApplied = false;
             }
 
@@ -222,7 +222,7 @@ namespace BannerWand.Behaviors
             }
             else if (Settings.EditInfluence == 0)
             {
-                // Reset flag when setting returns to zero
+                // Reset flag when setting returns to zero (ready for next application)
                 _influenceApplied = false;
             }
         }
@@ -365,48 +365,52 @@ namespace BannerWand.Behaviors
             // DIAGNOSTIC: Log available smithing materials (only once per session)
             LogAvailableSmithingMaterials(itemRoster);
 
-            // Replenish all smithing materials to 9999
+            // Get target amount from settings (user-configurable)
+            int targetAmount = Settings.SmithyMaterialsQuantity;
+            int threshold = targetAmount - 10; // Replenish when below this
+
+            // Replenish all smithing materials to user-configured amount
             // Using CORRECT IDs for Bannerlord 1.3.x
 
             // Hardwood
-            AddSmithingMaterialIfLow(itemRoster, "hardwood", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "hardwood", targetAmount, threshold);
 
             // Charcoal
-            AddSmithingMaterialIfLow(itemRoster, "charcoal", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "charcoal", targetAmount, threshold);
 
             // Iron Ore (raw material)
-            AddSmithingMaterialIfLow(itemRoster, "iron", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "iron", targetAmount, threshold);
 
             // Crude Iron (tier 1 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot1", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot1", targetAmount, threshold);
 
             // Wrought Iron (tier 2 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot2", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot2", targetAmount, threshold);
 
             // Iron (tier 3 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot3", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot3", targetAmount, threshold);
 
             // Steel (tier 4 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot4", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot4", targetAmount, threshold);
 
             // Fine Steel (tier 5 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot5", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot5", targetAmount, threshold);
 
             // Thamaskene Steel (tier 6 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot6", GameConstants.SmithingMaterialTargetAmount);
+            AddSmithingMaterialIfLow(itemRoster, "ironIngot6", targetAmount, threshold);
         }
 
         /// <summary>
-        /// Adds smithing material to roster to maintain target amount (9999).
+        /// Adds smithing material to roster to maintain target amount.
         /// </summary>
         /// <param name="roster">The item roster to modify.</param>
         /// <param name="itemId">The Bannerlord item ID (e.g., "iron", "charcoal").</param>
-        /// <param name="targetAmount">The desired amount to maintain (9999).</param>
+        /// <param name="targetAmount">The desired amount to maintain.</param>
+        /// <param name="threshold">Replenish when stock falls below this threshold.</param>
         /// <remarks>
-        /// Threshold set to 9990 to restore materials if used during smithing sessions.
-        /// This ensures materials are replenished daily without excessive roster updates.
+        /// This ensures materials are replenished when used during smithing sessions.
         /// </remarks>
-        private static void AddSmithingMaterialIfLow(ItemRoster roster, string itemId, int targetAmount)
+        private static void AddSmithingMaterialIfLow(ItemRoster roster, string itemId, int targetAmount, int threshold)
         {
             try
             {
@@ -418,8 +422,8 @@ namespace BannerWand.Behaviors
 
                 int currentAmount = roster.GetItemNumber(item);
 
-                // Replenish if below 9990 (meaning materials were used)
-                if (currentAmount < 9990)
+                // Replenish if below threshold (meaning materials were used)
+                if (currentAmount < threshold)
                 {
                     int amountToAdd = targetAmount - currentAmount;
                     _ = roster.AddToCounts(item, amountToAdd);
