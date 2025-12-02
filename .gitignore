@@ -481,3 +481,20 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Bannerlord Mod specific files
+## Build outputs for specific game versions
+[Bb]in/[Rr]elease-*/
+[Bb]in/[Dd]ebug/
+
+## Mod log files
+*.log
+BannerWand*.log
+BannerWandRetro*.log
+
+## Temporary mod deployment directories
+[Bb]in/[Bb]annerWand/
+
+## Visual Studio project user files (may contain machine-specific paths)
+*.csproj.user
+*.csproj.DotSettings.user
