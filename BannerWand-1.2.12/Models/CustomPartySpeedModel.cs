@@ -1,4 +1,5 @@
 #nullable enable
+using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
@@ -35,27 +36,24 @@ namespace BannerWandRetro.Models
                     return base.CalculateBaseSpeed(mobileParty, includeDescriptions, additionalTroopOnFootCount, additionalTroopOnHorseCount);
                 }
 
-                // Check if player speed override is enabled
-                if (ShouldApplyPlayerSpeedOverride(mobileParty))
-                {
-                    // Create new ExplainedNumber with custom Base value
-                    ExplainedNumber customSpeed = new(Settings.MovementSpeed, includeDescriptions);
-
-                    // Log for debugging (only for player, only once per session to avoid spam)
-                    if (mobileParty == MobileParty.MainParty)
-                    {
-                        ModLogger.Debug($"Movement Speed override applied: Base +{Settings.MovementSpeed} (Player Party)");
-                    }
-
-                    return customSpeed;
-                }
-
-                // Get base speed from default implementation
+                // Get base speed from default implementation FIRST to preserve all modifiers
                 ExplainedNumber baseSpeed = base.CalculateBaseSpeed(
                     mobileParty,
                     includeDescriptions,
                     additionalTroopOnFootCount,
                     additionalTroopOnHorseCount);
+
+                // Check if player speed override is enabled
+                if (ShouldApplyPlayerSpeedOverride(mobileParty))
+                {
+                    ApplyPlayerSpeedBoost(ref baseSpeed);
+
+                    // Log for debugging (only for player, only once per session to avoid spam)
+                    if (mobileParty == MobileParty.MainParty)
+                    {
+                        ModLogger.Debug($"Movement Speed override applied: Result={baseSpeed.ResultNumber:F2} (Player Party)");
+                    }
+                }
 
                 // Apply AI slowdown if enabled
                 if (ShouldApplyAiSlowdown(mobileParty))
@@ -80,7 +78,33 @@ namespace BannerWandRetro.Models
         {
             return Settings!.MovementSpeed > 0f &&
                    mobileParty == MobileParty.MainParty &&
-                   TargetSettings!.ApplyToPlayer;
+                   TargetSettings!.ApplyToPlayer &&
+                   Campaign.Current != null;
+        }
+
+        /// <summary>
+        /// Applies player speed boost by calculating a multiplier factor.
+        /// Preserves all terrain, composition, and other modifiers.
+        /// </summary>
+        private void ApplyPlayerSpeedBoost(ref ExplainedNumber speed)
+        {
+            float desiredSpeed = Settings!.MovementSpeed;
+            float currentBaseSpeed = speed.BaseNumber;
+
+            if (currentBaseSpeed > GameConstants.MinBaseSpeedThreshold)
+            {
+                // Calculate multiplier: desiredSpeed / currentBaseSpeed
+                // Then add factor = (multiplier - 1.0) to get the desired result
+                float multiplier = desiredSpeed / currentBaseSpeed;
+                float factorToAdd = multiplier - 1.0f;
+                speed.AddFactor(factorToAdd, new TaleWorlds.Localization.TextObject("BannerWand Speed Override"));
+            }
+            else
+            {
+                // If base speed is too low, set it directly using Add
+                float adjustment = desiredSpeed - speed.ResultNumber;
+                speed.Add(adjustment, new TaleWorlds.Localization.TextObject("BannerWand Speed Override"));
+            }
         }
 
         /// <summary>
@@ -94,7 +118,7 @@ namespace BannerWandRetro.Models
             }
 
             // TEMPORARY: Log party type
-            string partyName = mobileParty.Name?.ToString() ?? "Unknown";
+            string partyName = mobileParty.Name?.ToString() ?? MessageConstants.UnknownPartyName;
             bool isBandit = mobileParty.IsBandit;
             bool hasFaction = mobileParty.MapFaction != null;
 
@@ -120,15 +144,16 @@ namespace BannerWandRetro.Models
         /// </summary>
         private void ApplyAiSlowdown(ExplainedNumber baseSpeed, MobileParty mobileParty)
         {
-            string partyName = mobileParty.Name?.ToString() ?? "Unknown";
+            string partyName = mobileParty.Name?.ToString() ?? MessageConstants.UnknownPartyName;
             float speedBefore = baseSpeed.ResultNumber;
 
-            // Try method 1: AddFactor
-            baseSpeed.AddFactor(-0.5f, new TaleWorlds.Localization.TextObject("AI Slowdown"));
+            // Apply slowdown factor (reduces speed to 50%)
+            baseSpeed.AddFactor(GameConstants.AiSlowdownFactor, new TaleWorlds.Localization.TextObject("AI Slowdown"));
             float speedAfterFactor = baseSpeed.ResultNumber;
 
             // Log detailed info
-            ModLogger.Log($"[AI Slowdown] {partyName}: Before={speedBefore:F2}, After AddFactor(-0.5)={speedAfterFactor:F2}, Expected={speedBefore * 0.5f:F2}");
+            float expectedSpeed = speedBefore * (1.0f + GameConstants.AiSlowdownFactor);
+            ModLogger.Log($"[AI Slowdown] {partyName}: Before={speedBefore:F2}, After={speedAfterFactor:F2}, Expected={expectedSpeed:F2}");
         }
     }
 }

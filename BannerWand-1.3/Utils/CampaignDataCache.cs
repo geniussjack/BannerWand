@@ -32,7 +32,13 @@ namespace BannerWand.Utils
     /// </remarks>
     public static class CampaignDataCache
     {
+        #region Fields
+
         private static long _lastCacheTick = -1;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets a cached snapshot of all alive heroes in the campaign.
@@ -101,6 +107,10 @@ namespace BannerWand.Utils
             }
             private set;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Invalidates the cache if campaign has progressed to a new tick.
@@ -179,5 +189,7 @@ namespace BannerWand.Utils
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
         }
+
+        #endregion
     }
 }
