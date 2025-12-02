@@ -41,12 +41,12 @@ namespace BannerWandRetro.Behaviors
         /// <summary>
         /// Tracks whether attribute points have been applied to prevent repeated application.
         /// </summary>
-        private bool _attributePointsApplied;
+        private bool _attributePointsApplied = false;
 
         /// <summary>
         /// Tracks whether focus points have been applied to prevent repeated application.
         /// </summary>
-        private bool _focusPointsApplied;
+        private bool _focusPointsApplied = false;
 
         #endregion
 
@@ -119,22 +119,24 @@ namespace BannerWandRetro.Behaviors
 
         /// <summary>
         /// Called every in-game hour.
-        /// Handles renown boost for player clan.
+        /// Handles renown boost for player clan and attribute/focus point changes.
         /// </summary>
         private void OnHourlyTick()
         {
             // Renown management - gradually increase player clan renown
             ApplyRenown();
+
+            // Apply attribute and focus point changes immediately (moved from daily tick)
+            ApplyAttributeAndFocusPoints();
         }
 
         /// <summary>
         /// Called every in-game day.
-        /// Handles attribute and focus point allocation for player and NPCs.
+        /// Reserved for future use.
         /// </summary>
         private void OnDailyTick()
         {
-            // Apply one-time attribute and focus point changes
-            ApplyAttributeAndFocusPoints();
+            // Attribute and focus points now applied hourly for immediate effect
         }
 
         #endregion
