@@ -32,6 +32,18 @@ namespace BannerWand.Constants
         /// </summary>
         public const string SettingsError = "BannerWand: Settings Error";
 
+        /// <summary>
+        /// Format string for mod initialization message with version.
+        /// Use with string.Format(ModInitializedSuccessfullyFormat, version).
+        /// </summary>
+        public const string ModInitializedSuccessfullyFormat = "BannerWand {0} successfully initialized";
+
+        /// <summary>
+        /// Format string for cheat initialization message when player appears on campaign map.
+        /// Use with string.Format(CheatsInitializedFormat, count).
+        /// </summary>
+        public const string CheatsInitializedFormat = "{0} cheats successfully initialized";
+
         #endregion
 
         #region Cheat Application Messages
@@ -98,6 +110,16 @@ namespace BannerWand.Constants
         /// Warning when target settings are null.
         /// </summary>
         public const string TargetSettingsNull = "Target settings are null";
+
+        /// <summary>
+        /// Default string for unknown party names.
+        /// </summary>
+        public const string UnknownPartyName = "Unknown";
+
+        /// <summary>
+        /// Default string for unknown version.
+        /// </summary>
+        public const string UnknownVersion = "Unknown";
 
         #endregion
 

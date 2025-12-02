@@ -172,6 +172,16 @@ namespace BannerWand.Constants
         public const short UnlimitedAmmoTarget = 999;
 
         /// <summary>
+        /// Safe minimum ammunition count to prevent game from blocking shots.
+        /// Game blocks shots when ammo is 0 or 1, so we maintain at least this amount.
+        /// </summary>
+        /// <remarks>
+        /// Set to 5 to provide safety margin. Game checks for ammo before shooting,
+        /// and if it sees 0-1, it blocks the shot. By maintaining 5+, we ensure shots are never blocked.
+        /// </remarks>
+        public const short SafeMinimumAmmo = 5;
+
+        /// <summary>
         /// Maximum morale base value for Max Morale cheat.
         /// </summary>
         public const float MaxMoraleBaseValue = 999f;
@@ -190,6 +200,65 @@ namespace BannerWand.Constants
         /// Instant siege construction progress per hour.
         /// </summary>
         public const float InstantSiegeConstructionProgress = 999999f;
+
+        /// <summary>
+        /// Mission tick interval for stealth cheat status logging (every 5 seconds at 60 FPS).
+        /// </summary>
+        public const int StealthStatusCheckTickInterval = 300;
+
+        /// <summary>
+        /// Minimum ammunition amount threshold for throwing weapons to trigger weight compensation.
+        /// </summary>
+        public const int ThrowingWeaponMinAmmoThreshold = 10;
+
+        /// <summary>
+        /// Weight reduction divisor for speed multiplier calculation.
+        /// </summary>
+        public const float SpeedBoostWeightDivisor = 50.0f;
+
+        /// <summary>
+        /// Maximum speed boost multiplier cap (base 1.0f + 2.0f = 3.0x total speed).
+        /// </summary>
+        public const float MaxSpeedBoostMultiplier = 2.0f;
+
+        /// <summary>
+        /// Base movement speed multiplier (1.0 = normal speed).
+        /// </summary>
+        public const float BaseSpeedMultiplier = 1.0f;
+
+        /// <summary>
+        /// Movement detection threshold for velocity checks (minimum change to consider movement).
+        /// </summary>
+        public const float MovementDetectionThreshold = 0.01f;
+
+        /// <summary>
+        /// Maximum number of times to log the same message to avoid log spam.
+        /// </summary>
+        public const int MaxRepeatLogCount = 3;
+
+        /// <summary>
+        /// AI slowdown factor (reduces speed to 50%).
+        /// </summary>
+        /// <remarks>
+        /// AddFactor(-0.5) reduces speed by 50% (half speed).
+        /// </remarks>
+        public const float AiSlowdownFactor = -0.5f;
+
+        /// <summary>
+        /// Minimum base speed threshold for speed calculations.
+        /// </summary>
+        /// <remarks>
+        /// Used to avoid division by zero when base speed is too low.
+        /// </remarks>
+        public const float MinBaseSpeedThreshold = 0.01f;
+
+        /// <summary>
+        /// Epsilon value for float comparisons.
+        /// </summary>
+        /// <remarks>
+        /// Used to check if float values are effectively zero or non-zero.
+        /// </remarks>
+        public const float FloatEpsilon = 0.01f;
 
         #endregion
 

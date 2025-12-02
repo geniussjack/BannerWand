@@ -30,6 +30,26 @@ namespace BannerWand.Constants
         /// </summary>
         public const string Debug = "DEBUG";
 
+        /// <summary>
+        /// Log level for model registration messages.
+        /// </summary>
+        public const string Model = "MODEL";
+
+        /// <summary>
+        /// Log level for behavior registration messages.
+        /// </summary>
+        public const string Behavior = "BEHAVIOR";
+
+        /// <summary>
+        /// Log level for cheat activation/deactivation messages.
+        /// </summary>
+        public const string Cheat = "CHEAT";
+
+        /// <summary>
+        /// Log level for performance metrics messages.
+        /// </summary>
+        public const string Performance = "PERF";
+
         #endregion
 
         #region Log File Configuration
@@ -40,12 +60,14 @@ namespace BannerWand.Constants
         public const string LogFileName = "BannerWand.log";
 
         /// <summary>
-        /// Base directory for Bannerlord logs.
+        /// Log file subdirectory path relative to CommonApplicationData folder.
         /// </summary>
-        /// <remarks>
-        /// Platform-independent path using forward slashes.
-        /// </remarks>
-        public const string LogDirectory = "C:/ProgramData/Mount and Blade II Bannerlord/logs";
+        public const string LogSubdirectory = "Mount and Blade II Bannerlord";
+
+        /// <summary>
+        /// Logs folder name within the subdirectory.
+        /// </summary>
+        public const string LogsFolderName = "logs";
 
         /// <summary>
         /// Maximum size of log file before rotation (in bytes).

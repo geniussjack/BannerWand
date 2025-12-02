@@ -191,6 +191,38 @@ namespace BannerWandRetro.Constants
         /// </summary>
         public const float InstantSiegeConstructionProgress = 999999f;
 
+        /// <summary>
+        /// AI slowdown factor (reduces speed to 50%).
+        /// </summary>
+        /// <remarks>
+        /// AddFactor(-0.5) reduces speed by 50% (half speed).
+        /// </remarks>
+        public const float AiSlowdownFactor = -0.5f;
+
+        /// <summary>
+        /// Minimum base speed threshold for speed calculations.
+        /// </summary>
+        /// <remarks>
+        /// Used to avoid division by zero when base speed is too low.
+        /// </remarks>
+        public const float MinBaseSpeedThreshold = 0.01f;
+
+        /// <summary>
+        /// Epsilon value for float comparisons.
+        /// </summary>
+        /// <remarks>
+        /// Used to check if float values are effectively zero or non-zero.
+        /// </remarks>
+        public const float FloatEpsilon = 0.01f;
+
+        /// <summary>
+        /// Safe minimum ammunition count to prevent game from blocking shots.
+        /// </summary>
+        /// <remarks>
+        /// Game blocks shots when ammo is 0 or 1, so we maintain at least this amount.
+        /// </remarks>
+        public const short SafeMinimumAmmo = 5;
+
         #endregion
 
         #region UI and Display Constants

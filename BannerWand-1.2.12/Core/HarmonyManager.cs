@@ -1,9 +1,13 @@
 #nullable enable
+using BannerWandRetro.Patches;
 using BannerWandRetro.Utils;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using TaleWorlds.Core;
+using TaleWorlds.MountAndBlade;
 
 namespace BannerWandRetro.Core
 {
@@ -127,7 +131,23 @@ namespace BannerWandRetro.Core
                     // Automatically discover and apply all patches in the executing assembly
                     // Patches are marked with [HarmonyPatch] attribute
                     Assembly executingAssembly = Assembly.GetExecutingAssembly();
-                    Instance.PatchAll(executingAssembly);
+
+                    try
+                    {
+                        Instance.PatchAll(executingAssembly);
+                        ModLogger.Log("PatchAll() completed successfully");
+                    }
+                    catch (Exception patchAllEx)
+                    {
+                        ModLogger.Warning($"PatchAll() failed: {patchAllEx.Message}");
+                        ModLogger.Warning("This is expected if some patches use HarmonyTargetMethod. Continuing with manual patches...");
+                    }
+
+                    // Manually apply RenownMultiplierPatch (uses HarmonyTargetMethod which PatchAll doesn't handle well)
+                    ApplyRenownMultiplierPatch();
+
+                    // Manually apply AmmoConsumptionPatch (uses HarmonyTargetMethod which PatchAll doesn't handle well)
+                    ApplyAmmoConsumptionPatch();
 
                     IsInitialized = true;
 
@@ -207,6 +227,159 @@ namespace BannerWandRetro.Core
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Manually applies the RenownMultiplierPatch.
+        /// </summary>
+        /// <remarks>
+        /// PatchAll() doesn't handle patches with [HarmonyTargetMethod] well,
+        /// so we apply this patch manually to ensure it works.
+        /// </remarks>
+        private static void ApplyRenownMultiplierPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[RenownMultiplier] Harmony Instance is null - cannot apply patch!");
+                    return;
+                }
+
+                // Get the target method from the patch class
+                MethodBase? targetMethod = RenownMultiplierPatch.TargetMethod();
+                if (targetMethod == null)
+                {
+                    ModLogger.Error("[RenownMultiplier] TargetMethod() returned null - patch cannot be applied!");
+                    return;
+                }
+
+                // Get the prefix method
+                MethodInfo? prefixMethod = typeof(RenownMultiplierPatch).GetMethod("Prefix",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (prefixMethod == null)
+                {
+                    ModLogger.Error("[RenownMultiplier] Prefix method not found!");
+                    return;
+                }
+
+                // Apply the patch
+                HarmonyMethod harmonyPrefix = new(prefixMethod);
+                _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
+
+                ModLogger.Log("[RenownMultiplier] Patch applied successfully via manual patching");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[RenownMultiplier] Error applying patch: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Manually applies the AmmoConsumptionPatch and MissionEquipmentAmmoSafetyPatch.
+        /// </summary>
+        /// <remarks>
+        /// These patches prevent ammo decrease for player when Unlimited Ammo is enabled.
+        /// Uses HarmonyTargetMethod so requires manual application.
+        /// </remarks>
+        private static void ApplyAmmoConsumptionPatch()
+        {
+            bool primaryPatchApplied = false;
+            bool fallbackPatchApplied = false;
+
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[AmmoConsumptionPatch] Harmony Instance is null - cannot apply patches!");
+                    return;
+                }
+
+                // Try to apply primary patch (Agent.SetWeaponAmountInSlot)
+                MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
+                if (targetMethod != null)
+                {
+                    // Find the Prefix method with 4 parameters (EquipmentIndex, short, bool)
+                    MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                        null,
+                        [typeof(Agent), typeof(EquipmentIndex), typeof(short), typeof(bool)],
+                        null);
+
+                    // If not found, try with 3 parameters
+                    if (prefixMethod is null)
+                    {
+                        prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
+                            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                            null,
+                            [typeof(Agent), typeof(EquipmentIndex), typeof(short)],
+                            null);
+                    }
+
+                    // Last resort - get any Prefix method
+                    if (prefixMethod == null)
+                    {
+                        prefixMethod = typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                            .FirstOrDefault(m => m.Name == "Prefix");
+                    }
+
+                    if (prefixMethod != null)
+                    {
+                        HarmonyMethod harmonyPrefix = new(prefixMethod);
+                        _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
+                        primaryPatchApplied = true;
+                        AmmoConsumptionPatch.IsPatchApplied = true;
+                        ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully - ammo decrease will be blocked");
+                    }
+                    else
+                    {
+                        ModLogger.Warning("[AmmoConsumptionPatch] Prefix method not found!");
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[AmmoConsumptionPatch] Target method not found - primary patch skipped");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[AmmoConsumptionPatch] Error applying primary patch: {ex.Message}");
+            }
+
+            // Try to apply fallback patch (MissionEquipment indexer)
+            try
+            {
+                MethodBase? fallbackTarget = MissionEquipmentAmmoSafetyPatch.TargetMethod();
+                if (fallbackTarget != null)
+                {
+                    MethodInfo? fallbackPrefix = typeof(MissionEquipmentAmmoSafetyPatch).GetMethod("Prefix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (fallbackPrefix != null)
+                    {
+                        HarmonyMethod harmonyPrefix = new(fallbackPrefix);
+                        _ = Instance!.Patch(fallbackTarget, prefix: harmonyPrefix);
+                        fallbackPatchApplied = true;
+                        ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch applied successfully");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error applying fallback patch: {ex.Message}");
+            }
+
+            // Summary
+            if (!primaryPatchApplied && !fallbackPatchApplied)
+            {
+                ModLogger.Warning("[AmmoConsumptionPatch] No ammo patches could be applied!");
+                ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based fallback restoration only.");
+            }
+            else
+            {
+                ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Fallback={fallbackPatchApplied}");
+            }
+        }
 
         /// <summary>
         /// Logs all methods that have been patched by this mod.
