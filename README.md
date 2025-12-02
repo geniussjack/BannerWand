@@ -4,9 +4,9 @@ A comprehensive cheat mod for **Mount & Blade II: Bannerlord** with fully config
 
 **All 31 cheats fully functional** - including previously non-working cheats now implemented via Harmony patches!
 
-> ⚠️ **Version Notice**: This is BannerWand v1.0.7
-> - Supports **Bannerlord 1.3.x** (project BannerWand-1.3)
-> - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
+> ⚠️ **Version Notice**: 
+> - **BannerWand v1.0.8** - Supports **Bannerlord 1.3.x** (project BannerWand-1.3) - includes Stealth Invisibility cheat
+> - **BannerWand v1.0.8** - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
 
 ---
 
@@ -23,6 +23,7 @@ A comprehensive cheat mod for **Mount & Blade II: Bannerlord** with fully config
 - ✅ **Barter Always Accepted** - All trade offers accepted
 - ✅ **Unlimited Smithy Stamina** - Never run out of crafting stamina
 - ✅ **Max Character Relationship** - Improve relationships with NPCs (supports NPC targeting)
+- ✅ **Stealth Invisibility** - Player is completely invisible and undetectable in stealth missions *(1.3.x only)*
 
 ### Inventory Cheats (7 cheats)
 - ✅ **Edit Gold** - Add/remove gold (supports NPC targeting)
@@ -153,14 +154,15 @@ To add translations, see [README_TRANSLATION.md](README_TRANSLATION.md)
 
 ## 📊 Statistics
 
-- **Total Cheats**: 31
-- **Working**: 31 (100%)
+- **Total Cheats**: 32 (1.3.x) / 31 (1.2.12)
+- **Working**: 32/31 (100%)
 - **NPC Support**: 10 cheats
-- **Harmony Patches**: 3 cheats
+- **Harmony Patches**: 4 cheats (1.3.x) / 3 cheats (1.2.12)
 - **Game Models**: 12 custom models
 - **Behaviors**: 7 custom behaviors
-- **Interfaces**: 4 abstraction interfaces
+- **Interfaces**: 6 abstraction interfaces
 - **Code Quality**: Comprehensive XML documentation, explicit typing, optimized C# patterns
+- **Stealth Invisibility cheat** (1.3.x only)
 
 ---
 
@@ -174,30 +176,35 @@ BannerWand follows modern C# best practices with clean architecture principles:
 - **Fully Documented**: Comprehensive XML documentation for all public APIs
 
 ### Technology Stack
-- **Language**: C# 14.0 (with .NET Framework 4.7.2 compatibility)
+- **Language**: C# latest (compatible with .NET Framework 4.7.2)
 - **Framework**: .NET Framework 4.7.2
 - **Game API**: TaleWorlds Engine (Bannerlord v1.3.x / v1.2.12)
 - **Configuration**: MCM v5 (Mod Configuration Menu)
 - **Patching**: Harmony 2.3.6
 
 ### Code Quality Features
-- **Explicit Typing**: All types explicitly declared for maximum readability (no `var` usage)
-- **Pattern Matching**: Modern C# 14.0 pattern matching for null checks and type checks
+- **C# 14 Language Version**: All projects use `<LangVersion>14.0</LangVersion>` for modern C# features
+- **Explicit Typing**: All types explicitly declared for maximum readability (no `var` usage where readability is improved)
+- **Pattern Matching**: Modern C# pattern matching for null checks and type checks
 - **Constants Organization**: All magic numbers and hardcoded values extracted to `Constants/` folder
-  - `GameConstants.cs` - Game-related constants (XP, renown, morale, etc.)
-  - `LogConstants.cs` - Logging-related constants (log levels, file names, formats)
-  - `MessageConstants.cs` - User-facing message strings
+  - `GameConstants.cs` - Game-related constants (XP, renown, morale, speed thresholds, etc.)
+  - `LogConstants.cs` - Logging-related constants (log levels, file names, formats, directory paths)
+  - `MessageConstants.cs` - User-facing message strings (initialization messages, cheat descriptions, etc.)
+- **Dynamic Version Management**: Version read from `SubModule.xml` via `VersionReader` utility (no hardcoded versions)
 - **Nullable Reference Types**: Full `#nullable enable` support throughout codebase for better null safety
 - **Performance Logging**: Built-in performance tracking and monitoring with scoped measurements
 - **Null Safety**: Comprehensive null checking throughout codebase using modern C# patterns
 - **Interface-Based Design**: Key components abstracted through interfaces for testability
   - `IModLogger` - Logging abstraction
+  - `ILogPathResolver` - Log file path resolution abstraction
+  - `ILogWriter` - Log file writing abstraction
   - `ITargetFilter` - Target filtering abstraction
   - `ICampaignDataCache` - Data caching abstraction
   - `IHarmonyManager` - Harmony patch management abstraction
-- **Clean Architecture**: Separation of concerns with Behaviors, Models, Core, Utils, Settings, Patches
-- **Comprehensive XML Documentation**: All public APIs fully documented with XML comments
-- **Code Standards**: No compiler warnings, clean codebase following C# best practices
+- **Clean Architecture**: Separation of concerns with Behaviors, Models, Core, Utils, Settings, Patches, Constants, Interfaces
+- **Comprehensive XML Documentation**: All public and internal APIs fully documented with XML comments (`summary`, `param`, `returns`, `remarks`)
+- **Code Standards**: No compiler warnings, clean codebase following C# best practices, consistent naming conventions
+- **Code Organization**: Proper use of regions (Fields, Properties, Methods, Constants) for better readability
 
 ### For Developers
 If you want to extend or modify BannerWand:
@@ -237,12 +244,30 @@ This mod is provided as-is for personal use. Feel free to modify for personal us
 **Version v1.0.8** - Comprehensive Code Refactoring & Optimization Release!
 
 ### Changelog v1.0.8
+- 🆕 **Stealth Invisibility Cheat** (1.3.x only) - Player is completely invisible and undetectable in stealth missions
+- ✅ **Bug Fixes** - Fixed critical bugs:
+  - ModLogger: Fixed empty setter for LogFilePath property, fixed uninitialized state when file logging fails
+  - CustomPartySpeedModel: Fixed loss of speed modifiers when creating new ExplainedNumber
+  - CampaignDataCache: Fixed missing field declarations for cached properties
+  - PlayerCheatBehavior: Removed duplicate ApplyUnlimitedSmithyMaterials() call from OnDailyTick()
+- ✅ **Code Quality** - Removed hardcoded paths from .csproj files, standardized using directives order, fixed all compiler warnings and IDE suggestions
+- ✅ **Constants** - All magic numbers and strings extracted to Constants folder (GameConstants, MessageConstants, LogConstants)
+- ✅ **Version Management** - Dynamic version reading from SubModule.xml via VersionReader utility (no hardcoded versions)
+- ✅ **Logging** - Improved log file location to use CommonApplicationData folder (platform-independent)
+- ✅ **Initialization** - Fixed duplicate initialization messages, added first-launch welcome message with dynamic version
+- ✅ **C# 14 Support** - Set LangVersion to 14.0 in all projects for modern C# features
+- ✅ **XML Documentation** - Comprehensive XML documentation added to all public/internal members
+- ✅ **Code Structure** - Improved code organization with proper regions, consistent naming conventions
+- ✅ **IDE Warnings Fixed** - Resolved all IDE0060, IDE0270, IDE0300, and RCS1163 warnings
 - ✅ **Fixed All Compiler Warnings** - Resolved all CS8632 nullable annotation warnings by adding `#nullable enable` throughout codebase
 - ✅ **Removed Unnecessary Suppressions** - Cleaned up IDE0079 warnings in ModLogger.cs
 - ✅ **Improved Null Safety** - Full nullable reference type support with proper annotations
 - ✅ **Code Quality Improvements** - Explicit typing, comprehensive XML documentation, clean codebase
 - ✅ **Constants Organization** - All hardcoded values properly organized in Constants folder
 - ✅ **Interface-Based Design** - Enhanced abstraction layer with comprehensive interfaces
+- ✅ **Bug Fixes** - Fixed ModLogger initialization, CustomPartySpeedModel modifier preservation, CampaignDataCache field declarations
+- ✅ **Version Management** - Dynamic version reading from SubModule.xml
+- ✅ **C# 14 Support** - Set LangVersion to 14.0 for modern C# features
 - 🎯 **Dual Version Support** - Single solution supporting both Bannerlord 1.3.x and 1.2.12
 - 📦 **Separate Projects** - BannerWand-1.3 for 1.3.x, BannerWand-1.2.12 for 1.2.12
 - 🔧 **Namespace Separation** - BannerWandRetro namespace for 1.2.12 backend, BannerWand.dll output
@@ -264,8 +289,8 @@ This mod is provided as-is for personal use. Feel free to modify for personal us
 - 📝 **Documentation Updated** - Clear version requirements and installation instructions
 - ❌ **Breaking Change**: NOT compatible with Bannerlord 1.2.12 or earlier
 - 🔄 **Code Refactoring** - Comprehensive optimization and refactoring:
-  - **C# 14.0 Language Version** - Updated project to use C# 14.0 explicitly
+  - **C# Language Version** - Updated project to use latest C# version explicitly
   - **Constants Centralization** - All hardcoded values moved to `Constants/GameConstants.cs`
   - **Code Cleanup** - Removed unused using directives, improved formatting
-  - **Modern C# Patterns** - Utilized latest C# 14.0 features and patterns
+  - **Modern C# Patterns** - Utilized latest C# features and patterns
   - **Architecture Improvements** - Enhanced modularity and maintainability
