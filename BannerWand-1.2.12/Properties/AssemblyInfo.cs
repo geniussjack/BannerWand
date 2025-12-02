@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // ќбщие сведени€ об этой сборке предоставл€ютс€ следующим набором

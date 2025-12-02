@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using TaleWorlds.Library;
 
 namespace BannerWand.Utils
 {
@@ -16,7 +15,9 @@ namespace BannerWand.Utils
     /// <remarks>
     /// <para>
     /// Log levels: DEBUG, INFO, WARN, ERROR, CHEAT, PATCH, PERFORMANCE
-    /// Log file location: Documents\Mount and Blade II Bannerlord\logs\BannerWand.log
+    /// Log file location: [CommonApplicationData]\[LogSubdirectory]\[LogsFolderName]\[LogFileName]
+    /// Platform-independent path that doesn't depend on game installation location.
+    /// Example Windows: C:\ProgramData\Mount and Blade II Bannerlord\logs\BannerWand.log
     /// </para>
     /// <para>
     /// This static class provides the default implementation of logging functionality.
@@ -26,57 +27,259 @@ namespace BannerWand.Utils
     /// </remarks>
     public static class ModLogger
     {
-        private static string? _logFilePath;
         private static readonly object _lock = new();
         private static bool _initialized = false;
+        private static string? _logFilePath;
 
         /// <summary>
-        /// Initializes the logger with the correct file path and clears any existing log file.
+        /// Gets or sets the log file path, initializing it if necessary.
+        /// </summary>
+        private static string? LogFilePath
+        {
+            get
+            {
+                _logFilePath ??= DetermineLogFilePath();
+                return _logFilePath;
+            }
+            set => _logFilePath = value;
+        }
+
+        /// <summary>
+        /// Determines the module directory and returns log file path (BannerWand\logs\BannerWand.log).
+        /// </summary>
+        private static string DetermineLogFilePath()
+        {
+            TaleWorlds.Library.Debug.Print("[BannerWand] DetermineLogFilePath: Starting path determination...");
+
+            try
+            {
+                // Get module directory path from assembly location
+                // DLL is in: [GamePath]\Modules\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll
+                // Module path is: [GamePath]\Modules\BannerWand\
+                System.Reflection.Assembly executingAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+                string? assemblyLocation = executingAssembly.Location;
+
+                if (string.IsNullOrEmpty(assemblyLocation))
+                {
+                    throw new InvalidOperationException("Assembly location is empty");
+                }
+
+                // Get directory of DLL and navigate up to module root
+                // From: ...\Modules\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll
+                // To:   ...\Modules\BannerWand\
+                string? dllDirectory = Path.GetDirectoryName(assemblyLocation);
+                if (string.IsNullOrEmpty(dllDirectory))
+                {
+                    throw new InvalidOperationException("DLL directory is empty");
+                }
+
+                // Navigate up: bin\Win64_Shipping_Client -> bin -> BannerWand
+                string? moduleDirectory = Path.GetDirectoryName(Path.GetDirectoryName(dllDirectory));
+                if (string.IsNullOrEmpty(moduleDirectory))
+                {
+                    throw new InvalidOperationException("Module directory is empty");
+                }
+
+                // Create logs directory in module folder
+                string logDirectory = Path.Combine(moduleDirectory, "logs");
+
+                // Ensure log directory exists
+                try
+                {
+                    _ = Directory.CreateDirectory(logDirectory);
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Created log directory: {logDirectory}");
+                }
+                catch (Exception dirEx)
+                {
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Failed to create log directory: {dirEx.Message}");
+                    // Continue anyway - file creation will handle directory creation if needed
+                }
+
+                string logPath = Path.Combine(logDirectory, LogConstants.LogFileName);
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Final log path: {logPath}");
+
+                // Test if we can write to this location
+                try
+                {
+                    string testFile = logPath + ".test";
+                    File.WriteAllText(testFile, "test");
+                    File.Delete(testFile);
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: ✓ Write test successful for: {logPath}");
+
+                    // Immediately create log file with initial diagnostic message
+                    try
+                    {
+                        string initialMsg = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] [DIAGNOSTIC] Log file path determined: {logPath}{Environment.NewLine}";
+                        File.WriteAllText(logPath, initialMsg);
+                        TaleWorlds.Library.Debug.Print("[BannerWand] DetermineLogFilePath: ✓ Initial log file created");
+                    }
+                    catch (Exception initEx)
+                    {
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Could not create initial log file: {initEx.Message}");
+                    }
+                }
+                catch (Exception writeEx)
+                {
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: ✗ Write test FAILED for {logPath}: {writeEx.Message}");
+                }
+
+                // Log path determined successfully (logged to file only)
+
+                return logPath;
+            }
+            catch (Exception ex)
+            {
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: EXCEPTION: {ex.Message}");
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: StackTrace: {ex.StackTrace}");
+
+                // Final fallback: use current directory
+                string fallbackPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    LogConstants.LogFileName
+                );
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Using final fallback: {fallbackPath}");
+
+                // Fallback path determined (error logged to file only)
+
+                return fallbackPath;
+            }
+        }
+
+        /// <summary>
+        /// Initializes the logger by clearing any existing log file and writing header.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Log location: C:\ProgramData\Mount and Blade II Bannerlord\logs\BannerWand.log
+        /// Log location: [GamePath]\Modules\BannerWand\logs\[LogFileName]
+        /// Logs are created in the module directory for easy access.
         /// </para>
         /// <para>
-        /// If initialization fails, falls back to game log only with error message.
+        /// This method should be called once at mod startup to clear old logs.
+        /// The log file is created in the module's logs directory.
         /// </para>
         /// </remarks>
         public static void Initialize()
         {
+            TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Starting logger initialization...");
+            TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Already initialized: {_initialized}");
+
             if (_initialized)
             {
+                TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Already initialized, skipping");
                 return;
             }
 
+            try
             {
+                TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Determining log file path...");
+                // Ensure log path is determined
+                string? logPath = LogFilePath;
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Log path determined: {logPath}");
+
+                // Immediately write diagnostic info to file (if possible)
                 try
                 {
-                    // Use C:\ProgramData\Mount and Blade II Bannerlord\logs for consistency
-                    string programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                    string bannerlordPath = Path.Combine(programDataPath, "Mount and Blade II Bannerlord", "logs");
-
-                    // Ensure directory exists
-                    if (!Directory.Exists(bannerlordPath))
-                    {
-                        _ = Directory.CreateDirectory(bannerlordPath);
-                    }
-
-                    _logFilePath = Path.Combine(bannerlordPath, LogConstants.LogFileName);
-
-                    // Clear old log on initialization with header and timestamp
-                    string timestamp = DateTime.Now.ToString(LogConstants.TimestampFormat);
-                    string logHeader = $"{LogConstants.LogHeader} Started at {timestamp}{Environment.NewLine}";
-                    File.WriteAllText(_logFilePath, logHeader);
-
-                    _initialized = true;
-                    Log(LogConstants.LoggerInitialized);
+                    string diagnosticMsg = $"[{DateTime.Now:HH:mm:ss.fff}] [DIAGNOSTIC] Logger initialization started. Log path: {logPath}{Environment.NewLine}";
+                    File.AppendAllText(logPath, diagnosticMsg);
+                    TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✓ Diagnostic message written to file");
                 }
-                catch (Exception ex)
+                catch (Exception diagEx)
                 {
-                    // Fallback to game log only if file logging fails
-                    string errorMessage = string.Format(LogConstants.LoggerInitErrorFormat, ex.Message);
-                    InformationManager.DisplayMessage(new InformationMessage(errorMessage, GameConstants.ErrorColor));
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Could not write diagnostic message: {diagEx.Message}");
                 }
+
+                // Clear old log on initialization with header and timestamp
+                string timestamp = DateTime.Now.ToString(LogConstants.TimestampFormat);
+                string logHeader = $"{LogConstants.LogHeader} Started at {timestamp}{Environment.NewLine}Log file location: {logPath}{Environment.NewLine}";
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Log header prepared, length: {logHeader.Length} chars");
+
+                lock (_lock)
+                {
+                    try
+                    {
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Checking if log file exists: {File.Exists(logPath)}");
+                        if (File.Exists(logPath))
+                        {
+                            TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Deleting existing log file...");
+                            File.Delete(logPath);
+                            TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Existing log file deleted");
+                        }
+
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Writing log header to: {logPath}");
+                        File.WriteAllText(logPath, logHeader);
+                        TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✓ Log file created successfully!");
+
+                        // Verify file was created
+                        if (File.Exists(logPath))
+                        {
+                            long fileSize = new FileInfo(logPath).Length;
+                            TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: ✓ Log file verified! Size: {fileSize} bytes");
+                        }
+                        else
+                        {
+                            TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✗ WARNING: Log file does not exist after creation!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: ✗ EXCEPTION writing to log file: {ex.Message}");
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Exception type: {ex.GetType().Name}");
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: StackTrace: {ex.StackTrace}");
+
+                        // If we can't write to the determined path, try to find another
+                        string errorMsg = $"Failed to write to log file {logPath}: {ex.Message}. Trying alternative path...";
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: {errorMsg}");
+
+                        // Error logged to file only
+
+                        // Force re-determination of path
+                        LogFilePath = null;
+                        logPath = LogFilePath;
+
+                        // Validate that logPath is not null before using it
+                        if (string.IsNullOrEmpty(logPath))
+                        {
+                            TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✗ Failed to determine log path after retry");
+                            // Still mark as initialized so we can use game log only
+                            _initialized = true;
+                            return;
+                        }
+
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Retrying with new path: {logPath}");
+
+                        // Try again with new path
+                        if (File.Exists(logPath))
+                        {
+                            File.Delete(logPath);
+                        }
+                        File.WriteAllText(logPath, logHeader);
+                        TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✓ Retry successful!");
+                    }
+                }
+
+                _initialized = true;
+                TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Logger marked as initialized");
+
+                // Log initialization to file only
+                string initMessage = $"BannerWand logger initialized. Log file: {logPath}";
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Writing initial log message: {initMessage}");
+                WriteLog(LogConstants.Info, initMessage);
+
+                TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: ✓ Initialization complete!");
+            }
+            catch (Exception ex)
+            {
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: ✗ FATAL EXCEPTION: {ex.Message}");
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: Exception type: {ex.GetType().Name}");
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: StackTrace: {ex.StackTrace}");
+
+                // Fallback to game log only if file logging fails (error logged to debug output only)
+                string errorMessage = $"BannerWand: Failed to initialize file logging: {ex.Message}. Using game log only.";
+                TaleWorlds.Library.Debug.Print($"[BannerWand] Initialize: {errorMessage}");
+
+                // Still mark as initialized so we can use game log
+                _initialized = true;
+                TaleWorlds.Library.Debug.Print("[BannerWand] Initialize: Marked as initialized (game log only mode)");
             }
         }
 
@@ -149,7 +352,7 @@ namespace BannerWand.Utils
         {
             string info = string.IsNullOrEmpty(details) ? string.Empty : $" - {details}";
             string message = $"{modelName} registered{info}";
-            WriteLog("MODEL", message);
+            WriteLog(LogConstants.Model, message);
         }
 
         /// <summary>
@@ -161,7 +364,7 @@ namespace BannerWand.Utils
         {
             string info = string.IsNullOrEmpty(details) ? string.Empty : $" - {details}";
             string message = $"{behaviorName} registered{info}";
-            WriteLog("BEHAVIOR", message);
+            WriteLog(LogConstants.Behavior, message);
         }
 
         /// <summary>
@@ -177,7 +380,7 @@ namespace BannerWand.Utils
             string valueInfo = value != null ? $" (value: {value})" : string.Empty;
             string targetInfo = !string.IsNullOrEmpty(target) ? $" for {target}" : string.Empty;
             string message = $"{cheatName} {status}{valueInfo}{targetInfo}";
-            WriteLog("CHEAT", message);
+            WriteLog(LogConstants.Cheat, message);
         }
 
         /// <summary>
@@ -196,7 +399,7 @@ namespace BannerWand.Utils
             }
 
             string message = $"{operationName} completed in {elapsedMs}ms{countInfo}";
-            WriteLog("PERF", message);
+            WriteLog(LogConstants.Performance, message);
         }
 
         /// <summary>
@@ -257,22 +460,42 @@ namespace BannerWand.Utils
                 string paddedLevel = level.PadRight(0);
                 string formattedMessage = $"[{timestamp}] [{paddedLevel}]{callerInfo} {message}";
 
-                // Write to file
-                if (_initialized && !string.IsNullOrEmpty(_logFilePath))
+                // Validate message is not null before processing
+                if (string.IsNullOrEmpty(message))
                 {
-                    lock (_lock)
-                    {
-                        File.AppendAllText(_logFilePath, formattedMessage + Environment.NewLine);
-                    }
+                    return;
                 }
 
-                // Also write to game log for critical messages
-                if (level is LogConstants.Error or LogConstants.Warning)
+                // Write to file (try-catch to prevent failures from breaking logging)
+                if (_initialized)
                 {
-                    Color color = level == LogConstants.Error ? GameConstants.ErrorColor : GameConstants.WarningColor;
-                    string gameMessage = $"BannerWand: {message}";
-                    InformationManager.DisplayMessage(new InformationMessage(gameMessage, color));
+                    try
+                    {
+                        string? logPath = LogFilePath;
+                        if (string.IsNullOrEmpty(logPath))
+                        {
+                            TaleWorlds.Library.Debug.Print("[BannerWand] WriteLog: Log path is null, cannot write to file");
+                            return;
+                        }
+
+                        lock (_lock)
+                        {
+                            File.AppendAllText(logPath, formattedMessage + Environment.NewLine);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // File write failed, log to debug output only
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] WriteLog: ✗ Failed to write to log file: {ex.Message}");
+                        TaleWorlds.Library.Debug.Print($"[BannerWand] WriteLog: Exception type: {ex.GetType().Name}");
+                    }
                 }
+                else
+                {
+                    TaleWorlds.Library.Debug.Print($"[BannerWand] WriteLog: Logger not initialized! Message: {message}");
+                }
+
+                // All logs go to file only - no chat messages
             }
             catch
             {

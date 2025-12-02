@@ -45,7 +45,7 @@
 		<string id="BW_Player_MaxMorale_Hint" text="La compañía del jugador siempre tiene moral máxima." />
 
 		<string id="BW_Player_MovementSpeed" text="Ajustar Velocidad de Movimiento" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Establece el multiplicador de velocidad de movimiento del jugador (0 = deshabilitado)." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Establece el multiplicador de velocidad de movimiento del jugador (0 = deshabilitado). Los cambios se aplican al día siguiente en el juego." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Ofertas de Trueque Siempre Aceptadas" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Todas las ofertas de trueque se aceptan automáticamente." />

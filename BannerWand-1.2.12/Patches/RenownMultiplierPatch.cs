@@ -1,3 +1,5 @@
+#nullable enable
+using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using HarmonyLib;
 using System;
@@ -27,47 +29,22 @@ namespace BannerWandRetro.Patches
     /// - AddRenown() is called from various game systems without hooks
     /// </para>
     /// </remarks>
-    /// <example>
-    /// Example usage scenario:
-    /// <code>
-    /// // User sets RenownMultiplier to 3.0 in MCM settings
-    /// // When player wins a battle that normally gives 10 renown:
-    /// //
-    /// // Without patch: Clan.AddRenown(10f) → Player gains 10 renown
-    /// // With patch:    Clan.AddRenown(10f) → Multiplied to 30f → Player gains 30 renown
-    /// //
-    /// // The patch modifies the 'ref float value' parameter before the original method executes
-    /// </code>
-    /// </example>
     [HarmonyPatch(typeof(Clan))]
     public static class RenownMultiplierPatch
     {
+        private static bool _firstCallLogged = false;
+
         /// <summary>
         /// Explicitly targets the AddRenown method by searching all available overloads.
         /// </summary>
-        /// <returns>The MethodInfo for Clan.AddRenown method, or null if not found.</returns>
-        /// <remarks>
-        /// <para>
-        /// This method searches for AddRenown with any signature to handle API changes
-        /// across different Bannerlord versions. It attempts to find the method in this order:
-        /// 1. AddRenown(float, bool) - preferred signature
-        /// 2. AddRenown(float) - fallback signature
-        /// 3. Any AddRenown method - last resort
-        /// </para>
-        /// <para>
-        /// Logs all available methods for debugging purposes to help diagnose patching issues.
-        /// </para>
-        /// </remarks>
         [HarmonyTargetMethod]
         public static MethodBase TargetMethod()
         {
             try
             {
-                // Get all AddRenown methods from Clan type
                 Type clanType = typeof(Clan);
                 MethodInfo[] clanMethods = clanType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
-                // Filter to only AddRenown methods
                 List<MethodInfo> allMethods = [];
                 foreach (MethodInfo methodInfo in clanMethods)
                 {
@@ -77,23 +54,20 @@ namespace BannerWandRetro.Patches
                     }
                 }
 
-                // Log all found methods for debugging
                 ModLogger.Log($"RenownMultiplierPatch: Found {allMethods.Count} AddRenown method(s):");
                 foreach (MethodInfo methodInfo in allMethods)
                 {
                     ParameterInfo[] parameters = methodInfo.GetParameters();
                     List<string> paramStrings = [];
-
                     foreach (ParameterInfo param in parameters)
                     {
                         paramStrings.Add($"{param.ParameterType.Name} {param.Name}");
                     }
-
                     string paramStr = string.Join(", ", paramStrings);
                     ModLogger.Log($"  - AddRenown({paramStr})");
                 }
 
-                // Try to find method with (float, bool) signature first
+                // Try (float, bool) signature first
                 MethodInfo method = clanType.GetMethod(
                     "AddRenown",
                     BindingFlags.Public | BindingFlags.Instance,
@@ -102,7 +76,7 @@ namespace BannerWandRetro.Patches
                     null
                 );
 
-                // If not found, try (float) signature only
+                // Fallback to (float) signature
                 if (method is null)
                 {
                     ModLogger.Warning("RenownMultiplierPatch: AddRenown(float, bool) not found, trying AddRenown(float)");
@@ -115,14 +89,13 @@ namespace BannerWandRetro.Patches
                     );
                 }
 
-                // If still not found, take any AddRenown method as last resort
+                // Last resort - any AddRenown
                 if (method is null && allMethods.Count > 0)
                 {
                     ModLogger.Warning("RenownMultiplierPatch: Using first available AddRenown method");
                     method = allMethods[0];
                 }
 
-                // Log final result
                 if (method is null)
                 {
                     ModLogger.Error("RenownMultiplierPatch: Could not find any AddRenown method!");
@@ -131,14 +104,12 @@ namespace BannerWandRetro.Patches
                 {
                     ParameterInfo[] parameters = method.GetParameters();
                     List<string> paramStrings = [];
-
                     foreach (ParameterInfo param in parameters)
                     {
                         paramStrings.Add($"{param.ParameterType.Name} {param.Name}");
                     }
-
                     string paramStr = string.Join(", ", paramStrings);
-                    ModLogger.Log($"RenownMultiplierPatch: Successfully targeting method AddRenown({paramStr})");
+                    ModLogger.Log($"RenownMultiplierPatch: Successfully targeting AddRenown({paramStr})");
                 }
 
                 return method!;
@@ -147,6 +118,60 @@ namespace BannerWandRetro.Patches
             {
                 ModLogger.Error($"RenownMultiplierPatch: Exception in TargetMethod: {ex.Message}");
                 return null!;
+            }
+        }
+
+        /// <summary>
+        /// Prefix that multiplies renown value before AddRenown executes.
+        /// </summary>
+        /// <param name="__instance">The Clan instance receiving renown.</param>
+        /// <param name="value">The renown amount to add (modified by ref).</param>
+        [HarmonyPrefix]
+        public static void Prefix(Clan __instance, ref float value)
+        {
+            try
+            {
+                CheatSettings? settings = CheatSettings.Instance;
+                CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+
+                if (settings == null || targetSettings == null)
+                {
+                    return;
+                }
+
+                // Only apply if multiplier is greater than 0 (0 = disabled)
+                if (settings.RenownMultiplier <= 0f)
+                {
+                    return;
+                }
+
+                // Only apply to player clan
+                if (!targetSettings.ApplyToPlayer || __instance != Clan.PlayerClan)
+                {
+                    return;
+                }
+
+                // Skip if value is negative (renown loss) or zero
+                if (value <= 0f)
+                {
+                    return;
+                }
+
+                float originalValue = value;
+                value *= settings.RenownMultiplier;
+
+                // Log first call for debugging
+                if (!_firstCallLogged)
+                {
+                    _firstCallLogged = true;
+                    ModLogger.Log($"[RenownMultiplier] Patch active! First multiplied renown: {originalValue:F1} × {settings.RenownMultiplier:F1} = {value:F1}");
+                }
+
+                ModLogger.Debug($"[RenownMultiplier] {originalValue:F1} × {settings.RenownMultiplier:F1} = {value:F1}");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[RenownMultiplier] Error in Prefix: {ex.Message}", ex);
             }
         }
     }

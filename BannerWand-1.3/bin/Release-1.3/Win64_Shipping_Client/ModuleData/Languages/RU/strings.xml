@@ -45,7 +45,7 @@
 		<string id="BW_Player_MaxMorale_Hint" text="Отряд игрока всегда имеет максимальный моральный дух." />
 
 		<string id="BW_Player_MovementSpeed" text="Скорость передвижения" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Множитель скорости передвижения игрока (0 = отключено)." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Множитель скорости передвижения игрока (0 = отключено). Изменения применяются на следующий игровой день." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Торговля всегда принимается" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Все торговые предложения автоматически принимаются." />
@@ -58,6 +58,9 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
+
+		<string id="BW_Player_StealthInvisibility" text="Невидимость в стелс-миссиях" />
+		<string id="BW_Player_StealthInvisibility_Hint" text="Игрок полностью невидим и незаметен в стелс-миссиях." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Изменить золото" />

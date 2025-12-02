@@ -115,8 +115,9 @@ namespace BannerWand.Settings
         /// <summary>
         /// Campaign map movement speed multiplier (1.0 = normal, 2.0 = double).
         /// Implemented in <see cref="Models.CustomPartySpeedModel"/>.
+        /// NOTE: Changes apply on the next in-game day.
         /// </summary>
-        [SettingPropertyFloatingInteger("{=BW_Player_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 5, RequireRestart = false, HintText = "{=BW_Player_MovementSpeed_Hint}Only works on map, not in battle.")]
+        [SettingPropertyFloatingInteger("{=BW_Player_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 5, RequireRestart = false, HintText = "{=BW_Player_MovementSpeed_Hint}Only works on map, not in battle. Changes apply on the next in-game day.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public float MovementSpeed { get; set; } = 0f;
 
@@ -151,6 +152,16 @@ namespace BannerWand.Settings
         [SettingPropertyBool("{=BW_Player_MaxAllCharacterRelationships}Max All Character Relationships", Order = 9, RequireRestart = false, HintText = "{=BW_Player_MaxAllCharacterRelationships_Hint}Instantly sets relationship to 100 with all characters.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool MaxAllCharacterRelationships { get; set; } = false;
+
+        // REMOVED: StealthInvisibility has been completely removed from the mod.
+        // It caused critical visual bugs where NPC models displayed in broken/horizontal poses.
+        // The aggressive Harmony patching of Agent detection methods interfered with
+        // skeletal animation and model synchronization systems.
+        // 
+        // This property is kept HIDDEN for backward compatibility with existing settings files.
+        // The feature is permanently disabled and the setting is no longer shown in MCM.
+        [System.ComponentModel.Browsable(false)]
+        public bool StealthInvisibility { get; set; } = false;
 
         #endregion
 
@@ -203,6 +214,14 @@ namespace BannerWand.Settings
         [SettingPropertyBool("{=BW_Inventory_UnlimitedSmithyMaterials}Unlimited Smithy Materials", Order = 5, RequireRestart = false, HintText = "{=BW_Inventory_UnlimitedSmithyMaterials_Hint}Only works for materials that you already owned, it has no effect on materials that you didn't own.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public bool UnlimitedSmithyMaterials { get; set; } = false;
+
+        /// <summary>
+        /// Target quantity for unlimited smithy materials.
+        /// Controls how many of each material to maintain when Unlimited Smithy Materials is enabled.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Inventory_SmithyMaterialsQuantity}Smithy Materials Quantity", 100, 9999, Order = 6, RequireRestart = false, HintText = "{=BW_Inventory_SmithyMaterialsQuantity_Hint}Set the target amount for smithy materials (100-9999). Only works when Unlimited Smithy Materials is enabled.")]
+        [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
+        public int SmithyMaterialsQuantity { get; set; } = 9999;
 
         /// <summary>
         /// [WIP] Unlocks all smithing parts/recipes.

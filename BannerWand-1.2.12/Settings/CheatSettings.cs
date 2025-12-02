@@ -115,8 +115,9 @@ namespace BannerWandRetro.Settings
         /// <summary>
         /// Campaign map movement speed multiplier (1.0 = normal, 2.0 = double).
         /// Implemented in <see cref="Models.CustomPartySpeedModel"/>.
+        /// NOTE: Changes apply on the next in-game day.
         /// </summary>
-        [SettingPropertyFloatingInteger("{=BW_Player_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 5, RequireRestart = false, HintText = "{=BW_Player_MovementSpeed_Hint}Only works on map, not in battle.")]
+        [SettingPropertyFloatingInteger("{=BW_Player_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 5, RequireRestart = false, HintText = "{=BW_Player_MovementSpeed_Hint}Only works on map, not in battle. Changes apply on the next in-game day.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public float MovementSpeed { get; set; } = 0f;
 

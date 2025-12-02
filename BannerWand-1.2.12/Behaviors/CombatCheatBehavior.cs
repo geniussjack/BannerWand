@@ -3,6 +3,7 @@ using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
+using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -49,6 +50,12 @@ namespace BannerWandRetro.Behaviors
         /// </summary>
         private bool _infiniteHealthApplied;
 
+        /// <summary>
+        /// Stores original ammunition amounts for each weapon slot to prevent ammo decrease.
+        /// Key: EquipmentIndex, Value: Original ammo amount
+        /// </summary>
+        private static readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _originalAmmoAmounts = [];
+
         #endregion
 
         #region Mission Events
@@ -63,6 +70,7 @@ namespace BannerWandRetro.Behaviors
 
             // Reset application flag for next mission
             _infiniteHealthApplied = false;
+            _originalAmmoAmounts.Clear();
         }
 
 
@@ -229,21 +237,23 @@ namespace BannerWandRetro.Behaviors
         #region Unlimited Ammunition
 
         /// <summary>
-        /// Maintains ammunition at 999 for all ranged weapons (bows, crossbows, throwables).
+        /// Prevents ammunition from decreasing for all ranged weapons (bows, crossbows, throwables).
+        /// Instead of adding ammo to 999, this method restores ammo to its original value when it decreases.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method iterates through all weapon slots and checks for ranged weapons that use ammunition.
-        /// When ammo count falls below 999, it restores it back to 999.
+        /// This method tracks the original ammunition count for each weapon when first detected.
+        /// When ammo count decreases (player uses ammo), it immediately restores it to the original value.
+        /// This approach avoids weight issues since we don't add extra ammo.
         /// </para>
         /// <para>
         /// Supported weapon types:
         /// - Bows (arrows)
         /// - Crossbows (bolts)
-        /// - Throwing weapons (javelins, throwing axes, throwing knives)
+        /// - Throwing weapons (javelins, throwing axes, throwing knives, stones)
         /// </para>
         /// <para>
-        /// Performance: Only restores ammo if below target (999) to avoid unnecessary API calls.
+        /// Performance: Only restores ammo if it decreased below original value.
         /// Runs every frame (~60 FPS) but optimized with early returns.
         /// </para>
         /// </remarks>
@@ -269,6 +279,11 @@ namespace BannerWandRetro.Behaviors
                 // Skip empty slots or weapons without ammo
                 if (weapon.IsEmpty || weapon.CurrentUsageItem == null)
                 {
+                    // Remove from tracking if weapon was removed
+                    if (_originalAmmoAmounts.ContainsKey(i))
+                    {
+                        _ = _originalAmmoAmounts.Remove(i);
+                    }
                     continue;
                 }
 
@@ -278,20 +293,74 @@ namespace BannerWandRetro.Behaviors
                 {
                     short currentAmmo = weapon.Amount;
 
-                    // Only restore if below target (optimization: avoid unnecessary API calls)
-                    if (currentAmmo < GameConstants.UnlimitedAmmoTarget)
+                    // Store original ammo amount if this is the first time we see this weapon
+                    if (!_originalAmmoAmounts.ContainsKey(i))
                     {
-                        // SetAmountOfSlot (4th parameter) sets the ammunition count
-                        // We set it to 999 which is effectively unlimited for most battles
-                        playerAgent.Equipment[i] = new MissionWeapon(
-                            weapon.Item,
-                            weapon.ItemModifier,
-                            weapon.Banner,
-                            GameConstants.UnlimitedAmmoTarget  // Set ammo to 999
-                        );
+                        _originalAmmoAmounts[i] = currentAmmo;
+                    }
 
-                        // Log when ammo is restored (only once when it drops, not every frame)
-                        ModLogger.Debug($"Unlimited Ammo: Restored {weapon.Item.Name} to {GameConstants.UnlimitedAmmoTarget}");
+                    // Get the original ammo amount for this weapon
+                    short originalAmmo = _originalAmmoAmounts[i];
+
+                    // If current ammo is less than original, restore it (player used ammo)
+                    if (currentAmmo < originalAmmo)
+                    {
+                        // Set flag to allow our restoration call through the Harmony patch (if patch is applied)
+                        if (Patches.AmmoConsumptionPatch.IsPatchApplied)
+                        {
+                            Patches.AmmoConsumptionPatch.IsRestorationInProgress = true;
+                        }
+                        try
+                        {
+                            // Try to use SetWeaponAmountInSlot if available (preferred method)
+                            // First try with 3 parameters (EquipmentIndex, short, bool)
+                            MethodInfo? setWeaponMethod = typeof(Agent).GetMethod("SetWeaponAmountInSlot",
+                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                null,
+                                [typeof(EquipmentIndex), typeof(short), typeof(bool)],
+                                null);
+
+                            if (setWeaponMethod != null)
+                            {
+                                _ = setWeaponMethod.Invoke(playerAgent, [i, originalAmmo, true]);
+                            }
+                            else
+                            {
+                                // If not found, try with 2 parameters (EquipmentIndex, short)
+                                setWeaponMethod = typeof(Agent).GetMethod("SetWeaponAmountInSlot",
+                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                    null,
+                                    [typeof(EquipmentIndex), typeof(short)],
+                                    null);
+
+                                if (setWeaponMethod != null)
+                                {
+                                    _ = setWeaponMethod.Invoke(playerAgent, [i, originalAmmo]);
+                                }
+                                else
+                                {
+                                    // Fallback: Restore to original amount (not 999) to avoid weight issues
+                                    playerAgent.Equipment[i] = new MissionWeapon(
+                                        weapon.Item,
+                                        weapon.ItemModifier,
+                                        weapon.Banner,
+                                        originalAmmo  // Restore to original amount
+                                    );
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            if (Patches.AmmoConsumptionPatch.IsPatchApplied)
+                            {
+                                Patches.AmmoConsumptionPatch.IsRestorationInProgress = false;
+                            }
+                        }
+                    }
+                    // If current ammo is greater than original (player picked up more ammo), update the original
+                    else if (currentAmmo > originalAmmo)
+                    {
+                        _originalAmmoAmounts[i] = currentAmmo;
                     }
                 }
             }

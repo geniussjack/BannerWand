@@ -6,6 +6,7 @@ using BannerWand.Utils;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
@@ -28,7 +29,7 @@ namespace BannerWand.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.3.x ONLY
-    /// For Bannerlord 1.2.12, use BannerWand v1.0.4
+    /// For Bannerlord 1.2.12, use BannerWand v1.0.8 (BannerWand-1.2.12 project)
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
@@ -48,7 +49,8 @@ namespace BannerWand.Core
             // Initialize logger first - critical for all subsequent operations
             ModLogger.Initialize();
             ModLogger.Log("=== BannerWand Initialization ===");
-            ModLogger.Log("Mod Version: 2.0.1");
+            string modVersion = VersionReader.GetModVersion();
+            ModLogger.Log($"Mod Version: {modVersion}");
             try
             {
                 ModLogger.Log($"Game Version: {TaleWorlds.Library.ApplicationVersion.FromParametersFile()}");
@@ -159,10 +161,22 @@ namespace BannerWand.Core
 
             using (ModLogger.BeginPerformanceScope("Game Start Initialization"))
             {
+                // Step 0: Show initialization message on first game launch (only once)
+                try
+                {
+                    string modVersion = VersionReader.GetModVersion();
+                    string initMessage = string.Format(MessageConstants.ModInitializedSuccessfullyFormat, modVersion);
+                    InformationManager.DisplayMessage(new InformationMessage(initMessage, GameConstants.SuccessColor));
+                }
+                catch (Exception imEx)
+                {
+                    ModLogger.Error($"Failed to display initialization message: {imEx.Message}");
+                }
+
                 // Step 1: Auto-reset dangerous settings (safety feature)
                 AutoResetDangerousSettings();
 
-                // Step 2: Initialize cheat manager
+                // Step 2: Initialize cheat manager (will show active cheats count)
                 CheatManager.Initialize();
                 ModLogger.Log("CheatManager initialized successfully");
 
@@ -403,12 +417,9 @@ namespace BannerWand.Core
                 // Add combat cheat behavior to all missions
                 mission.AddMissionBehavior(new CombatCheatBehavior());
                 ModLogger.Debug($"CombatCheatBehavior added to mission: {mission.SceneName}");
-
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 ModLogger.Error($"[SubModule] Error in OnMissionBehaviorInitialize: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
@@ -439,8 +450,8 @@ namespace BannerWand.Core
                     return;
                 }
 
-                // Re-initialize cheat manager for loaded game (silently, no duplicate logs)
-                CheatManager.Initialize();
+                // Re-initialize cheat manager for loaded game (silently, no duplicate messages)
+                CheatManager.Initialize(showMessage: false);
 
             }
             catch (Exception ex)

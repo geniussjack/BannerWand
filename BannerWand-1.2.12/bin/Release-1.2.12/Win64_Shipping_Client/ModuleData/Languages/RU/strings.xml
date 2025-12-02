@@ -45,7 +45,7 @@
 		<string id="BW_Player_MaxMorale_Hint" text="Отряд игрока всегда имеет максимальный моральный дух." />
 
 		<string id="BW_Player_MovementSpeed" text="Скорость передвижения" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Множитель скорости передвижения игрока (0 = отключено)." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Множитель скорости передвижения игрока (0 = отключено). Изменения применяются на следующий игровой день." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Торговля всегда принимается" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Все торговые предложения автоматически принимаются." />

@@ -45,7 +45,7 @@
 		<string id="BW_Player_MaxMorale_Hint" text="Player's party always has maximum morale." />
 
 		<string id="BW_Player_MovementSpeed" text="Set Movement Speed" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Set player movement speed multiplier (0 = disabled)." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Set player movement speed multiplier (0 = disabled). Changes apply on the next in-game day." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Barter Offer Always Accepted" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="All barter offers are automatically accepted." />
@@ -58,6 +58,9 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Max All Character Relationships" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Instantly sets relationship to 100 with all characters." />
+
+		<string id="BW_Player_StealthInvisibility" text="Stealth Invisibility" />
+		<string id="BW_Player_StealthInvisibility_Hint" text="Player is completely invisible and undetectable in stealth missions." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edit Gold" />

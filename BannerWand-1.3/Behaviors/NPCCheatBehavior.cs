@@ -41,12 +41,12 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Tracks whether attribute points have been applied to prevent repeated application.
         /// </summary>
-        private bool _attributePointsApplied;
+        private bool _attributePointsApplied = false;
 
         /// <summary>
         /// Tracks whether focus points have been applied to prevent repeated application.
         /// </summary>
-        private bool _focusPointsApplied;
+        private bool _focusPointsApplied = false;
 
         #endregion
 
@@ -119,22 +119,24 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called every in-game hour.
-        /// Handles renown boost for player clan.
+        /// Handles renown boost for player clan and attribute/focus point changes.
         /// </summary>
         private void OnHourlyTick()
         {
             // Renown management - gradually increase player clan renown
             ApplyRenown();
+
+            // Apply attribute and focus point changes immediately (moved from daily tick)
+            ApplyAttributeAndFocusPoints();
         }
 
         /// <summary>
         /// Called every in-game day.
-        /// Handles attribute and focus point allocation for player and NPCs.
+        /// Reserved for future use.
         /// </summary>
         private void OnDailyTick()
         {
-            // Apply one-time attribute and focus point changes
-            ApplyAttributeAndFocusPoints();
+            // Attribute and focus points now applied hourly for immediate effect
         }
 
         #endregion
@@ -143,14 +145,15 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Applies attribute and focus point changes to PLAYER ONLY (no NPCs).
-        /// Uses a flag system to ensure one-time application.
+        /// Uses a flag system to ensure one-time application, but applies immediately when value changes from 0.
         /// </summary>
         /// <remarks>
         /// <para>
         /// The flag system works as follows:
-        /// - When setting changes from 0 to non-zero, apply the change and set flag
-        /// - When setting returns to 0, clear the flag
-        /// - This allows multiple applications by toggling: 0 → value → 0 → value
+        /// - When setting changes from 0 to non-zero, apply the change immediately and set flag
+        /// - When setting returns to 0, clear the flag (ready for next application)
+        /// - This allows immediate application: 0 → value applies immediately
+        /// - To apply again: value → 0 → newValue applies immediately
         /// </para>
         /// </remarks>
         private void ApplyAttributeAndFocusPoints()
@@ -176,7 +179,7 @@ namespace BannerWand.Behaviors
             }
             else if (Settings.EditAttributePoints == 0)
             {
-                // Reset flag when setting returns to zero
+                // Reset flag when setting returns to zero (ready for next application)
                 _attributePointsApplied = false;
             }
 
@@ -201,7 +204,7 @@ namespace BannerWand.Behaviors
             }
             else if (Settings.EditFocusPoints == 0)
             {
-                // Reset flag when setting returns to zero
+                // Reset flag when setting returns to zero (ready for next application)
                 _focusPointsApplied = false;
             }
         }

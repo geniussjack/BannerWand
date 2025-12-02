@@ -1,5 +1,6 @@
 #nullable enable
 using BannerWand.Constants;
+using BannerWand.Patches;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
@@ -49,6 +50,25 @@ namespace BannerWand.Behaviors
         /// </summary>
         private bool _infiniteHealthApplied;
 
+        /// <summary>
+        /// Tracks whether unlimited ammo has been logged for current mission.
+        /// </summary>
+        private bool _unlimitedAmmoLogged = false;
+
+        /// <summary>
+        /// Counter for unlimited ammo logging calls (for detailed logging).
+        /// </summary>
+        private int _unlimitedAmmoLogCounter = 0;
+
+        /// <summary>
+        /// Counter for mission ticks (for performance monitoring).
+        /// </summary>
+        private int _missionTickCount = 0;
+
+
+
+
+
         #endregion
 
         #region Mission Events
@@ -63,6 +83,9 @@ namespace BannerWand.Behaviors
 
             // Reset application flag for next mission
             _infiniteHealthApplied = false;
+            _unlimitedAmmoLogged = false;
+            _unlimitedAmmoLogCounter = 0;
+            _missionTickCount = 0;
         }
 
 
@@ -70,7 +93,6 @@ namespace BannerWand.Behaviors
         /// Called every mission frame (approximately 60 times per second).
         /// Applies continuous combat cheats that need frame-by-frame updates.
         /// </summary>
-        /// <param name="dt">Delta time since last frame in seconds.</param>
         /// <remarks>
         /// <para>
         /// PERFORMANCE CRITICAL: This method runs 60+ times per second during combat.
@@ -82,7 +104,7 @@ namespace BannerWand.Behaviors
         /// - Unlimited player health (restore health if below max)
         /// - Unlimited horse health (restore mount health if below max)
         /// - One-hit kills (reduce enemy health to near-death)
-        /// - Unlimited ammunition (restore ammo to 999 for ranged weapons)
+        /// - Unlimited ammunition (prevent ammo decrease by restoring to original amount)
         /// </para>
         /// </remarks>
         public override void OnMissionTick(float dt)
@@ -97,6 +119,8 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
+                _missionTickCount++;
+
                 // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
                 ApplyInfiniteHealth();
 
@@ -104,7 +128,19 @@ namespace BannerWand.Behaviors
                 ApplyUnlimitedHealth();
                 ApplyUnlimitedHorseHealth();
                 ApplyOneHitKills();
+
+                // Apply unlimited ammo once per frame - now using safe minimum strategy
                 ApplyUnlimitedAmmo();
+
+                // Log unlimited ammo activation once per mission
+                if (Settings.UnlimitedAmmo && TargetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
+                {
+                    _unlimitedAmmoLogged = true;
+                    string patchStatus = AmmoConsumptionPatch.IsPatchApplied
+                        ? "Harmony patch ACTIVE (ammo consumption blocked)"
+                        : "Using tick-based restoration (fallback mode)";
+                    ModLogger.Log($"[UnlimitedAmmo] Unlimited Ammo cheat activated for this mission. Mode: {patchStatus}");
+                }
 
                 // Note: Movement speed for campaign map is handled in CustomPartySpeedModel
 
@@ -229,27 +265,25 @@ namespace BannerWand.Behaviors
         #region Unlimited Ammunition
 
         /// <summary>
-        /// Maintains ammunition at 999 for all ranged weapons (bows, crossbows, throwables).
+        /// Maintains maximum ammunition using the correct Bannerlord API method.
+        /// Uses Agent.SetWeaponAmountInSlot() which is the proper way to change ammo.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method iterates through all weapon slots and checks for ranged weapons that use ammunition.
-        /// When ammo count falls below 999, it restores it back to 999.
+        /// CRITICAL FIX: Previous implementation tried to replace MissionWeapon objects
+        /// which doesn't work because MissionEquipment is a struct. The correct approach
+        /// is to use Agent.SetWeaponAmountInSlot() which directly modifies weapon data.
         /// </para>
         /// <para>
-        /// Supported weapon types:
-        /// - Bows (arrows)
-        /// - Crossbows (bolts)
-        /// - Throwing weapons (javelins, throwing axes, throwing knives)
-        /// </para>
-        /// <para>
-        /// Performance: Only restores ammo if below target (999) to avoid unnecessary API calls.
-        /// Runs every frame (~60 FPS) but optimized with early returns.
+        /// Weapon detection logic:
+        /// - Arrows/Bolts: Have ModifiedMaxAmount > 1 (quiver size)
+        /// - Throwing weapons: Have ModifiedMaxAmount > 1 (stack size)
+        /// - Bows/Crossbows: Have ModifiedMaxAmount == 1 (the weapon itself, not ammo)
+        /// - Shields: Detected via CurrentUsageItem.IsShield
         /// </para>
         /// </remarks>
-        private static void ApplyUnlimitedAmmo()
+        private void ApplyUnlimitedAmmo()
         {
-            // Early returns for disabled cheat or missing agent
             if (!Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
             {
                 return;
@@ -261,37 +295,60 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            // Iterate through all weapon slots to find ranged weapons
+            // Iterate through weapon slots (no logging to reduce spam)
             for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
             {
                 MissionWeapon weapon = playerAgent.Equipment[i];
 
-                // Skip empty slots or weapons without ammo
-                if (weapon.IsEmpty || weapon.CurrentUsageItem == null)
+                // Skip empty slots
+                if (weapon.IsEmpty)
                 {
                     continue;
                 }
 
-                // Check if weapon uses ammunition (bows, crossbows, throwables)
-                // Bannerlord tracks ammo with MaxDataValue (max ammo) and DataValue (current ammo)
-                if (weapon.ModifiedMaxAmount > 0) // Weapon has ammo capacity
+                // Skip shields - they use HitPoints, not Amount
+                if (weapon.CurrentUsageItem?.IsShield == true)
                 {
-                    short currentAmmo = weapon.Amount;
+                    continue;
+                }
 
-                    // Only restore if below target (optimization: avoid unnecessary API calls)
-                    if (currentAmmo < GameConstants.UnlimitedAmmoTarget)
+                // Skip weapons without ammo capacity (melee weapons have MaxAmount <= 0)
+                if (weapon.ModifiedMaxAmount <= 0)
+                {
+                    continue;
+                }
+
+                // Skip bows/crossbows - MaxAmount == 1 means it's the weapon itself, not ammunition
+                // Bows don't consume themselves, they consume arrows from another slot
+                if (weapon.ModifiedMaxAmount == 1)
+                {
+                    continue;
+                }
+
+                short currentAmmo = weapon.Amount;
+                short maxAmmo = weapon.ModifiedMaxAmount;
+
+                // Restore ammo if below max using the CORRECT API method
+                if (currentAmmo < maxAmmo)
+                {
+                    // Set flag to allow our restoration call through the Harmony patch
+                    AmmoConsumptionPatch.IsRestorationInProgress = true;
+                    try
                     {
-                        // SetAmountOfSlot (4th parameter) sets the ammunition count
-                        // We set it to 999 which is effectively unlimited for most battles
-                        playerAgent.Equipment[i] = new MissionWeapon(
-                            weapon.Item,
-                            weapon.ItemModifier,
-                            weapon.Banner,
-                            GameConstants.UnlimitedAmmoTarget  // Set ammo to 999
-                        );
+                        // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
+                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
 
-                        // Log when ammo is restored (only once when it drops, not every frame)
-                        ModLogger.Debug($"Unlimited Ammo: Restored {weapon.Item.Name} to {GameConstants.UnlimitedAmmoTarget}");
+                        // Only log first restoration per mission to reduce spam
+                        if (_unlimitedAmmoLogCounter == 0)
+                        {
+                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
+                            _unlimitedAmmoLogCounter++;
+                        }
+                    }
+                    finally
+                    {
+                        AmmoConsumptionPatch.IsRestorationInProgress = false;
                     }
                 }
             }

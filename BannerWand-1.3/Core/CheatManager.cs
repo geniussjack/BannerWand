@@ -4,7 +4,6 @@ using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -33,6 +32,15 @@ namespace BannerWand.Core
         // Constants moved to GameConstants for consistency
         #endregion
 
+        #region Fields
+
+        /// <summary>
+        /// Flag to track if the initialization message has been shown to prevent duplicates.
+        /// </summary>
+        private static bool _initializationMessageShown = false;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -58,15 +66,17 @@ namespace BannerWand.Core
         /// <summary>
         /// Initializes the cheat manager when a campaign starts.
         /// </summary>
+        /// <param name="showMessage">Whether to show the initialization message to the user. Default is true.</param>
         /// <remarks>
         /// This method is called from <see cref="SubModule.OnGameStart"/> and performs
         /// initial setup, validation, and logging. Currently minimal, but reserved for
         /// future expansion (e.g., caching, pre-computation).
         /// </remarks>
-        public static void Initialize()
+        public static void Initialize(bool showMessage = true)
         {
             try
-            {                // Validate that settings are available before proceeding
+            {
+                // Validate that settings are available before proceeding
                 if (Settings == null || TargetSettings == null)
                 {
                     ModLogger.Error("Failed to initialize CheatManager - settings are null");
@@ -77,14 +87,17 @@ namespace BannerWand.Core
                 // Log successful initialization to file
                 ModLogger.Log(MessageConstants.CheatManagerInitialized);
 
-                // Calculate and display active cheat count for user feedback
-                int activeCheatCount = GetActiveCheatCount();
-                string welcomeMessage = activeCheatCount > 0
-                    ? string.Format(MessageConstants.InitializedWithCheatsFormat, activeCheatCount)
-                    : MessageConstants.InitializedNoCheats;
+                // Calculate and display active cheat count for user feedback (only once, when player appears on map)
+                if (showMessage && !_initializationMessageShown)
+                {
+                    int activeCheatCount = GetActiveCheatCount();
+                    string welcomeMessage = string.Format(MessageConstants.CheatsInitializedFormat, activeCheatCount);
 
-                InformationManager.DisplayMessage(new InformationMessage(welcomeMessage, GameConstants.SuccessColor));
-                ModLogger.Log(string.Format(MessageConstants.ActiveCheatsCountFormat, activeCheatCount));
+                    InformationManager.DisplayMessage(new InformationMessage(welcomeMessage, GameConstants.SuccessColor));
+                    ModLogger.Log(string.Format(MessageConstants.ActiveCheatsCountFormat, activeCheatCount));
+
+                    _initializationMessageShown = true;
+                }
 
             }
             catch (Exception ex)
@@ -107,6 +120,9 @@ namespace BannerWand.Core
         {
             try
             {
+                // Reset initialization flag so message can show again on next game start
+                _initializationMessageShown = false;
+
                 ModLogger.Log(MessageConstants.CheatManagerCleanup);
 
             }
@@ -223,8 +239,7 @@ namespace BannerWand.Core
         {
             try
             {                // Early return for zero amount - avoid unnecessary computation
-                const float floatEpsilon = 0.01f;
-                if (Math.Abs(amount) < floatEpsilon)
+                if (Math.Abs(amount) < GameConstants.FloatEpsilon)
                 {
                     return;
                 }
@@ -488,11 +503,14 @@ namespace BannerWand.Core
             // Add NPC parties if any NPC targets are enabled in settings
             if (TargetSettings.HasAnyNPCTargetEnabled())
             {
-                // Use LINQ to filter parties matching target criteria - performance is similar to foreach
-                IEnumerable<MobileParty> npcParties = MobileParty.All
-                    .Where(party => party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party));
-
-                affectedParties.AddRange(npcParties);
+                // Use foreach loop for better performance and fewer allocations than LINQ
+                foreach (MobileParty party in MobileParty.All)
+                {
+                    if (party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party))
+                    {
+                        affectedParties.Add(party);
+                    }
+                }
             }
 
             return affectedParties;
@@ -634,6 +652,11 @@ namespace BannerWand.Core
                     activeCheatCount++;
                 }
 
+                if (Settings.StealthInvisibility)
+                {
+                    activeCheatCount++;
+                }
+
                 if (Settings.UnlimitedFood)
                 {
                     activeCheatCount++;
@@ -705,28 +728,27 @@ namespace BannerWand.Core
                 }
 
                 // Numeric cheats - count if non-zero values are set
-                const float floatEpsilon = 0.01f;
-                if (Settings.MovementSpeed > floatEpsilon)
+                if (Settings.MovementSpeed > GameConstants.FloatEpsilon)
                 {
                     activeCheatCount++;
                 }
 
-                if (Settings.RenownMultiplier > floatEpsilon)
+                if (Settings.RenownMultiplier > GameConstants.FloatEpsilon)
                 {
                     activeCheatCount++;
                 }
 
-                if (Settings.SkillXPMultiplier > floatEpsilon)
+                if (Settings.SkillXPMultiplier > GameConstants.FloatEpsilon)
                 {
                     activeCheatCount++;
                 }
 
-                if (Settings.TroopsXPMultiplier > floatEpsilon)
+                if (Settings.TroopsXPMultiplier > GameConstants.FloatEpsilon)
                 {
                     activeCheatCount++;
                 }
 
-                if (Settings.GameSpeed > floatEpsilon)
+                if (Settings.GameSpeed > GameConstants.FloatEpsilon)
                 {
                     activeCheatCount++;
                 }
@@ -784,33 +806,33 @@ namespace BannerWand.Core
 
                 // Early return optimization - check most commonly used cheats first
                 // Returns immediately upon finding any active cheat
-                const float floatEpsilon = 0.01f;
                 return Settings.UnlimitedHealth ||
                         Settings.UnlimitedHorseHealth ||
                         Settings.UnlimitedShieldDurability ||
                         Settings.MaxMorale ||
-                        Settings.MovementSpeed > floatEpsilon ||
+                        Settings.MovementSpeed > GameConstants.FloatEpsilon ||
                         Settings.BarterAlwaysAccepted ||
                         Settings.UnlimitedSmithyStamina ||
                         Settings.MaxCharacterRelationship ||
+                        Settings.StealthInvisibility ||
                         Settings.UnlimitedFood ||
                         Settings.TradeItemsNoDecrease ||
                         Settings.MaxCarryingCapacity ||
                         Settings.UnlimitedSmithyMaterials ||
                         Settings.UnlockAllSmithyParts ||
                         Settings.UnlimitedRenown ||
-                        Settings.RenownMultiplier > floatEpsilon ||
+                        Settings.RenownMultiplier > GameConstants.FloatEpsilon ||
                         Settings.UnlimitedSkillXP ||
-                        Settings.SkillXPMultiplier > floatEpsilon ||
+                        Settings.SkillXPMultiplier > GameConstants.FloatEpsilon ||
                         Settings.UnlimitedTroopsXP ||
-                        Settings.TroopsXPMultiplier > floatEpsilon ||
+                        Settings.TroopsXPMultiplier > GameConstants.FloatEpsilon ||
                         Settings.SlowAIMovementSpeed ||
                         Settings.OneHitKills ||
                         Settings.FreezeDaytime ||
                         Settings.PersuasionAlwaysSucceed ||
                         Settings.OneDaySettlementsConstruction ||
                         Settings.InstantSiegeConstruction ||
-                        Settings.GameSpeed > floatEpsilon ||
+                        Settings.GameSpeed > GameConstants.FloatEpsilon ||
                         Settings.EditGold != 0 ||
                         Settings.EditInfluence != 0 ||
                         Settings.EditAttributePoints != 0 ||
@@ -897,13 +919,12 @@ namespace BannerWand.Core
                     activeCheatsList.Add("Persuasion Always Succeed");
                 }
 
-                const float floatEpsilon = 0.01f;
-                if (Settings.MovementSpeed > floatEpsilon)
+                if (Settings.MovementSpeed > GameConstants.FloatEpsilon)
                 {
                     activeCheatsList.Add($"Movement Speed x{Settings.MovementSpeed:F1}");
                 }
 
-                if (Settings.SkillXPMultiplier > floatEpsilon)
+                if (Settings.SkillXPMultiplier > GameConstants.FloatEpsilon)
                 {
                     activeCheatsList.Add($"Skill XP x{Settings.SkillXPMultiplier:F1}");
                 }
