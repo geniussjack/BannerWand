@@ -210,9 +210,10 @@ namespace BannerWand.Patches
 
     /// <summary>
     /// Alternative patch that tries to intercept MissionEquipment modifications.
-    /// This serves as a fallback if Agent.SetWeaponAmountInSlot doesn't exist.
+    /// DISABLED: This patch causes character model corruption because MissionEquipment.set_Item
+    /// is used for ALL equipment changes, including visual model updates.
     /// </summary>
-    [HarmonyPatch]
+    // [HarmonyPatch] - DISABLED to prevent automatic application via PatchAll()
     public static class MissionEquipmentAmmoSafetyPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
