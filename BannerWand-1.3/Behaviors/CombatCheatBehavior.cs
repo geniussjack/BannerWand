@@ -451,19 +451,31 @@ namespace BannerWand.Behaviors
                 // Update last known amount
                 _lastAmmoAmounts[i] = currentAmmo;
 
-                // DISABLED: Manual restoration via SetWeaponAmountInSlot causes UpdateAgentProperties()
-                // to be called, which can break character models. Instead, we rely entirely on
-                // the Harmony patch (AmmoConsumptionPatch) which prevents ammo decrease.
-                // The patch modifies the amount parameter before the original method executes,
-                // so no manual restoration is needed.
-                //
-                // If ammo somehow gets below max, the patch will prevent further decreases,
-                // and the player can pick up ammo normally or it will be restored on next shot attempt.
-                if (shouldRestore && _unlimitedAmmoLogCounter == 0)
+                // Restore ammo if needed
+                // NOTE: SetWeaponAmountInSlot patch is temporarily disabled for testing,
+                // so we need manual restoration. This will call UpdateAgentProperties(),
+                // but we need to test if the patch was causing the model corruption.
+                if (shouldRestore)
                 {
-                    string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                    ModLogger.Debug($"[UnlimitedAmmo] Ammo below max for {weaponName} (Slot: {i}): {currentAmmo}/{maxAmmo}. Patch will prevent further decrease.");
-                    _unlimitedAmmoLogCounter++;
+                    // Use SetWeaponAmountInSlot to restore ammo
+                    // This will trigger UpdateAgentProperties(), but we're testing if the patch was the issue
+                    try
+                    {
+                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
+                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
+
+                        // Only log first restoration per mission to reduce spam
+                        if (_unlimitedAmmoLogCounter == 0)
+                        {
+                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
+                            _unlimitedAmmoLogCounter++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ModLogger.Warning($"[UnlimitedAmmo] Error restoring ammo: {ex.Message}");
+                    }
                 }
             }
         }
