@@ -328,10 +328,10 @@ namespace BannerWand.Core
                 }
 
                 // TEMPORARILY DISABLED: Testing if SetWeaponAmountInSlot patch causes character model corruption
-                // This patch modifies the amount parameter before SetWeaponAmountInSlot executes,
-                // which may interfere with game's internal state management.
-                ModLogger.Log("[AmmoConsumptionPatch] SetWeaponAmountInSlot patch TEMPORARILY DISABLED for testing");
-                ModLogger.Log("[AmmoConsumptionPatch] Unlimited Ammo will use tick-based restoration only");
+                // This patch modifies the amount parameter via ref, which may still interfere with
+                // internal game state. Disabling to test if this is the root cause.
+                ModLogger.Warning("[AmmoConsumptionPatch] SetWeaponAmountInSlot patch TEMPORARILY DISABLED for testing");
+                ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based restoration only");
                 primaryPatchApplied = false; // Don't apply patch
                 AmmoConsumptionPatch.IsPatchApplied = false;
             }

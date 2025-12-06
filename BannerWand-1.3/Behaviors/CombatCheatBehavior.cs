@@ -52,18 +52,6 @@ namespace BannerWand.Behaviors
         private readonly System.Collections.Generic.Dictionary<int, bool> _infiniteHealthApplied = [];
 
         /// <summary>
-        /// Tracks original HealthLimit values before applying bonus.
-        /// Key: Agent index, Value: Original HealthLimit before bonus.
-        /// </summary>
-        private readonly System.Collections.Generic.Dictionary<int, float> _originalHealthLimits = [];
-
-        /// <summary>
-        /// Tracks when agents were built (tick count) to delay HealthLimit modification.
-        /// Key: Agent index, Value: Tick count when agent was built.
-        /// </summary>
-        private readonly System.Collections.Generic.Dictionary<int, int> _agentBuildTicks = [];
-
-        /// <summary>
         /// Tracks whether unlimited ammo has been logged for current mission.
         /// </summary>
         private bool _unlimitedAmmoLogged = false;
@@ -102,8 +90,6 @@ namespace BannerWand.Behaviors
 
             // Reset application flags for next mission
             _infiniteHealthApplied.Clear();
-            _originalHealthLimits.Clear();
-            _agentBuildTicks.Clear();
             _unlimitedAmmoLogged = false;
             _unlimitedAmmoLogCounter = 0;
             _missionTickCount = 0;
@@ -128,13 +114,10 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            // Track when player agent is built for delayed HealthLimit modification
-            // CRITICAL: Don't modify HealthLimit immediately - wait a few ticks for agent to fully initialize
+            // Apply Infinite Health bonus immediately when player agent is built
             if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
             {
-                int agentIndex = agent.Index;
-                _agentBuildTicks[agentIndex] = _missionTickCount;
-                ModLogger.Debug($"Agent {agentIndex} built at tick {_missionTickCount}, will apply Infinite Health after delay");
+                ApplyInfiniteHealthToAgent(agent);
             }
         }
 
@@ -179,16 +162,13 @@ namespace BannerWand.Behaviors
 
                 _missionTickCount++;
 
-                // Apply Infinite Health bonus with delay after agent is built
-                // This ensures agent is fully initialized before modifying HealthLimit
-                ApplyInfiniteHealthWithDelay();
+                // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
+                // Also try to apply in OnMissionTick as fallback if OnAgentBuild didn't work
+                ApplyInfiniteHealth();
 
-                // DISABLED: Per-frame health restoration causes character model corruption
-                // Health restoration is now handled only in OnAgentHit event, which is safer
-                // ApplyUnlimitedHealth(); // DISABLED - causes model corruption
-                // ApplyUnlimitedHorseHealth(); // DISABLED - causes model corruption
-                
                 // Apply continuous combat cheats
+                ApplyUnlimitedHealth();
+                ApplyUnlimitedHorseHealth();
                 ApplyOneHitKills();
 
                 // Apply unlimited ammo once per frame - now using safe minimum strategy
@@ -468,19 +448,32 @@ namespace BannerWand.Behaviors
                 // Update last known amount
                 _lastAmmoAmounts[i] = currentAmmo;
 
-                // DISABLED: Manual restoration via SetWeaponAmountInSlot causes UpdateAgentProperties()
-                // to be called, which can break character models. Instead, we rely entirely on
-                // the Harmony patch (AmmoConsumptionPatch) which prevents ammo decrease.
-                // The patch modifies the amount parameter before the original method executes,
-                // so no manual restoration is needed.
-                //
-                // If ammo somehow gets below max, the patch will prevent further decreases,
-                // and the player can pick up ammo normally or it will be restored on next shot attempt.
-                if (shouldRestore && _unlimitedAmmoLogCounter == 0)
+                // Restore ammo if needed
+                // NOTE: SetWeaponAmountInSlot patch is temporarily disabled for testing,
+                // so we need manual restoration. This will call UpdateAgentProperties(),
+                // but we're testing if the PATCH was the problem, not the method itself.
+                if (shouldRestore)
                 {
-                    string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                    ModLogger.Debug($"[UnlimitedAmmo] Ammo below max for {weaponName} (Slot: {i}): {currentAmmo}/{maxAmmo}. Patch will prevent further decrease.");
-                    _unlimitedAmmoLogCounter++;
+                    // Set flag to allow our restoration call through the Harmony patch (if it was enabled)
+                    AmmoConsumptionPatch.IsRestorationInProgress = true;
+                    try
+                    {
+                        // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
+                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
+                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
+
+                        // Only log first restoration per mission to reduce spam
+                        if (_unlimitedAmmoLogCounter == 0)
+                        {
+                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
+                            _unlimitedAmmoLogCounter++;
+                        }
+                    }
+                    finally
+                    {
+                        AmmoConsumptionPatch.IsRestorationInProgress = false;
+                    }
                 }
             }
         }
@@ -537,10 +530,25 @@ namespace BannerWand.Behaviors
         }
 
         /// <summary>
-        /// Applies Infinite Health bonus with a delay after agent is built.
-        /// This ensures the agent is fully initialized before modifying HealthLimit.
+        /// Adds +9999 HP to player at the start of battle.
+        /// Prevents one-shot kills from high damage attacks.
         /// </summary>
-        private void ApplyInfiniteHealthWithDelay()
+        /// <remarks>
+        /// <para>
+        /// This cheat modifies HealthLimit (max HP) rather than just restoring health.
+        /// The +9999 HP bonus makes it virtually impossible to die from any single attack.
+        /// </para>
+        /// <para>
+        /// Applied once per agent using _infiniteHealthApplied dictionary.
+        /// This prevents repeated application every frame.
+        /// </para>
+        /// <para>
+        /// Difference from Unlimited Health:
+        /// - Unlimited HP: Keeps health bar full, but can die from one-shot
+        /// - Infinite Health: Adds +9999 HP, prevents one-shot kills
+        /// </para>
+        /// </remarks>
+        private void ApplyInfiniteHealth()
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
@@ -562,34 +570,12 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            int agentIndex = playerAgent.Index;
-
-            // Check if agent was built and we need to apply bonus with delay
-            if (_agentBuildTicks.TryGetValue(agentIndex, out int buildTick))
-            {
-                // Wait at least 10 ticks (approximately 166ms at 60 FPS) before modifying HealthLimit
-                // This ensures agent's visual representation is fully initialized
-                const int delayTicks = 10;
-                if (_missionTickCount >= buildTick + delayTicks)
-                {
-                    // Delay passed, apply bonus now
-                    ApplyInfiniteHealthToAgent(playerAgent);
-                    _agentBuildTicks.Remove(agentIndex); // Remove from tracking
-                }
-                // If delay hasn't passed yet, wait for next tick
-            }
-            else if (!_infiniteHealthApplied.ContainsKey(agentIndex))
-            {
-                // Agent wasn't tracked in OnAgentBuild (maybe spawned before behavior was added)
-                // Apply immediately as fallback, but only once
-                ApplyInfiniteHealthToAgent(playerAgent);
-            }
+            // Apply bonus to the agent
+            ApplyInfiniteHealthToAgent(playerAgent);
         }
 
         /// <summary>
         /// Applies Infinite Health bonus to a specific agent.
-        /// CRITICAL: Only modifies HealthLimit ONCE, immediately after agent is built.
-        /// Never modifies HealthLimit again to prevent character model corruption.
         /// </summary>
         /// <param name="agent">The agent to apply the bonus to.</param>
         private void ApplyInfiniteHealthToAgent(Agent agent)
@@ -608,42 +594,43 @@ namespace BannerWand.Behaviors
 
             int agentIndex = agent.Index;
 
-            // CRITICAL: Only apply HealthLimit modification ONCE per agent
-            // Never reapply or modify again, as this can break character models
+            // Check if already applied to this agent
             if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
             {
-                // Bonus already applied - just restore health if needed, but NEVER modify HealthLimit again
-                if (agent.Health < agent.HealthLimit)
+                // Verify bonus is still there (in case HealthLimit was reset)
+                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
+                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
                 {
-                    agent.Health = agent.HealthLimit;
+                    // Bonus seems to have been reset, reapply it
+                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
+                    _infiniteHealthApplied[agentIndex] = false;
                 }
-                return;
+                else
+                {
+                    // Bonus is still there, just restore health
+                    if (agent.Health < agent.HealthLimit)
+                    {
+                        agent.Health = agent.HealthLimit;
+                    }
+                    return;
+                }
             }
 
-            // Store original HealthLimit BEFORE applying bonus
+            // Store original HealthLimit before applying bonus (for verification)
             float originalHealthLimit = agent.HealthLimit;
             float originalBaseHealthLimit = agent.BaseHealthLimit;
 
-            // CRITICAL FIX: DO NOT modify HealthLimit - it causes character model corruption!
-            // Instead, we rely on aggressive health restoration in OnAgentHit to prevent death.
-            // The game's internal systems may depend on HealthLimit being consistent, and changing
-            // it after agent initialization can break visual model updates.
-            //
-            // Strategy: Just restore health aggressively when it drops, without modifying HealthLimit.
-            // This prevents one-shot kills by restoring health immediately after damage is applied.
-            if (originalHealthLimit > 0)
+            // Set HealthLimit to original base + bonus to ensure consistency
+            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
             {
-                // Mark as applied WITHOUT modifying HealthLimit
+                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
+                agent.HealthLimit = newHealthLimit;
+                agent.Health = newHealthLimit; // Fill to new max
+
+                // Mark as applied to prevent repeated application
                 _infiniteHealthApplied[agentIndex] = true;
-                _originalHealthLimits[agentIndex] = originalHealthLimit;
 
-                // Just ensure health is at maximum
-                if (agent.Health < agent.HealthLimit)
-                {
-                    agent.Health = agent.HealthLimit;
-                }
-
-                ModLogger.Debug($"Infinite Health tracking enabled for agent {agentIndex} (HealthLimit NOT modified to prevent model corruption, original: {originalHealthLimit})");
+                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
             }
         }
 
