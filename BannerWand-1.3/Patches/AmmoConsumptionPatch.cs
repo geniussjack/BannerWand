@@ -249,6 +249,8 @@ namespace BannerWand.Patches
 
         /// <summary>
         /// Prefix that intercepts weapon slot modifications and prevents ammo decrease.
+        /// CRITICAL: This patch modifies MissionEquipment.set_Item which is also used for
+        /// visual model updates. We must be VERY careful to only modify ammo-related changes.
         /// </summary>
         [HarmonyPrefix]
         public static bool Prefix(MissionEquipment __instance, EquipmentIndex index, ref MissionWeapon value)
@@ -279,19 +281,45 @@ namespace BannerWand.Patches
                 // Get current weapon
                 MissionWeapon currentWeapon = __instance[index];
 
-                if (currentWeapon.IsEmpty || value.IsEmpty)
+                // CRITICAL FIX: If current weapon is empty, this is likely initial equipment setup
+                // or a weapon switch. DO NOT MODIFY to avoid breaking visual models!
+                if (currentWeapon.IsEmpty)
                 {
                     return true;
                 }
 
-                // Skip shields
+                // CRITICAL FIX: If the new weapon is a completely different item (not just amount change),
+                // this is a weapon switch or equipment update, NOT ammo consumption. Allow it!
+                if (!value.IsEmpty && value.Item != currentWeapon.Item)
+                {
+                    return true;
+                }
+
+                // CRITICAL FIX: If new weapon is empty, this is unequipping. Allow it!
+                if (value.IsEmpty)
+                {
+                    return true;
+                }
+
+                // Skip shields - they don't use ammo
                 if (currentWeapon.CurrentUsageItem?.IsShield == true)
                 {
                     return true;
                 }
 
-                // If new amount is less than current, this might be ammo consumption
-                if (value.Amount < currentWeapon.Amount && currentWeapon.ModifiedMaxAmount > 1)
+                // Skip weapons without ammo capacity (melee weapons, bows without arrows loaded)
+                if (currentWeapon.ModifiedMaxAmount <= 1)
+                {
+                    return true;
+                }
+
+                // CRITICAL FIX: Only block ammo decrease if:
+                // 1. Same weapon (same Item reference)
+                // 2. Amount decreased
+                // 3. Has ammo capacity
+                if (value.Item == currentWeapon.Item && 
+                    value.Amount < currentWeapon.Amount && 
+                    currentWeapon.ModifiedMaxAmount > 1)
                 {
                     // Create new weapon with original amount to prevent decrease
                     value = new MissionWeapon(
