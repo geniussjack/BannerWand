@@ -30,22 +30,16 @@
 		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Player's horse takes no damage." />
 
 		<string id="BW_Player_UnlimitedShieldDurability" text="Unlimited Shield Durability" />
-		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Player's shield never breaks." />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Takes effect when you block enemy attacks." />
 
 		<string id="BW_Player_UnlimitedAmmo" text="Unlimited Ammo" />
 		<string id="BW_Player_UnlimitedAmmo_Hint" text="Ammunition for bows, crossbows, and throwables is maintained at 999." />
-
-		<string id="BW_Player_UnlimitedPartyHealth" text="Unlimited Party Health" />
-		<string id="BW_Player_UnlimitedPartyHealth_Hint" text="All party members take no damage." />
-
-		<string id="BW_Player_IgnoreMeleeDamage" text="Ignore Melee Damage" />
-		<string id="BW_Player_IgnoreMeleeDamage_Hint" text="Player ignores melee damage." />
 
 		<string id="BW_Player_MaxMorale" text="Max Morale" />
 		<string id="BW_Player_MaxMorale_Hint" text="Player's party always has maximum morale." />
 
 		<string id="BW_Player_MovementSpeed" text="Set Movement Speed" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Set player movement speed multiplier (0 = disabled). Changes apply on the next in-game day." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Only works on map, not in battle. Changes apply on the next in-game day." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Barter Offer Always Accepted" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="All barter offers are automatically accepted." />
@@ -59,46 +53,43 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Max All Character Relationships" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Instantly sets relationship to 100 with all characters." />
 
-		<string id="BW_Player_StealthInvisibility" text="Stealth Invisibility" />
-		<string id="BW_Player_StealthInvisibility_Hint" text="Player is completely invisible and undetectable in stealth missions." />
-
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edit Gold" />
-		<string id="BW_Inventory_EditGold_Hint" text="Add or remove gold (applied once per button press)." />
+		<string id="BW_Inventory_EditGold_Hint" text="Add or remove gold (applied once when value changed)." />
 
 		<string id="BW_Inventory_EditInfluence" text="Edit Influence" />
-		<string id="BW_Inventory_EditInfluence_Hint" text="Add or remove influence (applied once per button press)." />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Add or remove influence (applied once when value changed)." />
 
 		<string id="BW_Inventory_UnlimitedFood" text="Unlimited Food" />
 		<string id="BW_Inventory_UnlimitedFood_Hint" text="Party food never decreases." />
 
-		<string id="BW_Inventory_TradeItemsNoDecrease" text="[WIP] Trade/Exchange Items Don't Decrease" />
-		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="[WORK IN PROGRESS] Trading or exchanging items doesn't remove them from inventory." />
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Trade/Exchange Items Don't Decrease" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Items stay in your inventory after trading them. Only applies to items you give away, not items you receive." />
 
 		<string id="BW_Inventory_MaxCarryingCapacity" text="Max Carrying Capacity" />
 		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Party has unlimited carrying capacity." />
 
 		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Unlimited Smithy Materials" />
-		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Smithing materials never decrease." />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Only works for materials that you already owned, it has no effect on materials that you didn't own." />
 
-		<string id="BW_Inventory_UnlockAllSmithyParts" text="[WIP] Unlock All Smithy Parts" />
-		<string id="BW_Inventory_UnlockAllSmithyParts_Hint" text="[WORK IN PROGRESS] All smithing parts are unlocked." />
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Smithy Materials Quantity" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Set the target amount for smithy materials (100-9999). Only works when Unlimited Smithy Materials is enabled." />
 
 		<!-- Stats Category -->
 		<string id="BW_Stats_EditAttributePoints" text="Edit Attribute Points" />
-		<string id="BW_Stats_EditAttributePoints_Hint" text="Add or remove attribute points (applied once per button press)." />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Takes effect when opening the character menu twice. To disable this option, you need to set the value to -1." />
 
 		<string id="BW_Stats_EditFocusPoints" text="Edit Focus Points" />
-		<string id="BW_Stats_EditFocusPoints_Hint" text="Add or remove focus points (applied once per button press)." />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Takes effect when opening the character menu twice. To disable this option, you need to set the value to -1." />
 
 		<string id="BW_Stats_UnlimitedRenown" text="Unlimited Renown" />
-		<string id="BW_Stats_UnlimitedRenown_Hint" text="Renown never decreases and always increases." />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Note sometime you may not gain any renown even though the game says you gained renown. Especially when enemies are fled. This might be a game bug. Takes effect when gaining renown." />
 
 		<string id="BW_Stats_RenownMultiplier" text="Renown Multiplier" />
-		<string id="BW_Stats_RenownMultiplier_Hint" text="Multiply renown gains (0 = disabled)." />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Multiplies all renown gains (0 = disabled). Note: The display value may not reflect the multiplied amount, but the actual renown gained is multiplied." />
 
 		<string id="BW_Stats_UnlimitedSkillXP" text="Unlimited Skill XP" />
-		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="All skills gain XP without limit." />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Takes effect when a skill gains XP. Note skills have level caps based on their learning rate which affected by your attributes. If a skill's learning rate is 0, it won't gain any XP, you need to spend attribute points to raise your attributes in order to raise learning rate." />
 
 		<string id="BW_Stats_SkillXPMultiplier" text="Skill XP Multiplier" />
 		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Multiply skill XP gains (0 = disabled)." />
@@ -110,30 +101,21 @@
 		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Multiply troop XP gains (0 = disabled)." />
 
 		<!-- Enemies Category -->
-		<string id="BW_Enemies_SlowAIMovementSpeed" text="[WIP] Slow AI Movement Speed" />
-		<string id="BW_Enemies_SlowAIMovementSpeed_Hint" text="[WORK IN PROGRESS] Enemy AI moves slower on campaign map." />
-
 		<string id="BW_Enemies_OneHitKills" text="One-Hit Kills" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="All enemy units die in one hit." />
 
 		<!-- Game Category -->
-		<string id="BW_Game_FreezeDaytime" text="[WIP] Freeze Daytime" />
-		<string id="BW_Game_FreezeDaytime_Hint" text="[WORK IN PROGRESS] Time of day is frozen." />
-
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasion/Conversation Always Succeed" />
 		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="All persuasion and conversation checks automatically succeed." />
 
-		<string id="BW_Game_RecruitPrisonersAnytime" text="Can Recruit Prisoners at Anytime" />
-		<string id="BW_Game_RecruitPrisonersAnytime_Hint" text="Prisoners can be recruited immediately without waiting." />
-
 		<string id="BW_Game_OneDaySettlementsConstruction" text="One Day Settlements Construction" />
-		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="All settlement building projects complete in one day." />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Only one building can be constructed at a time. Building/upgrading multiple buildings still requires multiple days." />
 
 		<string id="BW_Game_InstantSiegeConstruction" text="Instant Siege Construction" />
-		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Siege equipment is built instantly." />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Note this option affects both sides." />
 
-		<string id="BW_Game_GameSpeed" text="[WIP] Set Game Speed" />
-		<string id="BW_Game_GameSpeed_Hint" text="[WORK IN PROGRESS] Set campaign map time speed multiplier (0 = disabled)." />
+		<string id="BW_Game_GameSpeed" text="Set Game Speed Multiplier" />
+		<string id="BW_Game_GameSpeed_Hint" text="Multiplies the speed of Play (1x) and Fast Forward (4x) buttons. 1.0 = normal, 2.0 = double speed, etc." />
 
 		<!-- Target Settings -->
 		<!-- Category: Player -->

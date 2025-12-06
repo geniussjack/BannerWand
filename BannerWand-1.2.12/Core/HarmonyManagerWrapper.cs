@@ -39,8 +39,9 @@ namespace BannerWandRetro.Core
         /// <value>The Harmony instance, or null if not initialized.</value>
         /// <remarks>
         /// Delegates to <see cref="HarmonyManager.Instance"/>.
+        /// Callers should check for null before use if initialization may not have occurred.
         /// </remarks>
-        public Harmony Instance => HarmonyManager.Instance!;
+        public Harmony Instance => HarmonyManager.Instance;
 
         /// <summary>
         /// Gets whether Harmony patches have been initialized.

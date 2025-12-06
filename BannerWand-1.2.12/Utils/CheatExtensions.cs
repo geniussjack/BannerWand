@@ -47,10 +47,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsKingdomRuler: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsKingdomRuler));
                 return false;
             }
         }
@@ -74,10 +71,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsClanLeader: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsClanLeader));
                 return false;
             }
         }
@@ -100,10 +94,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsIndependent: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsIndependent));
                 return false;
             }
         }
@@ -125,10 +116,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsPlayerClanMember: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsPlayerClanMember));
                 return false;
             }
         }
@@ -158,10 +146,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsPlayerKingdomVassal: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsPlayerKingdomVassal));
                 return false;
             }
         }
@@ -205,10 +190,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsIndependent: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsIndependent));
                 return false;
             }
         }
@@ -230,10 +212,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsPlayerKingdomVassal: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsPlayerKingdomVassal));
                 return false;
             }
         }
@@ -267,10 +246,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsFriendlyToPlayer: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsFriendlyToPlayer));
                 return false;
             }
         }
@@ -292,10 +268,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in GetTotalTroopCount: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(GetTotalTroopCount));
                 return 0;
             }
         }
@@ -317,10 +290,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in GetHealthyTroopCount: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(GetHealthyTroopCount));
                 return 0;
             }
         }
@@ -372,10 +342,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in HealAllWounded: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(HealAllWounded));
                 return 0;
             }
         }
@@ -403,10 +370,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsPlayerEnemy: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsPlayerEnemy));
                 return false;
             }
         }
@@ -436,10 +400,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in FullHeal: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(FullHeal));
             }
         }
 
@@ -460,10 +421,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsPlayer: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsPlayer));
                 return false;
             }
         }
@@ -490,10 +448,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsFoodItem: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsFoodItem));
                 return false;
             }
         }
@@ -516,10 +471,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsWeaponItem: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsWeaponItem));
                 return false;
             }
         }
@@ -541,10 +493,7 @@ namespace BannerWandRetro.Utils
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatExtensions] Error in IsArmorItem: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsArmorItem));
                 return false;
             }
         }
@@ -614,6 +563,27 @@ namespace BannerWandRetro.Utils
                     DefaultSkills.Medicine,
                     DefaultSkills.Engineering
             ];
+        }
+
+        #endregion
+
+        #region Exception Handling
+
+        /// <summary>
+        /// Logs an exception with consistent formatting for CheatExtensions methods.
+        /// </summary>
+        /// <param name="ex">The exception to log.</param>
+        /// <param name="methodName">The name of the method where the exception occurred.</param>
+        /// <remarks>
+        /// This helper method centralizes exception logging to ensure consistent error reporting
+        /// and reduce code duplication across all CheatExtensions methods.
+        /// </remarks>
+        private static void LogException(Exception ex, string methodName)
+        {
+            ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
+            ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            ModLogger.Error($"[CheatExtensions] Error in {methodName}: {ex.Message}");
+            ModLogger.Error($"Stack trace: {ex.StackTrace}");
         }
 
         #endregion

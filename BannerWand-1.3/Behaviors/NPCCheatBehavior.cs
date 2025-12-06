@@ -2,6 +2,7 @@ using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Behaviors
@@ -31,12 +32,12 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Tracks whether attribute points have been applied to prevent repeated application.
@@ -89,14 +90,7 @@ namespace BannerWand.Behaviors
         /// </remarks>
         public override void SyncData(IDataStore dataStore)
         {
-            try
-            {
-            }// No persistent data to sync - settings are managed by MCM            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[NPCCheatBehavior] Error in SyncData: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-            }
+            // No persistent data to sync - settings are managed by MCM
         }
 
         #endregion
@@ -264,7 +258,13 @@ namespace BannerWand.Behaviors
             // Apply to NPC clans if any NPC targets are enabled
             if (TargetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (Clan clan in CampaignDataCache.AllClans!)
+                List<Clan> allClans = CampaignDataCache.AllClans;
+                if (allClans is null)
+                {
+                    return;
+                }
+
+                foreach (Clan clan in allClans)
                 {
                     // Skip player clan (already handled above)
                     if (clan == Clan.PlayerClan)

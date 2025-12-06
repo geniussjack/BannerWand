@@ -108,7 +108,7 @@ namespace BannerWandRetro.Settings
         /// Party morale locked at maximum (100).
         /// Implemented in <see cref="Models.CustomPartyMoraleModel"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_MaxMorale}Max Morale", Order = 4, RequireRestart = false, HintText = "{=BW_Player_MaxMorale_Hint}Player's party always has maximum morale.")]
+        [SettingPropertyBool("{=BW_Player_MaxMorale}Max Morale", Order = 5, RequireRestart = false, HintText = "{=BW_Player_MaxMorale_Hint}Player's party always has maximum morale.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool MaxMorale { get; set; } = false;
 
@@ -182,10 +182,10 @@ namespace BannerWandRetro.Settings
         public bool UnlimitedFood { get; set; } = false;
 
         /// <summary>
-        /// [WIP] Trade items would not decrease when sold/given.
-        /// Currently non-functional - requires further implementation.
+        /// Prevents items from being removed from player's inventory during barter/trade.
+        /// Implemented via <see cref="Patches.ItemBarterablePatch"/> Harmony patch.
         /// </summary>
-        [SettingPropertyBool("{=BW_Inventory_TradeItemsNoDecrease}[WIP] Trade/Exchange Items Don't Decrease", Order = 3, RequireRestart = false, HintText = "{=BW_Inventory_TradeItemsNoDecrease_Hint}[WORK IN PROGRESS] This feature is not yet implemented.")]
+        [SettingPropertyBool("{=BW_Inventory_TradeItemsNoDecrease}Trade/Exchange Items Don't Decrease", Order = 3, RequireRestart = false, HintText = "{=BW_Inventory_TradeItemsNoDecrease_Hint}Items stay in your inventory after trading them. Only applies to items you give away, not items you receive.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public bool TradeItemsNoDecrease { get; set; } = false;
 
@@ -206,14 +206,13 @@ namespace BannerWandRetro.Settings
         public bool UnlimitedSmithyMaterials { get; set; } = false;
 
         /// <summary>
-        /// [WIP] Unlocks all smithing parts/recipes.
-        /// NOTE: In Bannerlord 1.2.12 requires manual activation via console commands.
-        /// Check the log file for instructions.
+        /// Target quantity for unlimited smithy materials.
+        /// Controls how many of each material to maintain when Unlimited Smithy Materials is enabled.
         /// </summary>
-        //
-        [SettingPropertyBool("{=BW_Inventory_UnlockAllSmithyParts}[WIP] Unlock All Smithy Parts", Order = 6, RequireRestart = false, HintText = "{=BW_Inventory_UnlockAllSmithyParts_Hint}[WORK IN PROGRESS] All smithing parts are unlocked.")]
+        [SettingPropertyInteger("{=BW_Inventory_SmithyMaterialsQuantity}Smithy Materials Quantity", 100, 9999, Order = 6, RequireRestart = false, HintText = "{=BW_Inventory_SmithyMaterialsQuantity_Hint}Set the target amount for smithy materials (100-9999). Only works when Unlimited Smithy Materials is enabled.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
-        public bool UnlockAllSmithyParts { get; set; } = false;
+        public int SmithyMaterialsQuantity { get; set; } = 9999;
+
 
         #endregion
 
@@ -244,10 +243,10 @@ namespace BannerWandRetro.Settings
         public bool UnlimitedRenown { get; set; } = false;
 
         /// <summary>
-        /// WARNING: Currently non-functional - use Unlimited Renown instead.
-        /// Would multiply renown gains.
+        /// Multiplies all renown gains by the specified multiplier.
+        /// Implemented via <see cref="Patches.RenownMultiplierPatch"/> Harmony patch.
         /// </summary>
-        [SettingPropertyFloatingInteger("{=BW_Stats_RenownMultiplier}Renown Multiplier", 0f, 16f, Order = 3, RequireRestart = false, HintText = "{=BW_Stats_RenownMultiplier_Hint}Note sometime you may not gain any renown even though the game says you gained renown. Especially when enemies are fled. This might be a game bug. The display value is not affected, the actual amount you're gaining is multiplied.")]
+        [SettingPropertyFloatingInteger("{=BW_Stats_RenownMultiplier}Renown Multiplier", 0f, 16f, Order = 3, RequireRestart = false, HintText = "{=BW_Stats_RenownMultiplier_Hint}Multiplies all renown gains (0 = disabled). Note: The display value may not reflect the multiplied amount, but the actual renown gained is multiplied.")]
         [SettingPropertyGroup("{=BW_Category_Stats}Stats", GroupOrder = 2)]
         public float RenownMultiplier { get; set; } = 0f;
 
@@ -287,13 +286,6 @@ namespace BannerWandRetro.Settings
 
         #region Enemies Category
 
-        /// <summary>
-        /// [WIP] Reduces all AI party speeds to 50% of normal.
-        /// Currently has accuracy issues - may not reduce speed precisely.
-        /// </summary>
-        [SettingPropertyBool("{=BW_Enemies_SlowAIMovementSpeed}[WIP] Slow AI Movement Speed", Order = 0, RequireRestart = false, HintText = "{=BW_Enemies_SlowAIMovementSpeed_Hint}[WORK IN PROGRESS] Reduces enemy speed but accuracy needs improvement.")]
-        [SettingPropertyGroup("{=BW_Category_Enemies}Enemies", GroupOrder = 3)]
-        public bool SlowAIMovementSpeed { get; set; } = false;
 
         /// <summary>
         /// All enemy combatants die from a single hit.
@@ -307,13 +299,6 @@ namespace BannerWandRetro.Settings
 
         #region Game Category
 
-        /// <summary>
-        /// [WIP] Stops time progression on campaign map.
-        /// Currently pauses the entire game instead of just time.
-        /// </summary>
-        [SettingPropertyBool("{=BW_Game_FreezeDaytime}[WIP] Freeze Daytime", Order = 0, RequireRestart = false, HintText = "{=BW_Game_FreezeDaytime_Hint}[WORK IN PROGRESS] Currently freezes entire game, not just time.")]
-        [SettingPropertyGroup("{=BW_Category_Game}Game", GroupOrder = 4)]
-        public bool FreezeDaytime { get; set; } = false;
 
         /// <summary>
         /// All persuasion attempts automatically succeed.
@@ -340,12 +325,13 @@ namespace BannerWandRetro.Settings
         public bool InstantSiegeConstruction { get; set; } = false;
 
         /// <summary>
-        /// Campaign time flow speed (0 = paused, 1 = normal, 4 = fast forward).
-        /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
+        /// Game speed multiplier for Play and Fast Forward buttons.
+        /// Multiplies the speed provided by Play (1x) and Fast Forward (4x) buttons.
+        /// Example: 2.0 means Play becomes 2x speed, Fast Forward becomes 8x speed.
         /// </summary>
-        [SettingPropertyFloatingInteger("{=BW_Game_GameSpeed}[WIP] Set Game Speed", 0f, 16f, Order = 4, RequireRestart = false, HintText = "{=BW_Game_GameSpeed_Hint}[WORK IN PROGRESS] Set campaign map time speed multiplier (0 = disabled).")]
+        [SettingPropertyFloatingInteger("{=BW_Game_GameSpeed}Set Game Speed Multiplier", 0.1f, 10f, Order = 4, RequireRestart = false, HintText = "{=BW_Game_GameSpeed_Hint}Multiplies the speed of Play (1x) and Fast Forward (4x) buttons. 1.0 = normal, 2.0 = double speed, etc.")]
         [SettingPropertyGroup("{=BW_Category_Game}Game", GroupOrder = 4)]
-        public float GameSpeed { get; set; } = 0f;
+        public float GameSpeed { get; set; } = 1.0f;
 
         #endregion
 

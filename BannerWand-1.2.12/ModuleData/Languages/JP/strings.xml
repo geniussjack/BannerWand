@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="日本語" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - ターゲット" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="プレイヤー" />
+		<string id="BW_Category_Inventory" text="インベントリ" />
+		<string id="BW_Category_Stats" text="統計" />
+		<string id="BW_Category_Enemies" text="敵" />
+		<string id="BW_Category_Game" text="ゲーム" />
+		<string id="BW_Category_CheatTargets" text="チートターゲット" />
+		<string id="BW_Category_Kingdoms" text="王国" />
+		<string id="BW_Category_MinorClans" text="小氏族" />
+		<string id="BW_Category_Info" text="情報" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="無制限HP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="体力バーが減少しません。最大HPを超えるダメージで死ぬ可能性があります。" />
+
+		<string id="BW_Player_InfiniteHealth" text="無限体力" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="戦闘開始時に+9999 HPを追加します。一撃必殺を防ぎます。" />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="無制限馬の体力" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="プレイヤーの馬はダメージを受けません。" />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="無制限盾の耐久性" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="敵の攻撃をブロックしたときに効果を発揮します。" />
+
+		<string id="BW_Player_UnlimitedAmmo" text="無制限弾薬" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="弓、クロスボウ、投擲武器の弾薬は999に維持されます。" />
+
+		<string id="BW_Player_MaxMorale" text="最大士気" />
+		<string id="BW_Player_MaxMorale_Hint" text="プレイヤーのパーティーは常に最大士気を持ちます。" />
+
+		<string id="BW_Player_MovementSpeed" text="移動速度を設定" />
+		<string id="BW_Player_MovementSpeed_Hint" text="マップ上でのみ機能し、戦闘では機能しません。変更は次のゲーム内日で適用されます。" />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="取引オファー常時受け入れ" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="すべての取引オファーが自動的に受け入れられます。" />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="無制限鍛冶スタミナ" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="鍛冶はスタミナを消費しません。" />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="最大キャラクター関係" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="プレイヤーとの正の関係変化は+99に増加します。" />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="すべてのキャラクター関係を最大に" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="すべてのキャラクターとの関係を即座に100に設定します。" />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="金を編集" />
+		<string id="BW_Inventory_EditGold_Hint" text="金を追加または削除します（値が変更されたときに一度適用されます）。" />
+
+		<string id="BW_Inventory_EditInfluence" text="影響力を編集" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="影響力を追加または削除します（値が変更されたときに一度適用されます）。" />
+
+		<string id="BW_Inventory_UnlimitedFood" text="無制限食料" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="パーティーの食料は減少しません。" />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="取引/交換アイテムが減少しない" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="取引後もアイテムはインベントリに残ります。与えるアイテムにのみ適用され、受け取るアイテムには適用されません。" />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="最大運搬能力" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="パーティーは無制限の運搬能力を持ちます。" />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="無制限鍛冶材料" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="既に所有していた材料にのみ機能します。所有していなかった材料には効果がありません。" />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="鍛冶材料の数量" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="鍛冶材料の目標数量を設定します（100-9999）。無制限鍛冶材料が有効な場合のみ機能します。" />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="属性ポイントを編集" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="キャラクターメニューを2回開くと有効になります。このオプションを無効にするには、値を-1に設定する必要があります。" />
+
+		<string id="BW_Stats_EditFocusPoints" text="フォーカスポイントを編集" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="キャラクターメニューを2回開くと有効になります。このオプションを無効にするには、値を-1に設定する必要があります。" />
+
+		<string id="BW_Stats_UnlimitedRenown" text="無制限名声" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="注：ゲームが名声を得たと言っても、実際には得られない場合があります。特に敵が逃げた場合。これはゲームのバグかもしれません。名声を獲得したときに効果を発揮します。" />
+
+		<string id="BW_Stats_RenownMultiplier" text="名声倍率" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="すべての名声獲得を倍増します（0 = 無効）。注：表示値は倍増された量を反映しない場合がありますが、実際に獲得した名声は倍増されます。" />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="無制限スキルXP" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="スキルがXPを獲得したときに効果を発揮します。注：スキルには属性の影響を受ける学習率に基づくレベル上限があります。スキルの学習率が0の場合、XPを獲得しません。学習率を上げるために属性ポイントを消費して属性を上げる必要があります。" />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="スキルXP倍率" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="スキルXP獲得を倍増します（0 = 無効）。" />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="無制限部隊XP" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="すべての部隊が制限なくXPを獲得します。" />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="部隊XP倍率" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="部隊XP獲得を倍増します（0 = 無効）。" />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="一撃必殺" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="すべての敵ユニットは一撃で死にます。" />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="説得/会話常時成功" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="すべての説得と会話チェックが自動的に成功します。" />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="1日集落建設" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="一度に1つの建物のみ建設できます。複数の建物を建設/アップグレードするには、依然として複数の日が必要です。" />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="即座攻城建設" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="注：このオプションは両側に影響します。" />
+
+		<string id="BW_Game_GameSpeed" text="ゲーム速度倍率を設定" />
+		<string id="BW_Game_GameSpeed_Hint" text="再生（1x）と早送り（4x）ボタンの速度を倍増します。1.0 = 通常速度、2.0 = 2倍速度など。" />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="プレイヤーに適用" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="選択したチートをプレイヤーキャラクターに適用します。" />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="プレイヤーの氏族メンバーに適用" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="選択したチートをプレイヤーの氏族のすべてのメンバーに適用します。" />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="王国統治者に適用" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="選択したチートをすべての王国の統治者に適用します。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="プレイヤー王国統治者に適用" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="プレイヤーの現在の王国の統治者にチートを適用します。" />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="王国家臣に適用" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="選択したチートを任意の王国のすべての家臣氏族リーダーに適用します。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="プレイヤー王国家臣に適用" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="選択したチートをプレイヤーの王国のすべての家臣氏族リーダーに適用します。" />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="王国貴族に適用" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="選択したチートを任意の王国のすべての貴族ヒーローに適用します。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="プレイヤー王国貴族に適用" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="選択したチートをプレイヤーの王国のすべての貴族ヒーローに適用します。" />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="小氏族リーダーに適用" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="選択したチートをすべての小派閥のリーダーに適用します。" />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="小氏族メンバーに適用" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="選択したチートを小氏族のすべての貴族ヒーローに適用します。" />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="複数のオプションを組み合わせることができます。重複する適用は自動的に防止されます。" />
+	</strings>
+</base>

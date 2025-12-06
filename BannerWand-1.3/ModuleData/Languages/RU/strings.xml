@@ -30,22 +30,16 @@
 		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Лошадь игрока не получает урон." />
 
 		<string id="BW_Player_UnlimitedShieldDurability" text="Бесконечная прочность щита" />
-		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Щит игрока никогда не ломается." />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Вступает в силу, когда вы блокируете атаки врагов." />
 
 		<string id="BW_Player_UnlimitedAmmo" text="Бесконечные боеприпасы" />
 		<string id="BW_Player_UnlimitedAmmo_Hint" text="Боеприпасы для луков, арбалетов и метательного оружия поддерживаются на уровне 999." />
-
-		<string id="BW_Player_UnlimitedPartyHealth" text="Бесконечное здоровье отряда" />
-		<string id="BW_Player_UnlimitedPartyHealth_Hint" text="Все члены отряда не получают урон." />
-
-		<string id="BW_Player_IgnoreMeleeDamage" text="Игнорировать урон в ближнем бою" />
-		<string id="BW_Player_IgnoreMeleeDamage_Hint" text="Игрок игнорирует урон в ближнем бою." />
 
 		<string id="BW_Player_MaxMorale" text="Максимальный моральный дух" />
 		<string id="BW_Player_MaxMorale_Hint" text="Отряд игрока всегда имеет максимальный моральный дух." />
 
 		<string id="BW_Player_MovementSpeed" text="Скорость передвижения" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Множитель скорости передвижения игрока (0 = отключено). Изменения применяются на следующий игровой день." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Работает только на карте, не в бою. Изменения применяются на следующий игровой день." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Торговля всегда принимается" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Все торговые предложения автоматически принимаются." />
@@ -59,46 +53,43 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
 
-		<string id="BW_Player_StealthInvisibility" text="Невидимость в стелс-миссиях" />
-		<string id="BW_Player_StealthInvisibility_Hint" text="Игрок полностью невидим и незаметен в стелс-миссиях." />
-
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Изменить золото" />
-		<string id="BW_Inventory_EditGold_Hint" text="Добавить или удалить золото (применяется один раз при нажатии кнопки)." />
+		<string id="BW_Inventory_EditGold_Hint" text="Добавить или удалить золото (применяется один раз при изменении значения)." />
 
 		<string id="BW_Inventory_EditInfluence" text="Изменить влияние" />
-		<string id="BW_Inventory_EditInfluence_Hint" text="Добавить или удалить влияние (применяется один раз при нажатии кнопки)." />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Добавить или удалить влияние (применяется один раз при изменении значения)." />
 
 		<string id="BW_Inventory_UnlimitedFood" text="Бесконечная еда" />
 		<string id="BW_Inventory_UnlimitedFood_Hint" text="Еда в отряде никогда не уменьшается." />
 
-		<string id="BW_Inventory_TradeItemsNoDecrease" text="[WIP] Предметы не уменьшаются при торговле" />
-		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="[WORK IN PROGRESS] Торговля или обмен предметами не удаляет их из инвентаря." />
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Предметы не уменьшаются при торговле" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Предметы остаются в инвентаре после торговли. Применяется только к предметам, которые вы отдаете, а не к тем, что получаете." />
 
 		<string id="BW_Inventory_MaxCarryingCapacity" text="Максимальная грузоподъемность" />
 		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Отряд имеет неограниченную грузоподъемность." />
 
 		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Бесконечные материалы для ковки" />
-		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Материалы для ковки никогда не уменьшаются." />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Работает только для материалов, которые у вас уже были, не действует на материалы, которых у вас не было." />
 
-		<string id="BW_Inventory_UnlockAllSmithyParts" text="[WIP] Разблокировать все части оружия" />
-		<string id="BW_Inventory_UnlockAllSmithyParts_Hint" text="[WORK IN PROGRSS] Все части оружия для ковки разблокированы." />
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Количество материалов для ковки" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Установить целевое количество материалов для ковки (100-9999). Работает только при включенной опции Бесконечные материалы для ковки." />
 
 		<!-- Stats Category -->
 		<string id="BW_Stats_EditAttributePoints" text="Изменить очки атрибутов" />
-		<string id="BW_Stats_EditAttributePoints_Hint" text="Добавить или удалить очки атрибутов (применяется один раз при нажатии кнопки)." />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Вступает в силу при открытии меню персонажа дважды. Чтобы отключить эту опцию, нужно установить значение -1." />
 
 		<string id="BW_Stats_EditFocusPoints" text="Изменить очки фокусировки" />
-		<string id="BW_Stats_EditFocusPoints_Hint" text="Добавить или удалить очки фокусировки (применяется один раз при нажатии кнопки)." />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Вступает в силу при открытии меню персонажа дважды. Чтобы отключить эту опцию, нужно установить значение -1." />
 
 		<string id="BW_Stats_UnlimitedRenown" text="Бесконечная известность" />
-		<string id="BW_Stats_UnlimitedRenown_Hint" text="Известность никогда не уменьшается и всегда растет." />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Примечание: иногда вы можете не получить известность, даже если игра говорит, что вы получили. Особенно когда враги бегут. Это может быть ошибка игры. Вступает в силу при получении известности." />
 
 		<string id="BW_Stats_RenownMultiplier" text="Множитель известности" />
-		<string id="BW_Stats_RenownMultiplier_Hint" text="Умножает получение известности (0 = отключено)." />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Умножает все получения известности (0 = отключено). Примечание: отображаемое значение может не отражать умноженную сумму, но фактически полученная известность умножается." />
 
 		<string id="BW_Stats_UnlimitedSkillXP" text="Бесконечный опыт навыков" />
-		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Все навыки получают опыт без ограничений." />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Вступает в силу, когда навык получает опыт. Примечание: навыки имеют ограничения уровня на основе скорости обучения, которая зависит от ваших атрибутов. Если скорость обучения навыка равна 0, он не будет получать опыт, нужно потратить очки атрибутов, чтобы повысить атрибуты и тем самым повысить скорость обучения." />
 
 		<string id="BW_Stats_SkillXPMultiplier" text="Множитель опыта навыков" />
 		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Умножает получение опыта навыков (0 = отключено)." />
@@ -110,30 +101,21 @@
 		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Умножает получение опыта войсками (0 = отключено)." />
 
 		<!-- Enemies Category -->
-		<string id="BW_Enemies_SlowAIMovementSpeed" text="[WIP] Замедлить скорость ИИ" />
-		<string id="BW_Enemies_SlowAIMovementSpeed_Hint" text="[WORK IN PROGRESS] Вражеский ИИ двигается медленнее на карте кампании." />
-
 		<string id="BW_Enemies_OneHitKills" text="Убийство одним ударом" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="Все вражеские юниты умирают с одного удара." />
 
 		<!-- Game Category -->
-		<string id="BW_Game_FreezeDaytime" text="[WIP] Заморозить время суток" />
-		<string id="BW_Game_FreezeDaytime_Hint" text="[WORK IN PROGRESS] Время суток остается неподвижным." />
-
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Убеждение всегда успешно" />
 		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Все проверки убеждения и диалогов автоматически успешны." />
 
-		<string id="BW_Game_RecruitPrisonersAnytime" text="Рекрутировать пленников в любое время" />
-		<string id="BW_Game_RecruitPrisonersAnytime_Hint" text="Пленников можно рекрутировать сразу же без ожидания." />
-
 		<string id="BW_Game_OneDaySettlementsConstruction" text="Постройки за один день" />
-		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Все строительные проекты в поселениях завершаются за один день." />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Только одно здание может быть построено за раз. Строительство/улучшение нескольких зданий все равно требует нескольких дней." />
 
 		<string id="BW_Game_InstantSiegeConstruction" text="Мгновенное строительство осадных орудий" />
-		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Осадные орудия строятся мгновенно." />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Примечание: эта опция влияет на обе стороны." />
 
-		<string id="BW_Game_GameSpeed" text="[WIP] Скорость игры" />
-		<string id="BW_Game_GameSpeed_Hint" text="[WORK IN PROGRESS] Множитель скорости времени на карте кампании (0 = отключено)." />
+		<string id="BW_Game_GameSpeed" text="Множитель скорости игры" />
+		<string id="BW_Game_GameSpeed_Hint" text="Умножает скорость кнопок Воспроизведение (1x) и Быстрая перемотка (4x). 1.0 = нормальная скорость, 2.0 = двойная скорость и т.д." />
 
 		<!-- Target Settings -->
 		<!-- Category: Player -->

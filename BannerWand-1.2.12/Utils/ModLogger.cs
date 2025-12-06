@@ -29,7 +29,6 @@ namespace BannerWandRetro.Utils
     {
         private static readonly object _lock = new();
         private static bool _initialized = false;
-        private static string? _logFilePath;
 
         /// <summary>
         /// Gets or sets the log file path, initializing it if necessary.
@@ -38,10 +37,10 @@ namespace BannerWandRetro.Utils
         {
             get
             {
-                _logFilePath ??= DetermineLogFilePath();
-                return _logFilePath;
+                field ??= DetermineLogFilePath();
+                return field;
             }
-            set => _logFilePath = value;
+            set;
         }
 
         /// <summary>
@@ -463,9 +462,8 @@ namespace BannerWandRetro.Utils
                     callerInfo = $" [{fileName}::{memberName}:{sourceLineNumber}]";
                 }
 
-                // Build formatted message with padding for level alignment
-                string paddedLevel = level.PadRight(0);
-                string formattedMessage = $"[{timestamp}] [{paddedLevel}]{callerInfo} {message}";
+                // Build formatted message
+                string formattedMessage = $"[{timestamp}] [{level}]{callerInfo} {message}";
 
                 // Validate message is not null before processing
                 if (string.IsNullOrEmpty(message))
@@ -520,8 +518,8 @@ namespace BannerWandRetro.Utils
         {
             try
             {
-                Settings.CheatSettings settings = Settings.CheatSettings.Instance!;
-                Settings.CheatTargetSettings targetSettings = Settings.CheatTargetSettings.Instance!;
+                Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
+                Settings.CheatTargetSettings? targetSettings = Settings.CheatTargetSettings.Instance;
 
                 if (settings == null || targetSettings == null)
                 {
@@ -555,7 +553,6 @@ namespace BannerWandRetro.Utils
 
                 // Enemy cheats
                 Log($"One Hit Kills: {settings.OneHitKills}");
-                Log($"Slow AI Movement Speed: {settings.SlowAIMovementSpeed}");
 
                 Log("=== End of Settings State ===");
             }

@@ -498,3 +498,20 @@ BannerWandRetro*.log
 ## Visual Studio project user files (may contain machine-specific paths)
 *.csproj.user
 *.csproj.DotSettings.user
+
+## Visual Studio solution files (may contain user-specific settings)
+*.slnx.user
+
+## Rider IDE files
+.idea/
+*.iml
+
+## Temporary documentation and report files
+*_FIXES*.md
+*_REPORT*.md
+*_DIAGNOSTIC*.md
+fix-*.ps1
+
+## BannerWand project bin directories
+BannerWand-1.2.12/bin/
+BannerWand-1.3/bin/

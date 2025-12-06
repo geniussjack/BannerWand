@@ -80,6 +80,12 @@ namespace BannerWandRetro.Constants
         public const int SmithingMaterialTargetAmount = 9999;
 
         /// <summary>
+        /// Threshold below which smithing materials are replenished during smithing sessions.
+        /// Set to 9990 to restore materials if used during smithing (10 below target amount).
+        /// </summary>
+        public const int SmithingMaterialReplenishThreshold = 9990;
+
+        /// <summary>
         /// Minimum food threshold before replenishment.
         /// </summary>
         public const int MinFoodThreshold = 10;

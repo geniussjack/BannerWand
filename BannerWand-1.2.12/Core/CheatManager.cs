@@ -48,16 +48,18 @@ namespace BannerWandRetro.Core
         /// </summary>
         /// <remarks>
         /// This property provides quick access to the settings instance with null-safety.
+        /// Returns null if settings are not yet initialized.
         /// </remarks>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
         /// <remarks>
         /// Target settings determine which entities (player, NPCs, clans) are affected by cheats.
+        /// Returns null if settings are not yet initialized.
         /// </remarks>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         #endregion
 
@@ -102,10 +104,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in Initialize: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(Initialize));
             }
         }
 
@@ -128,10 +127,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in Cleanup: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(Cleanup));
             }
         }
 
@@ -159,7 +155,14 @@ namespace BannerWandRetro.Core
         public static void ApplyGold(int amount)
         {
             try
-            {                // Early return for zero amount - avoid unnecessary work
+            {
+                // Early exit if settings are null
+                if (Settings is null || TargetSettings is null)
+                {
+                    return;
+                }
+
+                // Early return for zero amount - avoid unnecessary work
                 if (amount == 0)
                 {
                     return;
@@ -176,9 +179,10 @@ namespace BannerWandRetro.Core
                 using (ModLogger.BeginPerformanceScope($"Apply Gold ({amount})"))
                 {
                     int affectedHeroCount = 0;
+                    CheatTargetSettings targetSettings = TargetSettings; // Already checked for null above
 
                     // Apply to player if target settings allow
-                    if (TargetSettings.ApplyToPlayer && Hero.MainHero != null)
+                    if (targetSettings.ApplyToPlayer && Hero.MainHero != null)
                     {
                         Hero.MainHero.ChangeHeroGold(amount);
                         affectedHeroCount++;
@@ -186,16 +190,20 @@ namespace BannerWandRetro.Core
                     }
 
                     // Apply to NPCs if any NPC targets are enabled in settings
-                    if (TargetSettings.HasAnyNPCTargetEnabled())
+                    if (targetSettings.HasAnyNPCTargetEnabled())
                     {
-                        // Iterate through all alive heroes to find matching targets
-                        foreach (Hero hero in Hero.AllAliveHeroes)
+                        // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
+                        List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                        if (allHeroes is not null)
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                hero.ChangeHeroGold(amount);
-                                affectedHeroCount++;
+                                // Skip player hero and check if hero matches target filter criteria
+                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    hero.ChangeHeroGold(amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -214,10 +222,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in ApplyGold: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(ApplyGold));
             }
         }
 
@@ -238,7 +243,14 @@ namespace BannerWandRetro.Core
         public static void ApplyInfluence(float amount)
         {
             try
-            {                // Early return for zero amount - avoid unnecessary computation
+            {
+                // Early exit if settings are null
+                if (Settings is null || TargetSettings is null)
+                {
+                    return;
+                }
+
+                // Early return for zero amount - avoid unnecessary computation
                 if (Math.Abs(amount) < GameConstants.FloatEpsilon)
                 {
                     return;
@@ -255,9 +267,10 @@ namespace BannerWandRetro.Core
                 using (ModLogger.BeginPerformanceScope($"Apply Influence ({amount})"))
                 {
                     int affectedClanCount = 0;
+                    CheatTargetSettings targetSettings = TargetSettings; // Already checked for null above
 
                     // Apply to player clan if target settings allow
-                    if (TargetSettings.ApplyToPlayer && Clan.PlayerClan != null)
+                    if (targetSettings.ApplyToPlayer && Clan.PlayerClan != null)
                     {
                         Clan.PlayerClan.Influence += amount;
                         affectedClanCount++;
@@ -265,16 +278,20 @@ namespace BannerWandRetro.Core
                     }
 
                     // Apply to NPC clans if any NPC targets are enabled in settings
-                    if (TargetSettings.HasAnyNPCTargetEnabled())
+                    if (targetSettings.HasAnyNPCTargetEnabled())
                     {
-                        // Iterate through all clans to find matching targets
-                        foreach (Clan clan in Clan.All)
+                        // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
+                        List<Clan>? allClans = CampaignDataCache.AllClans;
+                        if (allClans is not null)
                         {
-                            // Skip player clan and check if clan matches target filter criteria
-                            if (clan != Clan.PlayerClan && TargetFilter.ShouldApplyCheatToClan(clan))
+                            foreach (Clan clan in allClans)
                             {
-                                clan.Influence += amount;
-                                affectedClanCount++;
+                                // Skip player clan and check if clan matches target filter criteria
+                                if (clan != Clan.PlayerClan && TargetFilter.ShouldApplyCheatToClan(clan))
+                                {
+                                    clan.Influence += amount;
+                                    affectedClanCount++;
+                                }
                             }
                         }
                     }
@@ -293,10 +310,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in ApplyInfluence: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(ApplyInfluence));
             }
         }
 
@@ -310,7 +324,16 @@ namespace BannerWandRetro.Core
         public static void ApplyAttributePoints(int amount)
         {
             try
-            {                // Early return for zero amount - avoid unnecessary work
+            {
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                // Early return for zero amount - avoid unnecessary work
                 if (amount == 0)
                 {
                     return;
@@ -321,7 +344,7 @@ namespace BannerWandRetro.Core
                     int affectedHeroCount = 0;
 
                     // Apply to player if target settings allow
-                    if (TargetSettings.ApplyToPlayer && Hero.MainHero != null)
+                    if (targetSettings.ApplyToPlayer && Hero.MainHero != null)
                     {
                         ApplyAttributePointsToHero(Hero.MainHero, amount);
                         affectedHeroCount++;
@@ -329,16 +352,20 @@ namespace BannerWandRetro.Core
                     }
 
                     // Apply to NPCs if any NPC targets are enabled in settings
-                    if (TargetSettings.HasAnyNPCTargetEnabled())
+                    if (targetSettings.HasAnyNPCTargetEnabled())
                     {
-                        // Iterate through all alive heroes to find matching targets
-                        foreach (Hero hero in Hero.AllAliveHeroes)
+                        // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
+                        List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                        if (allHeroes is not null)
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                ApplyAttributePointsToHero(hero, amount);
-                                affectedHeroCount++;
+                                // Skip player hero and check if hero matches target filter criteria
+                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    ApplyAttributePointsToHero(hero, amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -357,10 +384,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in ApplyAttributePoints: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(ApplyAttributePoints));
             }
         }
 
@@ -374,7 +398,16 @@ namespace BannerWandRetro.Core
         public static void ApplyFocusPoints(int amount)
         {
             try
-            {                // Early return for zero amount - avoid unnecessary work
+            {
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                // Early return for zero amount - avoid unnecessary work
                 if (amount == 0)
                 {
                     return;
@@ -385,7 +418,7 @@ namespace BannerWandRetro.Core
                     int affectedHeroCount = 0;
 
                     // Apply to player if target settings allow
-                    if (TargetSettings.ApplyToPlayer && Hero.MainHero != null)
+                    if (targetSettings.ApplyToPlayer && Hero.MainHero != null)
                     {
                         ApplyFocusPointsToHero(Hero.MainHero, amount);
                         affectedHeroCount++;
@@ -393,16 +426,20 @@ namespace BannerWandRetro.Core
                     }
 
                     // Apply to NPCs if any NPC targets are enabled in settings
-                    if (TargetSettings.HasAnyNPCTargetEnabled())
+                    if (targetSettings.HasAnyNPCTargetEnabled())
                     {
-                        // Iterate through all alive heroes to find matching targets
-                        foreach (Hero hero in Hero.AllAliveHeroes)
+                        // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
+                        List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                        if (allHeroes is not null)
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                ApplyFocusPointsToHero(hero, amount);
-                                affectedHeroCount++;
+                                // Skip player hero and check if hero matches target filter criteria
+                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    ApplyFocusPointsToHero(hero, amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -421,10 +458,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in ApplyFocusPoints: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(ApplyFocusPoints));
             }
         }
 
@@ -494,21 +528,32 @@ namespace BannerWandRetro.Core
         {
             List<MobileParty> affectedParties = [];
 
+            // Early exit if settings are null
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (targetSettings is null)
+            {
+                return affectedParties;
+            }
+
             // Add player's main party if target settings allow
-            if (TargetSettings.ApplyToPlayer && MobileParty.MainParty != null)
+            if (targetSettings.ApplyToPlayer && MobileParty.MainParty != null)
             {
                 affectedParties.Add(MobileParty.MainParty);
             }
 
             // Add NPC parties if any NPC targets are enabled in settings
-            if (TargetSettings.HasAnyNPCTargetEnabled())
+            if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                // Use foreach loop for better performance and fewer allocations than LINQ
-                foreach (MobileParty party in MobileParty.All)
+                // OPTIMIZED: Use cached collection instead of direct MobileParty.All enumeration
+                List<MobileParty>? allParties = CampaignDataCache.AllParties;
+                if (allParties is not null)
                 {
-                    if (party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party))
+                    foreach (MobileParty party in allParties)
                     {
-                        affectedParties.Add(party);
+                        if (party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party))
+                        {
+                            affectedParties.Add(party);
+                        }
                     }
                 }
             }
@@ -578,10 +623,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in HealAllTroops: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(HealAllTroops));
             }
 
             return 0;
@@ -609,174 +651,54 @@ namespace BannerWandRetro.Core
         {
             try
             {
-                if (Settings == null)
+                CheatSettings? settings = Settings;
+                if (settings is null)
                 {
                     return 0;
                 }
 
                 int activeCheatCount = 0;
 
-                // Boolean cheats - each enabled cheat increments the counter
-                if (Settings.UnlimitedHealth)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedHorseHealth)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedShieldDurability)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.MaxMorale)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.BarterAlwaysAccepted)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedSmithyStamina)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.MaxCharacterRelationship)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedFood)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.TradeItemsNoDecrease)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.MaxCarryingCapacity)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedSmithyMaterials)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlockAllSmithyParts)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedRenown)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedSkillXP)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.UnlimitedTroopsXP)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.SlowAIMovementSpeed)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.OneHitKills)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.FreezeDaytime)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.PersuasionAlwaysSucceed)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.OneDaySettlementsConstruction)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.InstantSiegeConstruction)
-                {
-                    activeCheatCount++;
-                }
+                // Boolean cheats - count each enabled cheat
+                activeCheatCount += settings.UnlimitedHealth ? 1 : 0;
+                activeCheatCount += settings.UnlimitedHorseHealth ? 1 : 0;
+                activeCheatCount += settings.UnlimitedShieldDurability ? 1 : 0;
+                activeCheatCount += settings.UnlimitedAmmo ? 1 : 0;
+                activeCheatCount += settings.MaxMorale ? 1 : 0;
+                activeCheatCount += settings.BarterAlwaysAccepted ? 1 : 0;
+                activeCheatCount += settings.UnlimitedSmithyStamina ? 1 : 0;
+                activeCheatCount += settings.MaxCharacterRelationship ? 1 : 0;
+                activeCheatCount += settings.UnlimitedFood ? 1 : 0;
+                activeCheatCount += settings.TradeItemsNoDecrease ? 1 : 0;
+                activeCheatCount += settings.MaxCarryingCapacity ? 1 : 0;
+                activeCheatCount += settings.UnlimitedSmithyMaterials ? 1 : 0;
+                activeCheatCount += settings.UnlimitedRenown ? 1 : 0;
+                activeCheatCount += settings.UnlimitedSkillXP ? 1 : 0;
+                activeCheatCount += settings.UnlimitedTroopsXP ? 1 : 0;
+                activeCheatCount += settings.OneHitKills ? 1 : 0;
+                activeCheatCount += settings.PersuasionAlwaysSucceed ? 1 : 0;
+                activeCheatCount += settings.OneDaySettlementsConstruction ? 1 : 0;
+                activeCheatCount += settings.InstantSiegeConstruction ? 1 : 0;
 
                 // Numeric cheats - count if non-zero values are set
-                if (Settings.MovementSpeed > GameConstants.FloatEpsilon)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.RenownMultiplier > GameConstants.FloatEpsilon)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.SkillXPMultiplier > GameConstants.FloatEpsilon)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.TroopsXPMultiplier > GameConstants.FloatEpsilon)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.GameSpeed > GameConstants.FloatEpsilon)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.EditGold != 0)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.EditInfluence != 0)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.EditAttributePoints != 0)
-                {
-                    activeCheatCount++;
-                }
-
-                if (Settings.EditFocusPoints != 0)
-                {
-                    activeCheatCount++;
-                }
+                // MovementSpeed is active when > 0f (matches CustomPartySpeedModel.ShouldApplyPlayerSpeedOverride logic)
+                activeCheatCount += settings.MovementSpeed > 0f ? 1 : 0;
+                activeCheatCount += settings.RenownMultiplier > GameConstants.FloatEpsilon ? 1 : 0;
+                activeCheatCount += settings.SkillXPMultiplier > GameConstants.FloatEpsilon ? 1 : 0;
+                activeCheatCount += settings.TroopsXPMultiplier > GameConstants.FloatEpsilon ? 1 : 0;
+                // GameSpeed is active when > 0f (matches ApplyGameSpeed logic: > DefaultTimeSpeed which is 0f)
+                activeCheatCount += settings.GameSpeed > 0f ? 1 : 0;
+                activeCheatCount += settings.EditGold != 0 ? 1 : 0;
+                activeCheatCount += settings.EditInfluence != 0 ? 1 : 0;
+                activeCheatCount += settings.EditAttributePoints != 0 ? 1 : 0;
+                activeCheatCount += settings.EditFocusPoints != 0 ? 1 : 0;
 
                 return activeCheatCount;
 
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in GetActiveCheatCount: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(GetActiveCheatCount));
             }
 
             return 0;
@@ -794,51 +716,47 @@ namespace BannerWandRetro.Core
         {
             try
             {
-                if (Settings == null)
+                CheatSettings? settings = Settings;
+                if (settings is null)
                 {
                     return false;
                 }
 
                 // Early return optimization - check most commonly used cheats first
                 // Returns immediately upon finding any active cheat
-                return Settings.UnlimitedHealth ||
-                        Settings.UnlimitedHorseHealth ||
-                        Settings.UnlimitedShieldDurability ||
-                        Settings.MaxMorale ||
-                        Settings.MovementSpeed > GameConstants.FloatEpsilon ||
-                        Settings.BarterAlwaysAccepted ||
-                        Settings.UnlimitedSmithyStamina ||
-                        Settings.MaxCharacterRelationship ||
-                        Settings.UnlimitedFood ||
-                        Settings.TradeItemsNoDecrease ||
-                        Settings.MaxCarryingCapacity ||
-                        Settings.UnlimitedSmithyMaterials ||
-                        Settings.UnlockAllSmithyParts ||
-                        Settings.UnlimitedRenown ||
-                        Settings.RenownMultiplier > GameConstants.FloatEpsilon ||
-                        Settings.UnlimitedSkillXP ||
-                        Settings.SkillXPMultiplier > GameConstants.FloatEpsilon ||
-                        Settings.UnlimitedTroopsXP ||
-                        Settings.TroopsXPMultiplier > GameConstants.FloatEpsilon ||
-                        Settings.SlowAIMovementSpeed ||
-                        Settings.OneHitKills ||
-                        Settings.FreezeDaytime ||
-                        Settings.PersuasionAlwaysSucceed ||
-                        Settings.OneDaySettlementsConstruction ||
-                        Settings.InstantSiegeConstruction ||
-                        Settings.GameSpeed > GameConstants.FloatEpsilon ||
-                        Settings.EditGold != 0 ||
-                        Settings.EditInfluence != 0 ||
-                        Settings.EditAttributePoints != 0 ||
-                        Settings.EditFocusPoints != 0;
+                return settings.UnlimitedHealth ||
+                        settings.UnlimitedHorseHealth ||
+                        settings.UnlimitedShieldDurability ||
+                        settings.UnlimitedAmmo ||
+                        settings.MaxMorale ||
+                        settings.MovementSpeed > 0f ||
+                        settings.BarterAlwaysAccepted ||
+                        settings.UnlimitedSmithyStamina ||
+                        settings.MaxCharacterRelationship ||
+                        settings.UnlimitedFood ||
+                        settings.TradeItemsNoDecrease ||
+                        settings.MaxCarryingCapacity ||
+                        settings.UnlimitedSmithyMaterials ||
+                        settings.UnlimitedRenown ||
+                        settings.RenownMultiplier > GameConstants.FloatEpsilon ||
+                        settings.UnlimitedSkillXP ||
+                        settings.SkillXPMultiplier > GameConstants.FloatEpsilon ||
+                        settings.UnlimitedTroopsXP ||
+                        settings.TroopsXPMultiplier > GameConstants.FloatEpsilon ||
+                        settings.OneHitKills ||
+                        settings.PersuasionAlwaysSucceed ||
+                        settings.OneDaySettlementsConstruction ||
+                        settings.InstantSiegeConstruction ||
+                        settings.GameSpeed > 0f ||
+                        settings.EditGold != 0 ||
+                        settings.EditInfluence != 0 ||
+                        settings.EditAttributePoints != 0 ||
+                        settings.EditFocusPoints != 0;
 
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in IsAnyCheatActive: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(IsAnyCheatActive));
             }
             return false;
         }
@@ -928,10 +846,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in GetActiveCheatSummary: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(GetActiveCheatSummary));
                 return null;
             }
         }
@@ -954,11 +869,27 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in CheatManager.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[CheatManager] Error in LogCheatStatus: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(LogCheatStatus));
             }
+        }
+
+        #endregion
+
+        #region Exception Handling
+
+        /// <summary>
+        /// Logs an exception with consistent formatting for CheatManager methods.
+        /// </summary>
+        /// <param name="ex">The exception to log.</param>
+        /// <param name="methodName">The name of the method where the exception occurred.</param>
+        /// <remarks>
+        /// This helper method centralizes exception logging to ensure consistent error reporting
+        /// and reduce code duplication across all CheatManager methods.
+        /// </remarks>
+        private static void LogException(Exception ex, string methodName)
+        {
+            ModLogger.Error($"[CheatManager] Error in {methodName}: {ex.Message}");
+            ModLogger.Error($"Stack trace: {ex.StackTrace}");
         }
 
         #endregion

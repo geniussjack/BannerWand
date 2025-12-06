@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Polish" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Cele" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Gracz" />
+		<string id="BW_Category_Inventory" text="Ekwipunek" />
+		<string id="BW_Category_Stats" text="Statystyki" />
+		<string id="BW_Category_Enemies" text="Wrogowie" />
+		<string id="BW_Category_Game" text="Gra" />
+		<string id="BW_Category_CheatTargets" text="Cele Cheatów" />
+		<string id="BW_Category_Kingdoms" text="Królestwa" />
+		<string id="BW_Category_MinorClans" text="Mniejsze Klany" />
+		<string id="BW_Category_Info" text="Info" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Nieograniczone HP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Pasek zdrowia nigdy nie maleje. Można nadal umrzeć od obrażeń przekraczających maksymalne HP." />
+
+		<string id="BW_Player_InfiniteHealth" text="Nieskończone Zdrowie" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Dodaje +9999 HP na początku bitwy. Zapobiega zabiciom jednym ciosem." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Nieograniczone Zdrowie Konia" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Koń gracza nie otrzymuje obrażeń." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Nieograniczona Wytrzymałość Tarczy" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Wchodzi w życie, gdy blokujesz ataki wrogów." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Nieograniczona Amunicja" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Amunicja dla łuków, kusz i broni miotanej jest utrzymywana na poziomie 999." />
+
+		<string id="BW_Player_MaxMorale" text="Maksymalne Morale" />
+		<string id="BW_Player_MaxMorale_Hint" text="Grupa gracza zawsze ma maksymalne morale." />
+
+		<string id="BW_Player_MovementSpeed" text="Ustaw Prędkość Ruchu" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Działa tylko na mapie, nie w bitwie. Zmiany mają zastosowanie następnego dnia gry." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Oferty Handlowe Zawsze Akceptowane" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Wszystkie oferty handlowe są automatycznie akceptowane." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Nieograniczona Wytrzymałość Kuźni" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Kucie nigdy nie zużywa wytrzymałości." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Maksymalna Relacja z Postacią" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Każda pozytywna zmiana relacji z graczem jest zwiększana do +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Maksymalne Relacje ze Wszystkimi" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Natychmiast ustawia relację na 100 ze wszystkimi postaciami." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Edytuj Złoto" />
+		<string id="BW_Inventory_EditGold_Hint" text="Dodaj lub usuń złoto (stosowane raz, gdy wartość jest zmieniona)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Edytuj Wpływ" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Dodaj lub usuń wpływ (stosowane raz, gdy wartość jest zmieniona)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Nieograniczone Jedzenie" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Jedzenie grupy nigdy nie maleje." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Przedmioty Handlowe Nie Zmniejszają Się" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Przedmioty pozostają w ekwipunku po wymianie. Dotyczy tylko przedmiotów, które oddajesz, nie tych, które otrzymujesz." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Maksymalna Nośność" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Grupa ma nieograniczoną nośność." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Nieograniczone Materiały Kuźni" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Działa tylko dla materiałów, które już posiadałeś, nie ma wpływu na materiały, których nie posiadałeś." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Ilość Materiałów Kuźni" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Ustaw docelową ilość materiałów kuźni (100-9999). Działa tylko, gdy Nieograniczone Materiały Kuźni jest włączone." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Edytuj Punkty Atrybutów" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Wchodzi w życie po dwukrotnym otwarciu menu postaci. Aby wyłączyć tę opcję, musisz ustawić wartość na -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Edytuj Punkty Fokusa" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Wchodzi w życie po dwukrotnym otwarciu menu postaci. Aby wyłączyć tę opcję, musisz ustawić wartość na -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Nieograniczona Sława" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Uwaga: czasami możesz nie zyskać sławy, nawet jeśli gra mówi, że zyskałeś sławę. Szczególnie gdy wrogowie uciekają. To może być błąd gry. Wchodzi w życie, gdy zyskujesz sławę." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Mnożnik Sławy" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Mnoży wszystkie zyski sławy (0 = wyłączone). Uwaga: Wyświetlana wartość może nie odzwierciedlać pomnożonej kwoty, ale faktycznie zyskana sława jest mnożona." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Nieograniczony XP Umiejętności" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Wchodzi w życie, gdy umiejętność zyskuje XP. Uwaga: umiejętności mają limity poziomu oparte na tempie uczenia się, które zależy od twoich atrybutów. Jeśli tempo uczenia się umiejętności wynosi 0, nie zyska XP, musisz wydać punkty atrybutów, aby zwiększyć swoje atrybuty, aby zwiększyć tempo uczenia się." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Mnożnik XP Umiejętności" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Mnoży zyski XP umiejętności (0 = wyłączone)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Nieograniczony XP Wojsk" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Wszystkie wojska zyskują XP bez limitu." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Mnożnik XP Wojsk" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Mnoży zyski XP wojsk (0 = wyłączone)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Zabójstwa Jednym Ciosem" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Wszystkie wrogie jednostki umierają jednym ciosem." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Perswazja/Rozmowa Zawsze Sukces" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Wszystkie sprawdzenia perswazji i rozmowy automatycznie się udają." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Budowa Osad w Jeden Dzień" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Tylko jeden budynek może być budowany naraz. Budowanie/ulepszanie wielu budynków nadal wymaga wielu dni." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Natychmiastowa Budowa Oblężenia" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Uwaga: ta opcja wpływa na obie strony." />
+
+		<string id="BW_Game_GameSpeed" text="Ustaw Mnożnik Prędkości Gry" />
+		<string id="BW_Game_GameSpeed_Hint" text="Mnoży prędkość przycisków Odtwarzaj (1x) i Szybkie Przewijanie (4x). 1.0 = normalne, 2.0 = podwójna prędkość itd." />
+
+		<!-- Target Settings -->
+		<string id="BW_Target_ApplyToPlayer" text="Zastosuj do Gracza" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Stosuje wybrane cheaty do postaci gracza." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Zastosuj do Członków Klanu Gracza" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Stosuje wybrane cheaty do wszystkich członków klanu gracza." />
+
+		<string id="BW_Target_ApplyToKingdomRulers" text="Zastosuj do Władców Królestw" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Stosuje wybrane cheaty do władców wszystkich królestw." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Zastosuj do Władcy Królestwa Gracza" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Stosuje cheaty do władcy obecnego królestwa gracza." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Zastosuj do Wasali Królestw" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Stosuje wybrane cheaty do wszystkich przywódców klanów wasalnych dowolnego królestwa." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Zastosuj do Wasali Królestwa Gracza" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Stosuje wybrane cheaty do wszystkich przywódców klanów wasalnych królestwa gracza." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Zastosuj do Szlachty Królestw" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Stosuje wybrane cheaty do wszystkich szlachetnych bohaterów dowolnego królestwa." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Zastosuj do Szlachty Królestwa Gracza" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Stosuje wybrane cheaty do wszystkich szlachetnych bohaterów królestwa gracza." />
+
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Zastosuj do Przywódców Mniejszych Klanów" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Stosuje wybrane cheaty do przywódców wszystkich mniejszych frakcji." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Zastosuj do Członków Mniejszych Klanów" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Stosuje wybrane cheaty do wszystkich szlachetnych bohaterów z mniejszych klanów." />
+
+		<string id="BW_Target_InfoText" text="Wiele opcji można łączyć. Zduplikowane zastosowania są automatycznie zapobiegane." />
+	</strings>
+</base>

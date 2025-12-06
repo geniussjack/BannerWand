@@ -28,23 +28,34 @@ namespace BannerWand.Patches
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Postfix patch that adds maximum capacity after base calculation.
         /// </summary>
         /// <param name="__result">The result from the original method (passed by reference).</param>
         /// <param name="mobileParty">The party whose capacity was calculated.</param>
+        /// <param name="_isCurrentlyAtSea">Whether the party is currently at sea (ignored).</param>
+        /// <param name="_includeDescriptions">Whether to include descriptions (ignored).</param>
+        /// <param name="_additionalTroops">Additional troops count (ignored).</param>
+        /// <param name="_additionalSpareMounts">Additional spare mounts count (ignored).</param>
+        /// <param name="_additionalPackAnimals">Additional pack animals count (ignored).</param>
+        /// <param name="_includeFollowers">Whether to include followers (ignored).</param>
         /// <remarks>
         /// <para>
         /// Postfix patches run AFTER the original method completes, allowing us to modify
         /// the return value. The __result parameter contains the ExplainedNumber returned
         /// by DefaultInventoryCapacityModel.CalculateInventoryCapacity.
+        /// </para>
+        /// <para>
+        /// Harmony will match this method to any CalculateInventoryCapacity overload that has
+        /// MobileParty as the first parameter. Additional parameters are ignored but must match
+        /// the signature for Harmony to properly bind the patch.
         /// </para>
         /// <para>
         /// We modify __result by reference to add maximum capacity when conditions are met:
@@ -53,7 +64,19 @@ namespace BannerWand.Patches
         /// </para>
         /// </remarks>
 #pragma warning disable RCS1213 // Remove unused method declaration
-        private static void Postfix(ref ExplainedNumber __result, MobileParty mobileParty)
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable RCS1163 // Unused parameter
+        private static void Postfix(
+            ref ExplainedNumber __result,
+            MobileParty mobileParty,
+            bool _isCurrentlyAtSea = false,
+            bool _includeDescriptions = false,
+            int _additionalTroops = 0,
+            int _additionalSpareMounts = 0,
+            int _additionalPackAnimals = 0,
+            bool _includeFollowers = false)
+#pragma warning restore RCS1163 // Unused parameter
+#pragma warning restore IDE0060 // Remove unused parameter
 #pragma warning restore RCS1213 // Remove unused method declaration
         {
             try
@@ -80,16 +103,12 @@ namespace BannerWand.Patches
 
                     // Add adjustment to result
                     __result.Add(capacityAdjustment, null);
-
-                    if (mobileParty == MobileParty.MainParty)
-                    {
-                        ModLogger.Debug($"Applied max capacity to party: {mobileParty.Name} (new capacity: {__result.ResultNumber})");
-                    }
                 }
             }
             catch (System.Exception ex)
             {
-                ModLogger.Error("Error in InventoryCapacityPatch", ex);
+                ModLogger.Error($"[InventoryCapacityPatch] Error in Postfix: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
         }
 

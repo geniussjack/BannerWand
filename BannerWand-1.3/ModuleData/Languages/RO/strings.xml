@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Română" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Ținte" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Jucător" />
+		<string id="BW_Category_Inventory" text="Inventar" />
+		<string id="BW_Category_Stats" text="Statistici" />
+		<string id="BW_Category_Enemies" text="Inamici" />
+		<string id="BW_Category_Game" text="Joc" />
+		<string id="BW_Category_CheatTargets" text="Ținte Cheat" />
+		<string id="BW_Category_Kingdoms" text="Regate" />
+		<string id="BW_Category_MinorClans" text="Clanuri Minore" />
+		<string id="BW_Category_Info" text="Informații" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="HP Nelimitat" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Bara de viață nu scade niciodată. Poți muri în continuare din cauza daunelor care depășesc HP maxim." />
+
+		<string id="BW_Player_InfiniteHealth" text="Viață Infinită" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Adaugă +9999 HP la începutul bătăliei. Previne omorurile cu o lovitură." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Viață Nelimitată pentru Cal" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Calul jucătorului nu primește daune." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Durabilitate Nelimitată pentru Scut" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Intră în vigoare când blochezi atacurile inamice." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Muniție Nelimitată" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Muniția pentru arcuri, arbalete și aruncătoare este menținută la 999." />
+
+		<string id="BW_Player_MaxMorale" text="Moral Maxim" />
+		<string id="BW_Player_MaxMorale_Hint" text="Partida jucătorului are întotdeauna moral maxim." />
+
+		<string id="BW_Player_MovementSpeed" text="Setează Viteza de Mișcare" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Funcționează doar pe hartă, nu în bătălie. Schimbările se aplică în ziua următoare din joc." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Ofertă de Schimb Întotdeauna Acceptată" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Toate ofertele de schimb sunt acceptate automat." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Stamină Nelimitată la Fierărie" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Fierăria nu consumă niciodată stamină." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Relație Maximă cu Personajul" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Orice schimbare pozitivă de relație cu jucătorul este mărită la +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Relații Maximale cu Toți" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Setează instantaneu relația la 100 cu toți personajele." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Editează Aur" />
+		<string id="BW_Inventory_EditGold_Hint" text="Adaugă sau elimină aur (aplicat o dată când valoarea este modificată)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Editează Influență" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Adaugă sau elimină influență (aplicat o dată când valoarea este modificată)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Mâncare Nelimitată" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Mâncarea partidei nu scade niciodată." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Obiecte de Schimb Nu Scad" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Obiectele rămân în inventarul tău după schimbarea lor. Se aplică doar la obiectele pe care le dai, nu la cele pe care le primești." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Capacitate Maximă de Transport" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Partida are capacitate nelimitată de transport." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Materiale Nelimitate la Fierărie" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Funcționează doar pentru materialele pe care le aveai deja, nu are efect asupra materialelor pe care nu le aveai." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Cantitate Materiale Fierărie" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Setează cantitatea țintă pentru materialele fierăriei (100-9999). Funcționează doar când Materiale Nelimitate la Fierărie este activat." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Editează Puncte de Atribut" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Intră în vigoare când deschizi meniul personajului de două ori. Pentru a dezactiva această opțiune, trebuie să setezi valoarea la -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Editează Puncte de Focus" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Intră în vigoare când deschizi meniul personajului de două ori. Pentru a dezactiva această opțiune, trebuie să setezi valoarea la -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Renume Nelimitat" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Notă: uneori poți să nu primești renume chiar dacă jocul spune că ai primit. Mai ales când inamicii fug. Aceasta ar putea fi o eroare a jocului. Intră în vigoare când primești renume." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Multiplicator de Renume" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Înmulțește toate câștigurile de renume (0 = dezactivat). Notă: Valoarea afișată poate să nu reflecte suma înmulțită, dar renumele efectiv câștigat este înmulțit." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="XP Nelimitat pentru Abilități" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Intră în vigoare când o abilitate câștigă XP. Notă: abilitățile au limite de nivel bazate pe rata lor de învățare care este afectată de atributele tale. Dacă rata de învățare a unei abilități este 0, nu va câștiga XP, trebuie să cheltuiești puncte de atribut pentru a ridica atributele tale pentru a ridica rata de învățare." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Multiplicator de XP pentru Abilități" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Înmulțește câștigurile de XP pentru abilități (0 = dezactivat)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="XP Nelimitat pentru Trupe" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Toate trupele câștigă XP fără limită." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Multiplicator de XP pentru Trupe" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Înmulțește câștigurile de XP pentru trupe (0 = dezactivat)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Omoruri cu O Lovitură" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Toate unitățile inamice mor dintr-o lovitură." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasiune/Conversație Întotdeauna Reușește" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Toate verificările de persuasiune și conversație reușesc automat." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Construcție de Așezări într-o Zi" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Doar o clădire poate fi construită la un moment dat. Construirea/îmbunătățirea mai multor clădiri necesită încă mai multe zile." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Construcție de Asediu Instantanee" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Notă: această opțiune afectează ambele părți." />
+
+		<string id="BW_Game_GameSpeed" text="Setează Multiplicatorul Vitezei Jocului" />
+		<string id="BW_Game_GameSpeed_Hint" text="Înmulțește viteza butoanelor Redare (1x) și Derulare Rapidă (4x). 1.0 = normal, 2.0 = dublă viteză, etc." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="Aplică la Jucător" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Aplică cheaturile selectate la personajul jucătorului." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Aplică la Membrii Clanului Jucătorului" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Aplică cheaturile selectate la toți membrii clanului jucătorului." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="Aplică la Conducătorii Regatelor" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Aplică cheaturile selectate la conducătorii tuturor regatelor." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Aplică la Conducătorul Regatului Jucătorului" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Aplică cheaturile la conducătorul regatului curent al jucătorului." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Aplică la Vasalii Regatelor" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Aplică cheaturile selectate la toți liderii clanurilor vasale ale oricărui regat." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Aplică la Vasalii Regatului Jucătorului" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Aplică cheaturile selectate la toți liderii clanurilor vasale ale regatului jucătorului." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Aplică la Nobilii Regatelor" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Aplică cheaturile selectate la toți eroii nobili ai oricărui regat." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Aplică la Nobilii Regatului Jucătorului" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Aplică cheaturile selectate la toți eroii nobili ai regatului jucătorului." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Aplică la Liderii Clanurilor Minore" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Aplică cheaturile selectate la liderii tuturor facțiunilor minore." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Aplică la Membrii Clanurilor Minore" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Aplică cheaturile selectate la toți eroii nobili din clanurile minore." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="Mai multe opțiuni pot fi combinate. Aplicările duplicate sunt prevenite automat." />
+	</strings>
+</base>

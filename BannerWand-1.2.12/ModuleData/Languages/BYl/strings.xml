@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Biełaruskaja" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Mety" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Huliec" />
+		<string id="BW_Category_Inventory" text="Inventar" />
+		<string id="BW_Category_Stats" text="Statystyka" />
+		<string id="BW_Category_Enemies" text="Varazhyny" />
+		<string id="BW_Category_Game" text="Hulnia" />
+		<string id="BW_Category_CheatTargets" text="Mety chyta" />
+		<string id="BW_Category_Kingdoms" text="Karaleustvy" />
+		<string id="BW_Category_MinorClans" text="Malyja klany" />
+		<string id="BW_Category_Info" text="Infarmacyja" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Neabmiezhavanae HP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Palasa zdarouja nikoli nie pamianšajecca. Usio jašče možna pamerci ad paškodžanniaŭ, jakija pieravyšajuć maks. HP." />
+
+		<string id="BW_Player_InfiniteHealth" text="Biessmiarotnaść" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Dadaje +9999 HP u pačatku boju. Praduchilaje imhiennuju śmierć." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Neabmiezhavanae zdarouje kania" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Kon hulca nie atrymlivaje paškodžanniaŭ." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Neabmiezhavanaja tryvalaść ščyta" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Ustupaje ŭ siłu, kali vy blakujecie ataki varohaŭ." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Neabmiezhavanyja bojeprypasy" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Bojeprypasy dla łukaŭ, arbaletaŭ i metalnaj zbroi padtrymlivajucca na ŭzroŭni 999." />
+
+		<string id="BW_Player_MaxMorale" text="Maksimalny maralny duch" />
+		<string id="BW_Player_MaxMorale_Hint" text="Atrad hulca zaŭsiody maje maksimalny maralny duch." />
+
+		<string id="BW_Player_MovementSpeed" text="Chutkaść pieramiasčennia" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Pracuje tolki na karcie, nie ŭ bai. Zmeny prymianajucca na nastupny hulniavy dzień." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Handlovaja prapanova zaŭsiody prymajecca" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Usie handlovyja prapanovy aŭtamatyčna prymajucca." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Neabmiezhavanaja vynoslivasc u kuzni" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Kavannie nie rachoduje vynoslivasci." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Maksimalnyja adnosiny z personasam" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Lubojie stanoučaje zmianiennie adnosinaŭ z hulcam uzmocnivajecca da +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Maksimalnyja adnosiny sa ŭsimi" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imhienna ŭstaloŭvaje adnosiny na ŭzroŭni 100 sa ŭsimi personasami." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Zmiańić zołata" />
+		<string id="BW_Inventory_EditGold_Hint" text="Dadaci abo vydalić zołata (prymianajecca adzin raz pry zmianienni značennia)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Zmiańić upłyŭ" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Dadaci abo vydalić upłyŭ (prymianajecca adzin raz pry zmianienni značennia)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Neabmiezhavanaja ježa" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Ježa ŭ atradzie nikoli nie pamianšajecca." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Pradmiety nie pamianšajucca pry handli" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Pradmiety zastajucca ŭ inventary pasla handlu. Prymianajecca tolki da pradmetaŭ, jakija vy addajecie, a nie da tych, što atrymlivajecie." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Maksimalnaja hruzapadymalnaść" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Atrad maje neabmiezhavanuju hruzapadymalnaść." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Neabmiezhavanyja materyjaly dla kavannia" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Pracuje tolki dla materyjałaŭ, jakija ŭ vas užo byli, nie dziejničaje na materyjaly, jakich ŭ vas nie było." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Kolkaść materyjałaŭ dla kavannia" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Ustalaŭvaje metavuju kolkaść materyjałaŭ dla kavannia (100-9999). Pracuje tolki, kali ŭklučana Neabmiezhavanyja materyjaly dla kavannia." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Zmiańić ački atrybutaŭ" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Ustupaje ŭ siłu pry adkrycci menu personasa dvojčy. Kab adklučyć hetuju opcyju, treba ŭstalaŭvaje značennie -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Zmiańić ački fokusavannia" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Ustupaje ŭ siłu pry adkrycci menu personasa dvojčy. Kab adklučyć hetuju opcyju, treba ŭstalaŭvaje značennie -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Neabmiezhavanaja viadomasc" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Zavaža: časam vy možacie nie atrymać viadomasc, navat kali hulnia kaža, što vy atrymali. Asabliva kali varohi biahuć. Heta moža być pamyłka hulni. Ustupaje ŭ siłu pry atrymanni viadomasci." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Množnik viadomasci" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Množyć usie atrymanni viadomasci (0 = adklučana). Zavaža: adliustravanaje značennie moža nie adliustrovvać paminožanuju sumu, ale faktyčna atrymanaja viadomasc pamianožvajecca." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Neabmiezhavany vopyt navykaŭ" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Ustupaje ŭ siłu, kali navyk atrymlivaje vopyt. Zavaža: navyki majuć abmiezhavannia ŭzroŭniu na asnovie ich chutkaści navučennia, jakaja zaležyć ad vašych atrybutaŭ. Kali chutkaść navučennia navyka roŭnaja 0, jon nie budzie atrymlivać vopyt, treba vydatkavać ački atrybutaŭ, kab padvyšyć vašy atrybuty, kab padvyšyć chutkaść navučennia." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Množnik vopyta navykaŭ" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Množyć atrymannie vopyta navykaŭ (0 = adklučana)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Neabmiezhavany vopyt vojskaŭ" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Usie vojskaŭ atrymlivajuć vopyt bez abmiezhavanniaŭ." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Množnik vopyta vojskaŭ" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Množyć atrymannie vopyta vojskaŭ (0 = adklučana)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Zabojstva adnym udaram" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Usie varožyja junity pamiраюць z adnaho udaru." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Pierakazannie zaŭsiody paspiachova" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Usie pravierki pierakazannia i dyjalohaŭ aŭtamatyčna paspiachovyja." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Pabudovy za adzin dzień" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Tolki adna budynina moža być zbudavanaja adnačasova. Budaŭnictva/palepšańnie niekalkich budyninaŭ usio jašče patrebuje niekalkich dzion." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Imhiennae budaŭnictva ablahavych harmat" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Zavaža: hetaja opcyja ŭplyvaje na abodva baki." />
+
+		<string id="BW_Game_GameSpeed" text="Množnik chutkaści hulni" />
+		<string id="BW_Game_GameSpeed_Hint" text="Množyć chutkaść knopak Prajhravańnie (1x) i Chutkaja pieramotka (4x). 1.0 = narmalnaja chutkaść, 2.0 = padvojenaja chutkaść i h.d." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="Prymianić da hulca" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Prymianaje vybranyja chyty da personasa hulca." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Prymianić da členaŭ klana hulca" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Prymianaje vybranyja chyty da ŭsich členaŭ klana hulca." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="Prymianić da kiraŭnikoŭ karaleustvaŭ" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Prymianaje vybranyja chyty da kiraŭnikoŭ ŭsich karaleustvaŭ." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Prymianić da kiraŭnika karaleustva hulca" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Prymianaje chyty da kiraŭnika biahučaha karaleustva hulca." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Prymianić da vasalaŭ karaleustvaŭ" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Prymianaje vybranyja chyty da ŭsich lidaraŭ vasalnych klanaŭ lubych karaleustvaŭ." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Prymianić da vasalaŭ karaleustva hulca" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Prymianaje vybranyja chyty da ŭsich lidaraŭ vasalnych klanaŭ karaleustva hulca." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Prymianić da dvaranstva karaleustvaŭ" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Prymianaje vybranyja chyty da ŭsich dvaranskich herojaŭ lubych karaleustvaŭ." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Prymianić da dvaranstva karaleustva hulca" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Prymianaje vybranyja chyty da ŭsich dvaranskich herojaŭ karaleustva hulca." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Prymianić da lidaraŭ malych klanaŭ" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Prymianaje vybranyja chyty da lidaraŭ ŭsich malych frakcyj." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Prymianić da členaŭ malych klanaŭ" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Prymianaje vybranyja chyty da ŭsich dvaranskich herojaŭ z malych klanaŭ." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="Nekalki opcyj možna kambinavać. Dublujučyja prymianienni aŭtamatyčna praduchilajucca." />
+	</strings>
+</base>

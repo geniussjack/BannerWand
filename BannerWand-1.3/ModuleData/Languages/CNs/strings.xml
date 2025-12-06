@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="简体中文" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - 目标" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="玩家" />
+		<string id="BW_Category_Inventory" text="物品栏" />
+		<string id="BW_Category_Stats" text="属性" />
+		<string id="BW_Category_Enemies" text="敌人" />
+		<string id="BW_Category_Game" text="游戏" />
+		<string id="BW_Category_CheatTargets" text="作弊目标" />
+		<string id="BW_Category_Kingdoms" text="王国" />
+		<string id="BW_Category_MinorClans" text="小氏族" />
+		<string id="BW_Category_Info" text="信息" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="无限生命值" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="生命条永不减少。仍可能因超过最大生命值的伤害而死亡。" />
+
+		<string id="BW_Player_InfiniteHealth" text="无限生命" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="战斗开始时增加+9999生命值。防止一击必杀。" />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="无限马匹生命值" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="玩家的马匹不会受到伤害。" />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="无限盾牌耐久度" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="当你格挡敌人攻击时生效。" />
+
+		<string id="BW_Player_UnlimitedAmmo" text="无限弹药" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="弓、弩和投掷武器的弹药保持在999。" />
+
+		<string id="BW_Player_MaxMorale" text="最大士气" />
+		<string id="BW_Player_MaxMorale_Hint" text="玩家的队伍始终保持最大士气。" />
+
+		<string id="BW_Player_MovementSpeed" text="设置移动速度" />
+		<string id="BW_Player_MovementSpeed_Hint" text="仅在地图上有效，战斗中无效。更改在下一个游戏日生效。" />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="交易总是被接受" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="所有交易提议都会自动接受。" />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="无限锻造耐力" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="锻造永不消耗耐力。" />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="最大角色关系" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="与玩家的任何正面关系变化都会提升到+99。" />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="最大化所有角色关系" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="立即将所有角色的关系设置为100。" />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="编辑金币" />
+		<string id="BW_Inventory_EditGold_Hint" text="添加或移除金币（当值改变时应用一次）。" />
+
+		<string id="BW_Inventory_EditInfluence" text="编辑影响力" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="添加或移除影响力（当值改变时应用一次）。" />
+
+		<string id="BW_Inventory_UnlimitedFood" text="无限食物" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="队伍食物永不减少。" />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="交易/交换物品不减少" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="交易后物品仍保留在物品栏中。仅适用于你给出的物品，不适用于你收到的物品。" />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="最大载重" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="队伍拥有无限载重。" />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="无限锻造材料" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="仅适用于你已经拥有的材料，对你没有拥有的材料没有效果。" />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="锻造材料数量" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="设置锻造材料的目标数量（100-9999）。仅在启用无限锻造材料时有效。" />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="编辑属性点" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="打开角色菜单两次后生效。要禁用此选项，你需要将值设置为-1。" />
+
+		<string id="BW_Stats_EditFocusPoints" text="编辑专精点" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="打开角色菜单两次后生效。要禁用此选项，你需要将值设置为-1。" />
+
+		<string id="BW_Stats_UnlimitedRenown" text="无限声望" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="注意：有时即使游戏说你获得了声望，你也可能没有获得声望。特别是当敌人逃跑时。这可能是游戏错误。获得声望时生效。" />
+
+		<string id="BW_Stats_RenownMultiplier" text="声望倍数" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="倍增所有声望获得（0 = 禁用）。注意：显示值可能不反映倍增后的数量，但实际获得的声望会被倍增。" />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="无限技能经验" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="当技能获得经验时生效。注意：技能有基于其学习率的等级上限，学习率受你的属性影响。如果技能的学习率为0，它将不会获得经验，你需要花费属性点来提高你的属性以提高学习率。" />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="技能经验倍数" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="倍增技能经验获得（0 = 禁用）。" />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="无限部队经验" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="所有部队无限制获得经验。" />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="部队经验倍数" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="倍增部队经验获得（0 = 禁用）。" />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="一击必杀" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="所有敌方单位一击必死。" />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="说服/对话总是成功" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="所有说服和对话检查自动成功。" />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="一天完成定居点建设" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="一次只能建造一个建筑。建造/升级多个建筑仍然需要多天。" />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="即时攻城建设" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="注意：此选项影响双方。" />
+
+		<string id="BW_Game_GameSpeed" text="设置游戏速度倍数" />
+		<string id="BW_Game_GameSpeed_Hint" text="倍增播放（1x）和快进（4x）按钮的速度。1.0 = 正常速度，2.0 = 双倍速度等。" />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="应用于玩家" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="将选定的作弊应用于玩家角色。" />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="应用于玩家氏族成员" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="将选定的作弊应用于玩家氏族的所有成员。" />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="应用于王国统治者" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="将选定的作弊应用于所有王国的统治者。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="应用于玩家王国统治者" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="将作弊应用于玩家当前王国的统治者。" />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="应用于王国家臣" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="将选定的作弊应用于任何王国的所有家臣氏族领袖。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="应用于玩家王国家臣" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="将选定的作弊应用于玩家王国的所有家臣氏族领袖。" />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="应用于王国贵族" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="将选定的作弊应用于任何王国的所有贵族英雄。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="应用于玩家王国贵族" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="将选定的作弊应用于玩家王国的所有贵族英雄。" />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="应用于小氏族领袖" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="将选定的作弊应用于所有小派系的领袖。" />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="应用于小氏族成员" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="将选定的作弊应用于小氏族的所有贵族英雄。" />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="可以组合多个选项。重复应用会自动防止。" />
+	</strings>
+</base>

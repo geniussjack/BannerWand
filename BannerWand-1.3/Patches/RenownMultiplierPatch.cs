@@ -38,7 +38,7 @@ namespace BannerWand.Patches
         /// Explicitly targets the AddRenown method by searching all available overloads.
         /// </summary>
         [HarmonyTargetMethod]
-        public static MethodBase TargetMethod()
+        public static MethodBase? TargetMethod()
         {
             try
             {
@@ -98,26 +98,25 @@ namespace BannerWand.Patches
 
                 if (method is null)
                 {
-                    ModLogger.Error("RenownMultiplierPatch: Could not find any AddRenown method!");
-                }
-                else
-                {
-                    ParameterInfo[] parameters = method.GetParameters();
-                    List<string> paramStrings = [];
-                    foreach (ParameterInfo param in parameters)
-                    {
-                        paramStrings.Add($"{param.ParameterType.Name} {param.Name}");
-                    }
-                    string paramStr = string.Join(", ", paramStrings);
-                    ModLogger.Log($"RenownMultiplierPatch: Successfully targeting AddRenown({paramStr})");
+                    ModLogger.Error("RenownMultiplierPatch: Could not find any AddRenown method! Patch will not be applied.");
+                    return null;
                 }
 
-                return method!;
+                ParameterInfo[] finalParameters = method.GetParameters();
+                List<string> finalParamStrings = [];
+                foreach (ParameterInfo param in finalParameters)
+                {
+                    finalParamStrings.Add($"{param.ParameterType.Name} {param.Name}");
+                }
+                string finalParamStr = string.Join(", ", finalParamStrings);
+                ModLogger.Log($"RenownMultiplierPatch: Successfully targeting AddRenown({finalParamStr})");
+
+                return method;
             }
             catch (Exception ex)
             {
                 ModLogger.Error($"RenownMultiplierPatch: Exception in TargetMethod: {ex.Message}");
-                return null!;
+                return null;
             }
         }
 

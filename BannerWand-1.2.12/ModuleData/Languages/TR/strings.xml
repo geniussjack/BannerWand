@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Türkçe" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Hedefler" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Oyuncu" />
+		<string id="BW_Category_Inventory" text="Envanter" />
+		<string id="BW_Category_Stats" text="İstatistikler" />
+		<string id="BW_Category_Enemies" text="Düşmanlar" />
+		<string id="BW_Category_Game" text="Oyun" />
+		<string id="BW_Category_CheatTargets" text="Hile Hedefleri" />
+		<string id="BW_Category_Kingdoms" text="Krallıklar" />
+		<string id="BW_Category_MinorClans" text="Küçük Klanlar" />
+		<string id="BW_Category_Info" text="Bilgi" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Sınırsız HP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Can çubuğu asla azalmaz. Maksimum HP'yi aşan hasardan hala ölebilirsiniz." />
+
+		<string id="BW_Player_InfiniteHealth" text="Sonsuz Can" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Savaş başlangıcında +9999 HP ekler. Tek vuruşta öldürmeyi önler." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Sınırsız At Sağlığı" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Oyuncunun atı hasar almaz." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Sınırsız Kalkan Dayanıklılığı" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Düşman saldırılarını engellediğinizde etkili olur." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Sınırsız Cephane" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Yaylar, arbaletler ve fırlatma silahları için cephane 999'da tutulur." />
+
+		<string id="BW_Player_MaxMorale" text="Maksimum Moral" />
+		<string id="BW_Player_MaxMorale_Hint" text="Oyuncunun grubu her zaman maksimum morale sahiptir." />
+
+		<string id="BW_Player_MovementSpeed" text="Hareket Hızını Ayarla" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Sadece haritada çalışır, savaşta çalışmaz. Değişiklikler oyun içindeki bir sonraki günde uygulanır." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Takas Teklifi Her Zaman Kabul Edilir" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Tüm takas teklifleri otomatik olarak kabul edilir." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Sınırsız Demirci Dayanıklılığı" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Demircilik asla dayanıklılık tüketmez." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Maksimum Karakter İlişkisi" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Oyuncuyla olan herhangi bir pozitif ilişki değişikliği +99'a yükseltilir." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Tüm Karakter İlişkilerini Maksimize Et" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Tüm karakterlerle ilişkiyi anında 100'e ayarlar." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Altını Düzenle" />
+		<string id="BW_Inventory_EditGold_Hint" text="Altın ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Etkiyi Düzenle" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Etki ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Sınırsız Yiyecek" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Grup yiyeceği asla azalmaz." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Takas/Değişim Eşyaları Azalmaz" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Eşyalar takas edildikten sonra envanterinizde kalır. Sadece verdiğiniz eşyalara uygulanır, aldığınız eşyalara uygulanmaz." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Maksimum Taşıma Kapasitesi" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Grup sınırsız taşıma kapasitesine sahiptir." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Sınırsız Demirci Malzemeleri" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Sadece zaten sahip olduğunuz malzemeler için çalışır, sahip olmadığınız malzemeler üzerinde etkisi yoktur." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Demirci Malzemeleri Miktarı" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Demirci malzemeleri için hedef miktarı ayarlayın (100-9999). Sadece Sınırsız Demirci Malzemeleri etkinleştirildiğinde çalışır." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Nitelik Puanlarını Düzenle" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Karakter menüsünü iki kez açtığınızda etkili olur. Bu seçeneği devre dışı bırakmak için değeri -1'e ayarlamanız gerekir." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Odak Puanlarını Düzenle" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Karakter menüsünü iki kez açtığınızda etkili olur. Bu seçeneği devre dışı bırakmak için değeri -1'e ayarlamanız gerekir." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Sınırsız Şöhret" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Not: Bazen oyun şöhret kazandığınızı söylese bile şöhret kazanamayabilirsiniz. Özellikle düşmanlar kaçtığında. Bu bir oyun hatası olabilir. Şöhret kazandığınızda etkili olur." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Şöhret Çarpanı" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Tüm şöhret kazançlarını çarpar (0 = devre dışı). Not: Görüntülenen değer çarpılmış miktarı yansıtmayabilir, ancak gerçekten kazanılan şöhret çarpılır." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Sınırsız Beceri XP" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Bir beceri XP kazandığında etkili olur. Not: Becerilerin niteliklerinizden etkilenen öğrenme oranına dayalı seviye sınırları vardır. Bir becerinin öğrenme oranı 0 ise, XP kazanmayacaktır, öğrenme oranını artırmak için nitelik puanları harcayarak niteliklerinizi yükseltmeniz gerekir." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Beceri XP Çarpanı" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Beceri XP kazançlarını çarpar (0 = devre dışı)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Sınırsız Birlik XP" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Tüm birlikler sınırsız XP kazanır." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Birlik XP Çarpanı" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Birlik XP kazançlarını çarpar (0 = devre dışı)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Tek Vuruşta Öldürme" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Tüm düşman birimleri tek vuruşta ölür." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="İkna/Konuşma Her Zaman Başarılı" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Tüm ikna ve konuşma kontrolleri otomatik olarak başarılı olur." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Bir Günlük Yerleşim İnşaatı" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Aynı anda yalnızca bir bina inşa edilebilir. Birden fazla binayı inşa etmek/yükseltmek hala birden fazla gün gerektirir." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Anında Kuşatma İnşaatı" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Not: Bu seçenek her iki tarafı da etkiler." />
+
+		<string id="BW_Game_GameSpeed" text="Oyun Hızı Çarpanını Ayarla" />
+		<string id="BW_Game_GameSpeed_Hint" text="Oynat (1x) ve Hızlı İleri (4x) düğmelerinin hızını çarpar. 1.0 = normal, 2.0 = çift hız, vb." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="Oyuncuya Uygula" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Seçilen hileleri oyuncu karakterine uygular." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Oyuncunun Klan Üyelerine Uygula" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Seçilen hileleri oyuncunun klanının tüm üyelerine uygular." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="Krallık Hükümdarlarına Uygula" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Seçilen hileleri tüm krallıkların hükümdarlarına uygular." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Oyuncu Krallığı Hükümdarına Uygula" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Oyuncunun mevcut krallığının hükümdarına hileleri uygular." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Krallık Vasallarına Uygula" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Seçilen hileleri herhangi bir krallığın tüm vasal klan liderlerine uygular." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Oyuncu Krallığı Vasallarına Uygula" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Seçilen hileleri oyuncunun krallığının tüm vasal klan liderlerine uygular." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Krallık Asillerine Uygula" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Seçilen hileleri herhangi bir krallığın tüm asil kahramanlarına uygular." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Oyuncu Krallığı Asillerine Uygula" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Seçilen hileleri oyuncunun krallığının tüm asil kahramanlarına uygular." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Küçük Klan Liderlerine Uygula" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Seçilen hileleri tüm küçük hiziplerin liderlerine uygular." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Küçük Klan Üyelerine Uygula" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Seçilen hileleri küçük klanlardan tüm asil kahramanlara uygular." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="Birden fazla seçenek birleştirilebilir. Yinelenen uygulamalar otomatik olarak önlenir." />
+	</strings>
+</base>

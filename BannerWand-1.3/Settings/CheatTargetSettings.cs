@@ -199,7 +199,14 @@ namespace BannerWand.Settings
                 // Category: Kingdoms
                 if (ApplyToKingdomRulers)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom?.Leader != null)
                         {
@@ -219,7 +226,14 @@ namespace BannerWand.Settings
 
                 if (ApplyToKingdomVassals)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom != null)
                         {
@@ -253,7 +267,14 @@ namespace BannerWand.Settings
 
                 if (ApplyToKingdomNobles)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom != null)
                         {
@@ -300,7 +321,14 @@ namespace BannerWand.Settings
                 // Category: Minor Clans
                 if (ApplyToMinorClanLeaders)
                 {
-                    foreach (Clan clan in Clan.All)
+                    // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Clan clan in allClans)
                     {
                         if (clan?.IsMinorFaction == true && clan.Leader != null)
                         {
@@ -311,7 +339,14 @@ namespace BannerWand.Settings
 
                 if (ApplyToMinorClanMembers)
                 {
-                    foreach (Clan clan in Clan.All)
+                    // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Clan clan in allClans)
                     {
                         if (clan?.IsMinorFaction == true)
                         {

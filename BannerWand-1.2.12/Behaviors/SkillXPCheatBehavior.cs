@@ -133,8 +133,8 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            CheatSettings settings = CheatSettings.Instance!;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance!;
+            CheatSettings settings = CheatSettings.Instance;
+            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
@@ -262,8 +262,8 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyTroopXPBoost()
         {
-            CheatSettings settings = CheatSettings.Instance!;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance!;
+            CheatSettings settings = CheatSettings.Instance;
+            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {

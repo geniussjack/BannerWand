@@ -43,7 +43,7 @@ namespace BannerWand.Utils
         /// <remarks>
         /// Delegates to <see cref="CampaignDataCache.AllAliveHeroes"/>.
         /// </remarks>
-        public List<Hero> AllAliveHeroes => CampaignDataCache.AllAliveHeroes!;
+        public List<Hero> AllAliveHeroes => CampaignDataCache.AllAliveHeroes ?? [];
 
         /// <summary>
         /// Gets a cached snapshot of all clans in the campaign.
@@ -54,7 +54,7 @@ namespace BannerWand.Utils
         /// <remarks>
         /// Delegates to <see cref="CampaignDataCache.AllClans"/>.
         /// </remarks>
-        public List<Clan> AllClans => CampaignDataCache.AllClans!;
+        public List<Clan> AllClans => CampaignDataCache.AllClans ?? [];
 
         /// <summary>
         /// Gets a cached snapshot of all mobile parties in the campaign.
@@ -65,7 +65,18 @@ namespace BannerWand.Utils
         /// <remarks>
         /// Delegates to <see cref="CampaignDataCache.AllParties"/>.
         /// </remarks>
-        public List<MobileParty> AllParties => CampaignDataCache.AllParties!;
+        public List<MobileParty> AllParties => CampaignDataCache.AllParties ?? [];
+
+        /// <summary>
+        /// Gets a cached snapshot of all kingdoms in the campaign.
+        /// </summary>
+        /// <returns>
+        /// Read-only list of kingdoms. Cache is refreshed each campaign tick.
+        /// </returns>
+        /// <remarks>
+        /// Delegates to <see cref="CampaignDataCache.AllKingdoms"/>.
+        /// </remarks>
+        public List<Kingdom> AllKingdoms => CampaignDataCache.AllKingdoms ?? [];
 
         /// <summary>
         /// Clears all cached data.

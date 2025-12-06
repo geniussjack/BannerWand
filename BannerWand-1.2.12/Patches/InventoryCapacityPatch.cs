@@ -28,12 +28,12 @@ namespace BannerWandRetro.Patches
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Postfix patch that adds maximum capacity after base calculation.
@@ -47,13 +47,26 @@ namespace BannerWandRetro.Patches
         /// by DefaultInventoryCapacityModel.CalculateInventoryCapacity.
         /// </para>
         /// <para>
+        /// Harmony will match this method to any CalculateInventoryCapacity overload that has
+        /// MobileParty as the first parameter. Additional parameters are ignored but must match
+        /// the signature for Harmony to properly bind the patch.
+        /// </para>
+        /// <para>
         /// We modify __result by reference to add maximum capacity when conditions are met:
         /// 1. Cheat is enabled (MaxCarryingCapacity setting)
         /// 2. Party qualifies (player party or targeted NPC party)
         /// </para>
         /// </remarks>
 #pragma warning disable RCS1213 // Remove unused method declaration
-        private static void Postfix(ref ExplainedNumber __result, MobileParty mobileParty)
+        private static void Postfix(
+            ref ExplainedNumber __result,
+            MobileParty mobileParty,
+            bool _ = false, // isCurrentlyAtSea
+            bool __ = false, // includeDescriptions
+            int ___ = 0, // additionalTroops
+            int ____ = 0, // additionalSpareMounts
+            int _____ = 0, // additionalPackAnimals
+            bool ______ = false) // includeFollowers
 #pragma warning restore RCS1213 // Remove unused method declaration
         {
             try
@@ -80,16 +93,12 @@ namespace BannerWandRetro.Patches
 
                     // Add adjustment to result
                     __result.Add(capacityAdjustment, null);
-
-                    if (mobileParty == MobileParty.MainParty)
-                    {
-                        ModLogger.Debug($"Applied max capacity to party: {mobileParty.Name} (new capacity: {__result.ResultNumber})");
-                    }
                 }
             }
             catch (System.Exception ex)
             {
-                ModLogger.Error("Error in InventoryCapacityPatch", ex);
+                ModLogger.Error($"[InventoryCapacityPatch] Error in Postfix: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
         }
 

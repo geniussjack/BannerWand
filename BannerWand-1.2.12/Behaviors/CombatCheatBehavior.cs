@@ -38,12 +38,12 @@ namespace BannerWandRetro.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Tracks whether Infinite Health bonus has been applied in current mission.
@@ -150,9 +150,17 @@ namespace BannerWandRetro.Behaviors
             {
                 base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
 
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
                 // Handle One-Hit Kills - ensure enemies die from PLAYER's hits/shots
                 // IMPORTANT: Only works when PLAYER is the attacker (not allies)
-                if (Settings.OneHitKills)
+                if (settings.OneHitKills)
                 {
                     Agent? mainAgent = Mission.Current?.MainAgent;
 
@@ -202,8 +210,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedShieldDurability(Agent agent)
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or non-player agent
-            if (!Settings.UnlimitedShieldDurability || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedShieldDurability || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -259,8 +275,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedAmmo()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing agent
-            if (!Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -294,6 +318,7 @@ namespace BannerWandRetro.Behaviors
                     short currentAmmo = weapon.Amount;
 
                     // Store original ammo amount if this is the first time we see this weapon
+                    // Store the ACTUAL original value - don't inflate it with SafeMinimumAmmo
                     if (!_originalAmmoAmounts.ContainsKey(i))
                     {
                         _originalAmmoAmounts[i] = currentAmmo;
@@ -303,6 +328,7 @@ namespace BannerWandRetro.Behaviors
                     short originalAmmo = _originalAmmoAmounts[i];
 
                     // If current ammo is less than original, restore it (player used ammo)
+                    // Apply SafeMinimumAmmo only during restoration, not when storing original value
                     if (currentAmmo < originalAmmo)
                     {
                         // Set flag to allow our restoration call through the Harmony patch (if patch is applied)
@@ -322,7 +348,13 @@ namespace BannerWandRetro.Behaviors
 
                             if (setWeaponMethod != null)
                             {
-                                _ = setWeaponMethod.Invoke(playerAgent, [i, originalAmmo, true]);
+                                // Restore to original amount
+                                // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
+                                // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
+                                short restoreAmount = originalAmmo == 0
+                                    ? GameConstants.SafeMinimumAmmo
+                                    : originalAmmo;
+                                _ = setWeaponMethod.Invoke(playerAgent, [i, restoreAmount, true]);
                             }
                             else
                             {
@@ -335,16 +367,27 @@ namespace BannerWandRetro.Behaviors
 
                                 if (setWeaponMethod != null)
                                 {
-                                    _ = setWeaponMethod.Invoke(playerAgent, [i, originalAmmo]);
+                                    // Restore to original amount
+                                    // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
+                                    // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
+                                    short restoreAmount = originalAmmo == 0
+                                        ? GameConstants.SafeMinimumAmmo
+                                        : originalAmmo;
+                                    _ = setWeaponMethod.Invoke(playerAgent, [i, restoreAmount]);
                                 }
                                 else
                                 {
                                     // Fallback: Restore to original amount (not 999) to avoid weight issues
+                                    // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
+                                    // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
+                                    short restoreAmount = originalAmmo == 0
+                                        ? GameConstants.SafeMinimumAmmo
+                                        : originalAmmo;
                                     playerAgent.Equipment[i] = new MissionWeapon(
                                         weapon.Item,
                                         weapon.ItemModifier,
                                         weapon.Banner,
-                                        originalAmmo  // Restore to original amount
+                                        restoreAmount  // Restore to original (or SafeMinimumAmmo if original was 0)
                                     );
                                 }
                             }
@@ -357,11 +400,9 @@ namespace BannerWandRetro.Behaviors
                             }
                         }
                     }
-                    // If current ammo is greater than original (player picked up more ammo), update the original
-                    else if (currentAmmo > originalAmmo)
-                    {
-                        _originalAmmoAmounts[i] = currentAmmo;
-                    }
+                    // DO NOT update original amount when current ammo exceeds it
+                    // This preserves the true baseline and prevents the "original" from continuously increasing
+                    // as the player picks up ammunition during battles
                 }
             }
         }
@@ -390,8 +431,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedHealth()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing agent
-            if (!Settings.UnlimitedHealth || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -430,8 +479,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private void ApplyInfiniteHealth()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or already applied
-            if (!Settings.InfiniteHealth || !TargetSettings.ApplyToPlayer || _infiniteHealthApplied)
+            if (!settings.InfiniteHealth || !targetSettings.ApplyToPlayer || _infiniteHealthApplied)
             {
                 return;
             }
@@ -472,8 +529,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedHorseHealth()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing agent
-            if (!Settings.UnlimitedHorseHealth || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedHorseHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -521,8 +586,15 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyOneHitKills()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            if (settings is null)
+            {
+                return;
+            }
+
             // Early return if cheat disabled
-            if (!Settings.OneHitKills)
+            if (!settings.OneHitKills)
             {
                 return;
             }
