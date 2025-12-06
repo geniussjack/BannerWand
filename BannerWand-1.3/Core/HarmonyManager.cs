@@ -511,14 +511,12 @@ namespace BannerWand.Core
                 // Check if patch is already applied (e.g., by PatchAll())
                 if (IsPatchAlreadyApplied(targetMethod, postfixMethod))
                 {
-                    ModLogger.Log("[InventoryCapacityPatch] Patch already applied (likely by PatchAll()), skipping manual application");
                     return true;
                 }
 
                 // Apply the patch
                 HarmonyMethod harmonyPostfix = new(postfixMethod);
                 _ = Instance.Patch(targetMethod, postfix: harmonyPostfix);
-                ModLogger.Log("[InventoryCapacityPatch] Patch applied successfully via manual patching");
                 return true;
             }
             catch (Exception ex)
