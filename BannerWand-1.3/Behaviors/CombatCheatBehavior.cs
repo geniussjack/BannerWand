@@ -448,32 +448,19 @@ namespace BannerWand.Behaviors
                 // Update last known amount
                 _lastAmmoAmounts[i] = currentAmmo;
 
-                // Restore ammo if needed
-                // NOTE: SetWeaponAmountInSlot patch is temporarily disabled for testing,
-                // so we need manual restoration. This will call UpdateAgentProperties(),
-                // but we're testing if the PATCH was the problem, not the method itself.
-                if (shouldRestore)
+                // DISABLED: Manual restoration via SetWeaponAmountInSlot causes UpdateAgentProperties()
+                // to be called, which can break character models. Instead, we rely entirely on
+                // the Harmony patch (AmmoConsumptionPatch) which prevents ammo decrease.
+                // The patch modifies the amount parameter before the original method executes,
+                // so no manual restoration is needed.
+                //
+                // If ammo somehow gets below max, the patch will prevent further decreases,
+                // and the player can pick up ammo normally or it will be restored on next shot attempt.
+                if (shouldRestore && _unlimitedAmmoLogCounter == 0)
                 {
-                    // Set flag to allow our restoration call through the Harmony patch (if it was enabled)
-                    AmmoConsumptionPatch.IsRestorationInProgress = true;
-                    try
-                    {
-                        // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
-                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
-                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
-
-                        // Only log first restoration per mission to reduce spam
-                        if (_unlimitedAmmoLogCounter == 0)
-                        {
-                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
-                            _unlimitedAmmoLogCounter++;
-                        }
-                    }
-                    finally
-                    {
-                        AmmoConsumptionPatch.IsRestorationInProgress = false;
-                    }
+                    string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                    ModLogger.Debug($"[UnlimitedAmmo] Ammo below max for {weaponName} (Slot: {i}): {currentAmmo}/{maxAmmo}. Patch will prevent further decrease.");
+                    _unlimitedAmmoLogCounter++;
                 }
             }
         }
@@ -597,41 +584,28 @@ namespace BannerWand.Behaviors
             // Check if already applied to this agent
             if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
             {
-                // Verify bonus is still there (in case HealthLimit was reset)
-                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
-                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
+                // Just restore health - we no longer modify HealthLimit
+                if (agent.Health < agent.HealthLimit)
                 {
-                    // Bonus seems to have been reset, reapply it
-                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
-                    _infiniteHealthApplied[agentIndex] = false;
+                    agent.Health = agent.HealthLimit;
                 }
-                else
-                {
-                    // Bonus is still there, just restore health
-                    if (agent.Health < agent.HealthLimit)
-                    {
-                        agent.Health = agent.HealthLimit;
-                    }
-                    return;
-                }
+                return;
             }
 
-            // Store original HealthLimit before applying bonus (for verification)
-            float originalHealthLimit = agent.HealthLimit;
-            float originalBaseHealthLimit = agent.BaseHealthLimit;
-
-            // Set HealthLimit to original base + bonus to ensure consistency
-            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
+            // DISABLED: Modifying HealthLimit causes character model corruption.
+            // Instead, we rely on aggressive health restoration in OnAgentHit to prevent death.
+            // The health restoration happens immediately after damage is applied, before death check.
+            
+            // Just mark as "applied" (even though we're not modifying HealthLimit) to prevent repeated checks
+            _infiniteHealthApplied[agentIndex] = true;
+            
+            // Restore health to current limit (without modifying the limit itself)
+            if (agent.Health < agent.HealthLimit)
             {
-                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
-                agent.HealthLimit = newHealthLimit;
-                agent.Health = newHealthLimit; // Fill to new max
-
-                // Mark as applied to prevent repeated application
-                _infiniteHealthApplied[agentIndex] = true;
-
-                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+                agent.Health = agent.HealthLimit;
             }
+            
+            ModLogger.Debug($"Infinite Health mode enabled for agent {agentIndex} (using health restoration instead of HealthLimit modification)");
         }
 
         #endregion
