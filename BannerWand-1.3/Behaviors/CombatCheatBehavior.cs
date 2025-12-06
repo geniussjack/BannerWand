@@ -183,9 +183,12 @@ namespace BannerWand.Behaviors
                 // This ensures agent is fully initialized before modifying HealthLimit
                 ApplyInfiniteHealthWithDelay();
 
+                // DISABLED: Per-frame health restoration causes character model corruption
+                // Health restoration is now handled only in OnAgentHit event, which is safer
+                // ApplyUnlimitedHealth(); // DISABLED - causes model corruption
+                // ApplyUnlimitedHorseHealth(); // DISABLED - causes model corruption
+                
                 // Apply continuous combat cheats
-                ApplyUnlimitedHealth();
-                ApplyUnlimitedHorseHealth();
                 ApplyOneHitKills();
 
                 // Apply unlimited ammo once per frame - now using safe minimum strategy
