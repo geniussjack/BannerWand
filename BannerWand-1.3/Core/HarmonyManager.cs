@@ -319,6 +319,13 @@ namespace BannerWand.Core
             bool primaryPatchApplied = false;
             bool fallbackPatchApplied = false;
 
+            // TEMPORARILY DISABLED: Testing if SetWeaponAmountInSlot patch causes character model corruption
+            // If disabling this fixes the issue, we'll need to find an alternative approach
+            ModLogger.Warning("[AmmoConsumptionPatch] TEMPORARILY DISABLED for testing - SetWeaponAmountInSlot patch");
+            ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based restoration only");
+            bool primaryPatchApplied = false;
+            
+            /* TEMPORARILY DISABLED FOR TESTING
             try
             {
                 if (Instance == null)
@@ -327,16 +334,9 @@ namespace BannerWand.Core
                     return false;
                 }
 
-            // TEMPORARILY DISABLED: Testing if SetWeaponAmountInSlot patch causes character model corruption
-            // If disabling this fixes the issue, we'll need to find an alternative approach
-            ModLogger.Warning("[AmmoConsumptionPatch] TEMPORARILY DISABLED for testing - SetWeaponAmountInSlot patch");
-            ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based restoration only");
-            bool primaryPatchApplied = false;
-            
-            /* TEMPORARILY DISABLED FOR TESTING
-            // Try to apply primary patch (Agent.SetWeaponAmountInSlot)
-            MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
-            if (targetMethod != null)
+                // Try to apply primary patch (Agent.SetWeaponAmountInSlot)
+                MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
+                if (targetMethod != null)
                 {
                     // Find the Prefix method with 4 parameters (EquipmentIndex, short, bool)
                     MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
