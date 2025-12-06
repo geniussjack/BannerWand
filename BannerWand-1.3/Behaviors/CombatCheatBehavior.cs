@@ -484,22 +484,22 @@ namespace BannerWand.Behaviors
         }
 
         /// <summary>
-        /// Adds +9999 HP to player at the start of battle.
-        /// Prevents one-shot kills from high damage attacks.
+        /// Rapidly restores player health after damage to prevent death.
+        /// NOTE: We do NOT modify HealthLimit as it breaks character model/physics.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This cheat modifies HealthLimit (max HP) rather than just restoring health.
-        /// The +9999 HP bonus makes it virtually impossible to die from any single attack.
+        /// CRITICAL: HealthLimit modification is disabled because it breaks character model initialization.
+        /// Instead, this cheat works by rapidly restoring health after damage is taken.
         /// </para>
         /// <para>
-        /// Applied once per agent using _infiniteHealthApplied dictionary.
-        /// This prevents repeated application every frame.
+        /// Applied continuously to ensure health is always at maximum.
+        /// Uses _infiniteHealthApplied dictionary to track which agents have this cheat active.
         /// </para>
         /// <para>
         /// Difference from Unlimited Health:
         /// - Unlimited HP: Keeps health bar full, but can die from one-shot
-        /// - Infinite Health: Adds +9999 HP, prevents one-shot kills
+        /// - Infinite Health: Same behavior now (rapid health restoration)
         /// </para>
         /// </remarks>
         private void ApplyInfiniteHealth()
@@ -530,6 +530,8 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Applies Infinite Health bonus to a specific agent.
+        /// NOTE: We do NOT modify HealthLimit as it breaks character model/physics.
+        /// Instead, we rely on fast health restoration after damage.
         /// </summary>
         /// <param name="agent">The agent to apply the bonus to.</param>
         private void ApplyInfiniteHealthToAgent(Agent agent)
@@ -539,55 +541,23 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
-            // Check that agent has valid character data and health is properly initialized
-            if (agent.Character == null || agent.HealthLimit <= 0)
-            {
-                // Agent not fully ready yet, skip for now
-                return;
-            }
-
+            // CRITICAL FIX: Do NOT modify HealthLimit as it breaks character model initialization
+            // Instead, Infinite Health works by rapidly restoring health after damage
+            // This prevents death from normal attacks but may not prevent one-shot kills exceeding HealthLimit
+            
             int agentIndex = agent.Index;
 
-            // Check if already applied to this agent
-            if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
+            // Mark as applied (for compatibility with existing code)
+            if (!_infiniteHealthApplied.ContainsKey(agentIndex))
             {
-                // Verify bonus is still there (in case HealthLimit was reset)
-                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
-                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
-                {
-                    // Bonus seems to have been reset, reapply it
-                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
-                    _infiniteHealthApplied[agentIndex] = false;
-                }
-                else
-                {
-                    // Bonus is still there, just restore health
-                    if (agent.Health < agent.HealthLimit)
-                    {
-                        agent.Health = agent.HealthLimit;
-                    }
-                    return;
-                }
+                _infiniteHealthApplied[agentIndex] = true;
+                ModLogger.Debug($"Infinite Health tracking enabled for agent {agentIndex} (using health restoration method)");
             }
 
-            // Store original HealthLimit before applying bonus (for verification)
-            float originalHealthLimit = agent.HealthLimit;
-            float originalBaseHealthLimit = agent.BaseHealthLimit;
-
-            // CRITICAL FIX: Set HealthLimit directly instead of using += to avoid breaking agent state
-            // Only apply if we have valid base values
-            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
+            // Restore health to maximum if below
+            if (agent.Health < agent.HealthLimit)
             {
-                // Set to original base + bonus to ensure consistency
-                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
-                agent.HealthLimit = newHealthLimit;
-                agent.Health = newHealthLimit; // Fill to new max
-
-                // Mark as applied to prevent repeated application
-                _infiniteHealthApplied[agentIndex] = true;
-
-                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+                agent.Health = agent.HealthLimit;
             }
         }
 
