@@ -1,7 +1,6 @@
 using BannerWand.Behaviors;
 using BannerWand.Constants;
 using BannerWand.Models;
-using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -29,7 +28,8 @@ namespace BannerWand.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.3.x ONLY
-    /// For Bannerlord 1.2.12, use BannerWand v1.0.8 (BannerWand-1.2.12 project)
+    /// Mod Version: 1.0.9
+    /// For Bannerlord 1.2.12, use BannerWand v1.0.9 (BannerWand-1.2.12 project)
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
@@ -55,9 +55,10 @@ namespace BannerWand.Core
             {
                 ModLogger.Log($"Game Version: {TaleWorlds.Library.ApplicationVersion.FromParametersFile()}");
             }
-            catch
+            catch (Exception ex)
             {
                 // Fallback if version detection fails
+                ModLogger.Warning($"Failed to detect game version: {ex.Message}. Using fallback.");
                 ModLogger.Log("Game Version: 1.3.x (fallback)");
             }
             ModLogger.Log("Build Configuration: VERSION_1_3_X");
@@ -117,9 +118,7 @@ namespace BannerWand.Core
             }
             catch (Exception exception)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {exception}: {exception.Message}");
-                ModLogger.Error($"Stack trace: {exception.StackTrace}");
-                ModLogger.Error($"Error checking localization: {exception.Message}");
+                ModLogger.Error($"Error checking localization: {exception.Message}", exception);
                 ModLogger.Log("=== End Localization Check ===");
             }
         }
@@ -136,7 +135,6 @@ namespace BannerWand.Core
         /// <remarks>
         /// <para>
         /// This method performs critical initialization in the following order:
-        /// 1. Auto-reset dangerous settings (safety measure for crash recovery)
         /// 2. Initialize <see cref="CheatManager"/>
         /// 3. Register custom game models (replaces default Bannerlord models)
         /// 4. Register campaign behaviors (handles cheats not covered by models)
@@ -173,10 +171,7 @@ namespace BannerWand.Core
                     ModLogger.Error($"Failed to display initialization message: {imEx.Message}");
                 }
 
-                // Step 1: Auto-reset dangerous settings (safety feature)
-                AutoResetDangerousSettings();
-
-                // Step 2: Initialize cheat manager (will show active cheats count)
+                // Step 1: Initialize cheat manager (will show active cheats count)
                 CheatManager.Initialize();
                 ModLogger.Log("CheatManager initialized successfully");
 
@@ -191,85 +186,6 @@ namespace BannerWand.Core
             }
 
             ModLogger.Log("Game start initialization completed successfully");
-        }
-
-        /// <summary>
-        /// Auto-resets potentially dangerous settings that might have persisted from game crashes.
-        /// This is a safety measure to prevent game-breaking configurations from surviving crashes.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Extreme multipliers (&gt;10x) can cause game instability or performance issues.
-        /// This method detects and resets them to safe values on every game start.
-        /// </para>
-        /// <para>
-        /// Settings checked:
-        /// - Skill XP Multiplier
-        /// - Troops XP Multiplier
-        /// - Renown Multiplier
-        /// - Movement Speed
-        /// - Game Speed
-        /// </para>
-        /// </remarks>
-        private void AutoResetDangerousSettings()
-        {
-            CheatSettings settings = CheatSettings.Instance!;
-            if (settings == null)
-            {
-                ModLogger.Warning("CheatSettings.Instance is null - cannot perform safety checks");
-                return;
-            }
-
-            bool hadDangerousSettings = false;
-
-            // Default safe value to reset extreme multipliers to
-            const float defaultSafeValue = 1f;
-
-            // Check Skill XP Multiplier and reset if exceeds safe limit
-            if (settings.SkillXPMultiplier > GameConstants.MaxSafeGameSpeed)
-            {
-                ModLogger.Warning($"Detected extreme Skill XP Multiplier ({settings.SkillXPMultiplier}), resetting to {defaultSafeValue} for safety");
-                settings.SkillXPMultiplier = defaultSafeValue;
-                hadDangerousSettings = true;
-            }
-
-            // Check Troops XP Multiplier and reset if exceeds safe limit
-            if (settings.TroopsXPMultiplier > GameConstants.MaxSafeGameSpeed)
-            {
-                ModLogger.Warning($"Detected extreme Troops XP Multiplier ({settings.TroopsXPMultiplier}), resetting to {defaultSafeValue} for safety");
-                settings.TroopsXPMultiplier = defaultSafeValue;
-                hadDangerousSettings = true;
-            }
-
-            // Check Renown Multiplier and reset if exceeds safe limit
-            if (settings.RenownMultiplier > GameConstants.MaxSafeRenownMultiplier)
-            {
-                ModLogger.Warning($"Detected extreme Renown Multiplier ({settings.RenownMultiplier}), resetting to {defaultSafeValue} for safety");
-                settings.RenownMultiplier = defaultSafeValue;
-                hadDangerousSettings = true;
-            }
-
-            // Check Movement Speed and reset if exceeds safe limit
-            if (settings.MovementSpeed > GameConstants.MaxSafeGameSpeed)
-            {
-                ModLogger.Warning($"Detected extreme Movement Speed ({settings.MovementSpeed}), resetting to {defaultSafeValue} for safety");
-                settings.MovementSpeed = defaultSafeValue;
-                hadDangerousSettings = true;
-            }
-
-            // Check Game Speed and reset if exceeds safe limit
-            if (settings.GameSpeed > GameConstants.MaxSafeGameSpeed)
-            {
-                ModLogger.Warning($"Detected extreme Game Speed ({settings.GameSpeed}), resetting to {defaultSafeValue} for safety");
-                settings.GameSpeed = defaultSafeValue;
-                hadDangerousSettings = true;
-            }
-
-            // Log completion message if any dangerous settings were found and reset
-            if (hadDangerousSettings)
-            {
-                ModLogger.Log("Auto-reset completed - dangerous settings have been normalized to prevent crashes");
-            }
         }
 
         /// <summary>
@@ -345,6 +261,28 @@ namespace BannerWand.Core
                 ModLogger.Warning("CustomGenericXpModel could not be registered - using behavior-based XP boost as fallback");
             }
 
+            // CombatXpModel - multiplies troop XP from battles
+            try
+            {
+                campaignStarter.AddModel(new CustomCombatXpModel());
+                ModLogger.LogModelRegistration(nameof(CustomCombatXpModel), "Controls troop XP gain from combat");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Warning($"CustomCombatXpModel could not be registered: {ex.Message}");
+            }
+
+            // PartyTrainingModel - multiplies troop XP from battles (including simulation battles)
+            try
+            {
+                campaignStarter.AddModel(new CustomPartyTrainingModel());
+                ModLogger.LogModelRegistration(nameof(CustomPartyTrainingModel), "Controls troop XP gain from battles (including auto-battles)");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Warning($"CustomPartyTrainingModel could not be registered: {ex.Message}");
+            }
+
             ModLogger.Log("All custom game models registered successfully");
         }
 
@@ -386,8 +324,6 @@ namespace BannerWand.Core
             campaignStarter.AddBehavior(new SkillXPCheatBehavior());
             ModLogger.LogBehaviorRegistration(nameof(SkillXPCheatBehavior), "Handles skill and troop XP multipliers");
 
-            //campaignStarter.AddBehavior(new SmithingUnlockBehavior());
-            //ModLogger.LogBehaviorRegistration(nameof(SmithingUnlockBehavior), "Handles automatic unlocking of all smithing parts");
 
             ModLogger.Log("All campaign behaviors registered successfully");
         }
@@ -420,8 +356,7 @@ namespace BannerWand.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[SubModule] Error in OnMissionBehaviorInitialize: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnMissionBehaviorInitialize: {ex.Message}", ex);
             }
         }
 
@@ -456,24 +391,15 @@ namespace BannerWand.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[SubModule] Error in OnGameLoaded: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnGameLoaded: {ex.Message}", ex);
             }
         }
 
         /// <summary>
         /// Called when the game ends (returning to main menu or exiting to desktop).
-        /// Resets all cheats to default values and cleans up resources.
+        /// Cleans up resources.
         /// </summary>
         /// <param name="game">The <see cref="Game"/> instance that is ending.</param>
-        /// <remarks>
-        /// <para>
-        /// Cleanup is important to prevent settings from persisting between game sessions
-        /// and to ensure a clean state for the next game.
-        /// </para>
-        /// </remarks>
         public override void OnGameEnd(Game game)
         {
             try
@@ -488,10 +414,6 @@ namespace BannerWand.Core
                     return;
                 }
 
-                // Reset all cheats to default values
-                ResetAllCheats();
-                ModLogger.Log("All cheats have been reset to default values");
-
                 // Cleanup cheat manager
                 CheatManager.Cleanup();
                 ModLogger.Log("CheatManager cleaned up successfully");
@@ -499,16 +421,13 @@ namespace BannerWand.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[SubModule] Error in OnGameEnd: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnGameEnd: {ex.Message}", ex);
             }
         }
 
         /// <summary>
         /// Called when the module is unloaded (game shutdown).
-        /// Performs final cleanup and resets all settings.
+        /// Performs final cleanup.
         /// </summary>
         /// <remarks>
         /// This is the last chance to clean up resources before the game closes.
@@ -518,10 +437,6 @@ namespace BannerWand.Core
             base.OnSubModuleUnloaded();
 
             ModLogger.Log("BannerWand module unloading - performing final cleanup...");
-
-            // Reset all cheats to default values
-            ResetAllCheats();
-            ModLogger.Log("All cheats have been reset to default values");
             ModLogger.Log("BannerWand mod unloaded successfully - goodbye!");
         }
 
@@ -542,81 +457,5 @@ namespace BannerWand.Core
             // Currently no frame-based cheats implemented
         }
 
-        /// <summary>
-        /// Resets all cheat settings to their default values.
-        /// Called when game ends or module is unloaded to ensure clean state.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This method resets ALL cheat settings across all categories:
-        /// - Player category (health, morale, movement, etc.)
-        /// - Inventory category (gold, influence, food, etc.)
-        /// - Stats category (attribute points, skill XP, renown, etc.)
-        /// - Enemies category (one-hit kills, AI slowdown)
-        /// - Game category (time freeze, persuasion, construction speed)
-        /// </para>
-        /// <para>
-        /// Default values are typically:
-        /// - Booleans: false
-        /// - Integers: 0
-        /// - Floats: 0f
-        /// </para>
-        /// </remarks>
-        private void ResetAllCheats()
-        {
-            CheatSettings settings = CheatSettings.Instance!;
-            if (settings == null)
-            {
-                ModLogger.Warning("Cannot reset cheats - CheatSettings.Instance is null");
-                return;
-            }
-
-            // Default values for reset
-            const bool defaultBool = false;
-            const int defaultInt = 0;
-            const float defaultFloat = 0f;
-
-            // Player category - combat and character cheats
-            settings.UnlimitedHealth = defaultBool;
-            settings.UnlimitedHorseHealth = defaultBool;
-            settings.UnlimitedShieldDurability = defaultBool;
-            settings.MaxMorale = defaultBool;
-            settings.MovementSpeed = defaultFloat;
-            settings.BarterAlwaysAccepted = defaultBool;
-            settings.UnlimitedSmithyStamina = defaultBool;
-            settings.MaxCharacterRelationship = defaultBool;
-
-            // Inventory category - resources and items
-            settings.EditGold = defaultInt;
-            settings.EditInfluence = defaultInt;
-            settings.UnlimitedFood = defaultBool;
-            settings.TradeItemsNoDecrease = defaultBool;
-            settings.MaxCarryingCapacity = defaultBool;
-            settings.UnlimitedSmithyMaterials = defaultBool;
-            settings.UnlockAllSmithyParts = defaultBool;
-
-            // Stats category - character progression
-            settings.EditAttributePoints = defaultInt;
-            settings.EditFocusPoints = defaultInt;
-            settings.UnlimitedRenown = defaultBool;
-            settings.RenownMultiplier = defaultFloat;
-            settings.UnlimitedSkillXP = defaultBool;
-            settings.SkillXPMultiplier = defaultFloat;
-            settings.UnlimitedTroopsXP = defaultBool;
-            settings.TroopsXPMultiplier = defaultFloat;
-
-            // Enemies category - enemy modifications
-            settings.SlowAIMovementSpeed = defaultBool;
-            settings.OneHitKills = defaultBool;
-
-            // Game category - world and time manipulation
-            settings.FreezeDaytime = defaultBool;
-            settings.PersuasionAlwaysSucceed = defaultBool;
-            settings.OneDaySettlementsConstruction = defaultBool;
-            settings.InstantSiegeConstruction = defaultBool;
-            settings.GameSpeed = defaultFloat;
-
-            ModLogger.Debug("All cheat settings reset to default values");
-        }
     }
 }
