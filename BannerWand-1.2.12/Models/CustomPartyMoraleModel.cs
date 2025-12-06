@@ -43,12 +43,12 @@ namespace BannerWandRetro.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the effective morale for a mobile party with cheat overrides applied.
@@ -149,9 +149,16 @@ namespace BannerWandRetro.Models
         /// </remarks>
         private bool ShouldApplyMaxMoraleToParty(MobileParty mobileParty)
         {
+            // Early exit if settings are null
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (targetSettings is null)
+            {
+                return false;
+            }
+
             // Check if this is player party
             // ApplyToPlayer must be enabled for player party to receive the cheat
-            if (mobileParty == MobileParty.MainParty && TargetSettings.ApplyToPlayer)
+            if (mobileParty == MobileParty.MainParty && targetSettings.ApplyToPlayer)
             {
                 return true;
             }
@@ -160,7 +167,7 @@ namespace BannerWandRetro.Models
             // HasAnyNPCTargetEnabled checks if any NPC target options are enabled (companions, vassals, etc.)
             // ShouldApplyCheatToParty checks if the specific party matches the target criteria
             return mobileParty != MobileParty.MainParty &&
-                TargetSettings.HasAnyNPCTargetEnabled() &&
+                targetSettings.HasAnyNPCTargetEnabled() &&
                 TargetFilter.ShouldApplyCheatToParty(mobileParty);
         }
 

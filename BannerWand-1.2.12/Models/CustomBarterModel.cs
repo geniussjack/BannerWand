@@ -28,8 +28,8 @@ namespace BannerWandRetro.Models
     /// </remarks>
     public class CustomBarterModel : DefaultBarterModel
     {
-        private static CheatSettings Settings => CheatSettings.Instance!;
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the barter penalty for an offer.
@@ -52,19 +52,19 @@ namespace BannerWandRetro.Models
                     return basePenalty;
                 }
 
-                // FIXED: Check if PLAYER is involved in this barter transaction
-                // Either as the original owner OR as the receiving party
+                // FIXED: Only apply penalty when PLAYER is the item owner (giving items)
+                // Do NOT apply when player is receiving items (party/faction check)
+                // The penalty should only affect offers where player is giving items away
                 bool playerIsOwner = originalOwner == Hero.MainHero;
-                bool playerIsParty = IsPlayerParty(party);
-                bool playerIsFaction = IsPlayerFaction(faction);
 
-                if (!playerIsOwner && !playerIsParty && !playerIsFaction)
+                if (!playerIsOwner)
                 {
-                    // Player not involved - don't affect this barter
+                    // Player is not the owner - don't affect this barter
+                    // This prevents unintended behavior when NPCs evaluate offers to the player
                     return basePenalty;
                 }
 
-                // Apply massive negative penalty for player's offers
+                // Apply massive negative penalty ONLY for player's offers (when player is giving items)
                 basePenalty.Add(GameConstants.BarterAutoAcceptPenalty, null);
 
                 ModLogger.Debug($"[Barter] Penalty applied - Owner: {originalOwner?.Name}, Party: {party?.Name}, Faction: {faction?.Name}");
@@ -79,64 +79,5 @@ namespace BannerWandRetro.Models
             }
         }
 
-        /// <summary>
-        /// Checks if the party belongs to or is controlled by the player.
-        /// </summary>
-        /// <remarks>
-        /// IMPORTANT: Only checks for direct player control, NOT clan membership.
-        /// This prevents the cheat from affecting AI-to-AI trades within player's clan.
-        /// </remarks>
-        private static bool IsPlayerParty(PartyBase party)
-        {
-            if (party == null)
-            {
-                return false;
-            }
-
-            // Check if it's the main player party
-            if (party == PartyBase.MainParty)
-            {
-                return true;
-            }
-
-            // Check if party's leader is the player (direct control)
-            if (party.LeaderHero == Hero.MainHero)
-            {
-                return true;
-            }
-
-            // NOTE: We intentionally do NOT check party.MapFaction == Clan.PlayerClan
-            // because that would affect AI-to-AI trades within player's clan,
-            // which can cause AI lords to switch factions unexpectedly.
-
-            return false;
-        }
-
-        /// <summary>
-        /// Checks if the faction is the player's faction or clan.
-        /// </summary>
-        /// <remarks>
-        /// IMPORTANT: This checks if the faction evaluating the barter is the player's faction.
-        /// We keep the Clan.PlayerClan check because the faction parameter represents WHO is evaluating,
-        /// not who owns the item. If the player's clan is evaluating, it means the player is involved.
-        /// However, we still require that either originalOwner or party is player-controlled
-        /// (checked in the main method) to ensure player is directly involved.
-        /// </remarks>
-        private static bool IsPlayerFaction(IFaction faction)
-        {
-            if (faction == null)
-            {
-                return false;
-            }
-
-            // Check if it's the player's clan
-            if (faction == Clan.PlayerClan)
-            {
-                return true;
-            }
-
-            // Check if it's the player's kingdom
-            return Hero.MainHero?.MapFaction != null && faction == Hero.MainHero.MapFaction;
-        }
     }
 }

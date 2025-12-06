@@ -41,12 +41,12 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the construction progress per hour for siege engines with cheat overrides.
@@ -83,13 +83,15 @@ namespace BannerWand.Models
             {
                 float baseProgress = base.GetConstructionProgressPerHour(siegeEngineType, siegeEvent, siegeEventSide);
 
-                if (Settings == null || TargetSettings == null)
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
                 {
                     return baseProgress;
                 }
 
                 // Apply instant siege construction when enabled
-                if (Settings.InstantSiegeConstruction && ShouldApplyInstantConstructionToSiege(siegeEvent))
+                if (settings.InstantSiegeConstruction && ShouldApplyInstantConstructionToSiege(siegeEvent))
                 {
                     // Log for test characters
                     MobileParty attackerLeader = siegeEvent.BesiegerCamp?.LeaderParty!;
@@ -159,15 +161,22 @@ namespace BannerWand.Models
                 return false;
             }
 
+            // Early exit if settings are null
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (targetSettings is null)
+            {
+                return false;
+            }
+
             // Check if attacker is player
-            if (besiegerParty == MobileParty.MainParty && TargetSettings.ApplyToPlayer)
+            if (besiegerParty == MobileParty.MainParty && targetSettings.ApplyToPlayer)
             {
                 return true;
             }
 
             // Check if attacker is a targeted NPC
             return besiegerParty != MobileParty.MainParty &&
-                TargetSettings.HasAnyNPCTargetEnabled() &&
+                targetSettings.HasAnyNPCTargetEnabled() &&
                 Utils.TargetFilter.ShouldApplyCheatToParty(besiegerParty);
         }
 
@@ -190,8 +199,15 @@ namespace BannerWand.Models
                 return false;
             }
 
+            // Early exit if settings are null
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (targetSettings is null)
+            {
+                return false;
+            }
+
             // Check if defender is player's settlement
-            if (defenderSettlement.OwnerClan == Clan.PlayerClan && TargetSettings.ApplyToPlayer)
+            if (defenderSettlement.OwnerClan == Clan.PlayerClan && targetSettings.ApplyToPlayer)
             {
                 return true;
             }
@@ -199,7 +215,7 @@ namespace BannerWand.Models
             // Check if defender is a targeted NPC's settlement
             return defenderSettlement.OwnerClan != null &&
                 defenderSettlement.OwnerClan != Clan.PlayerClan &&
-                TargetSettings.HasAnyNPCTargetEnabled() &&
+                targetSettings.HasAnyNPCTargetEnabled() &&
                 Utils.TargetFilter.ShouldApplyCheatToClan(defenderSettlement.OwnerClan);
         }
 

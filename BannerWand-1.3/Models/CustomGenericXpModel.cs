@@ -52,12 +52,12 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the XP multiplier for a hero with cheat overrides applied.
@@ -104,8 +104,14 @@ namespace BannerWand.Models
                 }
 
                 // Check if this hero should receive XP cheats
-                if (!TargetFilter.ShouldApplyCheat(hero))
+                bool shouldApply = TargetFilter.ShouldApplyCheat(hero);
+                if (!shouldApply)
                 {
+                    // Debug logging for clan members
+                    if (hero.Clan == Clan.PlayerClan && hero != Hero.MainHero)
+                    {
+                        ModLogger.Debug($"[CustomGenericXpModel] Hero {hero.Name} is in player clan but ShouldApplyCheat returned false. ApplyToPlayerClanMembers={TargetSettings.ApplyToPlayerClanMembers}");
+                    }
                     return DefaultMultiplier;
                 }
 
@@ -113,6 +119,12 @@ namespace BannerWand.Models
                 float multiplier = Settings.UnlimitedSkillXP
                     ? GameConstants.UnlimitedXpMultiplier
                     : Settings.SkillXPMultiplier > DefaultMultiplier ? Settings.SkillXPMultiplier : DefaultMultiplier;
+
+                // Debug logging for clan members
+                if (hero.Clan == Clan.PlayerClan && hero != Hero.MainHero && multiplier > DefaultMultiplier)
+                {
+                    ModLogger.Debug($"[CustomGenericXpModel] Applying {multiplier}x multiplier to clan member {hero.Name}");
+                }
 
                 return multiplier;
             }

@@ -34,12 +34,12 @@ namespace BannerWandRetro.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Calculates daily construction progress for settlement buildings with cheat override.
