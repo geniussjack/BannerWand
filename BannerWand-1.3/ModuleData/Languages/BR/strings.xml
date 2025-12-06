@@ -30,22 +30,16 @@
 		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="O cavalo do jogador não recebe dano." />
 
 		<string id="BW_Player_UnlimitedShieldDurability" text="Durabilidade Ilimitada do Escudo" />
-		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="O escudo do jogador nunca quebra." />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Tem efeito quando você bloqueia ataques inimigos." />
 
 		<string id="BW_Player_UnlimitedAmmo" text="Munição Ilimitada" />
 		<string id="BW_Player_UnlimitedAmmo_Hint" text="Munição para arcos, bestas e arremessáveis é mantida em 999." />
-
-		<string id="BW_Player_UnlimitedPartyHealth" text="Vida Ilimitada do Grupo" />
-		<string id="BW_Player_UnlimitedPartyHealth_Hint" text="Todos os membros do grupo não recebem dano." />
-
-		<string id="BW_Player_IgnoreMeleeDamage" text="Ignorar Dano Corpo a Corpo" />
-		<string id="BW_Player_IgnoreMeleeDamage_Hint" text="O jogador ignora dano corpo a corpo." />
 
 		<string id="BW_Player_MaxMorale" text="Moral Máxima" />
 		<string id="BW_Player_MaxMorale_Hint" text="O grupo do jogador sempre tem moral máxima." />
 
 		<string id="BW_Player_MovementSpeed" text="Definir Velocidade de Movimento" />
-		<string id="BW_Player_MovementSpeed_Hint" text="Define o multiplicador de velocidade de movimento do jogador (0 = desativado). As alterações são aplicadas no próximo dia do jogo." />
+		<string id="BW_Player_MovementSpeed_Hint" text="Funciona apenas no mapa, não em batalha. As alterações são aplicadas no próximo dia do jogo." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Ofertas de Escambo Sempre Aceitas" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Todas as ofertas de escambo são automaticamente aceitas." />
@@ -59,46 +53,43 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Maximizar Relacionamento com Todos" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Define instantaneamente o relacionamento com todos os personagens para 100." />
 
-		<string id="BW_Player_StealthInvisibility" text="Invisibilidade Furtiva" />
-		<string id="BW_Player_StealthInvisibility_Hint" text="O jogador fica completamente invisível e indetectável em missões furtivas." />
-
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Editar Ouro" />
-		<string id="BW_Inventory_EditGold_Hint" text="Adicionar ou remover ouro (aplicado uma vez por pressionamento de botão)." />
+		<string id="BW_Inventory_EditGold_Hint" text="Adicionar ou remover ouro (aplicado uma vez quando o valor é alterado)." />
 
 		<string id="BW_Inventory_EditInfluence" text="Editar Influência" />
-		<string id="BW_Inventory_EditInfluence_Hint" text="Adicionar ou remover influência (aplicado uma vez por pressionamento de botão)." />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Adicionar ou remover influência (aplicado uma vez quando o valor é alterado)." />
 
 		<string id="BW_Inventory_UnlimitedFood" text="Comida Ilimitada" />
 		<string id="BW_Inventory_UnlimitedFood_Hint" text="A comida do grupo nunca diminui." />
 
-		<string id="BW_Inventory_TradeItemsNoDecrease" text="[WIP] Itens de Comércio/Troca Não Diminuem" />
-		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="[EM DESENVOLVIMENTO] Comerciar ou trocar itens não os remove do inventário." />
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Itens de Comércio/Troca Não Diminuem" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Itens permanecem no inventário após comercializá-los. Aplica-se apenas a itens que você dá, não aos que recebe." />
 
 		<string id="BW_Inventory_MaxCarryingCapacity" text="Capacidade de Carga Máxima" />
 		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="O grupo tem capacidade de carga ilimitada." />
 
 		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Materiais Ilimitados da Forja" />
-		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Os materiais de forja nunca diminuem." />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Funciona apenas para materiais que você já possuía, não tem efeito em materiais que você não possuía." />
 
-		<string id="BW_Inventory_UnlockAllSmithyParts" text="[WIP] Desbloquear Todas as Peças da Forja" />
-		<string id="BW_Inventory_UnlockAllSmithyParts_Hint" text="[EM DESENVOLVIMENTO] Todas as peças de forja estão desbloqueadas." />
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Quantidade de Materiais da Forja" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Defina a quantidade alvo para materiais da forja (100-9999). Funciona apenas quando Materiais Ilimitados da Forja está ativado." />
 
 		<!-- Stats Category -->
 		<string id="BW_Stats_EditAttributePoints" text="Editar Pontos de Atributo" />
-		<string id="BW_Stats_EditAttributePoints_Hint" text="Adicionar ou remover pontos de atributo (aplicado uma vez por pressionamento de botão)." />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Tem efeito ao abrir o menu de personagem duas vezes. Para desativar esta opção, você precisa definir o valor como -1." />
 
 		<string id="BW_Stats_EditFocusPoints" text="Editar Pontos de Foco" />
-		<string id="BW_Stats_EditFocusPoints_Hint" text="Adicionar ou remover pontos de foco (aplicado uma vez por pressionamento de botão)." />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Tem efeito ao abrir o menu de personagem duas vezes. Para desativar esta opção, você precisa definir o valor como -1." />
 
 		<string id="BW_Stats_UnlimitedRenown" text="Renome Ilimitado" />
-		<string id="BW_Stats_UnlimitedRenown_Hint" text="O renome nunca diminui e sempre aumenta." />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Nota: às vezes você pode não ganhar renome mesmo que o jogo diga que você ganhou. Especialmente quando os inimigos fogem. Isso pode ser um bug do jogo. Tem efeito ao ganhar renome." />
 
 		<string id="BW_Stats_RenownMultiplier" text="Multiplicador de Renome" />
-		<string id="BW_Stats_RenownMultiplier_Hint" text="Multiplica os ganhos de renome (0 = desativado)." />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Multiplica todos os ganhos de renome (0 = desativado). Nota: O valor exibido pode não refletir a quantidade multiplicada, mas o renome realmente ganho é multiplicado." />
 
 		<string id="BW_Stats_UnlimitedSkillXP" text="XP de Habilidades Ilimitado" />
-		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Todas as habilidades ganham XP sem limite." />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Tem efeito quando uma habilidade ganha XP. Nota: habilidades têm limites de nível baseados na taxa de aprendizado que é afetada por seus atributos. Se a taxa de aprendizado de uma habilidade for 0, ela não ganhará XP, você precisa gastar pontos de atributo para aumentar seus atributos para aumentar a taxa de aprendizado." />
 
 		<string id="BW_Stats_SkillXPMultiplier" text="Multiplicador de XP de Habilidades" />
 		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Multiplica os ganhos de XP de habilidades (0 = desativado)." />
@@ -110,30 +101,21 @@
 		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Multiplica os ganhos de XP de tropas (0 = desativado)." />
 
 		<!-- Enemies Category -->
-		<string id="BW_Enemies_SlowAIMovementSpeed" text="[WIP] Reduzir Velocidade de Movimento da IA" />
-		<string id="BW_Enemies_SlowAIMovementSpeed_Hint" text="[EM DESENVOLVIMENTO] A IA inimiga se move mais devagar no mapa de campanha." />
-
 		<string id="BW_Enemies_OneHitKills" text="Mortes com Um Golpe" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="Todas as unidades inimigas morrem com um golpe." />
 
 		<!-- Game Category -->
-		<string id="BW_Game_FreezeDaytime" text="[WIP] Congelar Horário do Dia" />
-		<string id="BW_Game_FreezeDaytime_Hint" text="[EM DESENVOLVIMENTO] O horário do dia está congelado." />
-
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasão/Conversa Sempre Bem-Sucedida" />
 		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Todas as verificações de persuasão e conversa são automaticamente bem-sucedidas." />
 
-		<string id="BW_Game_RecruitPrisonersAnytime" text="Pode Recrutar Prisioneiros a Qualquer Momento" />
-		<string id="BW_Game_RecruitPrisonersAnytime_Hint" text="Prisioneiros podem ser recrutados imediatamente, sem esperar." />
-
 		<string id="BW_Game_OneDaySettlementsConstruction" text="Construção de Assentamentos em Um Dia" />
-		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Todos os projetos de construção de assentamentos são concluídos em um dia." />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Apenas um edifício pode ser construído por vez. Construir/melhorar vários edifícios ainda requer vários dias." />
 
 		<string id="BW_Game_InstantSiegeConstruction" text="Construção Instantânea de Cerco" />
-		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Equipamentos de cerco são construídos instantaneamente." />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Nota: esta opção afeta ambos os lados." />
 
-		<string id="BW_Game_GameSpeed" text="[WIP] Definir Velocidade do Jogo" />
-		<string id="BW_Game_GameSpeed_Hint" text="[EM DESENVOLVIMENTO] Define o multiplicador de velocidade do tempo no mapa de campanha (0 = desativado)." />
+		<string id="BW_Game_GameSpeed" text="Multiplicador de Velocidade do Jogo" />
+		<string id="BW_Game_GameSpeed_Hint" text="Multiplica a velocidade dos botões Reproduzir (1x) e Avanço Rápido (4x). 1.0 = velocidade normal, 2.0 = velocidade dupla, etc." />
 
 		<!-- Target Settings -->
 		<!-- Category: Player -->
