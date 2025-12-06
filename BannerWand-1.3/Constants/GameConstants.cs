@@ -47,8 +47,11 @@ namespace BannerWand.Constants
 
         /// <summary>
         /// Base XP amount used for troop XP multiplier calculations.
+        /// Increased to 2000 for more noticeable effect.
+        /// Typical troop upgrade requires 1000-5000 XP depending on tier.
+        /// With multiplier x16, this gives 32000 XP per hour, which should be very noticeable.
         /// </summary>
-        public const int TroopXPBaseAmount = 100;
+        public const int TroopXPBaseAmount = 2000;
 
         /// <summary>
         /// Amount of renown added per hour when Unlimited Renown is enabled.
@@ -78,6 +81,12 @@ namespace BannerWand.Constants
         /// Target amount for smithing materials replenishment.
         /// </summary>
         public const int SmithingMaterialTargetAmount = 9999;
+
+        /// <summary>
+        /// Threshold below which smithing materials are replenished during smithing sessions.
+        /// Set to 9990 to restore materials if used during smithing (10 below target amount).
+        /// </summary>
+        public const int SmithingMaterialReplenishThreshold = 9990;
 
         /// <summary>
         /// Minimum food threshold before replenishment.

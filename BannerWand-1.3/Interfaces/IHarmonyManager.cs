@@ -19,7 +19,6 @@ namespace BannerWand.Interfaces
     /// <para>
     /// Patches typically include:
     /// - TradeItemsNoDecrease: Patches ItemBarterable.Apply() to prevent item loss
-    /// - UnlockAllSmithyParts: Patches CraftingCampaignBehavior to unlock smithing parts
     /// - RenownMultiplier: Patches Clan.AddRenown() to multiply renown gains
     /// </para>
     /// <para>
@@ -39,6 +38,7 @@ namespace BannerWand.Interfaces
         /// <remarks>
         /// Access to the raw Harmony instance allows for advanced patching scenarios
         /// and debugging patch conflicts with other mods.
+        /// Callers should check for null before use.
         /// </remarks>
         Harmony Instance { get; }
 

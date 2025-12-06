@@ -35,6 +35,7 @@ namespace BannerWandRetro.Utils
         #region Fields
 
         private static long _lastCacheTick = -1;
+        private static readonly object _lockObject = new();
 
         #endregion
 
@@ -108,6 +109,26 @@ namespace BannerWandRetro.Utils
             private set;
         }
 
+        /// <summary>
+        /// Gets a cached snapshot of all kingdoms in the campaign.
+        /// </summary>
+        /// <returns>
+        /// Read-only list of kingdoms. Cache is refreshed each campaign tick.
+        /// </returns>
+        /// <remarks>
+        /// Used for kingdom-related target filtering in CheatTargetSettings.
+        /// </remarks>
+        public static List<Kingdom>? AllKingdoms
+        {
+            get
+            {
+                RefreshCacheIfNeeded();
+                field ??= [.. Kingdom.All];
+                return field;
+            }
+            private set;
+        }
+
         #endregion
 
         #region Methods
@@ -137,11 +158,15 @@ namespace BannerWandRetro.Utils
 
             long currentTick = (long)CampaignTime.Now.ToHours;
 
-            if (currentTick != _lastCacheTick)
+            // Thread-safe check and update
+            lock (_lockObject)
             {
-                // New tick detected, invalidate cache
-                ClearCache();
-                _lastCacheTick = currentTick;
+                if (currentTick != _lastCacheTick)
+                {
+                    // New tick detected, invalidate cache
+                    ClearCache();
+                    _lastCacheTick = currentTick;
+                }
             }
         }
 
@@ -159,6 +184,7 @@ namespace BannerWandRetro.Utils
                 AllAliveHeroes = null;
                 AllClans = null;
                 AllParties = null;
+                AllKingdoms = null;
 
             }
             catch (Exception ex)

@@ -74,6 +74,17 @@ namespace BannerWandRetro.Interfaces
         List<MobileParty> AllParties { get; }
 
         /// <summary>
+        /// Gets a cached snapshot of all kingdoms in the campaign.
+        /// </summary>
+        /// <returns>
+        /// Read-only list of kingdoms. Cache should be refreshed based on implementation strategy.
+        /// </returns>
+        /// <remarks>
+        /// Used for kingdom-related target filtering in CheatTargetSettings.
+        /// </remarks>
+        List<Kingdom> AllKingdoms { get; }
+
+        /// <summary>
         /// Clears all cached data, forcing refresh on next access.
         /// </summary>
         /// <remarks>

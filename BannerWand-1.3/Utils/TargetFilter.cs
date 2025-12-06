@@ -62,8 +62,8 @@ namespace BannerWand.Utils
                     return false;
                 }
 
-                Settings.CheatTargetSettings settings = Settings.CheatTargetSettings.Instance!;
-                if (settings == null)
+                Settings.CheatTargetSettings? settings = Settings.CheatTargetSettings.Instance;
+                if (settings is null)
                 {
                     return false;
                 }
@@ -200,8 +200,8 @@ namespace BannerWand.Utils
                     return false;
                 }
 
-                Settings.CheatTargetSettings settings = Settings.CheatTargetSettings.Instance!;
-                if (settings == null)
+                Settings.CheatTargetSettings? settings = Settings.CheatTargetSettings.Instance;
+                if (settings is null)
                 {
                     return false;
                 }
