@@ -255,6 +255,12 @@ namespace BannerWand.Patches
         {
             try
             {
+                // Only work in missions (battle/combat), not in menus
+                if (Mission.Current == null)
+                {
+                    return true;
+                }
+
                 if (Settings == null || TargetSettings == null)
                 {
                     return true;
