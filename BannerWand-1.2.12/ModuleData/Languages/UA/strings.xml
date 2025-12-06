@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Українська" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Цілі" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Гравець" />
+		<string id="BW_Category_Inventory" text="Інвентар" />
+		<string id="BW_Category_Stats" text="Характеристики" />
+		<string id="BW_Category_Enemies" text="Вороги" />
+		<string id="BW_Category_Game" text="Гра" />
+		<string id="BW_Category_CheatTargets" text="Цілі читів" />
+		<string id="BW_Category_Kingdoms" text="Королівства" />
+		<string id="BW_Category_MinorClans" text="Малі клани" />
+		<string id="BW_Category_Info" text="Інформація" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Безкінечне ХП" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Смужка здоров'я не зменшується. Можна померти від урону, що перевищує макс. ХП." />
+
+		<string id="BW_Player_InfiniteHealth" text="Безсмертя" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Додає +9999 ХП на початку бою. Запобігає миттєвій смерті." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Безкінечне здоров'я коня" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Кінь гравця не отримує урону." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Безкінечна міцність щита" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Набуває чинності, коли ви блокуєте атаки ворогів." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Безкінечні боєприпаси" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Боєприпаси для луків, арбалетів і метальної зброї підтримуються на рівні 999." />
+
+		<string id="BW_Player_MaxMorale" text="Максимальний моральний дух" />
+		<string id="BW_Player_MaxMorale_Hint" text="Загін гравця завжди має максимальний моральний дух." />
+
+		<string id="BW_Player_MovementSpeed" text="Швидкість переміщення" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Працює тільки на карті, не в бою. Зміни застосовуються на наступний ігровий день." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Торгівля завжди приймається" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Всі торгові пропозиції автоматично приймаються." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Безкінечна витривалість у ковальні" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Кування не витрачає витривалість." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Максимальні стосунки з персонажем" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Будь-яка позитивна зміна стосунків з гравцем посилюється до +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальні стосунки з усіма" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Миттєво встановлює стосунки на рівні 100 з усіма персонажами." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Змінити золото" />
+		<string id="BW_Inventory_EditGold_Hint" text="Додати або видалити золото (застосовується один раз при зміні значення)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Змінити вплив" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Додати або видалити вплив (застосовується один раз при зміні значення)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Безкінечна їжа" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Їжа в загоні ніколи не зменшується." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Предмети не зменшуються при торгівлі" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Предмети залишаються в інвентарі після торгівлі. Застосовується тільки до предметів, які ви віддаєте, а не до тих, що отримуєте." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Максимальна вантажопідйомність" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Загін має безкінечну вантажопідйомність." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Безкінечні матеріали для кування" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Працює тільки для матеріалів, які у вас вже були, не діє на матеріали, яких у вас не було." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Кількість матеріалів для кування" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Встановити цільову кількість матеріалів для кування (100-9999). Працює тільки, коли увімкнено Безкінечні матеріали для кування." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Змінити очки атрибутів" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Набуває чинності при відкритті меню персонажа двічі. Щоб відключити цю опцію, потрібно встановити значення -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Змінити очки фокусування" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Набуває чинності при відкритті меню персонажа двічі. Щоб відключити цю опцію, потрібно встановити значення -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Безкінечна слава" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Примітка: іноді ви можете не отримати славу, навіть якщо гра каже, що ви отримали. Особливо коли вороги тікають. Це може бути помилка гри. Набуває чинності при отриманні слави." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Множник слави" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Множить всі отримання слави (0 = відключено). Примітка: відображане значення може не відображати помножену суму, але фактично отримана слава множиться." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Безкінечний досвід навичок" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Набуває чинності, коли навичка отримує досвід. Примітка: навички мають обмеження рівня на основі їх швидкості навчання, яка залежить від ваших атрибутів. Якщо швидкість навчання навички дорівнює 0, вона не буде отримувати досвід, потрібно витратити очки атрибутів, щоб підвищити ваші атрибути, щоб підвищити швидкість навчання." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Множник досвіду навичок" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Множить отримання досвіду навичок (0 = відключено)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Безкінечний досвід військ" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Всі війська отримують досвід без обмежень." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Множник досвіду військ" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Множить отримання досвіду військами (0 = відключено)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Вбивство одним ударом" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Всі ворожі юніти вмирають з одного удару." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Переконання завжди успішне" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Всі перевірки переконання та діалогів автоматично успішні." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Будівлі за один день" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Тільки одна будівля може бути побудована одночасно. Будівництво/покращення кількох будівель все ще потребує кількох днів." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Миттєве будівництво облогових гармат" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Примітка: ця опція впливає на обидві сторони." />
+
+		<string id="BW_Game_GameSpeed" text="Множник швидкості гри" />
+		<string id="BW_Game_GameSpeed_Hint" text="Множить швидкість кнопок Відтворення (1x) та Швидка перемотка (4x). 1.0 = нормальна швидкість, 2.0 = подвійна швидкість тощо." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="Застосувати до гравця" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Застосовує вибрані чити до персонажа гравця." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Застосувати до членів клану гравця" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Застосовує вибрані чити до всіх членів клану гравця." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="Застосувати до правителів королівств" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Застосовує вибрані чити до правителів всіх королівств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Застосувати до правителя королівства гравця" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Застосовує чити до правителя поточного королівства гравця." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Застосувати до васалів королівств" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Застосовує вибрані чити до всіх лідерів васальних кланів будь-яких королівств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Застосувати до васалів королівства гравця" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Застосовує вибрані чити до всіх лідерів васальних кланів королівства гравця." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Застосувати до знаті королівств" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Застосовує вибрані чити до всіх знатних героїв будь-яких королівств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Застосувати до знаті королівства гравця" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Застосовує вибрані чити до всіх знатних героїв королівства гравця." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Застосувати до лідерів малих кланів" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Застосовує вибрані чити до лідерів всіх малих фракцій." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Застосувати до членів малих кланів" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Застосовує вибрані чити до всіх знатних героїв з малих кланів." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="Кілька опцій можна комбінувати. Дублюючі застосування автоматично запобігаються." />
+	</strings>
+</base>
