@@ -323,7 +323,6 @@ namespace BannerWand.Core
             // If disabling this fixes the issue, we'll need to find an alternative approach
             ModLogger.Warning("[AmmoConsumptionPatch] TEMPORARILY DISABLED for testing - SetWeaponAmountInSlot patch");
             ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based restoration only");
-            bool primaryPatchApplied = false;
             
             /* TEMPORARILY DISABLED FOR TESTING
             try
