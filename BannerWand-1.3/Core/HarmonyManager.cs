@@ -380,35 +380,14 @@ namespace BannerWand.Core
                 ModLogger.Error($"[AmmoConsumptionPatch] Error applying primary patch: {ex.Message}");
             }
 
-            // Try to apply fallback patch (MissionEquipment indexer)
-            try
-            {
-                MethodBase? fallbackTarget = MissionEquipmentAmmoSafetyPatch.TargetMethod();
-                if (fallbackTarget != null)
-                {
-                    MethodInfo? fallbackPrefix = typeof(MissionEquipmentAmmoSafetyPatch).GetMethod("Prefix",
-                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-                    if (fallbackPrefix != null)
-                    {
-                        // Check if patch is already applied (e.g., by PatchAll())
-                        if (IsPatchAlreadyApplied(fallbackTarget, fallbackPrefix))
-                        {
-                            fallbackPatchApplied = true;
-                        }
-                        else
-                        {
-                            HarmonyMethod harmonyPrefix = new(fallbackPrefix);
-                            _ = Instance!.Patch(fallbackTarget, prefix: harmonyPrefix);
-                            fallbackPatchApplied = true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error applying fallback patch: {ex.Message}");
-            }
+            // DISABLED: MissionEquipmentAmmoSafetyPatch is causing character model corruption
+            // This patch modifies MissionEquipment.set_Item which is used for ALL equipment changes,
+            // including visual model updates. Even with careful checks, it can interfere with
+            // character rendering. The primary patch (SetWeaponAmountInSlot) should be sufficient.
+            // 
+            // If primary patch fails, we'll rely on tick-based restoration in CombatCheatBehavior.ApplyUnlimitedAmmo()
+            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch DISABLED to prevent character model corruption");
+            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Using primary SetWeaponAmountInSlot patch only");
 
             // Summary
             bool success = primaryPatchApplied || fallbackPatchApplied;
