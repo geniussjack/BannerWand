@@ -123,12 +123,12 @@ namespace BannerWand.Patches
         /// Prefix patch that prevents ammo decrease for player when Unlimited Ammo is enabled.
         /// </summary>
         /// <param name="__instance">The Agent instance (player or NPC)</param>
-        /// <param name="equipmentIndex">The weapon slot being modified</param>
+        /// <param name="equipmentSlot">The weapon slot being modified</param>
         /// <param name="amount">The new ammo amount to set</param>
         /// <param name="_">Whether to enforce primary item (unused, required for Harmony signature)</param>
         /// <returns>True to continue with original method, False to skip it</returns>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentIndex, short amount, bool _)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool _)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace BannerWand.Patches
                 }
 
                 // Get current weapon in slot
-                MissionWeapon weapon = __instance.Equipment[equipmentIndex];
+                MissionWeapon weapon = __instance.Equipment[equipmentSlot];
 
                 // Allow if weapon is empty
                 if (weapon.IsEmpty)
@@ -203,10 +203,10 @@ namespace BannerWand.Patches
         /// Alternative Prefix for methods with different signature.
         /// </summary>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentIndex, short amount)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount)
         {
             // Delegate to main prefix with default enforcePrimaryItem
-            return Prefix(__instance, equipmentIndex, amount, false);
+            return Prefix(__instance, equipmentSlot, amount, false);
         }
     }
 
