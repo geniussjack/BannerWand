@@ -2,6 +2,7 @@ using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
@@ -33,6 +34,20 @@ namespace BannerWand.Behaviors
     /// </remarks>
     public class SkillXPCheatBehavior : CampaignBehaviorBase
     {
+        #region Static Fields for Logging Control
+
+        /// <summary>
+        /// Counter for troop XP logging to reduce spam when Game Speed is high.
+        /// </summary>
+        private static int _troopXpLogCounter = 0;
+
+        /// <summary>
+        /// Flag to prevent repeated "no troops" warnings.
+        /// </summary>
+        private static bool _noTroopsWarningLogged = false;
+
+        #endregion
+
         #region Event Registration
 
         /// <summary>
@@ -65,14 +80,7 @@ namespace BannerWand.Behaviors
         /// </remarks>
         public override void SyncData(IDataStore dataStore)
         {
-            try
-            {
-            }// No persistent data to sync - settings are managed by MCM            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[SkillXPCheatBehavior] Error in SyncData: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-            }
+            // No persistent data to sync - settings are managed by MCM
         }
 
         #endregion
@@ -133,8 +141,8 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            CheatSettings settings = CheatSettings.Instance!;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance!;
+            CheatSettings settings = CheatSettings.Instance;
+            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
@@ -171,7 +179,13 @@ namespace BannerWand.Behaviors
             // Use cached collection to avoid repeated enumeration (runs hourly)
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (Hero hero in CampaignDataCache.AllAliveHeroes!)
+                List<Hero> allHeroes = CampaignDataCache.AllAliveHeroes;
+                if (allHeroes is null)
+                {
+                    return;
+                }
+
+                foreach (Hero hero in allHeroes)
                 {
                     // Skip player hero (already handled)
                     if (hero == Hero.MainHero)
@@ -262,8 +276,8 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyTroopXPBoost()
         {
-            CheatSettings settings = CheatSettings.Instance!;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance!;
+            CheatSettings settings = CheatSettings.Instance;
+            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
@@ -301,6 +315,25 @@ namespace BannerWand.Behaviors
                 {
                     totalTroopsImproved += troopsImproved;
                     partiesProcessed++;
+                    ModLogger.Debug($"[TroopXP] Applied {xpToAdd} XP to {troopsImproved} troops in player party");
+                }
+            }
+
+            // Apply to player clan members' parties if enabled
+            if (targetSettings.ApplyToPlayerClanMembers && Hero.MainHero?.Clan != null)
+            {
+                foreach (Hero hero in Hero.MainHero.Clan.Heroes)
+                {
+                    if (hero?.PartyBelongedTo?.MemberRoster != null && hero != Hero.MainHero)
+                    {
+                        int troopsImproved = ApplyTroopXPToParty(hero.PartyBelongedTo, xpToAdd);
+                        if (troopsImproved > 0)
+                        {
+                            totalTroopsImproved += troopsImproved;
+                            partiesProcessed++;
+                            ModLogger.Debug($"[TroopXP] Applied {xpToAdd} XP to {troopsImproved} troops in {hero.Name}'s party (clan member)");
+                        }
+                    }
                 }
             }
 
@@ -308,10 +341,22 @@ namespace BannerWand.Behaviors
             // Use cached collection to avoid repeated enumeration (runs hourly)
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (MobileParty party in CampaignDataCache.AllParties!)
+                List<MobileParty> allParties = CampaignDataCache.AllParties;
+                if (allParties is null)
+                {
+                    return;
+                }
+
+                foreach (MobileParty party in allParties)
                 {
                     // Skip player party (already handled) and parties without member roster
                     if (party == MobileParty.MainParty || party.MemberRoster is null)
+                    {
+                        continue;
+                    }
+
+                    // Skip player clan parties (already handled above)
+                    if (party.LeaderHero?.Clan == Clan.PlayerClan)
                     {
                         continue;
                     }
@@ -329,11 +374,26 @@ namespace BannerWand.Behaviors
                 }
             }
 
-            // Log progress for debugging
+            // Log progress for debugging (only log once per hour to avoid spam)
+            // Since Game Speed can make hours pass very quickly, we use a static counter
             if (totalTroopsImproved > 0)
             {
                 string mode = unlimitedMode ? "Unlimited" : $"Multiplier x{settings.TroopsXPMultiplier:F1}";
-                ModLogger.Debug($"Troop XP ({mode}): Added {xpToAdd} XP to {totalTroopsImproved} troops across {partiesProcessed} parties");
+                // Only log every 10th call to reduce spam when Game Speed is high
+                if (_troopXpLogCounter % 10 == 0)
+                {
+                    ModLogger.Log($"Troop XP ({mode}): Added {xpToAdd} XP to {totalTroopsImproved} troops across {partiesProcessed} parties (call #{_troopXpLogCounter + 1})");
+                }
+                _troopXpLogCounter++;
+            }
+            else if (multiplierMode && targetSettings.ApplyToPlayer)
+            {
+                // Log if no troops were improved (for debugging) - only once per session
+                if (!_noTroopsWarningLogged)
+                {
+                    ModLogger.Debug($"[TroopXP] Multiplier mode active (x{settings.TroopsXPMultiplier:F1}) but no troops received XP. Player party has {MobileParty.MainParty?.MemberRoster?.TotalManCount ?? 0} troops.");
+                    _noTroopsWarningLogged = true;
+                }
             }
         }
 
@@ -343,6 +403,16 @@ namespace BannerWand.Behaviors
         /// <param name="party">The party to apply XP to.</param>
         /// <param name="xpAmount">Amount of XP to add to each troop.</param>
         /// <returns>Number of troop types that received XP.</returns>
+        /// <remarks>
+        /// <para>
+        /// IMPORTANT: AddXpToTroopAtIndex adds the amount to CURRENT XP, not sets it.
+        /// So if troop has 100 XP and we pass 8000, it becomes 8100 XP.
+        /// </para>
+        /// <para>
+        /// This method iterates through all troop types in the party and adds XP to each.
+        /// Heroes are skipped as they use the skill XP system instead.
+        /// </para>
+        /// </remarks>
         private static int ApplyTroopXPToParty(MobileParty party, int xpAmount)
         {
             if (party?.MemberRoster is null)
@@ -361,8 +431,25 @@ namespace BannerWand.Behaviors
                 // Only add XP to non-hero troops (heroes level via skill XP system)
                 if (element.Character?.IsHero == false)
                 {
+                    // Get current XP before adding
+                    int currentXp = party.MemberRoster.GetElementXp(i);
+
                     // Add XP to this troop stack
+                    // NOTE: AddXpToTroopAtIndex adds xpAmount to current XP, so result = currentXp + xpAmount
                     party.MemberRoster.AddXpToTroopAtIndex(xpAmount, i);
+
+                    // Verify XP was added (for debugging - only log first few to avoid spam)
+                    int newXp = party.MemberRoster.GetElementXp(i);
+                    if (troopsImproved < 3 && newXp != currentXp + xpAmount)
+                    {
+                        string troopName = "Unknown";
+                        if (element.Character?.Name != null)
+                        {
+                            troopName = element.Character.Name.ToString();
+                        }
+                        ModLogger.Warning($"[TroopXP] XP mismatch for {troopName}: Expected {currentXp + xpAmount}, got {newXp}");
+                    }
+
                     troopsImproved++;
                 }
             }

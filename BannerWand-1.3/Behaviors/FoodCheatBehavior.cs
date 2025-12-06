@@ -3,6 +3,7 @@ using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -33,12 +34,12 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         #region Event Registration
 
@@ -72,14 +73,7 @@ namespace BannerWand.Behaviors
         /// </remarks>
         public override void SyncData(IDataStore dataStore)
         {
-            try
-            {
-            }// No persistent data to sync - settings are managed by MCM            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[FoodCheatBehavior] Error in SyncData: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-            }
+            // No persistent data to sync - settings are managed by MCM
         }
 
         #endregion
@@ -103,14 +97,22 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private void OnHourlyTick()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat
-            if (!Settings.UnlimitedFood)
+            if (!settings.UnlimitedFood)
             {
                 return;
             }
 
             // Early return if no targets enabled
-            if (!TargetSettings.ApplyToPlayer && !TargetSettings.HasAnyNPCTargetEnabled())
+            if (!targetSettings.ApplyToPlayer && !targetSettings.HasAnyNPCTargetEnabled())
             {
                 return;
             }
@@ -126,7 +128,7 @@ namespace BannerWand.Behaviors
             int partiesReplenished = 0;
 
             // Apply to player's party if enabled
-            if (TargetSettings.ApplyToPlayer && MobileParty.MainParty?.ItemRoster is not null)
+            if (targetSettings.ApplyToPlayer && MobileParty.MainParty?.ItemRoster is not null)
             {
                 if (ReplenishPartyFood(MobileParty.MainParty, grainItem))
                 {
@@ -135,9 +137,16 @@ namespace BannerWand.Behaviors
             }
 
             // Apply to NPC parties if any NPC targets are enabled
-            if (TargetSettings.HasAnyNPCTargetEnabled())
+            if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (MobileParty party in MobileParty.All)
+                // OPTIMIZED: Use cached collection instead of direct MobileParty.All enumeration
+                List<MobileParty>? allParties = CampaignDataCache.AllParties;
+                if (allParties is null)
+                {
+                    return;
+                }
+
+                foreach (MobileParty party in allParties)
                 {
                     // Skip player party (already handled) and parties without item roster
                     if (party == MobileParty.MainParty || party.ItemRoster is null)

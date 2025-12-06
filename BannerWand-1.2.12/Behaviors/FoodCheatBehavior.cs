@@ -33,12 +33,12 @@ namespace BannerWandRetro.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         #region Event Registration
 
@@ -103,14 +103,22 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private void OnHourlyTick()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat
-            if (!Settings.UnlimitedFood)
+            if (!settings.UnlimitedFood)
             {
                 return;
             }
 
             // Early return if no targets enabled
-            if (!TargetSettings.ApplyToPlayer && !TargetSettings.HasAnyNPCTargetEnabled())
+            if (!targetSettings.ApplyToPlayer && !targetSettings.HasAnyNPCTargetEnabled())
             {
                 return;
             }
@@ -126,7 +134,7 @@ namespace BannerWandRetro.Behaviors
             int partiesReplenished = 0;
 
             // Apply to player's party if enabled
-            if (TargetSettings.ApplyToPlayer && MobileParty.MainParty?.ItemRoster is not null)
+            if (targetSettings.ApplyToPlayer && MobileParty.MainParty?.ItemRoster is not null)
             {
                 if (ReplenishPartyFood(MobileParty.MainParty, grainItem))
                 {
@@ -135,7 +143,7 @@ namespace BannerWandRetro.Behaviors
             }
 
             // Apply to NPC parties if any NPC targets are enabled
-            if (TargetSettings.HasAnyNPCTargetEnabled())
+            if (targetSettings.HasAnyNPCTargetEnabled())
             {
                 foreach (MobileParty party in MobileParty.All)
                 {

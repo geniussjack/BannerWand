@@ -38,17 +38,18 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
-        /// Tracks whether Infinite Health bonus has been applied in current mission.
+        /// Tracks whether Infinite Health bonus has been applied to the player agent.
+        /// Key: Agent index, Value: Whether bonus was applied.
         /// </summary>
-        private bool _infiniteHealthApplied;
+        private readonly System.Collections.Generic.Dictionary<int, bool> _infiniteHealthApplied = [];
 
         /// <summary>
         /// Tracks whether unlimited ammo has been logged for current mission.
@@ -81,11 +82,36 @@ namespace BannerWand.Behaviors
         {
             base.OnEndMission();
 
-            // Reset application flag for next mission
-            _infiniteHealthApplied = false;
+            // Reset application flags for next mission
+            _infiniteHealthApplied.Clear();
             _unlimitedAmmoLogged = false;
             _unlimitedAmmoLogCounter = 0;
             _missionTickCount = 0;
+        }
+
+        /// <summary>
+        /// Called when an agent is built (created) in the mission.
+        /// This is the perfect time to apply Infinite Health bonus.
+        /// </summary>
+        /// <param name="agent">The agent that was built.</param>
+        /// <param name="banner">The banner for the agent (can be null).</param>
+        public override void OnAgentBuild(Agent agent, Banner? banner)
+        {
+            base.OnAgentBuild(agent, banner);
+
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
+            // Apply Infinite Health bonus immediately when player agent is built
+            if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
+            {
+                ApplyInfiniteHealthToAgent(agent);
+            }
         }
 
 
@@ -119,6 +145,14 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
                 _missionTickCount++;
 
                 // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
@@ -133,7 +167,7 @@ namespace BannerWand.Behaviors
                 ApplyUnlimitedAmmo();
 
                 // Log unlimited ammo activation once per mission
-                if (Settings.UnlimitedAmmo && TargetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
+                if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
                 {
                     _unlimitedAmmoLogged = true;
                     string patchStatus = AmmoConsumptionPatch.IsPatchApplied
@@ -178,9 +212,41 @@ namespace BannerWand.Behaviors
             {
                 base.OnAgentHit(affectedAgent, affectorAgent, affectorWeapon, blow, attackCollisionData);
 
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                // CRITICAL FIX: Restore health immediately after taking damage if Infinite Health is enabled
+                // This prevents death from one-shot kills that exceed HealthLimit
+                if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                {
+                    // Ensure Infinite Health bonus is applied (in case it wasn't applied on spawn)
+                    ApplyInfiniteHealthToAgent(affectedAgent);
+
+                    // Restore health immediately after damage to prevent death
+                    // If health dropped below a safe threshold, restore it
+                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
+                    {
+                        affectedAgent.Health = affectedAgent.HealthLimit;
+                    }
+                }
+
+                // Also restore health if Unlimited Health is enabled (but this won't prevent one-shot kills)
+                if (settings.UnlimitedHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                {
+                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
+                    {
+                        affectedAgent.Health = affectedAgent.HealthLimit;
+                    }
+                }
+
                 // Handle One-Hit Kills - ensure enemies die from PLAYER's hits/shots
                 // IMPORTANT: Only works when PLAYER is the attacker (not allies)
-                if (Settings.OneHitKills)
+                if (settings.OneHitKills)
                 {
                     Agent? mainAgent = Mission.Current?.MainAgent;
 
@@ -230,8 +296,22 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedShieldDurability(Agent agent)
         {
+            // Early exit if settings are null
+            if (Settings is null || TargetSettings is null)
+            {
+                return;
+            }
+
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or non-player agent
-            if (!Settings.UnlimitedShieldDurability || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedShieldDurability || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -284,7 +364,15 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private void ApplyUnlimitedAmmo()
         {
-            if (!Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
+            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -378,8 +466,16 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedHealth()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing agent
-            if (!Settings.UnlimitedHealth || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -407,7 +503,7 @@ namespace BannerWand.Behaviors
         /// The +9999 HP bonus makes it virtually impossible to die from any single attack.
         /// </para>
         /// <para>
-        /// Applied once per mission using _infiniteHealthApplied flag.
+        /// Applied once per agent using _infiniteHealthApplied dictionary.
         /// This prevents repeated application every frame.
         /// </para>
         /// <para>
@@ -418,8 +514,16 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private void ApplyInfiniteHealth()
         {
-            // Early returns for disabled cheat or already applied
-            if (!Settings.InfiniteHealth || !TargetSettings.ApplyToPlayer || _infiniteHealthApplied)
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
+            // Early returns for disabled cheat
+            if (!settings.InfiniteHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -430,15 +534,57 @@ namespace BannerWand.Behaviors
                 return;
             }
 
+            // Apply bonus to the agent
+            ApplyInfiniteHealthToAgent(playerAgent);
+        }
+
+        /// <summary>
+        /// Applies Infinite Health bonus to a specific agent.
+        /// </summary>
+        /// <param name="agent">The agent to apply the bonus to.</param>
+        private void ApplyInfiniteHealthToAgent(Agent agent)
+        {
+            if (agent?.IsActive() != true)
+            {
+                return;
+            }
+
+            int agentIndex = agent.Index;
+
+            // Check if already applied to this agent
+            if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
+            {
+                // Verify bonus is still there (in case HealthLimit was reset)
+                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
+                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
+                {
+                    // Bonus seems to have been reset, reapply it
+                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
+                    _infiniteHealthApplied[agentIndex] = false;
+                }
+                else
+                {
+                    // Bonus is still there, just restore health
+                    if (agent.Health < agent.HealthLimit)
+                    {
+                        agent.Health = agent.HealthLimit;
+                    }
+                    return;
+                }
+            }
+
+            // Store original HealthLimit before applying bonus (for verification)
+            float originalHealthLimit = agent.HealthLimit;
+
             // Add bonus to max HP (HealthLimit)
             // This makes the player effectively unkillable by normal damage
-            playerAgent.HealthLimit += GameConstants.InfiniteHealthBonus;
-            playerAgent.Health = playerAgent.HealthLimit; // Fill to new max
+            agent.HealthLimit += GameConstants.InfiniteHealthBonus;
+            agent.Health = agent.HealthLimit; // Fill to new max
 
             // Mark as applied to prevent repeated application
-            _infiniteHealthApplied = true;
+            _infiniteHealthApplied[agentIndex] = true;
 
-            ModLogger.Debug($"Infinite Health applied: +{GameConstants.InfiniteHealthBonus} HP (new limit: {playerAgent.HealthLimit})");
+            ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
         }
 
         #endregion
@@ -460,8 +606,16 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedHorseHealth()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing agent
-            if (!Settings.UnlimitedHorseHealth || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedHorseHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -509,8 +663,15 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyOneHitKills()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            if (settings is null)
+            {
+                return;
+            }
+
             // Early return if cheat disabled
-            if (!Settings.OneHitKills)
+            if (!settings.OneHitKills)
             {
                 return;
             }
@@ -523,7 +684,12 @@ namespace BannerWand.Behaviors
 
             // Process all active enemy agents
             // Using foreach instead of LINQ for better performance (runs every frame)
-            foreach (Agent agent in Mission.Current!.Agents)
+            if (Mission.Current?.Agents == null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in Mission.Current.Agents)
             {
                 // Skip null, inactive, or non-human agents
                 if (agent?.IsActive() != true || !agent.IsHuman)

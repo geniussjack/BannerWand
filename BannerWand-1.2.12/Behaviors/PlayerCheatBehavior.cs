@@ -3,7 +3,9 @@ using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 
@@ -28,26 +30,17 @@ namespace BannerWandRetro.Behaviors
     /// </remarks>
     public class PlayerCheatBehavior : CampaignBehaviorBase
     {
-        #region Constants
-
-        /// <summary>
-        /// Default time speed value when feature is disabled.
-        /// </summary>
-        private const float DefaultTimeSpeed = 0f;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance!;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance!;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Tracks whether gold has been applied to prevent repeated application.
@@ -60,14 +53,22 @@ namespace BannerWandRetro.Behaviors
         private bool _influenceApplied;
 
         /// <summary>
-        /// Stores the last time of day for freeze daytime feature.
-        /// </summary>
-        private float _lastTimeOfDay;
-
-        /// <summary>
         /// Flag to track if Max All Character Relationships has been applied.
         /// </summary>
         private static bool _maxAllRelationshipsApplied;
+
+
+        /// <summary>
+        /// Backup of player's inventory for trade restoration.
+        /// Key: ItemObject, Value: Original amount when backup was first created
+        /// </summary>
+        private Dictionary<ItemObject, int>? _inventoryBackup;
+
+        /// <summary>
+        /// Flag to track if inventory backup has been initialized.
+        /// Prevents newly looted items from being added to the backup.
+        /// </summary>
+        private bool _inventoryBackupInitialized;
 
         #endregion
 
@@ -92,8 +93,7 @@ namespace BannerWandRetro.Behaviors
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[PlayerCheatBehavior] Error in RegisterEvents: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(RegisterEvents));
             }
         }
 
@@ -110,13 +110,11 @@ namespace BannerWandRetro.Behaviors
         {
             try
             {
-            }// No persistent data to sync - settings are managed by MCM            }
+                // No persistent data to sync - settings are managed by MCM
+            }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[PlayerCheatBehavior] Error in SyncData: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                LogException(ex, nameof(SyncData));
             }
         }
 
@@ -126,7 +124,7 @@ namespace BannerWandRetro.Behaviors
 
         /// <summary>
         /// Called when a campaign session is launched (new game or loaded game).
-        /// Resets one-time application flags and attempts to unlock smithy parts.
+        /// Resets one-time application flags.
         /// </summary>
         /// <param name="starter">The campaign game starter instance.</param>
         private void OnSessionLaunched(CampaignGameStarter starter)
@@ -137,9 +135,7 @@ namespace BannerWandRetro.Behaviors
             _goldApplied = false;
             _influenceApplied = false;
             _maxAllRelationshipsApplied = false;
-
-            // Attempt to unlock smithy parts (if enabled)
-            UnlockAllSmithyParts();
+            _inventoryBackupInitialized = false;
         }
 
         /// <summary>
@@ -154,11 +150,11 @@ namespace BannerWandRetro.Behaviors
             // Smithing materials - ensure player has enough for unlimited smithing
             ApplyUnlimitedSmithyMaterials();
 
-            // Time manipulation - freeze daytime if enabled
-            ApplyFreezeDaytime();
-
             // Game speed - adjust campaign map time flow
             ApplyGameSpeed();
+
+            // Trade items restoration - check and restore removed items
+            CheckAndRestoreTradeItems();
         }
 
         /// <summary>
@@ -191,35 +187,43 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private void ApplyGoldAndInfluence()
         {
-            // Apply gold if set and not yet applied (PLAYER ONLY)
-            if (Settings.EditGold != 0 && !_goldApplied)
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
             {
-                if (TargetSettings.ApplyToPlayer && Hero.MainHero is not null)
+                return;
+            }
+
+            // Apply gold if set and not yet applied (PLAYER ONLY)
+            if (settings.EditGold != 0 && !_goldApplied)
+            {
+                if (targetSettings.ApplyToPlayer && Hero.MainHero is not null)
                 {
-                    Hero.MainHero.ChangeHeroGold(Settings.EditGold);
-                    ModLogger.LogCheat("Gold Edit", true, Settings.EditGold, "player");
+                    Hero.MainHero.ChangeHeroGold(settings.EditGold);
+                    ModLogger.LogCheat("Gold Edit", true, settings.EditGold, "player");
                 }
 
                 _goldApplied = true;
             }
-            else if (Settings.EditGold == 0)
+            else if (settings.EditGold == 0)
             {
                 // Reset flag when setting returns to zero
                 _goldApplied = false;
             }
 
             // Apply influence if set and not yet applied (PLAYER ONLY)
-            if (Settings.EditInfluence != 0 && !_influenceApplied)
+            if (settings.EditInfluence != 0 && !_influenceApplied)
             {
-                if (TargetSettings.ApplyToPlayer && Clan.PlayerClan is not null)
+                if (targetSettings.ApplyToPlayer && Clan.PlayerClan is not null)
                 {
-                    Clan.PlayerClan.Influence += Settings.EditInfluence;
-                    ModLogger.LogCheat("Influence Edit", true, Settings.EditInfluence, "player clan");
+                    Clan.PlayerClan.Influence += settings.EditInfluence;
+                    ModLogger.LogCheat("Influence Edit", true, settings.EditInfluence, "player clan");
                 }
 
                 _influenceApplied = true;
             }
-            else if (Settings.EditInfluence == 0)
+            else if (settings.EditInfluence == 0)
             {
                 // Reset flag when setting returns to zero
                 _influenceApplied = false;
@@ -254,11 +258,19 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyMaxAllCharacterRelationships()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early return if cheat not enabled or player target disabled
-            if (!Settings.MaxAllCharacterRelationships || !TargetSettings.ApplyToPlayer)
+            if (!settings.MaxAllCharacterRelationships || !targetSettings.ApplyToPlayer)
             {
                 // Reset flag when cheat is disabled so it can be reapplied
-                if (!Settings.MaxAllCharacterRelationships)
+                if (!settings.MaxAllCharacterRelationships)
                 {
                     _maxAllRelationshipsApplied = false;
                 }
@@ -348,8 +360,16 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void ApplyUnlimitedSmithyMaterials()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled cheat or missing data
-            if (!Settings.UnlimitedSmithyMaterials || !TargetSettings.ApplyToPlayer)
+            if (!settings.UnlimitedSmithyMaterials || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -402,7 +422,7 @@ namespace BannerWandRetro.Behaviors
         /// <param name="itemId">The Bannerlord item ID (e.g., "iron", "charcoal").</param>
         /// <param name="targetAmount">The desired amount to maintain (9999).</param>
         /// <remarks>
-        /// Threshold set to 9990 to restore materials if used during smithing sessions.
+        /// Threshold set to <see cref="GameConstants.SmithingMaterialReplenishThreshold"/> to restore materials if used during smithing sessions.
         /// This ensures materials are replenished daily without excessive roster updates.
         /// </remarks>
         private static void AddSmithingMaterialIfLow(ItemRoster roster, string itemId, int targetAmount)
@@ -417,8 +437,8 @@ namespace BannerWandRetro.Behaviors
 
                 int currentAmount = roster.GetItemNumber(item);
 
-                // Replenish if below 9990 (meaning materials were used)
-                if (currentAmount < 9990)
+                // Replenish if below threshold (meaning materials were used)
+                if (currentAmount < GameConstants.SmithingMaterialReplenishThreshold)
                 {
                     int amountToAdd = targetAmount - currentAmount;
                     _ = roster.AddToCounts(item, amountToAdd);
@@ -430,60 +450,7 @@ namespace BannerWandRetro.Behaviors
                 ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 ModLogger.Debug($"[Smithing] Could not add material '{itemId}': {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Unlocks all smithy crafting parts for the player.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// WARNING: This feature is currently DISABLED due to API changes in recent Bannerlord versions.
-        /// The methods <c>Hero.IsAlreadyKnowingPiece</c> and <c>Hero.AddSmithingPieceData</c>
-        /// no longer exist in the current API.
-        /// </para>
-        /// <para>
-        /// TODO: Find alternative API to unlock smithing pieces in current Bannerlord version.
-        /// Possible approaches:
-        /// - Check for new API in CraftingPiece or Hero classes
-        /// - Use reflection to access internal methods (not recommended)
-        /// - Wait for official mod support in future game updates
-        /// </para>
-        /// </remarks>
-        public static void UnlockAllSmithyParts()
-        {
-            try
-            {                // DISABLED: API methods no longer available in current Bannerlord version
-                // See remarks for details and potential solutions
-
-                if (!Settings.UnlockAllSmithyParts || !TargetSettings.ApplyToPlayer)
-                {
-                    return;
-                }
-
-                ModLogger.Debug("Unlock All Smithy Parts is enabled but feature is disabled (API not available)");
-
-                /*
-                // Original implementation (no longer works):
-                if (Hero.MainHero is null)
-                    return;
-
-                foreach (var craftingPiece in CraftingPiece.All)
-                {
-                    if (!Hero.MainHero.IsAlreadyKnowingPiece(craftingPiece))
-                    {
-                        Hero.MainHero.AddSmithingPieceData(craftingPiece);
-                    }
-                }
-                */
-
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[PlayerCheatBehavior] Error in UnlockAllSmithyParts: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                // Note: This catch block has additional debug logging, so we keep it separate
             }
         }
 
@@ -563,62 +530,31 @@ namespace BannerWandRetro.Behaviors
         #region Time and Game Speed
 
         /// <summary>
-        /// [WIP] Freezes the campaign time of day when enabled.
-        /// Currently disabled - freezes entire game instead of just time.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// PROBLEM: Campaign.Current.SetTimeSpeed(0) stops ALL game processing,
-        /// not just the visual time progression. This makes the game unplayable.
-        /// </para>
-        /// <para>
-        /// TODO: Find alternative method to freeze time of day visual only
-        /// without stopping game logic, events, and player controls.
-        /// </para>
-        /// </remarks>
-        private void ApplyFreezeDaytime()
-        {
-            if (!Settings.FreezeDaytime || !TargetSettings.ApplyToPlayer)
-            {
-                // Reset stored time when disabled
-                _lastTimeOfDay = DefaultTimeSpeed;
-                return;
-            }
-
-            if (Campaign.Current is null)
-            {
-                return;
-            }
-
-            // Store the time when first enabled
-            if (_lastTimeOfDay == DefaultTimeSpeed)
-            {
-                _lastTimeOfDay = Campaign.CurrentTime;
-                ModLogger.Debug($"Daytime frozen at: {_lastTimeOfDay}");
-            }
-
-            // [WIP] DISABLED: This stops the entire game, not just time
-            // TODO: Find alternative method to freeze time of day visual only
-            // Campaign.Current.SetTimeSpeed(0);
-        }
-
-        /// <summary>
         /// Applies custom campaign map time speed multiplier.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Game speed range: 0 (frozen) to 16 (very fast).
-        /// Default game speed is 1 (normal time flow).
+        /// Game speed range: 0.1 to 10.0 (as limited by MCM UI settings).
+        /// Default game speed is 1.0 (normal time flow).
         /// </para>
         /// <para>
-        /// WARNING: Extreme speeds (&gt;10) can cause instability and are auto-reset
-        /// on game start by <see cref="SubModule.AutoResetDangerousSettings"/>.
+        /// Note: The MCM UI limits GameSpeed to a maximum of 10.0 to prevent instability.
+        /// Values are persisted in the config file and will remain active after game restarts.
         /// </para>
         /// </remarks>
         private static void ApplyGameSpeed()
         {
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early returns for disabled or invalid settings
-            if (Settings.GameSpeed <= DefaultTimeSpeed || !TargetSettings.ApplyToPlayer)
+            // GameSpeed is active when > 0f (matches CheatManager.cs line 625)
+            if (settings.GameSpeed <= 0f || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -628,10 +564,122 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            // Apply the time speed multiplier
-            // Note: SetTimeSpeed expects an int, so we cast the float
-            int gameSpeed = (int)Settings.GameSpeed;
-            Campaign.Current.SetTimeSpeed(gameSpeed);
+            try
+            {
+                // Use Math.Ceiling to ensure fractional speeds (e.g., 0.5) round up to at least 1
+                // Math.Round uses banker's rounding which can round 0.5 down to 0, freezing the game
+                // Ensure minimum speed of 1 to prevent game freeze
+                int timeSpeed = Math.Max(1, (int)Math.Ceiling(settings.GameSpeed));
+                Campaign.Current.SetTimeSpeed(timeSpeed);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex, nameof(ApplyGameSpeed));
+            }
+        }
+
+        #endregion
+
+        #region Trade Items Restoration
+
+        /// <summary>
+        /// Checks player inventory and restores items that were removed during trade.
+        /// </summary>
+        /// <remarks>
+        /// This method is called hourly to check if items were removed from player's inventory
+        /// during barter/trade operations. If TradeItemsNoDecrease is enabled, it restores
+        /// the items from the backup.
+        /// </remarks>
+        private void CheckAndRestoreTradeItems()
+        {
+            try
+            {
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                if (!settings.TradeItemsNoDecrease || !targetSettings.ApplyToPlayer)
+                {
+                    // Reset backup when cheat is disabled to allow re-initialization when re-enabled
+                    _inventoryBackup = null;
+                    _inventoryBackupInitialized = false;
+                    return;
+                }
+
+                if (MobileParty.MainParty?.ItemRoster == null)
+                {
+                    return;
+                }
+
+                ItemRoster currentRoster = MobileParty.MainParty.ItemRoster;
+
+                // Initialize backup only once when cheat is first enabled
+                // This captures the original inventory state and prevents newly looted items from being added
+                if (!_inventoryBackupInitialized)
+                {
+                    _inventoryBackup = [];
+
+                    // Capture current inventory state as the baseline
+                    for (int i = 0; i < currentRoster.Count; i++)
+                    {
+                        ItemRosterElement element = currentRoster.GetElementCopyAtIndex(i);
+                        ItemObject? item = element.EquipmentElement.Item;
+
+                        if (item != null)
+                        {
+                            // Store original amount - this is the baseline that will be preserved
+                            _inventoryBackup[item] = currentRoster.GetItemNumber(item);
+                        }
+                    }
+
+                    _inventoryBackupInitialized = true;
+                    ModLogger.Debug("[TradeItemsNoDecrease] Inventory backup initialized with current items");
+                }
+
+                // Restore items that were in backup but are now missing or reduced
+                // Only restore items that were in the original backup, not newly looted items
+                if (_inventoryBackup != null)
+                {
+                    foreach (KeyValuePair<ItemObject, int> backupEntry in _inventoryBackup)
+                    {
+                        ItemObject item = backupEntry.Key;
+                        int originalAmount = backupEntry.Value;
+                        int currentAmount = currentRoster.GetItemNumber(item);
+
+                        if (currentAmount < originalAmount)
+                        {
+                            int amountToRestore = originalAmount - currentAmount;
+                            _ = currentRoster.AddToCounts(item, amountToRestore);
+                            ModLogger.Debug($"[TradeItemsNoDecrease] Restored {amountToRestore} x {item.Name} (from {currentAmount} to {originalAmount})");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogException(ex, nameof(CheckAndRestoreTradeItems));
+            }
+        }
+
+        /// <summary>
+        /// Logs an exception with consistent formatting for PlayerCheatBehavior methods.
+        /// </summary>
+        /// <param name="ex">The exception to log.</param>
+        /// <param name="methodName">The name of the method where the exception occurred.</param>
+        /// <remarks>
+        /// This helper method centralizes exception logging to ensure consistent error reporting
+        /// and reduce code duplication across all PlayerCheatBehavior methods.
+        /// </remarks>
+        private static void LogException(Exception ex, string methodName)
+        {
+            ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
+            ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            ModLogger.Error($"[PlayerCheatBehavior] Error in {methodName}: {ex.Message}");
+            ModLogger.Error($"Stack trace: {ex.StackTrace}");
         }
 
         #endregion
