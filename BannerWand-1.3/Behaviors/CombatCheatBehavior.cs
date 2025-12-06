@@ -4,6 +4,7 @@ using BannerWand.Patches;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
