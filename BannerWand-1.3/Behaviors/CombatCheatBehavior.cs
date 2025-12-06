@@ -91,7 +91,8 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called when an agent is built (created) in the mission.
-        /// This is the perfect time to apply Infinite Health bonus.
+        /// Note: We don't apply Infinite Health here because agent may not be fully initialized yet.
+        /// HealthLimit modification will be applied in OnMissionTick once agent is ready.
         /// </summary>
         /// <param name="agent">The agent that was built.</param>
         /// <param name="banner">The banner for the agent (can be null).</param>
@@ -99,19 +100,8 @@ namespace BannerWand.Behaviors
         {
             base.OnAgentBuild(agent, banner);
 
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            // Apply Infinite Health bonus immediately when player agent is built
-            if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
-            {
-                ApplyInfiniteHealthToAgent(agent);
-            }
+            // Don't apply Infinite Health here - agent may not be fully initialized
+            // This will be handled in OnMissionTick once agent is ready
         }
 
 
@@ -549,6 +539,14 @@ namespace BannerWand.Behaviors
                 return;
             }
 
+            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
+            // Check that agent has valid character data and health is properly initialized
+            if (agent.Character == null || agent.HealthLimit <= 0)
+            {
+                // Agent not fully ready yet, skip for now
+                return;
+            }
+
             int agentIndex = agent.Index;
 
             // Check if already applied to this agent
@@ -575,16 +573,22 @@ namespace BannerWand.Behaviors
 
             // Store original HealthLimit before applying bonus (for verification)
             float originalHealthLimit = agent.HealthLimit;
+            float originalBaseHealthLimit = agent.BaseHealthLimit;
 
-            // Add bonus to max HP (HealthLimit)
-            // This makes the player effectively unkillable by normal damage
-            agent.HealthLimit += GameConstants.InfiniteHealthBonus;
-            agent.Health = agent.HealthLimit; // Fill to new max
+            // CRITICAL FIX: Set HealthLimit directly instead of using += to avoid breaking agent state
+            // Only apply if we have valid base values
+            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
+            {
+                // Set to original base + bonus to ensure consistency
+                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
+                agent.HealthLimit = newHealthLimit;
+                agent.Health = newHealthLimit; // Fill to new max
 
-            // Mark as applied to prevent repeated application
-            _infiniteHealthApplied[agentIndex] = true;
+                // Mark as applied to prevent repeated application
+                _infiniteHealthApplied[agentIndex] = true;
 
-            ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+            }
         }
 
         #endregion
