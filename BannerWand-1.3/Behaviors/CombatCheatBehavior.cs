@@ -66,6 +66,12 @@ namespace BannerWand.Behaviors
         /// </summary>
         private int _missionTickCount = 0;
 
+        /// <summary>
+        /// Tracks last ammo amounts per slot to avoid unnecessary SetWeaponAmountInSlot calls.
+        /// Key: EquipmentIndex, Value: Last known ammo amount.
+        /// </summary>
+        private readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _lastAmmoAmounts = [];
+
 
 
 
@@ -87,6 +93,7 @@ namespace BannerWand.Behaviors
             _unlimitedAmmoLogged = false;
             _unlimitedAmmoLogCounter = 0;
             _missionTickCount = 0;
+            _lastAmmoAmounts.Clear();
         }
 
         /// <summary>
@@ -417,8 +424,32 @@ namespace BannerWand.Behaviors
                 short currentAmmo = weapon.Amount;
                 short maxAmmo = weapon.ModifiedMaxAmount;
 
-                // Restore ammo if below max using the CORRECT API method
-                if (currentAmmo < maxAmmo)
+                // CRITICAL FIX: Only restore if ammo actually decreased AND we haven't just restored it
+                // This prevents calling SetWeaponAmountInSlot every frame, which triggers UpdateAgentProperties()
+                // and can break character models. We only restore when ammo actually drops below max.
+                bool shouldRestore = false;
+                if (_lastAmmoAmounts.TryGetValue(i, out short lastAmmo))
+                {
+                    // Only restore if ammo decreased from last check AND is below max
+                    if (currentAmmo < lastAmmo && currentAmmo < maxAmmo)
+                    {
+                        shouldRestore = true;
+                    }
+                }
+                else
+                {
+                    // First time checking this slot - restore if below max
+                    if (currentAmmo < maxAmmo)
+                    {
+                        shouldRestore = true;
+                    }
+                }
+
+                // Update last known amount
+                _lastAmmoAmounts[i] = currentAmmo;
+
+                // Restore ammo if needed
+                if (shouldRestore)
                 {
                     // Set flag to allow our restoration call through the Harmony patch
                     AmmoConsumptionPatch.IsRestorationInProgress = true;
@@ -426,6 +457,7 @@ namespace BannerWand.Behaviors
                     {
                         // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
                         playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
+                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
 
                         // Only log first restoration per mission to reduce spam
                         if (_unlimitedAmmoLogCounter == 0)
