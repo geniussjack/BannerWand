@@ -58,15 +58,19 @@ namespace BannerWand.Patches
         /// </para>
         /// </remarks>
 #pragma warning disable RCS1213 // Remove unused method declaration
+#pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable RCS1163 // Unused parameter
         private static void Postfix(
             ref ExplainedNumber __result,
             MobileParty mobileParty,
-            bool _ = false, // isCurrentlyAtSea
-            bool __ = false, // includeDescriptions
-            int ___ = 0, // additionalTroops
-            int ____ = 0, // additionalSpareMounts
-            int _____ = 0, // additionalPackAnimals
-            bool ______ = false) // includeFollowers
+            bool isCurrentlyAtSea = false,
+            bool includeDescriptions = false,
+            int additionalTroops = 0,
+            int additionalSpareMounts = 0,
+            int additionalPackAnimals = 0,
+            bool includeFollowers = false)
+#pragma warning restore RCS1163 // Unused parameter
+#pragma warning restore IDE0060 // Remove unused parameter
 #pragma warning restore RCS1213 // Remove unused method declaration
         {
             try

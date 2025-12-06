@@ -248,7 +248,8 @@ namespace BannerWand.Models
                 }
 
                 // Fallback: Return zero (shouldn't happen, but safe fallback)
-                ModLogger.Warning("[CustomPartyTrainingModel] Could not get default model for GetEffectiveDailyExperience, returning zero");
+                // Note: This can happen frequently during normal gameplay when accessing troops
+                // that don't have a default model reference, so we silently return zero instead of logging
                 return new ExplainedNumber(0f, false, null);
             }
             catch (Exception ex)
