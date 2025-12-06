@@ -319,12 +319,6 @@ namespace BannerWand.Core
             bool primaryPatchApplied = false;
             bool fallbackPatchApplied = false;
 
-            // TEMPORARILY DISABLED: Testing if SetWeaponAmountInSlot patch causes character model corruption
-            // If disabling this fixes the issue, we'll need to find an alternative approach
-            ModLogger.Warning("[AmmoConsumptionPatch] TEMPORARILY DISABLED for testing - SetWeaponAmountInSlot patch");
-            ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based restoration only");
-            
-            /* TEMPORARILY DISABLED FOR TESTING
             try
             {
                 if (Instance == null)
@@ -385,7 +379,6 @@ namespace BannerWand.Core
             {
                 ModLogger.Error($"[AmmoConsumptionPatch] Error applying primary patch: {ex.Message}");
             }
-            */ // END TEMPORARY DISABLE
 
             // DISABLED: MissionEquipmentAmmoSafetyPatch is causing character model corruption
             // This patch modifies MissionEquipment.set_Item which is used for ALL equipment changes,

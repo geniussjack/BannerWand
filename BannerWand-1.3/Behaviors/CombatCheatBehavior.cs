@@ -98,9 +98,7 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called when an agent is built (created) in the mission.
-        /// CRITICAL FIX: Do NOT modify HealthLimit here - agent may not be fully initialized yet.
-        /// Game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase, so we must wait.
-        /// HealthLimit modification is now deferred to OnMissionTick after agent is fully ready.
+        /// This is the perfect time to apply Infinite Health bonus.
         /// </summary>
         /// <param name="agent">The agent that was built.</param>
         /// <param name="banner">The banner for the agent (can be null).</param>
@@ -108,11 +106,19 @@ namespace BannerWand.Behaviors
         {
             base.OnAgentBuild(agent, banner);
 
-            // DISABLED: Modifying HealthLimit in OnAgentBuild can break character models
-            // because the agent may not be fully initialized yet. The game modifies HealthLimit
-            // AFTER OnAgentBuild in SpawningBehaviorBase (line 244), so we must wait.
-            // HealthLimit modification is now handled in OnMissionTick via ApplyInfiniteHealth()
-            // which checks if agent is fully ready before modifying.
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
+            // Apply Infinite Health bonus immediately when player agent is built
+            if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
+            {
+                ApplyInfiniteHealthToAgent(agent);
+            }
         }
 
 

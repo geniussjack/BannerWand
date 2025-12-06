@@ -133,8 +133,9 @@ namespace BannerWand.Patches
         {
             try
             {
-                // CRITICAL FIX: Only work in missions (battle/combat), NOT in menus (inventory, clan, etc.)
-                // In menus, agents are in a different state and modifying equipment can break character models
+                // CRITICAL FIX: Only work in missions (battle/combat), NOT on campaign map
+                // Agent.SetWeaponAmountInSlot should only be called in missions, but we add
+                // this check as a safety measure to prevent any interference with campaign map operations
                 if (Mission.Current == null)
                 {
                     return true;
@@ -208,23 +209,24 @@ namespace BannerWand.Patches
         }
 
         /// <summary>
-        /// Alternative Prefix for methods with different signature (without enforcePrimaryItem parameter).
+        /// Alternative Prefix for methods with different signature.
         /// </summary>
         [HarmonyPrefix]
         public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount)
         {
             // Delegate to main prefix with default enforcePrimaryItem
-            // Note: This also checks Mission.Current to ensure we're in battle, not menu
             return Prefix(__instance, equipmentSlot, ref amount, false);
         }
     }
 
     /// <summary>
     /// Alternative patch that tries to intercept MissionEquipment modifications.
-    /// DISABLED: This patch causes character model corruption because MissionEquipment.set_Item
-    /// is used for ALL equipment changes, including visual model updates.
+    /// REMOVED: This patch causes character model corruption because MissionEquipment.set_Item
+    /// is used for ALL equipment changes, including visual model updates on campaign map.
+    /// Even with careful checks, it interferes with character rendering in menus.
     /// </summary>
-    // [HarmonyPatch] - DISABLED to prevent automatic application via PatchAll()
+    // CLASS REMOVED - was causing character model corruption on campaign map
+    /*
     public static class MissionEquipmentAmmoSafetyPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
@@ -352,4 +354,5 @@ namespace BannerWand.Patches
             }
         }
     }
+    */
 }
