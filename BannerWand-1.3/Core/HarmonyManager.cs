@@ -327,53 +327,13 @@ namespace BannerWand.Core
                     return false;
                 }
 
-                // Try to apply primary patch (Agent.SetWeaponAmountInSlot)
-                MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
-                if (targetMethod != null)
-                {
-                    // Find the Prefix method with 4 parameters (EquipmentIndex, short, bool)
-                    MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
-                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
-                        null,
-                        [typeof(Agent), typeof(EquipmentIndex), typeof(short), typeof(bool)],
-                        null);
-
-                    // If not found, try with 3 parameters
-                    prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
-                            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
-                            null,
-                            [typeof(Agent), typeof(EquipmentIndex), typeof(short)],
-                            null);
-
-                    // Last resort - get any Prefix method
-                    prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .FirstOrDefault(m => m.Name == "Prefix");
-
-                    if (prefixMethod != null)
-                    {
-                        // Check if patch is already applied (e.g., by PatchAll())
-                        if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
-                        {
-                            primaryPatchApplied = true;
-                            AmmoConsumptionPatch.IsPatchApplied = true;
-                        }
-                        else
-                        {
-                            HarmonyMethod harmonyPrefix = new(prefixMethod);
-                            _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
-                            primaryPatchApplied = true;
-                            AmmoConsumptionPatch.IsPatchApplied = true;
-                        }
-                    }
-                    else
-                    {
-                        ModLogger.Warning("[AmmoConsumptionPatch] Prefix method not found!");
-                    }
-                }
-                else
-                {
-                    ModLogger.Warning("[AmmoConsumptionPatch] Target method not found - primary patch skipped");
-                }
+                // TEMPORARILY DISABLED: Testing if SetWeaponAmountInSlot patch causes character model corruption
+                // This patch modifies the amount parameter before SetWeaponAmountInSlot executes,
+                // which may interfere with game's internal state management.
+                ModLogger.Log("[AmmoConsumptionPatch] SetWeaponAmountInSlot patch TEMPORARILY DISABLED for testing");
+                ModLogger.Log("[AmmoConsumptionPatch] Unlimited Ammo will use tick-based restoration only");
+                primaryPatchApplied = false; // Don't apply patch
+                AmmoConsumptionPatch.IsPatchApplied = false;
             }
             catch (Exception ex)
             {
