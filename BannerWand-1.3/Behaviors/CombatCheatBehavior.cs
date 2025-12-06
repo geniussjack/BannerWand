@@ -621,33 +621,26 @@ namespace BannerWand.Behaviors
             float originalHealthLimit = agent.HealthLimit;
             float originalBaseHealthLimit = agent.BaseHealthLimit;
 
-            // CRITICAL: Only modify HealthLimit if we have valid original values
-            // This should only happen ONCE, right after agent is built
-            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
+            // CRITICAL FIX: DO NOT modify HealthLimit - it causes character model corruption!
+            // Instead, we rely on aggressive health restoration in OnAgentHit to prevent death.
+            // The game's internal systems may depend on HealthLimit being consistent, and changing
+            // it after agent initialization can break visual model updates.
+            //
+            // Strategy: Just restore health aggressively when it drops, without modifying HealthLimit.
+            // This prevents one-shot kills by restoring health immediately after damage is applied.
+            if (originalHealthLimit > 0)
             {
-                // Calculate new HealthLimit based on BASE, not current (to avoid compounding)
-                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
-                
-                // Only apply if the new limit is significantly higher (to avoid unnecessary changes)
-                if (newHealthLimit > originalHealthLimit + 100f)
+                // Mark as applied WITHOUT modifying HealthLimit
+                _infiniteHealthApplied[agentIndex] = true;
+                _originalHealthLimits[agentIndex] = originalHealthLimit;
+
+                // Just ensure health is at maximum
+                if (agent.Health < agent.HealthLimit)
                 {
-                    agent.HealthLimit = newHealthLimit;
-                    agent.Health = newHealthLimit; // Fill to new max
-
-                    // Store original for reference (but never restore it)
-                    _originalHealthLimits[agentIndex] = originalHealthLimit;
-
-                    // Mark as applied - NEVER apply again
-                    _infiniteHealthApplied[agentIndex] = true;
-
-                    ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+                    agent.Health = agent.HealthLimit;
                 }
-                else
-                {
-                    // HealthLimit already high enough, just mark as applied without modifying
-                    _infiniteHealthApplied[agentIndex] = true;
-                    ModLogger.Debug($"Infinite Health: Agent {agentIndex} already has high HealthLimit ({originalHealthLimit}), skipping modification");
-                }
+
+                ModLogger.Debug($"Infinite Health tracking enabled for agent {agentIndex} (HealthLimit NOT modified to prevent model corruption, original: {originalHealthLimit})");
             }
         }
 
