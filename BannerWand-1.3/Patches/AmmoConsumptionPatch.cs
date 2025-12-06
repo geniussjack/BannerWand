@@ -301,8 +301,9 @@ namespace BannerWand.Patches
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error in Prefix: {ex.Message}");
                 return true;
             }
         }

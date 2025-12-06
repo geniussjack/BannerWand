@@ -63,15 +63,14 @@ namespace BannerWand.Patches
                     return;
                 }
 
-                // CRITICAL FIX: Check if player is involved in this barter transaction
-                // A barter involves:
-                // 1. The item/offer owner (OriginalOwner)
-                // 2. The faction evaluating the offer (faction parameter)
+                // CRITICAL FIX: Only manipulate values when player is the actual item owner
+                // Do NOT manipulate based on evaluator faction - this would affect NPC-to-NPC barters
+                // that just happen to be evaluated by player's faction
                 bool playerIsOwner = __instance.OriginalOwner == Hero.MainHero;
-                bool playerIsEvaluator = IsPlayerFaction(faction);
 
-                // If player is neither owner nor evaluator, this is an AI-to-AI barter - don't modify!
-                if (!playerIsOwner && !playerIsEvaluator)
+                // If player is not the owner, this is an NPC barter - don't modify!
+                // Even if player's faction is evaluating, we shouldn't affect NPC-to-NPC transactions
+                if (!playerIsOwner)
                 {
                     return;
                 }
@@ -86,29 +85,18 @@ namespace BannerWand.Patches
                 }
 
                 // Strategy constants
-                const int worthlessItemValue = 1;
                 const int valuableItemMultiplier = 1000;
 
-                // Strategy 1: Make NPC items worthless (player is RECEIVING from NPC)
-                // This makes it cheap for player to get items
-                if (__instance.OriginalOwner != Hero.MainHero && __instance.OriginalOwner != null)
-                {
-                    __result = worthlessItemValue;
-                    return;
-                }
-
-                // Strategy 2: Make player items super valuable (player is GIVING)
+                // Strategy: Make player items super valuable (player is GIVING)
                 // This makes NPCs think they're getting a great deal
-                if (__instance.OriginalOwner == Hero.MainHero)
+                // Note: We only modify player's items (already checked above that playerIsOwner is true)
+                if (__result > 0)
                 {
-                    if (__result > 0)
-                    {
-                        __result *= valuableItemMultiplier;
-                    }
-                    else if (__result < 0)
-                    {
-                        __result = Math.Abs(__result) * valuableItemMultiplier;
-                    }
+                    __result *= valuableItemMultiplier;
+                }
+                else if (__result < 0)
+                {
+                    __result = Math.Abs(__result) * valuableItemMultiplier;
                 }
             }
             catch (Exception ex)
@@ -117,30 +105,5 @@ namespace BannerWand.Patches
             }
         }
 
-        /// <summary>
-        /// Checks if the faction is the player's faction or clan.
-        /// </summary>
-        private static bool IsPlayerFaction(IFaction? faction)
-        {
-            if (faction == null)
-            {
-                return false;
-            }
-
-            // Check if it's the player's clan
-            if (faction == Clan.PlayerClan)
-            {
-                return true;
-            }
-
-            // Check if it's the player's kingdom
-            if (Hero.MainHero?.MapFaction != null && faction == Hero.MainHero.MapFaction)
-            {
-                return true;
-            }
-
-            // Check if the faction leader is the player
-            return faction is Clan clan && clan.Leader == Hero.MainHero;
-        }
     }
 }
