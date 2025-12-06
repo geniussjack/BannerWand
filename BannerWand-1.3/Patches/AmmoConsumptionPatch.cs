@@ -133,6 +133,13 @@ namespace BannerWand.Patches
         {
             try
             {
+                // CRITICAL FIX: Only work in missions (battle/combat), NOT in menus (inventory, clan, etc.)
+                // In menus, agents are in a different state and modifying equipment can break character models
+                if (Mission.Current == null)
+                {
+                    return true;
+                }
+
                 // Allow if settings not loaded
                 if (Settings == null || TargetSettings == null)
                 {
@@ -201,12 +208,13 @@ namespace BannerWand.Patches
         }
 
         /// <summary>
-        /// Alternative Prefix for methods with different signature.
+        /// Alternative Prefix for methods with different signature (without enforcePrimaryItem parameter).
         /// </summary>
         [HarmonyPrefix]
         public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount)
         {
             // Delegate to main prefix with default enforcePrimaryItem
+            // Note: This also checks Mission.Current to ensure we're in battle, not menu
             return Prefix(__instance, equipmentSlot, ref amount, false);
         }
     }
