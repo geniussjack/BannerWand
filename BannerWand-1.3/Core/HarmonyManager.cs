@@ -354,7 +354,6 @@ namespace BannerWand.Core
                         // Check if patch is already applied (e.g., by PatchAll())
                         if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
                         {
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch already applied (likely by PatchAll()), skipping manual application");
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
                         }
@@ -364,7 +363,6 @@ namespace BannerWand.Core
                             _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully - ammo decrease will be blocked");
                         }
                     }
                     else
@@ -396,7 +394,6 @@ namespace BannerWand.Core
                         // Check if patch is already applied (e.g., by PatchAll())
                         if (IsPatchAlreadyApplied(fallbackTarget, fallbackPrefix))
                         {
-                            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch already applied (likely by PatchAll()), skipping manual application");
                             fallbackPatchApplied = true;
                         }
                         else
@@ -404,7 +401,6 @@ namespace BannerWand.Core
                             HarmonyMethod harmonyPrefix = new(fallbackPrefix);
                             _ = Instance!.Patch(fallbackTarget, prefix: harmonyPrefix);
                             fallbackPatchApplied = true;
-                            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch applied successfully");
                         }
                     }
                 }
@@ -420,10 +416,6 @@ namespace BannerWand.Core
             {
                 ModLogger.Warning("[AmmoConsumptionPatch] No ammo patches could be applied!");
                 ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based fallback restoration only.");
-            }
-            else
-            {
-                ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Fallback={fallbackPatchApplied}");
             }
             return success;
         }

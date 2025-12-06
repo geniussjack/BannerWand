@@ -65,7 +65,6 @@ namespace BannerWand.Patches
 
                 if (method != null)
                 {
-                    ModLogger.Log("[AmmoConsumptionPatch] Found SetWeaponAmountInSlot(EquipmentIndex, short, bool) method");
                     return method;
                 }
 
@@ -79,7 +78,6 @@ namespace BannerWand.Patches
 
                 if (method != null)
                 {
-                    ModLogger.Log("[AmmoConsumptionPatch] Found SetWeaponAmountInSlot(EquipmentIndex, short) method");
                     return method;
                 }
 
@@ -125,10 +123,10 @@ namespace BannerWand.Patches
         /// <param name="__instance">The Agent instance (player or NPC)</param>
         /// <param name="equipmentSlot">The weapon slot being modified</param>
         /// <param name="amount">The new ammo amount to set</param>
-        /// <param name="_">Whether to enforce primary item (unused, required for Harmony signature)</param>
+        /// <param name="enforcePrimaryItem">Whether to enforce primary item (unused, required for Harmony signature)</param>
         /// <returns>True to continue with original method, False to skip it</returns>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool _)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool enforcePrimaryItem)
         {
             try
             {
