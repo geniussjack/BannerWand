@@ -98,7 +98,9 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called when an agent is built (created) in the mission.
-        /// This is the perfect time to apply Infinite Health bonus.
+        /// CRITICAL FIX: Do NOT modify HealthLimit here - agent may not be fully initialized yet.
+        /// Game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase, so we must wait.
+        /// HealthLimit modification is now deferred to OnMissionTick after agent is fully ready.
         /// </summary>
         /// <param name="agent">The agent that was built.</param>
         /// <param name="banner">The banner for the agent (can be null).</param>
@@ -106,19 +108,11 @@ namespace BannerWand.Behaviors
         {
             base.OnAgentBuild(agent, banner);
 
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            // Apply Infinite Health bonus immediately when player agent is built
-            if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
-            {
-                ApplyInfiniteHealthToAgent(agent);
-            }
+            // DISABLED: Modifying HealthLimit in OnAgentBuild can break character models
+            // because the agent may not be fully initialized yet. The game modifies HealthLimit
+            // AFTER OnAgentBuild in SpawningBehaviorBase (line 244), so we must wait.
+            // HealthLimit modification is now handled in OnMissionTick via ApplyInfiniteHealth()
+            // which checks if agent is fully ready before modifying.
         }
 
 
@@ -448,19 +442,35 @@ namespace BannerWand.Behaviors
                 // Update last known amount
                 _lastAmmoAmounts[i] = currentAmmo;
 
-                // DISABLED: Manual restoration via SetWeaponAmountInSlot causes UpdateAgentProperties()
-                // to be called, which can break character models. Instead, we rely entirely on
-                // the Harmony patch (AmmoConsumptionPatch) which prevents ammo decrease.
-                // The patch modifies the amount parameter before the original method executes,
-                // so no manual restoration is needed.
-                //
-                // If ammo somehow gets below max, the patch will prevent further decreases,
-                // and the player can pick up ammo normally or it will be restored on next shot attempt.
-                if (shouldRestore && _unlimitedAmmoLogCounter == 0)
+                // Restore ammo if needed
+                // NOTE: SetWeaponAmountInSlot patch is temporarily disabled for testing.
+                // If patch is disabled, we need manual restoration. If patch is enabled,
+                // this code is still safe because IsRestorationInProgress flag prevents patch interference.
+                if (shouldRestore)
                 {
-                    string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                    ModLogger.Debug($"[UnlimitedAmmo] Ammo below max for {weaponName} (Slot: {i}): {currentAmmo}/{maxAmmo}. Patch will prevent further decrease.");
-                    _unlimitedAmmoLogCounter++;
+                    // Set flag to allow our restoration call through the Harmony patch (if enabled)
+                    AmmoConsumptionPatch.IsRestorationInProgress = true;
+                    try
+                    {
+                        // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
+                        // WARNING: This calls UpdateAgentProperties() which may break character models
+                        // if called too frequently or at wrong time. We minimize calls by only
+                        // restoring when ammo actually decreased.
+                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
+                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
+
+                        // Only log first restoration per mission to reduce spam
+                        if (_unlimitedAmmoLogCounter == 0)
+                        {
+                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
+                            _unlimitedAmmoLogCounter++;
+                        }
+                    }
+                    finally
+                    {
+                        AmmoConsumptionPatch.IsRestorationInProgress = false;
+                    }
                 }
             }
         }
@@ -572,10 +582,19 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            // Ensure agent is fully initialized before modifying HealthLimit
-            if (agent.Character == null || agent.HealthLimit <= 0)
+            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
+            // The game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase,
+            // so we must wait until agent is fully ready. Check multiple conditions:
+            if (agent.Character == null || agent.HealthLimit <= 0 || agent.BaseHealthLimit <= 0)
             {
-                // Agent not fully ready yet, skip for now
+                // Agent not fully ready yet, skip for now (will retry next frame)
+                return;
+            }
+
+            // Additional safety check: Ensure agent has been in mission for at least a few frames
+            // This gives the game time to complete all initialization
+            if (!agent.IsActive() || agent.Index < 0)
+            {
                 return;
             }
 
