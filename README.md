@@ -5,8 +5,8 @@ A comprehensive cheat mod for **Mount & Blade II: Bannerlord** with fully config
 **All 31 cheats fully functional** - including previously non-working cheats now implemented via Harmony patches!
 
 > ⚠️ **Version Notice**: 
-> - **BannerWand v1.0.8** - Supports **Bannerlord 1.3.x** (project BannerWand-1.3) - includes Stealth Invisibility cheat
-> - **BannerWand v1.0.8** - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
+> - **BannerWand v1.0.9** - Supports **Bannerlord 1.3.x** (project BannerWand-1.3)
+> - **BannerWand v1.0.9** - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
 
 ---
 
@@ -23,7 +23,6 @@ A comprehensive cheat mod for **Mount & Blade II: Bannerlord** with fully config
 - ✅ **Barter Always Accepted** - All trade offers accepted
 - ✅ **Unlimited Smithy Stamina** - Never run out of crafting stamina
 - ✅ **Max Character Relationship** - Improve relationships with NPCs (supports NPC targeting)
-- ✅ **Stealth Invisibility** - Player is completely invisible and undetectable in stealth missions *(1.3.x only)*
 
 ### Inventory Cheats (7 cheats)
 - ✅ **Edit Gold** - Add/remove gold (supports NPC targeting)
@@ -162,7 +161,6 @@ To add translations, see [README_TRANSLATION.md](README_TRANSLATION.md)
 - **Behaviors**: 7 custom behaviors
 - **Interfaces**: 6 abstraction interfaces
 - **Code Quality**: Comprehensive XML documentation, explicit typing, optimized C# patterns
-- **Stealth Invisibility cheat** (1.3.x only)
 
 ---
 
@@ -241,10 +239,30 @@ This mod is provided as-is for personal use. Feel free to modify for personal us
 
 **Enjoy your enhanced Bannerlord experience! 🎉**
 
-**Version v1.0.8** - Comprehensive Code Refactoring & Optimization Release!
+**Version v1.0.9** - Major Code Optimization & Refactoring Release!
+
+### Changelog v1.0.9
+- ✅ **Code Optimization** - Comprehensive refactoring and optimization:
+  - C# 14.0 language version fully utilized across all projects
+  - All magic numbers extracted to Constants folder (including `SmithingMaterialReplenishThreshold`)
+  - Improved code readability with explicit typing (replaced `var` in documentation examples)
+  - Enhanced XML documentation throughout codebase with professional formatting
+  - Code style unification and formatting improvements
+  - Removed unused using directives (BarterSystem.Barterables)
+  - Optimized complex code sections (GetActiveCheatCount using ternary operators)
+  - Eliminated code duplication (centralized exception handling in CheatManager and CheatExtensions)
+  - Fixed all compiler warnings and linter errors
+- ✅ **Exception Handling** - Created `LogException` helper methods to reduce code duplication:
+  - `CheatManager.LogException()` - Centralized exception logging for CheatManager (replaced 10 duplicate blocks)
+  - `CheatExtensions.LogException()` - Centralized exception logging for CheatExtensions (replaced 17 duplicate blocks)
+  - `PlayerCheatBehavior.LogException()` - Centralized exception logging for PlayerCheatBehavior (replaced 4 duplicate blocks)
+- ✅ **Constants Organization** - Added `SmithingMaterialReplenishThreshold` constant to both versions
+- ✅ **Documentation** - Improved XML documentation for all public APIs with cref references
+- ✅ **Code Quality** - Enhanced maintainability, readability, and consistency
+- ✅ **Version Update** - Updated mod version to 1.0.9 in SubModule.xml and documentation
+- ✅ **Gitignore** - Added rules for .slnx.user, Rider IDE files, and temporary documentation files
 
 ### Changelog v1.0.8
-- 🆕 **Stealth Invisibility Cheat** (1.3.x only) - Player is completely invisible and undetectable in stealth missions
 - ✅ **Bug Fixes** - Fixed critical bugs:
   - ModLogger: Fixed empty setter for LogFilePath property, fixed uninitialized state when file logging fails
   - CustomPartySpeedModel: Fixed loss of speed modifiers when creating new ExplainedNumber
