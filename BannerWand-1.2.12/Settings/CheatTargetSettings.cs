@@ -199,7 +199,14 @@ namespace BannerWandRetro.Settings
                 // Category: Kingdoms
                 if (ApplyToKingdomRulers)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom?.Leader != null)
                         {
@@ -219,7 +226,14 @@ namespace BannerWandRetro.Settings
 
                 if (ApplyToKingdomVassals)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom != null)
                         {
@@ -253,7 +267,14 @@ namespace BannerWandRetro.Settings
 
                 if (ApplyToKingdomNobles)
                 {
-                    foreach (Kingdom kingdom in Kingdom.All)
+                    // OPTIMIZED: Use cached collection instead of direct Kingdom.All enumeration
+                    List<Kingdom>? allKingdoms = CampaignDataCache.AllKingdoms;
+                    if (allKingdoms is null)
+                    {
+                        return targets;
+                    }
+
+                    foreach (Kingdom kingdom in allKingdoms)
                     {
                         if (kingdom != null)
                         {
