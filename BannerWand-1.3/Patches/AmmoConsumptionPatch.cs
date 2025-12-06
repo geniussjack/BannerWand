@@ -119,14 +119,17 @@ namespace BannerWand.Patches
 
         /// <summary>
         /// Prefix patch that prevents ammo decrease for player when Unlimited Ammo is enabled.
+        /// CRITICAL FIX: Instead of blocking the call (return false), we modify the amount parameter
+        /// to prevent decrease while still allowing the original method to execute. This prevents
+        /// breaking internal game state that might depend on SetWeaponAmountInSlot completing.
         /// </summary>
         /// <param name="__instance">The Agent instance (player or NPC)</param>
         /// <param name="equipmentSlot">The weapon slot being modified</param>
-        /// <param name="amount">The new ammo amount to set</param>
+        /// <param name="amount">The new ammo amount to set (modified by ref to prevent decrease)</param>
         /// <param name="enforcePrimaryItem">Whether to enforce primary item (unused, required for Harmony signature)</param>
-        /// <returns>True to continue with original method, False to skip it</returns>
+        /// <returns>True to continue with original method (always true now)</returns>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool enforcePrimaryItem)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount, bool enforcePrimaryItem)
         {
             try
             {
@@ -172,7 +175,7 @@ namespace BannerWand.Patches
                 // Get current ammo amount
                 short currentAmount = weapon.Amount;
 
-                // BLOCK if this is an ammo DECREASE
+                // PREVENT DECREASE by modifying amount parameter instead of blocking call
                 if (amount < currentAmount)
                 {
                     // Log first block for debugging
@@ -180,14 +183,14 @@ namespace BannerWand.Patches
                     {
                         _firstBlockLogged = true;
                         string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                        ModLogger.Log($"[AmmoConsumptionPatch] BLOCKED ammo decrease: {weaponName} ({currentAmount} → {amount})");
+                        ModLogger.Log($"[AmmoConsumptionPatch] PREVENTED ammo decrease: {weaponName} ({currentAmount} → {amount}, setting to {currentAmount})");
                     }
 
-                    // Return false to skip original method (don't decrease ammo)
-                    return false;
+                    // Modify amount to prevent decrease, but allow original method to execute
+                    amount = currentAmount;
                 }
 
-                // Allow ammo INCREASE (pickups, our restoration, etc.)
+                // Always allow original method to execute (don't block it)
                 return true;
             }
             catch (Exception ex)
@@ -201,10 +204,10 @@ namespace BannerWand.Patches
         /// Alternative Prefix for methods with different signature.
         /// </summary>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, short amount)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount)
         {
             // Delegate to main prefix with default enforcePrimaryItem
-            return Prefix(__instance, equipmentSlot, amount, false);
+            return Prefix(__instance, equipmentSlot, ref amount, false);
         }
     }
 
