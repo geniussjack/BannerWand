@@ -100,10 +100,7 @@ namespace BannerWand.Models
                     {
                         ExplainedNumber maxMorale = new(GameConstants.MaxMoraleBaseValue, includeDescription);
 
-                        if (mobileParty == MobileParty.MainParty)
-                        {
-                            ModLogger.Debug($"Max Morale applied: Base +{GameConstants.MaxMoraleBaseValue} (Player Party)");
-                        }
+                        ModLogger.Debug($"Max Morale applied to {mobileParty.Name}: Base +{GameConstants.MaxMoraleBaseValue}");
 
                         return maxMorale;
                     }
