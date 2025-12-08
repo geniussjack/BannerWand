@@ -1,5 +1,6 @@
 #nullable enable
 using BannerWandRetro.Constants;
+using BannerWandRetro.Patches;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
@@ -46,9 +47,15 @@ namespace BannerWandRetro.Behaviors
         private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
-        /// Tracks whether Infinite Health bonus has been applied in current mission.
+        /// Tracks whether Infinite Health bonus has been applied to the player agent.
+        /// Key: Agent index, Value: Whether bonus was applied.
         /// </summary>
-        private bool _infiniteHealthApplied;
+        private readonly System.Collections.Generic.Dictionary<int, bool> _infiniteHealthApplied = [];
+
+        /// <summary>
+        /// Tracks whether unlimited ammo has been logged for current mission.
+        /// </summary>
+        private bool _unlimitedAmmoLogged;
 
         /// <summary>
         /// Stores original ammunition amounts for each weapon slot to prevent ammo decrease.
@@ -68,11 +75,37 @@ namespace BannerWandRetro.Behaviors
         {
             base.OnEndMission();
 
-            // Reset application flag for next mission
-            _infiniteHealthApplied = false;
+            // Reset application flags for next battle
+            _infiniteHealthApplied.Clear();
+            _unlimitedAmmoLogged = false;
             _originalAmmoAmounts.Clear();
         }
 
+        /// <summary>
+        /// Called when an agent is built (created) in the mission.
+        /// This is the perfect time to apply Infinite Health bonus.
+        /// </summary>
+        /// <param name="agent">The agent that was built.</param>
+        /// <param name="banner">The banner for the agent (can be null).</param>
+        public override void OnAgentBuild(Agent agent, Banner? banner)
+        {
+            base.OnAgentBuild(agent, banner);
+
+            // Early exit if settings are null
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
+            // Apply Infinite Health bonus immediately when player agent is built
+            if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
+            {
+                ModLogger.Debug($"OnAgentBuild: Player agent built, applying Infinite Health (Agent Index: {agent.Index})");
+                ApplyInfiniteHealthToAgent(agent);
+            }
+        }
 
         /// <summary>
         /// Called every mission frame (approximately 60 times per second).
@@ -156,6 +189,30 @@ namespace BannerWandRetro.Behaviors
                 if (settings is null || targetSettings is null)
                 {
                     return;
+                }
+
+                // CRITICAL FIX: Restore health immediately after taking damage if Infinite Health is enabled
+                // This prevents death from one-shot kills that exceed HealthLimit
+                if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                {
+                    // Ensure Infinite Health bonus is applied (in case it wasn't applied on spawn)
+                    ApplyInfiniteHealthToAgent(affectedAgent);
+
+                    // Restore health immediately after damage to prevent death
+                    // If health dropped below a safe threshold, restore it
+                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
+                    {
+                        affectedAgent.Health = affectedAgent.HealthLimit;
+                    }
+                }
+
+                // Also restore health if Unlimited Health is enabled (but this won't prevent one-shot kills)
+                if (settings.UnlimitedHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                {
+                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
+                    {
+                        affectedAgent.Health = affectedAgent.HealthLimit;
+                    }
                 }
 
                 // Handle One-Hit Kills - ensure enemies die from PLAYER's hits/shots
@@ -253,27 +310,36 @@ namespace BannerWandRetro.Behaviors
         #region Unlimited Ammunition
 
         /// <summary>
-        /// Prevents ammunition from decreasing for all ranged weapons (bows, crossbows, throwables).
-        /// Instead of adding ammo to 999, this method restores ammo to its original value when it decreases.
+        /// Unlimited Ammo is now handled PURELY by AmmoConsumptionPatch (Harmony).
+        /// This method serves as a fallback for tick-based restoration if the patch fails to apply.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This method tracks the original ammunition count for each weapon when first detected.
-        /// When ammo count decreases (player uses ammo), it immediately restores it to the original value.
-        /// This approach avoids weight issues since we don't add extra ammo.
+        /// CRITICAL FIX: Removed all calls to SetWeaponAmountInSlot() when patch is active to prevent character model corruption.
         /// </para>
         /// <para>
-        /// Supported weapon types:
-        /// - Bows (arrows)
-        /// - Crossbows (bolts)
-        /// - Throwing weapons (javelins, throwing axes, throwing knives, stones)
+        /// The previous implementation called SetWeaponAmountInSlot() every frame when ammo decreased,
+        /// which internally triggers UpdateAgentProperties(). This recalculates the entire character
+        /// visual model (mesh, skeleton, animations) 60 times per second during combat.
         /// </para>
         /// <para>
-        /// Performance: Only restores ammo if it decreased below original value.
-        /// Runs every frame (~60 FPS) but optimized with early returns.
+        /// When exiting battle and opening menus (inventory, clan, encyclopedia), this created a
+        /// conflict between:
+        /// - Combat system model updates (from SetWeaponAmountInSlot)
+        /// - Menu system model rendering
+        /// </para>
+        /// <para>
+        /// Result: Character model appears distorted/broken in all menu screens.
+        /// </para>
+        /// <para>
+        /// SOLUTION: Rely ONLY on AmmoConsumptionPatch which blocks ammo consumption at the source
+        /// (Agent.SetWeaponAmountInSlot Prefix) without triggering model updates.
+        /// </para>
+        /// <para>
+        /// Fallback: If patch is not applied, use tick-based restoration (for compatibility with older versions).
         /// </para>
         /// </remarks>
-        private static void ApplyUnlimitedAmmo()
+        private void ApplyUnlimitedAmmo()
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
@@ -283,11 +349,30 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            // Early returns for disabled cheat or missing agent
-            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
+            // Log unlimited ammo activation once per mission
+            if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
+            {
+                _unlimitedAmmoLogged = true;
+                string patchStatus = AmmoConsumptionPatch.IsPatchApplied
+                    ? "Harmony patch ACTIVE (ammo consumption blocked at source)"
+                    : "WARNING: Harmony patch NOT applied - using tick-based fallback restoration";
+                ModLogger.Log($"[UnlimitedAmmo] {patchStatus}");
+
+                if (!AmmoConsumptionPatch.IsPatchApplied)
+                {
+                    ModLogger.Warning("[UnlimitedAmmo] AmmoConsumptionPatch failed to apply - using tick-based fallback (check HarmonyManager logs!)");
+                }
+            }
+
+            // OPTIMIZATION: If AmmoConsumptionPatch is active, it handles everything at the source.
+            // This method only serves as a fallback if the patch fails to apply.
+            // This prevents redundant restoration calls and potential conflicts.
+            if (AmmoConsumptionPatch.IsPatchApplied)
             {
                 return;
             }
+
+            // FALLBACK: Tick-based restoration (only used if patch is not applied)
 
             Agent? playerAgent = Mission.Current?.MainAgent;
             if (playerAgent?.IsActive() != true)
@@ -332,9 +417,9 @@ namespace BannerWandRetro.Behaviors
                     if (currentAmmo < originalAmmo)
                     {
                         // Set flag to allow our restoration call through the Harmony patch (if patch is applied)
-                        if (Patches.AmmoConsumptionPatch.IsPatchApplied)
+                        if (AmmoConsumptionPatch.IsPatchApplied)
                         {
-                            Patches.AmmoConsumptionPatch.IsRestorationInProgress = true;
+                            AmmoConsumptionPatch.IsRestorationInProgress = true;
                         }
                         try
                         {
@@ -394,9 +479,9 @@ namespace BannerWandRetro.Behaviors
                         }
                         finally
                         {
-                            if (Patches.AmmoConsumptionPatch.IsPatchApplied)
+                            if (AmmoConsumptionPatch.IsPatchApplied)
                             {
-                                Patches.AmmoConsumptionPatch.IsRestorationInProgress = false;
+                                AmmoConsumptionPatch.IsRestorationInProgress = false;
                             }
                         }
                     }
@@ -454,7 +539,9 @@ namespace BannerWandRetro.Behaviors
             // Only restore if health is below maximum (optimization: avoid unnecessary assignments)
             if (playerAgent.Health < playerAgent.HealthLimit)
             {
+                float restoredFrom = playerAgent.Health;
                 playerAgent.Health = playerAgent.HealthLimit;
+                ModLogger.Debug($"Unlimited Health: Restored health from {restoredFrom:F1} to {playerAgent.HealthLimit:F1}");
             }
         }
 
@@ -468,7 +555,7 @@ namespace BannerWandRetro.Behaviors
         /// The +9999 HP bonus makes it virtually impossible to die from any single attack.
         /// </para>
         /// <para>
-        /// Applied once per mission using _infiniteHealthApplied flag.
+        /// Applied once per agent using _infiniteHealthApplied dictionary.
         /// This prevents repeated application every frame.
         /// </para>
         /// <para>
@@ -487,8 +574,8 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            // Early returns for disabled cheat or already applied
-            if (!settings.InfiniteHealth || !targetSettings.ApplyToPlayer || _infiniteHealthApplied)
+            // Early returns for disabled cheat
+            if (!settings.InfiniteHealth || !targetSettings.ApplyToPlayer)
             {
                 return;
             }
@@ -499,15 +586,77 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            // Add bonus to max HP (HealthLimit)
-            // This makes the player effectively unkillable by normal damage
-            playerAgent.HealthLimit += GameConstants.InfiniteHealthBonus;
-            playerAgent.Health = playerAgent.HealthLimit; // Fill to new max
+            // Apply bonus to the agent
+            ApplyInfiniteHealthToAgent(playerAgent);
+        }
 
-            // Mark as applied to prevent repeated application
-            _infiniteHealthApplied = true;
+        /// <summary>
+        /// Applies Infinite Health bonus to a specific agent.
+        /// </summary>
+        /// <param name="agent">The agent to apply the bonus to.</param>
+        private void ApplyInfiniteHealthToAgent(Agent agent)
+        {
+            if (agent?.IsActive() != true)
+            {
+                return;
+            }
 
-            ModLogger.Debug($"Infinite Health applied: +{GameConstants.InfiniteHealthBonus} HP (new limit: {playerAgent.HealthLimit})");
+            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
+            // The game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase,
+            // so we must wait until agent is fully ready. Check multiple conditions:
+            if (agent.Character == null || agent.HealthLimit <= 0 || agent.BaseHealthLimit <= 0)
+            {
+                // Agent not fully ready yet, skip for now (will retry next frame)
+                return;
+            }
+
+            // Additional safety check: Ensure agent has been in mission for at least a few frames
+            // This gives the game time to complete all initialization
+            if (!agent.IsActive() || agent.Index < 0)
+            {
+                return;
+            }
+
+            int agentIndex = agent.Index;
+
+            // Check if already applied to this agent
+            if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
+            {
+                // Verify bonus is still there (in case HealthLimit was reset)
+                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
+                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
+                {
+                    // Bonus seems to have been reset, reapply it
+                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
+                    _infiniteHealthApplied[agentIndex] = false;
+                }
+                else
+                {
+                    // Bonus is still there, just restore health
+                    if (agent.Health < agent.HealthLimit)
+                    {
+                        agent.Health = agent.HealthLimit;
+                    }
+                    return;
+                }
+            }
+
+            // Store original HealthLimit before applying bonus (for verification)
+            float originalHealthLimit = agent.HealthLimit;
+            float originalBaseHealthLimit = agent.BaseHealthLimit;
+
+            // Set HealthLimit to original base + bonus to ensure consistency
+            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
+            {
+                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
+                agent.HealthLimit = newHealthLimit;
+                agent.Health = newHealthLimit; // Fill to new max
+
+                // Mark as applied to prevent repeated application
+                _infiniteHealthApplied[agentIndex] = true;
+
+                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
+            }
         }
 
         #endregion
@@ -625,7 +774,9 @@ namespace BannerWandRetro.Behaviors
                 // If health somehow exceeded threshold, bring it back down
                 if (agent.Health > GameConstants.OneHitKillHealthThreshold)
                 {
+                    float oldHealth = agent.Health;
                     agent.Health = GameConstants.OneHitKillHealthThreshold;
+                    ModLogger.Debug($"One-Hit Kills: Set enemy agent {agent.Index} health from {oldHealth:F1} to {GameConstants.OneHitKillHealthThreshold:F1}");
                 }
             }
         }

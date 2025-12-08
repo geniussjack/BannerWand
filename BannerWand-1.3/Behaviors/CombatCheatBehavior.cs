@@ -54,23 +54,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Tracks whether unlimited ammo has been logged for current mission.
         /// </summary>
-        private bool _unlimitedAmmoLogged = false;
-
-        /// <summary>
-        /// Counter for unlimited ammo logging calls (for detailed logging).
-        /// </summary>
-        private int _unlimitedAmmoLogCounter = 0;
-
-        /// <summary>
-        /// Counter for mission ticks (for performance monitoring).
-        /// </summary>
-        private int _missionTickCount = 0;
-
-        /// <summary>
-        /// Tracks last ammo amounts per slot to avoid unnecessary SetWeaponAmountInSlot calls.
-        /// Key: EquipmentIndex, Value: Last known ammo amount.
-        /// </summary>
-        private readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _lastAmmoAmounts = [];
+        private bool _unlimitedAmmoLogged;
 
 
 
@@ -91,9 +75,6 @@ namespace BannerWand.Behaviors
             // Reset application flags for next mission
             _infiniteHealthApplied.Clear();
             _unlimitedAmmoLogged = false;
-            _unlimitedAmmoLogCounter = 0;
-            _missionTickCount = 0;
-            _lastAmmoAmounts.Clear();
         }
 
         /// <summary>
@@ -117,6 +98,7 @@ namespace BannerWand.Behaviors
             // Apply Infinite Health bonus immediately when player agent is built
             if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
             {
+                ModLogger.Debug($"OnAgentBuild: Player agent built, applying Infinite Health (Agent Index: {agent.Index})");
                 ApplyInfiniteHealthToAgent(agent);
             }
         }
@@ -160,8 +142,6 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
-                _missionTickCount++;
-
                 // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
                 // Also try to apply in OnMissionTick as fallback if OnAgentBuild didn't work
                 ApplyInfiniteHealth();
@@ -171,18 +151,8 @@ namespace BannerWand.Behaviors
                 ApplyUnlimitedHorseHealth();
                 ApplyOneHitKills();
 
-                // Apply unlimited ammo once per frame - now using safe minimum strategy
+                // Apply unlimited ammo - now handled purely by AmmoConsumptionPatch
                 ApplyUnlimitedAmmo();
-
-                // Log unlimited ammo activation once per mission
-                if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
-                {
-                    _unlimitedAmmoLogged = true;
-                    string patchStatus = AmmoConsumptionPatch.IsPatchApplied
-                        ? "Harmony patch ACTIVE (ammo consumption blocked)"
-                        : "Using tick-based restoration (fallback mode)";
-                    ModLogger.Log($"[UnlimitedAmmo] Unlimited Ammo cheat activated for this mission. Mode: {patchStatus}");
-                }
 
                 // Note: Movement speed for campaign map is handled in CustomPartySpeedModel
 
@@ -353,21 +323,30 @@ namespace BannerWand.Behaviors
         #region Unlimited Ammunition
 
         /// <summary>
-        /// Maintains maximum ammunition using the correct Bannerlord API method.
-        /// Uses Agent.SetWeaponAmountInSlot() which is the proper way to change ammo.
+        /// Unlimited Ammo is now handled PURELY by AmmoConsumptionPatch (Harmony).
+        /// This method is kept as a placeholder for future tick-based fallback if needed.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// CRITICAL FIX: Previous implementation tried to replace MissionWeapon objects
-        /// which doesn't work because MissionEquipment is a struct. The correct approach
-        /// is to use Agent.SetWeaponAmountInSlot() which directly modifies weapon data.
+        /// CRITICAL FIX: Removed all calls to SetWeaponAmountInSlot() to prevent character model corruption.
         /// </para>
         /// <para>
-        /// Weapon detection logic:
-        /// - Arrows/Bolts: Have ModifiedMaxAmount > 1 (quiver size)
-        /// - Throwing weapons: Have ModifiedMaxAmount > 1 (stack size)
-        /// - Bows/Crossbows: Have ModifiedMaxAmount == 1 (the weapon itself, not ammo)
-        /// - Shields: Detected via CurrentUsageItem.IsShield
+        /// The previous implementation called SetWeaponAmountInSlot() every frame when ammo decreased,
+        /// which internally triggers UpdateAgentProperties(). This recalculates the entire character
+        /// visual model (mesh, skeleton, animations) 60 times per second during combat.
+        /// </para>
+        /// <para>
+        /// When exiting battle and opening menus (inventory, clan, encyclopedia), this created a
+        /// conflict between:
+        /// - Combat system model updates (from SetWeaponAmountInSlot)
+        /// - Menu system model rendering
+        /// </para>
+        /// <para>
+        /// Result: Character model appears distorted/broken in all menu screens.
+        /// </para>
+        /// <para>
+        /// SOLUTION: Rely ONLY on AmmoConsumptionPatch which blocks ammo consumption at the source
+        /// (Agent.SetWeaponAmountInSlot Prefix) without triggering model updates.
         /// </para>
         /// </remarks>
         private void ApplyUnlimitedAmmo()
@@ -380,105 +359,23 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
+            // Log unlimited ammo activation once per mission
+            if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
             {
-                return;
+                _unlimitedAmmoLogged = true;
+                string patchStatus = AmmoConsumptionPatch.IsPatchApplied
+                    ? "Harmony patch ACTIVE (ammo consumption blocked at source)"
+                    : "WARNING: Harmony patch NOT applied - unlimited ammo may not work!";
+                ModLogger.Log($"[UnlimitedAmmo] {patchStatus}");
+
+                if (!AmmoConsumptionPatch.IsPatchApplied)
+                {
+                    ModLogger.Error("[UnlimitedAmmo] AmmoConsumptionPatch failed to apply - check HarmonyManager logs!");
+                }
             }
 
-            Agent? playerAgent = Mission.Current?.MainAgent;
-            if (playerAgent?.IsActive() != true)
-            {
-                return;
-            }
-
-            // Iterate through weapon slots (no logging to reduce spam)
-            for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
-            {
-                MissionWeapon weapon = playerAgent.Equipment[i];
-
-                // Skip empty slots
-                if (weapon.IsEmpty)
-                {
-                    continue;
-                }
-
-                // Skip shields - they use HitPoints, not Amount
-                if (weapon.CurrentUsageItem?.IsShield == true)
-                {
-                    continue;
-                }
-
-                // Skip weapons without ammo capacity (melee weapons have MaxAmount <= 0)
-                if (weapon.ModifiedMaxAmount <= 0)
-                {
-                    continue;
-                }
-
-                // Skip bows/crossbows - MaxAmount == 1 means it's the weapon itself, not ammunition
-                // Bows don't consume themselves, they consume arrows from another slot
-                if (weapon.ModifiedMaxAmount == 1)
-                {
-                    continue;
-                }
-
-                short currentAmmo = weapon.Amount;
-                short maxAmmo = weapon.ModifiedMaxAmount;
-
-                // CRITICAL FIX: Only restore if ammo actually decreased AND we haven't just restored it
-                // This prevents calling SetWeaponAmountInSlot every frame, which triggers UpdateAgentProperties()
-                // and can break character models. We only restore when ammo actually drops below max.
-                bool shouldRestore = false;
-                if (_lastAmmoAmounts.TryGetValue(i, out short lastAmmo))
-                {
-                    // Only restore if ammo decreased from last check AND is below max
-                    if (currentAmmo < lastAmmo && currentAmmo < maxAmmo)
-                    {
-                        shouldRestore = true;
-                    }
-                }
-                else
-                {
-                    // First time checking this slot - restore if below max
-                    if (currentAmmo < maxAmmo)
-                    {
-                        shouldRestore = true;
-                    }
-                }
-
-                // Update last known amount
-                _lastAmmoAmounts[i] = currentAmmo;
-
-                // Restore ammo if needed
-                // NOTE: SetWeaponAmountInSlot patch is temporarily disabled for testing.
-                // If patch is disabled, we need manual restoration. If patch is enabled,
-                // this code is still safe because IsRestorationInProgress flag prevents patch interference.
-                if (shouldRestore)
-                {
-                    // Set flag to allow our restoration call through the Harmony patch (if enabled)
-                    AmmoConsumptionPatch.IsRestorationInProgress = true;
-                    try
-                    {
-                        // Use SetWeaponAmountInSlot - this is the PROPER way to change ammo
-                        // WARNING: This calls UpdateAgentProperties() which may break character models
-                        // if called too frequently or at wrong time. We minimize calls by only
-                        // restoring when ammo actually decreased.
-                        playerAgent.SetWeaponAmountInSlot(i, maxAmmo, true);
-                        _lastAmmoAmounts[i] = maxAmmo; // Update tracked amount
-
-                        // Only log first restoration per mission to reduce spam
-                        if (_unlimitedAmmoLogCounter == 0)
-                        {
-                            string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                            ModLogger.Log($"[UnlimitedAmmo] First restoration: {weaponName} (Slot: {i}) {currentAmmo} → {maxAmmo}");
-                            _unlimitedAmmoLogCounter++;
-                        }
-                    }
-                    finally
-                    {
-                        AmmoConsumptionPatch.IsRestorationInProgress = false;
-                    }
-                }
-            }
+            // No tick-based restoration needed - AmmoConsumptionPatch handles everything
+            // This method is kept as a placeholder for future enhancements if needed
         }
 
         #endregion
@@ -528,7 +425,9 @@ namespace BannerWand.Behaviors
             // Only restore if health is below maximum (optimization: avoid unnecessary assignments)
             if (playerAgent.Health < playerAgent.HealthLimit)
             {
+                float restoredFrom = playerAgent.Health;
                 playerAgent.Health = playerAgent.HealthLimit;
+                ModLogger.Debug($"Unlimited Health: Restored health from {restoredFrom:F1} to {playerAgent.HealthLimit:F1}");
             }
         }
 
@@ -766,7 +665,9 @@ namespace BannerWand.Behaviors
                 // If health somehow exceeded threshold, bring it back down
                 if (agent.Health > GameConstants.OneHitKillHealthThreshold)
                 {
+                    float oldHealth = agent.Health;
                     agent.Health = GameConstants.OneHitKillHealthThreshold;
+                    ModLogger.Debug($"One-Hit Kills: Set enemy agent {agent.Index} health from {oldHealth:F1} to {GameConstants.OneHitKillHealthThreshold:F1}");
                 }
             }
         }
