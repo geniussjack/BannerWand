@@ -3,6 +3,7 @@ using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -145,7 +146,14 @@ namespace BannerWandRetro.Behaviors
             // Apply to NPC parties if any NPC targets are enabled
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (MobileParty party in MobileParty.All)
+                // OPTIMIZED: Use cached collection instead of direct MobileParty.All enumeration
+                List<MobileParty>? allParties = CampaignDataCache.AllParties;
+                if (allParties is null)
+                {
+                    return;
+                }
+
+                foreach (MobileParty party in allParties)
                 {
                     // Skip player party (already handled) and parties without item roster
                     if (party == MobileParty.MainParty || party.ItemRoster is null)
