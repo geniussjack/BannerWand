@@ -46,12 +46,12 @@ namespace BannerWandRetro.Models
                 // Check if player speed override is enabled
                 if (ShouldApplyPlayerSpeedOverride(mobileParty))
                 {
+                    float speedBefore = baseSpeed.ResultNumber;
                     ApplyPlayerSpeedBoost(ref baseSpeed);
-
-                    // Log for debugging (only for player, only once per session to avoid spam)
-                    if (mobileParty == MobileParty.MainParty)
+                    float speedAfter = baseSpeed.ResultNumber;
+                    if (Math.Abs(speedBefore - speedAfter) > 0.01f)
                     {
-                        ModLogger.Debug($"Movement Speed override applied: Result={baseSpeed.ResultNumber:F2} (Player Party)");
+                        ModLogger.Debug($"Movement Speed: Applied to {mobileParty.Name} - Speed changed from {speedBefore:F2} to {speedAfter:F2}");
                     }
                 }
 

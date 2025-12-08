@@ -128,6 +128,7 @@
     <Compile Include="Patches\InventoryCapacityPatch.cs" />
     <Compile Include="Patches\ItemBarterablePatch.cs" />
     <Compile Include="Patches\ItemRosterTradePatch.cs" />
+    <Compile Include="Patches\NavalSpeedPatch.cs" />
     <Compile Include="Patches\RelationshipBoostPatch.cs" />
     <Compile Include="Patches\RenownMultiplierPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

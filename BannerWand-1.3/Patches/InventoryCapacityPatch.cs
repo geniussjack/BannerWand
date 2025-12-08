@@ -40,12 +40,6 @@ namespace BannerWand.Patches
         /// </summary>
         /// <param name="__result">The result from the original method (passed by reference).</param>
         /// <param name="mobileParty">The party whose capacity was calculated.</param>
-        /// <param name="_isCurrentlyAtSea">Whether the party is currently at sea (ignored).</param>
-        /// <param name="_includeDescriptions">Whether to include descriptions (ignored).</param>
-        /// <param name="_additionalTroops">Additional troops count (ignored).</param>
-        /// <param name="_additionalSpareMounts">Additional spare mounts count (ignored).</param>
-        /// <param name="_additionalPackAnimals">Additional pack animals count (ignored).</param>
-        /// <param name="_includeFollowers">Whether to include followers (ignored).</param>
         /// <remarks>
         /// <para>
         /// Postfix patches run AFTER the original method completes, allowing us to modify
@@ -69,12 +63,12 @@ namespace BannerWand.Patches
         private static void Postfix(
             ref ExplainedNumber __result,
             MobileParty mobileParty,
-            bool _isCurrentlyAtSea = false,
-            bool _includeDescriptions = false,
-            int _additionalTroops = 0,
-            int _additionalSpareMounts = 0,
-            int _additionalPackAnimals = 0,
-            bool _includeFollowers = false)
+            bool isCurrentlyAtSea = false,
+            bool includeDescriptions = false,
+            int additionalTroops = 0,
+            int additionalSpareMounts = 0,
+            int additionalPackAnimals = 0,
+            bool includeFollowers = false)
 #pragma warning restore RCS1163 // Unused parameter
 #pragma warning restore IDE0060 // Remove unused parameter
 #pragma warning restore RCS1213 // Remove unused method declaration

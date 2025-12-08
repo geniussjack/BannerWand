@@ -28,7 +28,7 @@ namespace BannerWandRetro.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.2.12 ONLY
-    /// Mod Version: 1.0.9
+    /// Mod Version: 1.1.0
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase

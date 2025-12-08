@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="王国" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
 		<string id="BW_Category_Info" text="信息" />
+		<string id="BW_Category_Debug" text="调试" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="调试模式" />
+		<string id="BW_Debug_DebugMode_Hint" text="为所有作弊操作启用详细的调试日志记录。禁用以减少日志文件大小。" />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="无限生命值" />

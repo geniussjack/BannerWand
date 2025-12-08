@@ -321,26 +321,36 @@ namespace BannerWandRetro.Settings
                 // Category: Minor Clans
                 if (ApplyToMinorClanLeaders)
                 {
-                    foreach (Clan clan in Clan.All)
+                    // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans != null)
                     {
-                        if (clan?.IsMinorFaction == true && clan.Leader != null)
+                        foreach (Clan clan in allClans)
                         {
-                            _ = targets.Add(clan.Leader);
+                            if (clan?.IsMinorFaction == true && clan.Leader != null)
+                            {
+                                _ = targets.Add(clan.Leader);
+                            }
                         }
                     }
                 }
 
                 if (ApplyToMinorClanMembers)
                 {
-                    foreach (Clan clan in Clan.All)
+                    // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans != null)
                     {
-                        if (clan?.IsMinorFaction == true)
+                        foreach (Clan clan in allClans)
                         {
-                            foreach (Hero hero in clan.Heroes)
+                            if (clan?.IsMinorFaction == true)
                             {
-                                if (hero != null && hero.CharacterObject?.IsHero == true)
+                                foreach (Hero hero in clan.Heroes)
                                 {
-                                    _ = targets.Add(hero);
+                                    if (hero != null && hero.CharacterObject?.IsHero == true)
+                                    {
+                                        _ = targets.Add(hero);
+                                    }
                                 }
                             }
                         }

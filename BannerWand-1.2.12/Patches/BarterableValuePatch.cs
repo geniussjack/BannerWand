@@ -15,6 +15,7 @@ namespace BannerWandRetro.Patches
     /// <remarks>
     /// <para>
     /// FIXED (v1.0.9): Now properly checks if PLAYER is involved in the barter transaction.
+    /// Updated (v1.1.0): Version bump.
     /// Previously, the cheat affected ALL barter transactions in the game,
     /// causing clans to switch kingdoms unexpectedly due to AI-to-AI barters being affected.
     /// </para>

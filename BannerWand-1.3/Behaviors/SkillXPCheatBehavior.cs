@@ -432,23 +432,11 @@ namespace BannerWand.Behaviors
                 if (element.Character?.IsHero == false)
                 {
                     // Get current XP before adding
-                    int currentXp = party.MemberRoster.GetElementXp(i);
+                    _ = party.MemberRoster.GetElementXp(i);
 
                     // Add XP to this troop stack
                     // NOTE: AddXpToTroopAtIndex adds xpAmount to current XP, so result = currentXp + xpAmount
                     party.MemberRoster.AddXpToTroopAtIndex(xpAmount, i);
-
-                    // Verify XP was added (for debugging - only log first few to avoid spam)
-                    int newXp = party.MemberRoster.GetElementXp(i);
-                    if (troopsImproved < 3 && newXp != currentXp + xpAmount)
-                    {
-                        string troopName = "Unknown";
-                        if (element.Character?.Name != null)
-                        {
-                            troopName = element.Character.Name.ToString();
-                        }
-                        ModLogger.Warning($"[TroopXP] XP mismatch for {troopName}: Expected {currentXp + xpAmount}, got {newXp}");
-                    }
 
                     troopsImproved++;
                 }

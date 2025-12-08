@@ -290,6 +290,8 @@ namespace BannerWand.Behaviors
             int heroesImproved = 0;
             int totalHeroes = 0;
 
+            ModLogger.Debug("Max All Character Relationships: Starting to process all alive heroes...");
+
             // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
             List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
             if (allHeroes is null)
@@ -323,7 +325,7 @@ namespace BannerWand.Behaviors
             _maxAllRelationshipsApplied = true;
 
             // Log success
-            ModLogger.Log($"[Max All Relationships] Maximized relationships with {heroesImproved} heroes out of {totalHeroes} total alive heroes");
+            ModLogger.Debug($"Max All Character Relationships: Completed - {heroesImproved} heroes improved out of {totalHeroes} total alive heroes");
             ModLogger.LogCheat("Max All Character Relationships", true, heroesImproved, "heroes");
         }
 

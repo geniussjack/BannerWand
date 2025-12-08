@@ -661,6 +661,7 @@ namespace BannerWandRetro.Core
 
                 // Boolean cheats - count each enabled cheat
                 activeCheatCount += settings.UnlimitedHealth ? 1 : 0;
+                activeCheatCount += settings.InfiniteHealth ? 1 : 0;
                 activeCheatCount += settings.UnlimitedHorseHealth ? 1 : 0;
                 activeCheatCount += settings.UnlimitedShieldDurability ? 1 : 0;
                 activeCheatCount += settings.UnlimitedAmmo ? 1 : 0;
@@ -668,6 +669,7 @@ namespace BannerWandRetro.Core
                 activeCheatCount += settings.BarterAlwaysAccepted ? 1 : 0;
                 activeCheatCount += settings.UnlimitedSmithyStamina ? 1 : 0;
                 activeCheatCount += settings.MaxCharacterRelationship ? 1 : 0;
+                activeCheatCount += settings.MaxAllCharacterRelationships ? 1 : 0;
                 activeCheatCount += settings.UnlimitedFood ? 1 : 0;
                 activeCheatCount += settings.TradeItemsNoDecrease ? 1 : 0;
                 activeCheatCount += settings.MaxCarryingCapacity ? 1 : 0;
@@ -725,6 +727,7 @@ namespace BannerWandRetro.Core
                 // Early return optimization - check most commonly used cheats first
                 // Returns immediately upon finding any active cheat
                 return settings.UnlimitedHealth ||
+                        settings.InfiniteHealth ||
                         settings.UnlimitedHorseHealth ||
                         settings.UnlimitedShieldDurability ||
                         settings.UnlimitedAmmo ||
@@ -733,6 +736,7 @@ namespace BannerWandRetro.Core
                         settings.BarterAlwaysAccepted ||
                         settings.UnlimitedSmithyStamina ||
                         settings.MaxCharacterRelationship ||
+                        settings.MaxAllCharacterRelationships ||
                         settings.UnlimitedFood ||
                         settings.TradeItemsNoDecrease ||
                         settings.MaxCarryingCapacity ||
@@ -831,7 +835,7 @@ namespace BannerWandRetro.Core
                     activeCheatsList.Add("Persuasion Always Succeed");
                 }
 
-                if (Settings.MovementSpeed > GameConstants.FloatEpsilon)
+                if (Settings.MovementSpeed > 0f)
                 {
                     activeCheatsList.Add($"Movement Speed x{Settings.MovementSpeed:F1}");
                 }

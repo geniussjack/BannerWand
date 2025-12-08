@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Королівства" />
 		<string id="BW_Category_MinorClans" text="Малі клани" />
 		<string id="BW_Category_Info" text="Інформація" />
+		<string id="BW_Category_Debug" text="Відладка" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Режим відладки" />
+		<string id="BW_Debug_DebugMode_Hint" text="Увімкнює детальне логування для всіх операцій читів. Вимкніть для зменшення розміру файлу логів." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="Безкінечне ХП" />

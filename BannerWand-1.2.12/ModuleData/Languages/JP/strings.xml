@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="王国" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
 		<string id="BW_Category_Info" text="情報" />
+		<string id="BW_Category_Debug" text="デバッグ" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="デバッグモード" />
+		<string id="BW_Debug_DebugMode_Hint" text="すべてのチート操作の詳細なデバッグログを有効にします。ログファイルのサイズを減らすには無効にしてください。" />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="無制限HP" />

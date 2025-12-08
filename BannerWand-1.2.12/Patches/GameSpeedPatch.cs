@@ -99,7 +99,8 @@ namespace BannerWandRetro.Patches
                 }
 
                 // Get current time delta
-                float currentDt = (float)(dtField.GetValue(__instance) ?? 0f);
+                object? dtValue = dtField.GetValue(__instance);
+                float currentDt = dtValue != null ? (float)dtValue : 0f;
 
                 // Apply multiplier only if time is advancing (not paused)
                 if (currentDt > 0f)

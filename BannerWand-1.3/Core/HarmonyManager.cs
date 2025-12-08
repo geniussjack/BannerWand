@@ -119,11 +119,13 @@ namespace BannerWand.Core
                     patchesApplied++;
                 }
 
-                patchesTotal++;
-                if (ApplyAmmoConsumptionPatch())
-                {
-                    patchesApplied++;
-                }
+                // TEMPORARILY DISABLED FOR DEBUGGING - Testing if AmmoConsumptionPatch causes model corruption
+                // patchesTotal++;
+                // if (ApplyAmmoConsumptionPatch())
+                // {
+                //     patchesApplied++;
+                // }
+                ModLogger.Warning("[AmmoConsumptionPatch] DISABLED FOR DEBUGGING - Testing model corruption");
 
                 patchesTotal++;
                 if (ApplyInventoryCapacityPatch())
@@ -154,6 +156,9 @@ namespace BannerWand.Core
                 {
                     patchesApplied++;
                 }
+
+                // NavalSpeedPatch is applied in OnGameStart because DLC loads later
+                // Don't apply it here in OnSubModuleLoad
 
                 // Only mark as initialized if at least some patches were applied successfully
                 // This prevents silent failures when patches can't be applied (e.g., wrong game version)
@@ -236,10 +241,23 @@ namespace BannerWand.Core
                 }
 
                 // Check if our patch method is already in the prefixes or postfixes
-                return existingPatches.Prefixes.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Postfixes.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Transpilers.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Finalizers.Any(p => p.PatchMethod == patchMethod);
+                // CRITICAL FIX: Compare by declaring type and method name, not exact MethodInfo
+                // This handles cases where PatchAll() applied a different overload than what we're checking
+                string patchClassName = patchMethod.DeclaringType?.FullName ?? "";
+                string patchMethodName = patchMethod.Name;
+
+                return existingPatches.Prefixes.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Postfixes.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Transpilers.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Finalizers.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName));
             }
             catch (Exception ex)
             {
@@ -331,32 +349,37 @@ namespace BannerWand.Core
                 MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
                 if (targetMethod != null)
                 {
-                    // Find the Prefix method with 4 parameters (EquipmentIndex, short, bool)
+                    // Find the Prefix method with 4 parameters (EquipmentIndex, ref short, bool)
+                    // CRITICAL: Use MakeByRefType() for ref parameters!
                     MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                         BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                         null,
-                        [typeof(Agent), typeof(EquipmentIndex), typeof(short), typeof(bool)],
+                        [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType(), typeof(bool)],
                         null);
 
-                    // If not found, try with 3 parameters
+                    // If not found, try with 3 parameters (ref short)
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                             null,
-                            [typeof(Agent), typeof(EquipmentIndex), typeof(short)],
+                            [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType()],
                             null);
 
-                    // Last resort - get any Prefix method
+                    // Last resort - get Prefix method with most parameters (prefer 4-param version)
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .FirstOrDefault(m => m.Name == "Prefix");
+                        .Where(m => m.Name == "Prefix")
+                        .OrderByDescending(m => m.GetParameters().Length)
+                        .FirstOrDefault();
 
                     if (prefixMethod != null)
                     {
+                        ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixMethod.GetParameters().Length} parameters");
+
                         // Check if patch is already applied (e.g., by PatchAll())
                         if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
                         {
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch already applied (likely by PatchAll()), skipping manual application");
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
+                            ModLogger.Log("[AmmoConsumptionPatch] Patch already applied by PatchAll(), skipping manual application");
                         }
                         else
                         {
@@ -364,7 +387,7 @@ namespace BannerWand.Core
                             _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully - ammo decrease will be blocked");
+                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully via manual patching");
                         }
                     }
                     else
@@ -382,37 +405,14 @@ namespace BannerWand.Core
                 ModLogger.Error($"[AmmoConsumptionPatch] Error applying primary patch: {ex.Message}");
             }
 
-            // Try to apply fallback patch (MissionEquipment indexer)
-            try
-            {
-                MethodBase? fallbackTarget = MissionEquipmentAmmoSafetyPatch.TargetMethod();
-                if (fallbackTarget != null)
-                {
-                    MethodInfo? fallbackPrefix = typeof(MissionEquipmentAmmoSafetyPatch).GetMethod("Prefix",
-                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-                    if (fallbackPrefix != null)
-                    {
-                        // Check if patch is already applied (e.g., by PatchAll())
-                        if (IsPatchAlreadyApplied(fallbackTarget, fallbackPrefix))
-                        {
-                            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch already applied (likely by PatchAll()), skipping manual application");
-                            fallbackPatchApplied = true;
-                        }
-                        else
-                        {
-                            HarmonyMethod harmonyPrefix = new(fallbackPrefix);
-                            _ = Instance!.Patch(fallbackTarget, prefix: harmonyPrefix);
-                            fallbackPatchApplied = true;
-                            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch applied successfully");
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error applying fallback patch: {ex.Message}");
-            }
+            // DISABLED: MissionEquipmentAmmoSafetyPatch is causing character model corruption
+            // This patch modifies MissionEquipment.set_Item which is used for ALL equipment changes,
+            // including visual model updates. Even with careful checks, it can interfere with
+            // character rendering. The primary patch (SetWeaponAmountInSlot) should be sufficient.
+            // 
+            // If primary patch fails, we'll rely on tick-based restoration in CombatCheatBehavior.ApplyUnlimitedAmmo()
+            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Fallback patch DISABLED to prevent character model corruption");
+            ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Using primary SetWeaponAmountInSlot patch only");
 
             // Summary
             bool success = primaryPatchApplied || fallbackPatchApplied;
@@ -420,10 +420,6 @@ namespace BannerWand.Core
             {
                 ModLogger.Warning("[AmmoConsumptionPatch] No ammo patches could be applied!");
                 ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based fallback restoration only.");
-            }
-            else
-            {
-                ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Fallback={fallbackPatchApplied}");
             }
             return success;
         }
@@ -474,8 +470,8 @@ namespace BannerWand.Core
                     return false;
                 }
 
-                // Find the method with the correct signature (MobileParty, bool, bool, int, int, int, bool)
-                // According to API docs: CalculateInventoryCapacity(MobileParty, bool isCurrentlyAtSea, bool includeDescriptions, int additionalTroops, int additionalSpareMounts, int additionalPackAnimals, bool includeFollowers)
+                // Find the method with the correct signature (MobileParty, bool, int, int, int, bool)
+                // According to decompiled code: CalculateInventoryCapacity(MobileParty mobileParty, bool includeDescriptions = false, int additionalTroops = 0, int additionalSpareMounts = 0, int additionalPackAnimals = 0, bool includeFollowers = false)
                 MethodInfo? targetMethod = allMethods.FirstOrDefault(m =>
                 {
                     ParameterInfo[] parameters = m.GetParameters();
@@ -511,14 +507,12 @@ namespace BannerWand.Core
                 // Check if patch is already applied (e.g., by PatchAll())
                 if (IsPatchAlreadyApplied(targetMethod, postfixMethod))
                 {
-                    ModLogger.Log("[InventoryCapacityPatch] Patch already applied (likely by PatchAll()), skipping manual application");
                     return true;
                 }
 
                 // Apply the patch
                 HarmonyMethod harmonyPostfix = new(postfixMethod);
                 _ = Instance.Patch(targetMethod, postfix: harmonyPostfix);
-                ModLogger.Log("[InventoryCapacityPatch] Patch applied successfully via manual patching");
                 return true;
             }
             catch (Exception ex)
@@ -796,6 +790,145 @@ namespace BannerWand.Core
                 ModLogger.Error($"[MapTimeTrackerTickPatch] Error applying patch: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Manually applies the NavalSpeedPatch for War Sails DLC support.
+        /// </summary>
+        /// <returns>True if patch was applied successfully or NavalDLC is not available, false otherwise.</returns>
+        /// <remarks>
+        /// This patch supports War Sails DLC by patching NavalDLCPartySpeedCalculationModel
+        /// to apply movement speed multiplier for both land and sea travel.
+        /// If NavalDLC is not available, this patch gracefully skips application.
+        /// This method should be called in OnGameStart, not OnSubModuleLoad, because DLC loads later.
+        /// </remarks>
+        public static bool ApplyNavalSpeedPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[NavalSpeedPatch] Harmony Instance is null - cannot apply patch!");
+                    return false;
+                }
+
+                // Get the target method from the patch class
+                // Use direct type access since NavalSpeedPatch is in the same assembly
+                MethodBase? targetFinalSpeedMethod = NavalSpeedPatch.TargetMethod();
+
+                // If NavalDLC is not available, gracefully skip (not an error)
+                if (targetFinalSpeedMethod == null)
+                {
+                    ModLogger.Log("[NavalSpeedPatch] NavalDLC not available - skipping patch (this is normal if War Sails DLC is not installed)");
+                    return true; // Return true because skipping is expected behavior
+                }
+
+                bool finalSpeedPatchApplied = false;
+                bool baseSpeedPatchApplied = false;
+
+                // Apply CalculateBaseSpeed patch first (for sea travel)
+                MethodBase? targetBaseSpeedMethod = NavalSpeedPatch.TargetCalculateBaseSpeedMethod();
+                if (targetBaseSpeedMethod != null)
+                {
+                    ModLogger.Log($"[NavalSpeedPatch] Target method found: {targetBaseSpeedMethod.DeclaringType?.FullName}.{targetBaseSpeedMethod.Name}, Signature: {targetBaseSpeedMethod}");
+
+                    MethodInfo? baseSpeedPostfixMethod = typeof(NavalSpeedPatch).GetMethod(
+                        "CalculateBaseSpeed_Postfix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (baseSpeedPostfixMethod != null)
+                    {
+                        ModLogger.Log($"[NavalSpeedPatch] Postfix method found: {baseSpeedPostfixMethod.DeclaringType?.FullName}.{baseSpeedPostfixMethod.Name}, Signature: {baseSpeedPostfixMethod}");
+
+                        if (IsPatchAlreadyApplied(targetBaseSpeedMethod, baseSpeedPostfixMethod))
+                        {
+                            ModLogger.Log("[NavalSpeedPatch] CalculateBaseSpeed patch already applied (likely by PatchAll()), skipping manual application");
+                            baseSpeedPatchApplied = true;
+                        }
+                        else
+                        {
+                            HarmonyMethod harmonyPostfix = new(baseSpeedPostfixMethod);
+                            MethodInfo patchResult = Instance.Patch(targetBaseSpeedMethod, postfix: harmonyPostfix);
+                            baseSpeedPatchApplied = true;
+                            ModLogger.Log($"[NavalSpeedPatch] CalculateBaseSpeed patch applied successfully via manual patching. Patch result: {patchResult}");
+
+                            // Verify patch was actually applied
+                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetBaseSpeedMethod);
+                            if (patchInfo != null)
+                            {
+                                ModLogger.Log($"[NavalSpeedPatch] Verify: CalculateBaseSpeed has {patchInfo.Postfixes.Count} postfix(es) applied");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModLogger.Warning("[NavalSpeedPatch] CalculateBaseSpeed_Postfix method not found!");
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[NavalSpeedPatch] TargetCalculateBaseSpeedMethod returned null!");
+                }
+
+                // Apply CalculateFinalSpeed patch
+                if (targetFinalSpeedMethod != null)
+                {
+                    ModLogger.Log($"[NavalSpeedPatch] Target method found: {targetFinalSpeedMethod.DeclaringType?.FullName}.{targetFinalSpeedMethod.Name}, Signature: {targetFinalSpeedMethod}");
+
+                    MethodInfo? postfixMethod = typeof(NavalSpeedPatch).GetMethod(
+                        "CalculateFinalSpeed_Postfix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (postfixMethod != null)
+                    {
+                        ModLogger.Log($"[NavalSpeedPatch] Postfix method found: {postfixMethod.DeclaringType?.FullName}.{postfixMethod.Name}, Signature: {postfixMethod}");
+
+                        // Check if patch is already applied (e.g., by PatchAll())
+                        if (IsPatchAlreadyApplied(targetFinalSpeedMethod, postfixMethod))
+                        {
+                            ModLogger.Log("[NavalSpeedPatch] CalculateFinalSpeed patch already applied (likely by PatchAll()), skipping manual application");
+                            finalSpeedPatchApplied = true;
+                        }
+                        else
+                        {
+                            HarmonyMethod harmonyPostfix = new(postfixMethod);
+                            MethodInfo patchResult = Instance.Patch(targetFinalSpeedMethod, postfix: harmonyPostfix);
+                            finalSpeedPatchApplied = true;
+                            ModLogger.Log($"[NavalSpeedPatch] CalculateFinalSpeed patch applied successfully via manual patching. Patch result: {patchResult}");
+
+                            // Verify patch was actually applied
+                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetFinalSpeedMethod);
+                            if (patchInfo != null)
+                            {
+                                ModLogger.Log($"[NavalSpeedPatch] Verify: CalculateFinalSpeed has {patchInfo.Postfixes.Count} postfix(es) applied");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModLogger.Warning("[NavalSpeedPatch] CalculateFinalSpeed_Postfix method not found!");
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[NavalSpeedPatch] TargetMethod returned null!");
+                }
+
+                bool success = baseSpeedPatchApplied && finalSpeedPatchApplied;
+                if (!success && targetFinalSpeedMethod != null)
+                {
+                    ModLogger.Warning("[NavalSpeedPatch] Failed to apply patches - War Sails speed multiplier may not work correctly");
+                }
+
+                return success;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[NavalSpeedPatch] Error applying patch: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                // Return true because NavalDLC might not be available (not an error)
+                return true;
             }
         }
 

@@ -35,6 +35,17 @@ namespace BannerWand.Settings
         #region MCM Configuration
 
         /// <summary>
+        /// Private backing field for GameSpeed property.
+        /// Used to ensure default value is 1.0, not 0.1 (minimum value from attribute).
+        /// </summary>
+
+        /// <summary>
+        /// Flag to track if GameSpeed has been explicitly set by the user.
+        /// Once set, the user can set any value (including below 1.0).
+        /// </summary>
+        private bool _gameSpeedUserSet = false;
+
+        /// <summary>
         /// Gets the unique identifier for this settings instance.
         /// Used by MCM to distinguish this mod from others.
         /// </summary>
@@ -56,6 +67,19 @@ namespace BannerWand.Settings
         /// Increment this if settings structure changes significantly to trigger migration.
         /// </summary>
         public override string FormatType => "json2";
+
+        #endregion
+
+        #region Debug Category
+
+        /// <summary>
+        /// Enables detailed debug logging for troubleshooting and development.
+        /// When enabled, detailed logs are written for all cheat operations.
+        /// When disabled, only initialization and error logs are written.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Debug_DebugMode}Debug Mode", Order = 0, RequireRestart = false, HintText = "{=BW_Debug_DebugMode_Hint}Enables detailed debug logging for all cheat operations. Disable to reduce log file size.")]
+        [SettingPropertyGroup("{=BW_Category_Debug}Debug", GroupOrder = -1)]
+        public bool DebugMode { get; set; } = false;
 
         #endregion
 
@@ -329,9 +353,35 @@ namespace BannerWand.Settings
         /// Multiplies the speed provided by Play (1x) and Fast Forward (4x) buttons.
         /// Example: 2.0 means Play becomes 2x speed, Fast Forward becomes 8x speed.
         /// </summary>
+        /// <remarks>
+        /// FIXED: Default value is now enforced to be 1.0, not 0.1 (minimum value from attribute).
+        /// This fixes the issue where MCM might use the minimum value (0.1f) as default.
+        /// </remarks>
         [SettingPropertyFloatingInteger("{=BW_Game_GameSpeed}Set Game Speed Multiplier", 0.1f, 10f, Order = 4, RequireRestart = false, HintText = "{=BW_Game_GameSpeed_Hint}Multiplies the speed of Play (1x) and Fast Forward (4x) buttons. 1.0 = normal, 2.0 = double speed, etc.")]
         [SettingPropertyGroup("{=BW_Category_Game}Game", GroupOrder = 4)]
-        public float GameSpeed { get; set; } = 1.0f;
+        public float GameSpeed
+        {
+            get
+            {
+                // On first access, ensure default value is 1.0, not 0.1 (minimum value from attribute)
+                // This fixes the issue where MCM might use the minimum value (0.1f) as default
+                // Only apply this fix if the user hasn't explicitly set a value yet
+                if (!_gameSpeedUserSet && (field <= 0.1f || field == 0f))
+                {
+                    field = 1.0f;
+                }
+                return field;
+            }
+            set
+            {
+                // Mark that the user has explicitly set a value
+                _gameSpeedUserSet = true;
+
+                // Allow any value within the attribute range (0.1f to 10f)
+                // User can now set any value they want, including below 1.0
+                field = value;
+            }
+        } = 1.0f;
 
         #endregion
 

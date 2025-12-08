@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Каралеўствы" />
 		<string id="BW_Category_MinorClans" text="Малыя кланы" />
 		<string id="BW_Category_Info" text="Інфармацыя" />
+		<string id="BW_Category_Debug" text="Адладка" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Рэжым адладкі" />
+		<string id="BW_Debug_DebugMode_Hint" text="Уключае дэтальнае лагаванне для ўсіх аперацый чытаў. Выключыце для памяншэння памеру файла лагоў." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="Неабмежаванае ХП" />

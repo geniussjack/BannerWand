@@ -28,7 +28,7 @@ namespace BannerWand.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.3.x ONLY
-    /// Mod Version: 1.0.9
+    /// Mod Version: 1.1.0
     /// For Bannerlord 1.2.12, use BannerWand v1.0.9 (BannerWand-1.2.12 project)
     /// </para>
     /// </remarks>
@@ -189,6 +189,34 @@ namespace BannerWand.Core
         }
 
         /// <summary>
+        /// Called after game initialization is finished.
+        /// This is called after all mods have registered their models, so we can safely patch DLC models here.
+        /// </summary>
+        public override void OnAfterGameInitializationFinished(Game game, object starterObject)
+        {
+            base.OnAfterGameInitializationFinished(game, starterObject);
+
+            // Apply NavalSpeedPatch for War Sails DLC after all mods have initialized
+            // This ensures the DLC model is fully loaded before we patch it
+            try
+            {
+                if (HarmonyManager.ApplyNavalSpeedPatch())
+                {
+                    ModLogger.Log("NavalSpeedPatch applied successfully in OnAfterGameInitializationFinished");
+                }
+                else
+                {
+                    ModLogger.Log("NavalSpeedPatch not applied (DLC may not be available or already patched)");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"Failed to apply NavalSpeedPatch in OnAfterGameInitializationFinished: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            }
+        }
+
+        /// <summary>
         /// Registers all custom game models that replace default Bannerlord models.
         /// This is the official, Harmony-free way to modify game behavior.
         /// </summary>
@@ -217,8 +245,11 @@ namespace BannerWand.Core
             ModLogger.Log("Registering custom game models...");
 
             // Movement speed - replaces DefaultPartySpeedCalculatingModel
+            // NOTE: If War Sails DLC is active, NavalDLCPartySpeedCalculationModel will be registered
+            // by the DLC, and CustomPartySpeedModel will replace it. The NavalSpeedPatch will handle
+            // speed overrides for sea travel, but CustomPartySpeedModel will handle land travel.
             campaignStarter.AddModel(new CustomPartySpeedModel());
-            ModLogger.LogModelRegistration(nameof(CustomPartySpeedModel), "Controls party movement speed and AI slowdown");
+            ModLogger.LogModelRegistration(nameof(CustomPartySpeedModel), "Controls party movement speed and AI slowdown (works with War Sails DLC)");
 
             // Morale - replaces DefaultPartyMoraleModel
             campaignStarter.AddModel(new CustomPartyMoraleModel());

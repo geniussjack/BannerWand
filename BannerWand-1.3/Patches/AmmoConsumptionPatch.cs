@@ -29,7 +29,8 @@ namespace BannerWand.Patches
     /// from blocking shots.
     /// </para>
     /// </remarks>
-    [HarmonyPatch]
+    // TEMPORARILY DISABLED FOR DEBUGGING - Remove [HarmonyPatch] to prevent PatchAll() from applying this
+    // [HarmonyPatch]
     public static class AmmoConsumptionPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
@@ -65,7 +66,6 @@ namespace BannerWand.Patches
 
                 if (method != null)
                 {
-                    ModLogger.Log("[AmmoConsumptionPatch] Found SetWeaponAmountInSlot(EquipmentIndex, short, bool) method");
                     return method;
                 }
 
@@ -79,7 +79,6 @@ namespace BannerWand.Patches
 
                 if (method != null)
                 {
-                    ModLogger.Log("[AmmoConsumptionPatch] Found SetWeaponAmountInSlot(EquipmentIndex, short) method");
                     return method;
                 }
 
@@ -121,17 +120,38 @@ namespace BannerWand.Patches
 
         /// <summary>
         /// Prefix patch that prevents ammo decrease for player when Unlimited Ammo is enabled.
+        /// CRITICAL FIX: Instead of blocking the call (return false), we modify the amount parameter
+        /// to prevent decrease while still allowing the original method to execute. This prevents
+        /// breaking internal game state that might depend on SetWeaponAmountInSlot completing.
         /// </summary>
         /// <param name="__instance">The Agent instance (player or NPC)</param>
-        /// <param name="equipmentIndex">The weapon slot being modified</param>
-        /// <param name="amount">The new ammo amount to set</param>
-        /// <param name="_">Whether to enforce primary item (unused, required for Harmony signature)</param>
-        /// <returns>True to continue with original method, False to skip it</returns>
+        /// <param name="equipmentSlot">The weapon slot being modified</param>
+        /// <param name="amount">The new ammo amount to set (modified by ref to prevent decrease)</param>
+        /// <param name="enforcePrimaryItem">Whether to enforce primary item (unused, required for Harmony signature)</param>
+        /// <returns>False to skip original method when blocking ammo decrease, true otherwise</returns>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentIndex, short amount, bool _)
+#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount, bool enforcePrimaryItem)
+#pragma warning restore IDE0060, RCS1163
         {
             try
             {
+                // CRITICAL FIX: Only work in missions (battle/combat), NOT on campaign map or in menus
+                // Agent.SetWeaponAmountInSlot should only be called in missions, but we add
+                // this check as a safety measure to prevent any interference with campaign map operations
+                // or menu screens (inventory, party, clan) where character models are displayed
+                if (Mission.Current == null)
+                {
+                    return true;
+                }
+
+                // Additional safety check: ensure agent is active in the mission
+                // This prevents interference when menus are open but mission is still active
+                if (__instance?.IsActive() != true)
+                {
+                    return true;
+                }
+
                 // Allow if settings not loaded
                 if (Settings == null || TargetSettings == null)
                 {
@@ -157,7 +177,7 @@ namespace BannerWand.Patches
                 }
 
                 // Get current weapon in slot
-                MissionWeapon weapon = __instance.Equipment[equipmentIndex];
+                MissionWeapon weapon = __instance.Equipment[equipmentSlot];
 
                 // Allow if weapon is empty
                 if (weapon.IsEmpty)
@@ -174,7 +194,10 @@ namespace BannerWand.Patches
                 // Get current ammo amount
                 short currentAmount = weapon.Amount;
 
-                // BLOCK if this is an ammo DECREASE
+                // CRITICAL FIX: Instead of blocking the call (return false), modify the amount parameter
+                // to prevent decrease while still allowing the original method to execute.
+                // This prevents breaking internal game state that might depend on SetWeaponAmountInSlot completing.
+                // Blocking the call can corrupt character models in menus (inventory, party, clan).
                 if (amount < currentAmount)
                 {
                     // Log first block for debugging
@@ -182,14 +205,16 @@ namespace BannerWand.Patches
                     {
                         _firstBlockLogged = true;
                         string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                        ModLogger.Log($"[AmmoConsumptionPatch] BLOCKED ammo decrease: {weaponName} ({currentAmount} → {amount})");
+                        ModLogger.Log($"[AmmoConsumptionPatch] PREVENTED ammo decrease: {weaponName} ({currentAmount} → {amount}, setting to {currentAmount})");
                     }
 
-                    // Return false to skip original method (don't decrease ammo)
-                    return false;
+                    // CRITICAL FIX: Modify amount to current value instead of blocking the call
+                    // This allows SetWeaponAmountInSlot to execute and update internal state correctly,
+                    // while preventing the actual ammo decrease. This fixes character model corruption.
+                    amount = currentAmount;
                 }
 
-                // Allow ammo INCREASE (pickups, our restoration, etc.)
+                // Always allow original method to execute (with potentially modified amount)
                 return true;
             }
             catch (Exception ex)
@@ -203,109 +228,10 @@ namespace BannerWand.Patches
         /// Alternative Prefix for methods with different signature.
         /// </summary>
         [HarmonyPrefix]
-        public static bool Prefix(Agent __instance, EquipmentIndex equipmentIndex, short amount)
+        public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount)
         {
             // Delegate to main prefix with default enforcePrimaryItem
-            return Prefix(__instance, equipmentIndex, amount, false);
-        }
-    }
-
-    /// <summary>
-    /// Alternative patch that tries to intercept MissionEquipment modifications.
-    /// This serves as a fallback if Agent.SetWeaponAmountInSlot doesn't exist.
-    /// </summary>
-    [HarmonyPatch]
-    public static class MissionEquipmentAmmoSafetyPatch
-    {
-        private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
-
-        /// <summary>
-        /// Gets the target method - tries to find any method that modifies weapon amounts.
-        /// </summary>
-        [HarmonyTargetMethod]
-        public static MethodBase? TargetMethod()
-        {
-            try
-            {
-                // Try to find MissionEquipment indexer setter
-                PropertyInfo? indexerProperty = typeof(MissionEquipment).GetProperty("Item",
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, typeof(MissionWeapon), [typeof(EquipmentIndex)], null);
-
-                if (indexerProperty?.GetSetMethod(true) != null)
-                {
-                    ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Found MissionEquipment indexer setter");
-                    return indexerProperty.GetSetMethod(true);
-                }
-
-                ModLogger.Warning("[MissionEquipmentAmmoSafetyPatch] MissionEquipment indexer setter not found");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[MissionEquipmentAmmoSafetyPatch] Error finding target: {ex.Message}");
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Prefix that intercepts weapon slot modifications and prevents ammo decrease.
-        /// </summary>
-        [HarmonyPrefix]
-        public static bool Prefix(MissionEquipment __instance, EquipmentIndex index, ref MissionWeapon value)
-        {
-            try
-            {
-                if (Settings == null || TargetSettings == null)
-                {
-                    return true;
-                }
-
-                if (!Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
-                {
-                    return true;
-                }
-
-                if (AmmoConsumptionPatch.IsRestorationInProgress)
-                {
-                    return true;
-                }
-
-                // Get current weapon
-                MissionWeapon currentWeapon = __instance[index];
-
-                if (currentWeapon.IsEmpty || value.IsEmpty)
-                {
-                    return true;
-                }
-
-                // Skip shields
-                if (currentWeapon.CurrentUsageItem?.IsShield == true)
-                {
-                    return true;
-                }
-
-                // If new amount is less than current, this might be ammo consumption
-                if (value.Amount < currentWeapon.Amount && currentWeapon.ModifiedMaxAmount > 1)
-                {
-                    // Create new weapon with original amount to prevent decrease
-                    value = new MissionWeapon(
-                        value.Item,
-                        value.ItemModifier,
-                        value.Banner,
-                        currentWeapon.Amount);
-
-                    ModLogger.Debug($"[MissionEquipmentAmmoSafetyPatch] Prevented ammo decrease: {currentWeapon.Item?.Name}");
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error in Prefix: {ex.Message}");
-                return true;
-            }
+            return Prefix(__instance, equipmentSlot, ref amount, false);
         }
     }
 }

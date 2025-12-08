@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Krallıklar" />
 		<string id="BW_Category_MinorClans" text="Küçük Klanlar" />
 		<string id="BW_Category_Info" text="Bilgi" />
+		<string id="BW_Category_Debug" text="Hata Ayıklama" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Hata Ayıklama Modu" />
+		<string id="BW_Debug_DebugMode_Hint" text="Tüm hile işlemleri için ayrıntılı hata ayıklama günlüğünü etkinleştirir. Günlük dosya boyutunu azaltmak için devre dışı bırakın." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="Sınırsız HP" />
