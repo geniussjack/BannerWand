@@ -202,9 +202,9 @@ namespace BannerWandRetro.Behaviors
                 {
                     Hero.MainHero.ChangeHeroGold(settings.EditGold);
                     ModLogger.LogCheat("Gold Edit", true, settings.EditGold, "player");
+                    // Only set flag after confirming the change was actually applied
+                    _goldApplied = true;
                 }
-
-                _goldApplied = true;
             }
             else if (settings.EditGold == 0)
             {
@@ -219,9 +219,9 @@ namespace BannerWandRetro.Behaviors
                 {
                     Clan.PlayerClan.Influence += settings.EditInfluence;
                     ModLogger.LogCheat("Influence Edit", true, settings.EditInfluence, "player clan");
+                    // Only set flag after confirming the change was actually applied
+                    _influenceApplied = true;
                 }
-
-                _influenceApplied = true;
             }
             else if (settings.EditInfluence == 0)
             {
@@ -292,8 +292,16 @@ namespace BannerWandRetro.Behaviors
             int heroesImproved = 0;
             int totalHeroes = 0;
 
-            // Use Hero.AllAliveHeroes for complete coverage of all kingdoms
-            foreach (Hero hero in Hero.AllAliveHeroes)
+            ModLogger.Debug("Max All Character Relationships: Starting to process all alive heroes...");
+
+            // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
+            List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+            if (allHeroes == null)
+            {
+                return;
+            }
+
+            foreach (Hero hero in allHeroes)
             {
                 totalHeroes++;
 
@@ -319,7 +327,7 @@ namespace BannerWandRetro.Behaviors
             _maxAllRelationshipsApplied = true;
 
             // Log success
-            ModLogger.Log($"[Max All Relationships] Maximized relationships with {heroesImproved} heroes out of {totalHeroes} total alive heroes");
+            ModLogger.Debug($"Max All Character Relationships: Completed - {heroesImproved} heroes improved out of {totalHeroes} total alive heroes");
             ModLogger.LogCheat("Max All Character Relationships", true, heroesImproved, "heroes");
         }
 
@@ -602,11 +610,18 @@ namespace BannerWandRetro.Behaviors
                     return;
                 }
 
-                if (!settings.TradeItemsNoDecrease || !targetSettings.ApplyToPlayer)
+                // Check if cheat is disabled - reset flags to allow fresh backup when re-enabled
+                bool cheatEnabled = settings.TradeItemsNoDecrease && targetSettings.ApplyToPlayer;
+                if (!cheatEnabled)
                 {
                     // Reset backup when cheat is disabled to allow re-initialization when re-enabled
-                    _inventoryBackup = null;
-                    _inventoryBackupInitialized = false;
+                    // This ensures a fresh backup is created if the cheat is re-enabled later
+                    if (_inventoryBackupInitialized || _inventoryBackup != null)
+                    {
+                        _inventoryBackup = null;
+                        _inventoryBackupInitialized = false;
+                        ModLogger.Debug("[TradeItemsNoDecrease] Cheat disabled - backup reset for re-initialization");
+                    }
                     return;
                 }
 
