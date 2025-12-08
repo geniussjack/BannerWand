@@ -125,8 +125,11 @@ namespace BannerWand.Patches
         /// </summary>
         /// <param name="__instance">The Clan instance receiving renown.</param>
         /// <param name="value">The renown amount to add (modified by ref).</param>
+        /// <param name="shouldNotify">Whether to notify about renown change (unused, required for signature match).</param>
         [HarmonyPrefix]
-        public static void Prefix(Clan __instance, ref float value)
+#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
+        public static void Prefix(Clan __instance, ref float value, bool shouldNotify = true)
+#pragma warning restore IDE0060, RCS1163
         {
             try
             {
