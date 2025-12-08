@@ -1,3 +1,4 @@
+#nullable enable
 using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
@@ -28,12 +29,12 @@ namespace BannerWandRetro.Patches
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Postfix patch that adds maximum capacity after base calculation.
@@ -58,15 +59,16 @@ namespace BannerWandRetro.Patches
         /// </para>
         /// </remarks>
 #pragma warning disable RCS1213 // Remove unused method declaration
+#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
         private static void Postfix(
             ref ExplainedNumber __result,
             MobileParty mobileParty,
-            bool _ = false, // isCurrentlyAtSea
-            bool __ = false, // includeDescriptions
-            int ___ = 0, // additionalTroops
-            int ____ = 0, // additionalSpareMounts
-            int _____ = 0, // additionalPackAnimals
-            bool ______ = false) // includeFollowers
+            bool includeDescriptions = false, // includeDescriptions
+            int additionalTroops = 0, // additionalTroops
+            int additionalSpareMounts = 0, // additionalSpareMounts
+            int additionalPackAnimals = 0, // additionalPackAnimals
+            bool includeFollowers = false) // includeFollowers
+#pragma warning restore IDE0060, RCS1163
 #pragma warning restore RCS1213 // Remove unused method declaration
         {
             try
@@ -122,14 +124,14 @@ namespace BannerWandRetro.Patches
         private static bool ShouldApplyMaxCapacityToParty(MobileParty mobileParty)
         {
             // Check if this is player party
-            if (mobileParty == MobileParty.MainParty && TargetSettings.ApplyToPlayer)
+            if (mobileParty == MobileParty.MainParty && TargetSettings?.ApplyToPlayer == true)
             {
                 return true;
             }
 
             // Check if this is a targeted NPC party
             return mobileParty != MobileParty.MainParty &&
-                   TargetSettings.HasAnyNPCTargetEnabled() &&
+                   TargetSettings?.HasAnyNPCTargetEnabled() == true &&
                    TargetFilter.ShouldApplyCheatToParty(mobileParty);
         }
     }
