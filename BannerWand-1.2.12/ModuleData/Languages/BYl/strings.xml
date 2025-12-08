@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Karaleustvy" />
 		<string id="BW_Category_MinorClans" text="Malyja klany" />
 		<string id="BW_Category_Info" text="Infarmacyja" />
+		<string id="BW_Category_Debug" text="Adładka" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Režym adładki" />
+		<string id="BW_Debug_DebugMode_Hint" text="Uklučaje detalnaje łahavańnie dla ŭsich aperacyj čytau. Vyklučycie dla pamienszennia pamieru fajła łahoŭ." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="Neabmiezhavanae HP" />

@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="왕국" />
 		<string id="BW_Category_MinorClans" text="소규모 클랜" />
 		<string id="BW_Category_Info" text="정보" />
+		<string id="BW_Category_Debug" text="디버그" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="디버그 모드" />
+		<string id="BW_Debug_DebugMode_Hint" text="모든 치트 작업에 대한 상세한 디버그 로깅을 활성화합니다. 로그 파일 크기를 줄이려면 비활성화하세요." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="무제한 HP" />

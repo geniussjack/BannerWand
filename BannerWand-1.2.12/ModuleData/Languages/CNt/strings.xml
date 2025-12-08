@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="王國" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
 		<string id="BW_Category_Info" text="資訊" />
+		<string id="BW_Category_Debug" text="除錯" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="除錯模式" />
+		<string id="BW_Debug_DebugMode_Hint" text="為所有作弊操作啟用詳細的除錯日誌記錄。停用以減少日誌檔案大小。" />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="無限生命值" />

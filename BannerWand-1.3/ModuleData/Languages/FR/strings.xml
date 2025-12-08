@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Royaumes" />
 		<string id="BW_Category_MinorClans" text="Clans Mineurs" />
 		<string id="BW_Category_Info" text="Info" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Mode Debug" />
+		<string id="BW_Debug_DebugMode_Hint" text="Active l'enregistrement détaillé pour toutes les opérations de triche. Désactivez pour réduire la taille du fichier journal." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="PV Illimités" />

@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Regate" />
 		<string id="BW_Category_MinorClans" text="Clanuri Minore" />
 		<string id="BW_Category_Info" text="Informații" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Mod Debug" />
+		<string id="BW_Debug_DebugMode_Hint" text="Activează înregistrarea detaliată pentru toate operațiunile de cheat. Dezactivează pentru a reduce dimensiunea fișierului de jurnal." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="HP Nelimitat" />

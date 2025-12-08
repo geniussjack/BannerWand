@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Reinos" />
 		<string id="BW_Category_MinorClans" text="Clãs Menores" />
 		<string id="BW_Category_Info" text="Informação" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Modo Debug" />
+		<string id="BW_Debug_DebugMode_Hint" text="Habilita o registro detalhado para todas as operações de trapaça. Desative para reduzir o tamanho do arquivo de log." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="HP Ilimitado" />

@@ -18,6 +18,11 @@
 		<string id="BW_Category_Kingdoms" text="Kingdoms" />
 		<string id="BW_Category_MinorClans" text="Minor Clans" />
 		<string id="BW_Category_Info" text="Info" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Debug Mode" />
+		<string id="BW_Debug_DebugMode_Hint" text="Enables detailed debug logging for all cheat operations. Disable to reduce log file size." />
 
 		<!-- Player Category -->
 		<string id="BW_Player_UnlimitedHealth" text="Unlimited HP" />
