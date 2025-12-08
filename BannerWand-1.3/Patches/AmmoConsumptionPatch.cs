@@ -29,7 +29,8 @@ namespace BannerWand.Patches
     /// from blocking shots.
     /// </para>
     /// </remarks>
-    [HarmonyPatch]
+    // TEMPORARILY DISABLED FOR DEBUGGING - Remove [HarmonyPatch] to prevent PatchAll() from applying this
+    // [HarmonyPatch]
     public static class AmmoConsumptionPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
@@ -127,16 +128,26 @@ namespace BannerWand.Patches
         /// <param name="equipmentSlot">The weapon slot being modified</param>
         /// <param name="amount">The new ammo amount to set (modified by ref to prevent decrease)</param>
         /// <param name="enforcePrimaryItem">Whether to enforce primary item (unused, required for Harmony signature)</param>
-        /// <returns>True to continue with original method (always true now)</returns>
+        /// <returns>False to skip original method when blocking ammo decrease, true otherwise</returns>
         [HarmonyPrefix]
+#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
         public static bool Prefix(Agent __instance, EquipmentIndex equipmentSlot, ref short amount, bool enforcePrimaryItem)
+#pragma warning restore IDE0060, RCS1163
         {
             try
             {
-                // CRITICAL FIX: Only work in missions (battle/combat), NOT on campaign map
+                // CRITICAL FIX: Only work in missions (battle/combat), NOT on campaign map or in menus
                 // Agent.SetWeaponAmountInSlot should only be called in missions, but we add
                 // this check as a safety measure to prevent any interference with campaign map operations
+                // or menu screens (inventory, party, clan) where character models are displayed
                 if (Mission.Current == null)
+                {
+                    return true;
+                }
+
+                // Additional safety check: ensure agent is active in the mission
+                // This prevents interference when menus are open but mission is still active
+                if (__instance?.IsActive() != true)
                 {
                     return true;
                 }
@@ -183,7 +194,10 @@ namespace BannerWand.Patches
                 // Get current ammo amount
                 short currentAmount = weapon.Amount;
 
-                // PREVENT DECREASE by modifying amount parameter instead of blocking call
+                // CRITICAL FIX: Instead of blocking the call (return false), modify the amount parameter
+                // to prevent decrease while still allowing the original method to execute.
+                // This prevents breaking internal game state that might depend on SetWeaponAmountInSlot completing.
+                // Blocking the call can corrupt character models in menus (inventory, party, clan).
                 if (amount < currentAmount)
                 {
                     // Log first block for debugging
@@ -194,11 +208,13 @@ namespace BannerWand.Patches
                         ModLogger.Log($"[AmmoConsumptionPatch] PREVENTED ammo decrease: {weaponName} ({currentAmount} → {amount}, setting to {currentAmount})");
                     }
 
-                    // Modify amount to prevent decrease, but allow original method to execute
+                    // CRITICAL FIX: Modify amount to current value instead of blocking the call
+                    // This allows SetWeaponAmountInSlot to execute and update internal state correctly,
+                    // while preventing the actual ammo decrease. This fixes character model corruption.
                     amount = currentAmount;
                 }
 
-                // Always allow original method to execute (don't block it)
+                // Always allow original method to execute (with potentially modified amount)
                 return true;
             }
             catch (Exception ex)
@@ -218,141 +234,4 @@ namespace BannerWand.Patches
             return Prefix(__instance, equipmentSlot, ref amount, false);
         }
     }
-
-    /// <summary>
-    /// Alternative patch that tries to intercept MissionEquipment modifications.
-    /// REMOVED: This patch causes character model corruption because MissionEquipment.set_Item
-    /// is used for ALL equipment changes, including visual model updates on campaign map.
-    /// Even with careful checks, it interferes with character rendering in menus.
-    /// </summary>
-    // CLASS REMOVED - was causing character model corruption on campaign map
-    /*
-    public static class MissionEquipmentAmmoSafetyPatch
-    {
-        private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
-
-        /// <summary>
-        /// Gets the target method - tries to find any method that modifies weapon amounts.
-        /// </summary>
-        [HarmonyTargetMethod]
-        public static MethodBase? TargetMethod()
-        {
-            try
-            {
-                // Try to find MissionEquipment indexer setter
-                PropertyInfo? indexerProperty = typeof(MissionEquipment).GetProperty("Item",
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, typeof(MissionWeapon), [typeof(EquipmentIndex)], null);
-
-                if (indexerProperty?.GetSetMethod(true) != null)
-                {
-                    ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Found MissionEquipment indexer setter");
-                    return indexerProperty.GetSetMethod(true);
-                }
-
-                ModLogger.Warning("[MissionEquipmentAmmoSafetyPatch] MissionEquipment indexer setter not found");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[MissionEquipmentAmmoSafetyPatch] Error finding target: {ex.Message}");
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Prefix that intercepts weapon slot modifications and prevents ammo decrease.
-        /// CRITICAL: This patch modifies MissionEquipment.set_Item which is also used for
-        /// visual model updates. We must be VERY careful to only modify ammo-related changes.
-        /// </summary>
-        [HarmonyPrefix]
-        public static bool Prefix(MissionEquipment __instance, EquipmentIndex index, ref MissionWeapon value)
-        {
-            try
-            {
-                // Only work in missions (battle/combat), not in menus
-                if (Mission.Current == null)
-                {
-                    return true;
-                }
-
-                if (Settings == null || TargetSettings == null)
-                {
-                    return true;
-                }
-
-                if (!Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
-                {
-                    return true;
-                }
-
-                if (AmmoConsumptionPatch.IsRestorationInProgress)
-                {
-                    return true;
-                }
-
-                // Get current weapon
-                MissionWeapon currentWeapon = __instance[index];
-
-                // CRITICAL FIX: If current weapon is empty, this is likely initial equipment setup
-                // or a weapon switch. DO NOT MODIFY to avoid breaking visual models!
-                if (currentWeapon.IsEmpty)
-                {
-                    return true;
-                }
-
-                // CRITICAL FIX: If the new weapon is a completely different item (not just amount change),
-                // this is a weapon switch or equipment update, NOT ammo consumption. Allow it!
-                if (!value.IsEmpty && value.Item != currentWeapon.Item)
-                {
-                    return true;
-                }
-
-                // CRITICAL FIX: If new weapon is empty, this is unequipping. Allow it!
-                if (value.IsEmpty)
-                {
-                    return true;
-                }
-
-                // Skip shields - they don't use ammo
-                if (currentWeapon.CurrentUsageItem?.IsShield == true)
-                {
-                    return true;
-                }
-
-                // Skip weapons without ammo capacity (melee weapons, bows without arrows loaded)
-                if (currentWeapon.ModifiedMaxAmount <= 1)
-                {
-                    return true;
-                }
-
-                // CRITICAL FIX: Only block ammo decrease if:
-                // 1. Same weapon (same Item reference)
-                // 2. Amount decreased
-                // 3. Has ammo capacity
-                if (value.Item == currentWeapon.Item && 
-                    value.Amount < currentWeapon.Amount && 
-                    currentWeapon.ModifiedMaxAmount > 1)
-                {
-                    // Create new weapon with original amount to prevent decrease
-                    value = new MissionWeapon(
-                        value.Item,
-                        value.ItemModifier,
-                        value.Banner,
-                        currentWeapon.Amount);
-
-                    ModLogger.Debug($"[MissionEquipmentAmmoSafetyPatch] Prevented ammo decrease: {currentWeapon.Item?.Name}");
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Warning($"[MissionEquipmentAmmoSafetyPatch] Error in Prefix: {ex.Message}");
-                return true;
-            }
-        }
-    }
-    */
 }
