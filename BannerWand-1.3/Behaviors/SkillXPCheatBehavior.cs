@@ -432,7 +432,7 @@ namespace BannerWand.Behaviors
                 if (element.Character?.IsHero == false)
                 {
                     // Get current XP before adding
-                    int currentXp = party.MemberRoster.GetElementXp(i);
+                    _ = party.MemberRoster.GetElementXp(i);
 
                     // Add XP to this troop stack
                     // NOTE: AddXpToTroopAtIndex adds xpAmount to current XP, so result = currentXp + xpAmount
