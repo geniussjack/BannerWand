@@ -290,18 +290,42 @@ namespace BannerWandRetro.Utils
         }
 
         /// <summary>
+        /// Checks if debug mode is enabled in settings.
+        /// </summary>
+        private static bool IsDebugModeEnabled()
+        {
+            try
+            {
+                Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
+                return settings?.DebugMode ?? false;
+            }
+            catch
+            {
+                // If settings are not available, default to false (no debug logging)
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Logs an informational message with optional caller information.
+        /// Only logs if DebugMode is enabled, except for initialization messages.
         /// </summary>
         /// <param name="message">The message to log.</param>
         /// <param name="memberName">Auto-captured calling member name.</param>
         /// <param name="sourceFilePath">Auto-captured source file path.</param>
         /// <param name="sourceLineNumber">Auto-captured source line number.</param>
+        /// <param name="forceLog">If true, logs regardless of DebugMode (for initialization messages).</param>
         public static void Log(string message,
             [CallerMemberName] string memberName = "",
             [CallerFilePath] string sourceFilePath = "",
-            [CallerLineNumber] int sourceLineNumber = 0)
+            [CallerLineNumber] int sourceLineNumber = 0,
+            bool forceLog = false)
         {
-            WriteLog(LogConstants.Info, message, memberName, sourceFilePath, sourceLineNumber);
+            // Always log if forceLog is true (for initialization), otherwise check DebugMode
+            if (forceLog || IsDebugModeEnabled())
+            {
+                WriteLog(LogConstants.Info, message, memberName, sourceFilePath, sourceLineNumber);
+            }
         }
 
         /// <summary>
@@ -330,7 +354,8 @@ namespace BannerWandRetro.Utils
         }
 
         /// <summary>
-        /// Logs a debug message (only in debug builds) with caller context.
+        /// Logs a debug message with caller context.
+        /// Only logs if DebugMode is enabled in settings.
         /// </summary>
         /// <param name="message">The debug message to log.</param>
         /// <param name="memberName">Auto-captured calling member name.</param>
@@ -339,18 +364,16 @@ namespace BannerWandRetro.Utils
             [CallerMemberName] string memberName = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-#if DEBUG
-            string formattedMessage = $"[{memberName}:{sourceLineNumber}] {message}";
-            WriteLog(LogConstants.Debug, formattedMessage, memberName, string.Empty, sourceLineNumber);
-#else
-            _ = message;
-            _ = memberName;
-            _ = sourceLineNumber;
-#endif
+            if (IsDebugModeEnabled())
+            {
+                string formattedMessage = $"[{memberName}:{sourceLineNumber}] {message}";
+                WriteLog(LogConstants.Debug, formattedMessage, memberName, string.Empty, sourceLineNumber);
+            }
         }
 
         /// <summary>
         /// Logs model registration with details.
+        /// Always logs (initialization message).
         /// </summary>
         /// <param name="modelName">Name of the registered model.</param>
         /// <param name="details">Additional details about registration.</param>
@@ -363,6 +386,7 @@ namespace BannerWandRetro.Utils
 
         /// <summary>
         /// Logs behavior registration with details.
+        /// Always logs (initialization message).
         /// </summary>
         /// <param name="behaviorName">Name of the registered behavior.</param>
         /// <param name="details">Additional details about registration.</param>
@@ -375,6 +399,7 @@ namespace BannerWandRetro.Utils
 
         /// <summary>
         /// Logs cheat activation/deactivation with detailed context.
+        /// Only logs if DebugMode is enabled.
         /// </summary>
         /// <param name="cheatName">Name of the cheat.</param>
         /// <param name="enabled">Whether cheat is enabled or disabled.</param>
@@ -382,6 +407,11 @@ namespace BannerWandRetro.Utils
         /// <param name="target">Optional target description.</param>
         public static void LogCheat(string cheatName, bool enabled, object? value = null, string target = "player")
         {
+            if (!IsDebugModeEnabled())
+            {
+                return;
+            }
+
             string status = enabled ? "ENABLED" : "DISABLED";
             string valueInfo = value != null ? $" (value: {value})" : string.Empty;
             string targetInfo = !string.IsNullOrEmpty(target) ? $" for {target}" : string.Empty;
@@ -391,12 +421,18 @@ namespace BannerWandRetro.Utils
 
         /// <summary>
         /// Logs performance metrics for operations.
+        /// Only logs if DebugMode is enabled.
         /// </summary>
         /// <param name="operationName">Name of the operation being measured.</param>
         /// <param name="elapsedMs">Elapsed time in milliseconds.</param>
         /// <param name="itemCount">Optional count of items processed.</param>
         public static void LogPerformance(string operationName, long elapsedMs, int itemCount = 0)
         {
+            if (!IsDebugModeEnabled())
+            {
+                return;
+            }
+
             string countInfo = string.Empty;
             if (itemCount > 0)
             {
@@ -527,34 +563,34 @@ namespace BannerWandRetro.Utils
                     return;
                 }
 
-                Log("=== Current Cheat Settings State ===");
-                Log($"Apply to Player: {targetSettings.ApplyToPlayer}");
+                Log("=== Current Cheat Settings State ===", forceLog: true);
+                Log($"Apply to Player: {targetSettings.ApplyToPlayer}", forceLog: true);
 
                 // Player cheats
-                Log($"Unlimited Health: {settings.UnlimitedHealth}");
-                Log($"Unlimited Horse Health: {settings.UnlimitedHorseHealth}");
-                Log($"Unlimited Shield Durability: {settings.UnlimitedShieldDurability}");
-                Log($"Max Morale: {settings.MaxMorale}");
-                Log($"Movement Speed: {settings.MovementSpeed}");
+                Log($"Unlimited Health: {settings.UnlimitedHealth}", forceLog: true);
+                Log($"Unlimited Horse Health: {settings.UnlimitedHorseHealth}", forceLog: true);
+                Log($"Unlimited Shield Durability: {settings.UnlimitedShieldDurability}", forceLog: true);
+                Log($"Max Morale: {settings.MaxMorale}", forceLog: true);
+                Log($"Movement Speed: {settings.MovementSpeed}", forceLog: true);
 
                 // Inventory cheats
-                Log($"Edit Gold: {settings.EditGold}");
-                Log($"Edit Influence: {settings.EditInfluence}");
-                Log($"Unlimited Food: {settings.UnlimitedFood}");
-                Log($"Max Carrying Capacity: {settings.MaxCarryingCapacity}");
+                Log($"Edit Gold: {settings.EditGold}", forceLog: true);
+                Log($"Edit Influence: {settings.EditInfluence}", forceLog: true);
+                Log($"Unlimited Food: {settings.UnlimitedFood}", forceLog: true);
+                Log($"Max Carrying Capacity: {settings.MaxCarryingCapacity}", forceLog: true);
 
                 // Stats cheats
-                Log($"Unlimited Skill XP: {settings.UnlimitedSkillXP}");
-                Log($"Skill XP Multiplier: {settings.SkillXPMultiplier}");
-                Log($"Unlimited Troops XP: {settings.UnlimitedTroopsXP}");
-                Log($"Troops XP Multiplier: {settings.TroopsXPMultiplier}");
-                Log($"Unlimited Renown: {settings.UnlimitedRenown}");
-                Log($"Renown Multiplier: {settings.RenownMultiplier}");
+                Log($"Unlimited Skill XP: {settings.UnlimitedSkillXP}", forceLog: true);
+                Log($"Skill XP Multiplier: {settings.SkillXPMultiplier}", forceLog: true);
+                Log($"Unlimited Troops XP: {settings.UnlimitedTroopsXP}", forceLog: true);
+                Log($"Troops XP Multiplier: {settings.TroopsXPMultiplier}", forceLog: true);
+                Log($"Unlimited Renown: {settings.UnlimitedRenown}", forceLog: true);
+                Log($"Renown Multiplier: {settings.RenownMultiplier}", forceLog: true);
 
                 // Enemy cheats
-                Log($"One Hit Kills: {settings.OneHitKills}");
+                Log($"One Hit Kills: {settings.OneHitKills}", forceLog: true);
 
-                Log("=== End of Settings State ===");
+                Log("=== End of Settings State ===", forceLog: true);
             }
             catch (Exception ex)
             {
