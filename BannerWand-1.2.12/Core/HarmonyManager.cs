@@ -311,14 +311,28 @@ namespace BannerWandRetro.Core
                 }
 
                 // Check if our patch method is already in the prefixes or postfixes
-                return existingPatches.Prefixes.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Postfixes.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Transpilers.Any(p => p.PatchMethod == patchMethod) ||
-                       existingPatches.Finalizers.Any(p => p.PatchMethod == patchMethod);
+                // CRITICAL FIX: Compare by declaring type and method name, not exact MethodInfo
+                // This handles cases where PatchAll() applied a different overload than what we're checking
+                string patchClassName = patchMethod.DeclaringType?.FullName ?? "";
+                string patchMethodName = patchMethod.Name;
+
+                return existingPatches.Prefixes.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Postfixes.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Transpilers.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
+                       existingPatches.Finalizers.Any(p =>
+                           (p.PatchMethod == patchMethod) ||
+                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName));
             }
-            catch
+            catch (Exception ex)
             {
                 // If we can't check, assume not applied to be safe
+                ModLogger.Warning($"[HarmonyManager] Failed to check if patch is already applied: {ex.Message}");
                 return false;
             }
         }
@@ -405,35 +419,37 @@ namespace BannerWandRetro.Core
                 MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
                 if (targetMethod != null)
                 {
-                    // Find the Prefix method with 4 parameters (EquipmentIndex, short, bool)
+                    // Find the Prefix method with 4 parameters (EquipmentIndex, ref short, bool)
+                    // CRITICAL: Use MakeByRefType() for ref parameters!
                     MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                         BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                         null,
-                        [typeof(Agent), typeof(EquipmentIndex), typeof(short), typeof(bool)],
+                        [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType(), typeof(bool)],
                         null);
 
-                    // If not found, try with 3 parameters
+                    // If not found, try with 3 parameters (ref short)
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                             null,
-                            [typeof(Agent), typeof(EquipmentIndex), typeof(short)],
+                            [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType()],
                             null);
 
-                    // Last resort - get any Prefix method
-                    if (prefixMethod == null)
-                    {
-                        prefixMethod = typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                            .FirstOrDefault(m => m.Name == "Prefix");
-                    }
+                    // Last resort - get Prefix method with most parameters (prefer 4-param version)
+                    prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                        .Where(m => m.Name == "Prefix")
+                        .OrderByDescending(m => m.GetParameters().Length)
+                        .FirstOrDefault();
 
                     if (prefixMethod != null)
                     {
+                        ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixMethod.GetParameters().Length} parameters");
+
                         // Check if patch is already applied (e.g., by PatchAll())
                         if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
                         {
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch already applied (likely by PatchAll()), skipping manual application");
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
+                            ModLogger.Log("[AmmoConsumptionPatch] Patch already applied by PatchAll(), skipping manual application");
                         }
                         else
                         {
@@ -441,7 +457,7 @@ namespace BannerWandRetro.Core
                             _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully - ammo decrease will be blocked");
+                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully via manual patching");
                         }
                     }
                     else
@@ -551,8 +567,8 @@ namespace BannerWandRetro.Core
                     return false;
                 }
 
-                // Find the method with the correct signature (MobileParty, bool, bool, int, int, int, bool)
-                // According to API docs: CalculateInventoryCapacity(MobileParty, bool isCurrentlyAtSea, bool includeDescriptions, int additionalTroops, int additionalSpareMounts, int additionalPackAnimals, bool includeFollowers)
+                // Find the method with the correct signature (MobileParty, bool, int, int, int, bool)
+                // According to decompiled code: CalculateInventoryCapacity(MobileParty mobileParty, bool includeDescriptions = false, int additionalTroops = 0, int additionalSpareMounts = 0, int additionalPackAnimals = 0, bool includeFollowers = false)
                 MethodInfo? targetMethod = allMethods.FirstOrDefault(m =>
                 {
                     ParameterInfo[] parameters = m.GetParameters();
