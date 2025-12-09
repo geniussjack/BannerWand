@@ -119,13 +119,14 @@ namespace BannerWand.Core
                     patchesApplied++;
                 }
 
-                // TEMPORARILY DISABLED FOR DEBUGGING - Testing if AmmoConsumptionPatch causes model corruption
+                // CRITICAL: AmmoConsumptionPatch is NOT applied here during initialization
+                // It is applied dynamically in OnMissionBehaviorInitialize to prevent breaking
+                // character models in menus. See ApplyAmmoConsumptionPatchForMission().
                 // patchesTotal++;
                 // if (ApplyAmmoConsumptionPatch())
                 // {
                 //     patchesApplied++;
                 // }
-                ModLogger.Warning("[AmmoConsumptionPatch] DISABLED FOR DEBUGGING - Testing model corruption");
 
                 patchesTotal++;
                 if (ApplyInventoryCapacityPatch())
@@ -335,6 +336,7 @@ namespace BannerWand.Core
         private static bool ApplyAmmoConsumptionPatch()
         {
             bool primaryPatchApplied = false;
+            bool nativeConsumePatchApplied = false;
             bool fallbackPatchApplied = false;
 
             try
@@ -349,30 +351,56 @@ namespace BannerWand.Core
                 MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
                 if (targetMethod != null)
                 {
-                    // Find the Prefix method with 4 parameters (EquipmentIndex, ref short, bool)
-                    // CRITICAL: Use MakeByRefType() for ref parameters!
-                    MethodInfo? prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
-                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
-                        null,
-                        [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType(), typeof(bool)],
-                        null);
+                    // Get target method parameters to determine which Prefix to use
+                    ParameterInfo[] targetParams = targetMethod.GetParameters();
+                    bool targetHasRef = targetParams.Length >= 2 && targetParams[1].ParameterType.IsByRef;
+                    
+                    string targetSig = string.Join(", ", targetParams.Select(p => 
+                        p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
+                    ModLogger.Log($"[AmmoConsumptionPatch] Target method signature: {targetMethod.Name}({targetSig}), hasRef={targetHasRef}");
+                    
+                    MethodInfo? prefixMethod = null;
 
-                    // If not found, try with 3 parameters (ref short)
-                    prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
+                    if (targetHasRef)
+                    {
+                        // Target method has ref parameter - use Prefix with ref
+                        // Find the Prefix method with 4 parameters (EquipmentIndex, ref short, bool)
+                        prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                             null,
-                            [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType()],
+                            [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType(), typeof(bool)],
                             null);
 
-                    // Last resort - get Prefix method with most parameters (prefer 4-param version)
+                        // If not found, try with 3 parameters (ref short)
+                        prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
+                                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                                null,
+                                [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType()],
+                                null);
+                    }
+                    else
+                    {
+                        // Target method does NOT have ref parameter - use Prefix_NoRef
+                        // Find the Prefix_NoRef method with 4 parameters (EquipmentIndex, short, bool) - NO ref
+                        prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix_NoRef",
+                            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                            null,
+                            [typeof(Agent), typeof(EquipmentIndex), typeof(short), typeof(bool)],
+                            null);
+                    }
+
+                    // Last resort - get Prefix or Prefix_NoRef method with most parameters
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(m => m.Name == "Prefix")
+                        .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
                         .OrderByDescending(m => m.GetParameters().Length)
                         .FirstOrDefault();
 
                     if (prefixMethod != null)
                     {
-                        ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixMethod.GetParameters().Length} parameters");
+                        ParameterInfo[] prefixParams = prefixMethod.GetParameters();
+                        string prefixSig = string.Join(", ", prefixParams.Select(p => 
+                            p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
+                        ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixParams.Length} parameters ({prefixSig})");
 
                         // Check if patch is already applied (e.g., by PatchAll())
                         if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
@@ -383,11 +411,32 @@ namespace BannerWand.Core
                         }
                         else
                         {
-                            HarmonyMethod harmonyPrefix = new(prefixMethod);
-                            _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
+                            // CRITICAL: Create HarmonyMethod with explicit argument types to ensure proper parameter matching
+                            // Harmony may fail to match parameters if types are not explicitly specified
+                            HarmonyMethod harmonyPrefix = new(prefixMethod)
+                            {
+                                argumentTypes = targetMethod.GetParameters().Select(p => p.ParameterType).ToArray()
+                            };
+                            
+                            ModLogger.Log($"[AmmoConsumptionPatch] Applying patch: Target={targetMethod.DeclaringType?.FullName}.{targetMethod.Name}, Prefix={prefixMethod.DeclaringType?.FullName}.{prefixMethod.Name}");
+                            ModLogger.Log($"[AmmoConsumptionPatch] Target parameters: {string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}");
+                            ModLogger.Log($"[AmmoConsumptionPatch] Prefix parameters: {string.Join(", ", prefixMethod.GetParameters().Select(p => p.ParameterType.Name))}");
+                            
+                            MethodInfo patchResult = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
-                            ModLogger.Log("[AmmoConsumptionPatch] Primary patch applied successfully via manual patching");
+                            ModLogger.Log($"[AmmoConsumptionPatch] Primary patch applied successfully via manual patching. Patch result: {patchResult}");
+                            
+                            // Verify patch was actually applied
+                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetMethod);
+                            if (patchInfo != null)
+                            {
+                                ModLogger.Debug($"[AmmoConsumptionPatch] Verify: Target method has {patchInfo.Prefixes.Count} prefix(es) applied");
+                                foreach (var prefix in patchInfo.Prefixes)
+                                {
+                                    ModLogger.Debug($"[AmmoConsumptionPatch]   - Prefix: {prefix.owner}.{prefix.PatchMethod.Name}");
+                                }
+                            }
                         }
                     }
                     else
@@ -405,6 +454,42 @@ namespace BannerWand.Core
                 ModLogger.Error($"[AmmoConsumptionPatch] Error applying primary patch: {ex.Message}");
             }
 
+            // Apply native ammo consume patch (Agent.OnWeaponAmmoConsume) – this is invoked by the engine when ammo decreases
+            try
+            {
+                MethodInfo? nativeConsumePrefix = typeof(AmmoConsumptionPatch).GetMethod(
+                    "OnWeaponAmmoConsume_Prefix",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                MethodInfo? nativeConsumeTarget = typeof(Agent).GetMethod(
+                    "OnWeaponAmmoConsume",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+
+                if (nativeConsumePrefix != null && nativeConsumeTarget != null)
+                {
+                    if (IsPatchAlreadyApplied(nativeConsumeTarget, nativeConsumePrefix))
+                    {
+                        nativeConsumePatchApplied = true;
+                        ModLogger.Log("[AmmoConsumptionPatch] Native OnWeaponAmmoConsume patch already applied, skipping");
+                    }
+                    else
+                    {
+                        HarmonyMethod harmonyPrefix = new(nativeConsumePrefix);
+                        MethodInfo patchResult = Instance!.Patch(nativeConsumeTarget, prefix: harmonyPrefix);
+                        nativeConsumePatchApplied = true;
+                        ModLogger.Log($"[AmmoConsumptionPatch] Native OnWeaponAmmoConsume patch applied. Patch result: {patchResult}");
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[AmmoConsumptionPatch] Native OnWeaponAmmoConsume patch not applied (method not found)");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[AmmoConsumptionPatch] Error applying native consume patch: {ex.Message}");
+            }
+
             // DISABLED: MissionEquipmentAmmoSafetyPatch is causing character model corruption
             // This patch modifies MissionEquipment.set_Item which is used for ALL equipment changes,
             // including visual model updates. Even with careful checks, it can interfere with
@@ -415,13 +500,90 @@ namespace BannerWand.Core
             ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Using primary SetWeaponAmountInSlot patch only");
 
             // Summary
-            bool success = primaryPatchApplied || fallbackPatchApplied;
+            bool success = primaryPatchApplied || nativeConsumePatchApplied || fallbackPatchApplied;
+            ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Native={nativeConsumePatchApplied}, Fallback={fallbackPatchApplied}");
             if (!success)
             {
                 ModLogger.Warning("[AmmoConsumptionPatch] No ammo patches could be applied!");
                 ModLogger.Warning("[AmmoConsumptionPatch] Unlimited Ammo will rely on tick-based fallback restoration only.");
             }
             return success;
+        }
+
+        /// <summary>
+        /// Applies AmmoConsumptionPatch dynamically for a combat mission.
+        /// This method should be called in OnMissionBehaviorInitialize to apply the patch
+        /// only during combat missions, preventing it from breaking character models in menus.
+        /// </summary>
+        /// <returns>True if patch was applied successfully, false otherwise.</returns>
+        public static bool ApplyAmmoConsumptionPatchForMission()
+        {
+            // Only apply if not already applied
+            if (AmmoConsumptionPatch.IsPatchApplied)
+            {
+                ModLogger.Debug("[AmmoConsumptionPatch] Patch already applied for this mission");
+                return true;
+            }
+
+            return ApplyAmmoConsumptionPatch();
+        }
+
+        /// <summary>
+        /// Removes AmmoConsumptionPatch after mission ends.
+        /// This method should be called in OnEndMission to remove the patch
+        /// and prevent it from affecting character models in menus.
+        /// </summary>
+        public static void RemoveAmmoConsumptionPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    return;
+                }
+
+                if (!AmmoConsumptionPatch.IsPatchApplied)
+                {
+                    return; // Patch not applied, nothing to remove
+                }
+
+                // Get target method
+                MethodBase? targetMethod = AmmoConsumptionPatch.TargetMethod();
+                if (targetMethod == null)
+                {
+                    return;
+                }
+
+                // Get all Prefix methods and try to unpatch each one
+                // This handles both ref and non-ref versions
+                MethodInfo[] prefixMethods = typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
+                    .ToArray();
+
+                bool anyUnpatched = false;
+                foreach (MethodInfo prefixMethod in prefixMethods)
+                {
+                    try
+                    {
+                        Instance.Unpatch(targetMethod, prefixMethod);
+                        anyUnpatched = true;
+                    }
+                    catch
+                    {
+                        // This prefix wasn't applied, try next one
+                    }
+                }
+
+                if (anyUnpatched)
+                {
+                    AmmoConsumptionPatch.IsPatchApplied = false;
+                    ModLogger.Debug("[AmmoConsumptionPatch] Patch removed after mission end");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Warning($"[AmmoConsumptionPatch] Error removing patch: {ex.Message}");
+            }
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 #nullable enable
 using BannerWand.Constants;
+using BannerWand.Core;
 using BannerWand.Patches;
 using BannerWand.Settings;
 using BannerWand.Utils;
@@ -56,6 +57,16 @@ namespace BannerWand.Behaviors
         /// </summary>
         private bool _unlimitedAmmoLogged;
 
+        /// <summary>
+        /// Tracks maximum ammo per weapon slot to restore when it drops.
+        /// </summary>
+        private static readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _ammoMaxBySlot = [];
+
+        /// <summary>
+        /// Ensures we log restoration only once per mission to avoid spam.
+        /// </summary>
+        private bool _ammoRestoredLogged;
+
 
 
 
@@ -66,15 +77,20 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Called when the mission is ending.
-        /// Resets one-time application flags for next battle.
+        /// Resets one-time application flags for next battle and removes AmmoConsumptionPatch.
         /// </summary>
         protected override void OnEndMission()
         {
             base.OnEndMission();
 
+            // Remove AmmoConsumptionPatch to prevent breaking character models in menus
+            Core.HarmonyManager.RemoveAmmoConsumptionPatch();
+
             // Reset application flags for next mission
             _infiniteHealthApplied.Clear();
             _unlimitedAmmoLogged = false;
+            _ammoRestoredLogged = false;
+            _ammoMaxBySlot.Clear();
         }
 
         /// <summary>
@@ -359,23 +375,82 @@ namespace BannerWand.Behaviors
                 return;
             }
 
+            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
+            {
+                return;
+            }
+
             // Log unlimited ammo activation once per mission
-            if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
+            if (!_unlimitedAmmoLogged)
             {
                 _unlimitedAmmoLogged = true;
                 string patchStatus = AmmoConsumptionPatch.IsPatchApplied
-                    ? "Harmony patch ACTIVE (ammo consumption blocked at source)"
-                    : "WARNING: Harmony patch NOT applied - unlimited ammo may not work!";
+                    ? "Harmony patch ACTIVE (consumption blocked at source); tick restore also enabled"
+                    : "WARNING: Harmony patch NOT applied - using tick-based restoration";
                 ModLogger.Log($"[UnlimitedAmmo] {patchStatus}");
-
-                if (!AmmoConsumptionPatch.IsPatchApplied)
-                {
-                    ModLogger.Error("[UnlimitedAmmo] AmmoConsumptionPatch failed to apply - check HarmonyManager logs!");
-                }
             }
 
-            // No tick-based restoration needed - AmmoConsumptionPatch handles everything
-            // This method is kept as a placeholder for future enhancements if needed
+            Agent? playerAgent = Mission.Current?.MainAgent;
+            if (playerAgent?.IsActive() != true)
+            {
+                return;
+            }
+
+            // Tick-based restoration to max ammo (safe because runs only in mission, on main agent)
+            for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+            {
+                MissionWeapon weapon = playerAgent.Equipment[i];
+
+                // Skip empty slots or weapons without ammo
+                if (weapon.IsEmpty || weapon.CurrentUsageItem == null || weapon.ModifiedMaxAmount <= 0)
+                {
+                    _ = _ammoMaxBySlot.Remove(i);
+                    continue;
+                }
+
+                // Track max ammo for this slot (account for buffs)
+                short maxAmmo = weapon.ModifiedMaxAmount;
+                if (_ammoMaxBySlot.TryGetValue(i, out short existingMax))
+                {
+                    if (maxAmmo < existingMax)
+                    {
+                        maxAmmo = existingMax;
+                    }
+                    _ammoMaxBySlot[i] = maxAmmo;
+                }
+                else
+                {
+                    _ammoMaxBySlot[i] = maxAmmo;
+                }
+
+                short currentAmmo = weapon.Amount;
+                if (currentAmmo < _ammoMaxBySlot[i])
+                {
+                    bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
+                    if (patchApplied)
+                    {
+                        AmmoConsumptionPatch.IsRestorationInProgress = true;
+                    }
+                    try
+                    {
+                        playerAgent.SetWeaponAmountInSlot(i, _ammoMaxBySlot[i], true);
+                    }
+                    finally
+                    {
+                        if (patchApplied)
+                        {
+                            AmmoConsumptionPatch.IsRestorationInProgress = false;
+                        }
+                    }
+
+                    if (!_ammoRestoredLogged)
+                    {
+                        _ammoRestoredLogged = true;
+                        string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                        ModLogger.Log($"[UnlimitedAmmo] Restored ammo to max via tick: {weaponName} ({currentAmmo} -> {_ammoMaxBySlot[i]})");
+                    }
+                }
+            }
         }
 
         #endregion
