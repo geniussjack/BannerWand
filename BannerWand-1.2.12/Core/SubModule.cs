@@ -354,6 +354,10 @@ namespace BannerWandRetro.Core
             {
                 base.OnMissionBehaviorInitialize(mission);
 
+                // Apply AmmoConsumptionPatch dynamically for this combat mission
+                // This prevents the patch from breaking character models in menus
+                Core.HarmonyManager.ApplyAmmoConsumptionPatchForMission();
+
                 // Add combat cheat behavior to all missions
                 mission.AddMissionBehavior(new CombatCheatBehavior());
                 ModLogger.Debug($"CombatCheatBehavior added to mission: {mission.SceneName}");
