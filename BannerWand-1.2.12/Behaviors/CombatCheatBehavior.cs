@@ -1,5 +1,6 @@
 #nullable enable
 using BannerWandRetro.Constants;
+using BannerWandRetro.Core;
 using BannerWandRetro.Patches;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
@@ -58,6 +59,16 @@ namespace BannerWandRetro.Behaviors
         private bool _unlimitedAmmoLogged;
 
         /// <summary>
+        /// Tracks maximum ammo per weapon slot to restore when it drops.
+        /// </summary>
+        private static readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _ammoMaxBySlot = [];
+
+        /// <summary>
+        /// Ensures we log restoration only once per mission to avoid spam.
+        /// </summary>
+        private bool _ammoRestoredLogged;
+
+        /// <summary>
         /// Stores original ammunition amounts for each weapon slot to prevent ammo decrease.
         /// Key: EquipmentIndex, Value: Original ammo amount
         /// </summary>
@@ -69,15 +80,20 @@ namespace BannerWandRetro.Behaviors
 
         /// <summary>
         /// Called when the mission is ending.
-        /// Resets one-time application flags for next battle.
+        /// Resets one-time application flags for next battle and removes AmmoConsumptionPatch.
         /// </summary>
         protected override void OnEndMission()
         {
             base.OnEndMission();
 
+            // Remove AmmoConsumptionPatch to prevent breaking character models in menus
+            Core.HarmonyManager.RemoveAmmoConsumptionPatch();
+
             // Reset application flags for next battle
             _infiniteHealthApplied.Clear();
             _unlimitedAmmoLogged = false;
+            _ammoRestoredLogged = false;
+            _ammoMaxBySlot.Clear();
             _originalAmmoAmounts.Clear();
         }
 
@@ -364,16 +380,6 @@ namespace BannerWandRetro.Behaviors
                 }
             }
 
-            // OPTIMIZATION: If AmmoConsumptionPatch is active, it handles everything at the source.
-            // This method only serves as a fallback if the patch fails to apply.
-            // This prevents redundant restoration calls and potential conflicts.
-            if (AmmoConsumptionPatch.IsPatchApplied)
-            {
-                return;
-            }
-
-            // FALLBACK: Tick-based restoration (only used if patch is not applied)
-
             Agent? playerAgent = Mission.Current?.MainAgent;
             if (playerAgent?.IsActive() != true)
             {
@@ -386,108 +392,52 @@ namespace BannerWandRetro.Behaviors
                 MissionWeapon weapon = playerAgent.Equipment[i];
 
                 // Skip empty slots or weapons without ammo
-                if (weapon.IsEmpty || weapon.CurrentUsageItem == null)
+                if (weapon.IsEmpty || weapon.CurrentUsageItem == null || weapon.ModifiedMaxAmount <= 0)
                 {
-                    // Remove from tracking if weapon was removed
-                    if (_originalAmmoAmounts.ContainsKey(i))
-                    {
-                        _ = _originalAmmoAmounts.Remove(i);
-                    }
+                    _ = _originalAmmoAmounts.Remove(i);
+                    _ = _ammoMaxBySlot.Remove(i);
                     continue;
                 }
 
-                // Check if weapon uses ammunition (bows, crossbows, throwables)
-                // Bannerlord tracks ammo with MaxDataValue (max ammo) and DataValue (current ammo)
-                if (weapon.ModifiedMaxAmount > 0) // Weapon has ammo capacity
+                // Track max ammo for this slot (supports buffs)
+                short maxAmmo = weapon.ModifiedMaxAmount;
+                if (_ammoMaxBySlot.TryGetValue(i, out short existingMax) && existingMax > maxAmmo)
                 {
-                    short currentAmmo = weapon.Amount;
+                    maxAmmo = existingMax;
+                }
+                _ammoMaxBySlot[i] = maxAmmo;
 
-                    // Store original ammo amount if this is the first time we see this weapon
-                    // Store the ACTUAL original value - don't inflate it with SafeMinimumAmmo
-                    if (!_originalAmmoAmounts.ContainsKey(i))
+                short currentAmmo = weapon.Amount;
+
+                if (currentAmmo < _ammoMaxBySlot[i])
+                {
+                    bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
+                    if (patchApplied)
                     {
-                        _originalAmmoAmounts[i] = currentAmmo;
+                        AmmoConsumptionPatch.IsRestorationInProgress = true;
+                    }
+                    try
+                    {
+                        playerAgent.SetWeaponAmountInSlot(i, _ammoMaxBySlot[i], true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModLogger.Error($"[UnlimitedAmmo] Error restoring ammo for slot {i}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        if (patchApplied)
+                        {
+                            AmmoConsumptionPatch.IsRestorationInProgress = false;
+                        }
                     }
 
-                    // Get the original ammo amount for this weapon
-                    short originalAmmo = _originalAmmoAmounts[i];
-
-                    // If current ammo is less than original, restore it (player used ammo)
-                    // Apply SafeMinimumAmmo only during restoration, not when storing original value
-                    if (currentAmmo < originalAmmo)
+                    if (!_ammoRestoredLogged)
                     {
-                        // Set flag to allow our restoration call through the Harmony patch (if patch is applied)
-                        if (AmmoConsumptionPatch.IsPatchApplied)
-                        {
-                            AmmoConsumptionPatch.IsRestorationInProgress = true;
-                        }
-                        try
-                        {
-                            // Try to use SetWeaponAmountInSlot if available (preferred method)
-                            // First try with 3 parameters (EquipmentIndex, short, bool)
-                            MethodInfo? setWeaponMethod = typeof(Agent).GetMethod("SetWeaponAmountInSlot",
-                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                null,
-                                [typeof(EquipmentIndex), typeof(short), typeof(bool)],
-                                null);
-
-                            if (setWeaponMethod != null)
-                            {
-                                // Restore to original amount
-                                // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
-                                // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
-                                short restoreAmount = originalAmmo == 0
-                                    ? GameConstants.SafeMinimumAmmo
-                                    : originalAmmo;
-                                _ = setWeaponMethod.Invoke(playerAgent, [i, restoreAmount, true]);
-                            }
-                            else
-                            {
-                                // If not found, try with 2 parameters (EquipmentIndex, short)
-                                setWeaponMethod = typeof(Agent).GetMethod("SetWeaponAmountInSlot",
-                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                    null,
-                                    [typeof(EquipmentIndex), typeof(short)],
-                                    null);
-
-                                if (setWeaponMethod != null)
-                                {
-                                    // Restore to original amount
-                                    // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
-                                    // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
-                                    short restoreAmount = originalAmmo == 0
-                                        ? GameConstants.SafeMinimumAmmo
-                                        : originalAmmo;
-                                    _ = setWeaponMethod.Invoke(playerAgent, [i, restoreAmount]);
-                                }
-                                else
-                                {
-                                    // Fallback: Restore to original amount (not 999) to avoid weight issues
-                                    // Only apply SafeMinimumAmmo if original was 0 to prevent blocking shots
-                                    // Do NOT inflate amounts that are below SafeMinimumAmmo but > 0
-                                    short restoreAmount = originalAmmo == 0
-                                        ? GameConstants.SafeMinimumAmmo
-                                        : originalAmmo;
-                                    playerAgent.Equipment[i] = new MissionWeapon(
-                                        weapon.Item,
-                                        weapon.ItemModifier,
-                                        weapon.Banner,
-                                        restoreAmount  // Restore to original (or SafeMinimumAmmo if original was 0)
-                                    );
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            if (AmmoConsumptionPatch.IsPatchApplied)
-                            {
-                                AmmoConsumptionPatch.IsRestorationInProgress = false;
-                            }
-                        }
+                        _ammoRestoredLogged = true;
+                        string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
+                        ModLogger.Debug($"[UnlimitedAmmo] Restored ammo to max via tick: {weaponName} ({currentAmmo} -> {_ammoMaxBySlot[i]})");
                     }
-                    // DO NOT update original amount when current ammo exceeds it
-                    // This preserves the true baseline and prevents the "original" from continuously increasing
-                    // as the player picks up ammunition during battles
                 }
             }
         }
