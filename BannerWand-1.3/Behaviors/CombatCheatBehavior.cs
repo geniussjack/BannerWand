@@ -1,12 +1,18 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Core;
-using BannerWand.Patches;
+// System namespaces
+using System;
+
+// Third-party namespaces
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
+
+// Project namespaces
+using BannerWand.Behaviors.Handlers;
+using BannerWand.Interfaces;
 using BannerWand.Settings;
 using BannerWand.Utils;
-using System;
-using TaleWorlds.Core;
-using TaleWorlds.MountAndBlade;
 
 namespace BannerWand.Behaviors
 {
@@ -27,11 +33,45 @@ namespace BannerWand.Behaviors
     /// Agent iteration is optimized by caching Mission.Current.Agents and using minimal LINQ.
     /// For large battles (100+ agents), this can save significant CPU time.
     /// </para>
+    /// <para>
+    /// This class uses handler classes (<see cref="IHealthCheatHandler"/>, <see cref="IShieldCheatHandler"/>,
+    /// <see cref="IOneHitKillHandler"/>, <see cref="IAmmoCheatHandler"/>, <see cref="INPCCheatHandler"/>)
+    /// to encapsulate cheat logic, improving modularity and testability.
+    /// </para>
     /// </remarks>
     public class CombatCheatBehavior : MissionLogic
     {
         #region Constants
         // Combat constants are now defined in GameConstants for consistency
+        #endregion
+
+        #region Handler Fields
+
+        /// <summary>
+        /// Handler for health-related cheats (unlimited health, infinite health, horse health).
+        /// </summary>
+        private readonly IHealthCheatHandler _healthCheatHandler;
+
+        /// <summary>
+        /// Handler for shield-related cheats (unlimited shield durability).
+        /// </summary>
+        private readonly IShieldCheatHandler _shieldCheatHandler;
+
+        /// <summary>
+        /// Handler for one-hit kill cheats.
+        /// </summary>
+        private readonly IOneHitKillHandler _oneHitKillHandler;
+
+        /// <summary>
+        /// Handler for ammo-related cheats (unlimited ammo).
+        /// </summary>
+        private readonly IAmmoCheatHandler _ammoCheatHandler;
+
+        /// <summary>
+        /// Handler for NPC-related cheats (unlimited HP, infinite HP, horse HP, shield HP, ammo for allied heroes).
+        /// </summary>
+        private readonly INPCCheatHandler _npcCheatHandler;
+
         #endregion
 
         #region Properties
@@ -46,30 +86,50 @@ namespace BannerWand.Behaviors
         /// </summary>
         private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
-        /// <summary>
-        /// Tracks whether Infinite Health bonus has been applied to the player agent.
-        /// Key: Agent index, Value: Whether bonus was applied.
-        /// </summary>
-        private readonly System.Collections.Generic.Dictionary<int, bool> _infiniteHealthApplied = [];
+        #endregion
+
+        #region Constructor
 
         /// <summary>
-        /// Tracks whether unlimited ammo has been logged for current mission.
+        /// Initializes a new instance of the <see cref="CombatCheatBehavior"/> class.
         /// </summary>
-        private bool _unlimitedAmmoLogged;
+        /// <remarks>
+        /// Initializes all cheat handlers with their default implementations.
+        /// Handlers can be replaced with mock implementations for testing.
+        /// </remarks>
+        public CombatCheatBehavior()
+        {
+            _healthCheatHandler = new HealthCheatHandler();
+            _shieldCheatHandler = new ShieldCheatHandler();
+            _oneHitKillHandler = new OneHitKillHandler();
+            _ammoCheatHandler = new AmmoCheatHandler();
+            _npcCheatHandler = new NPCCheatHandler();
+        }
 
         /// <summary>
-        /// Tracks maximum ammo per weapon slot to restore when it drops.
+        /// Initializes a new instance of the <see cref="CombatCheatBehavior"/> class with custom handlers.
         /// </summary>
-        private static readonly System.Collections.Generic.Dictionary<EquipmentIndex, short> _ammoMaxBySlot = [];
-
-        /// <summary>
-        /// Ensures we log restoration only once per mission to avoid spam.
-        /// </summary>
-        private bool _ammoRestoredLogged;
-
-
-
-
+        /// <param name="healthCheatHandler">Handler for health-related cheats.</param>
+        /// <param name="shieldCheatHandler">Handler for shield-related cheats.</param>
+        /// <param name="oneHitKillHandler">Handler for one-hit kill cheats.</param>
+        /// <param name="ammoCheatHandler">Handler for ammo-related cheats.</param>
+        /// <param name="npcCheatHandler">Handler for NPC-related cheats.</param>
+        /// <remarks>
+        /// This constructor allows dependency injection for testing purposes.
+        /// </remarks>
+        public CombatCheatBehavior(
+            IHealthCheatHandler healthCheatHandler,
+            IShieldCheatHandler shieldCheatHandler,
+            IOneHitKillHandler oneHitKillHandler,
+            IAmmoCheatHandler ammoCheatHandler,
+            INPCCheatHandler npcCheatHandler)
+        {
+            _healthCheatHandler = healthCheatHandler ?? throw new ArgumentNullException(nameof(healthCheatHandler));
+            _shieldCheatHandler = shieldCheatHandler ?? throw new ArgumentNullException(nameof(shieldCheatHandler));
+            _oneHitKillHandler = oneHitKillHandler ?? throw new ArgumentNullException(nameof(oneHitKillHandler));
+            _ammoCheatHandler = ammoCheatHandler ?? throw new ArgumentNullException(nameof(ammoCheatHandler));
+            _npcCheatHandler = npcCheatHandler ?? throw new ArgumentNullException(nameof(npcCheatHandler));
+        }
 
         #endregion
 
@@ -86,11 +146,21 @@ namespace BannerWand.Behaviors
             // Remove AmmoConsumptionPatch to prevent breaking character models in menus
             Core.HarmonyManager.RemoveAmmoConsumptionPatch();
 
-            // Reset application flags for next mission
-            _infiniteHealthApplied.Clear();
-            _unlimitedAmmoLogged = false;
-            _ammoRestoredLogged = false;
-            _ammoMaxBySlot.Clear();
+            // Reset handler tracking for next mission
+            if (_healthCheatHandler is HealthCheatHandler healthHandler)
+            {
+                healthHandler.ClearInfiniteHealthTracking();
+            }
+
+            if (_npcCheatHandler is NPCCheatHandler npcHandler)
+            {
+                npcHandler.ClearInfiniteHealthTracking();
+            }
+
+            if (_ammoCheatHandler is AmmoCheatHandler ammoHandler)
+            {
+                ammoHandler.ResetTracking();
+            }
         }
 
         /// <summary>
@@ -115,7 +185,7 @@ namespace BannerWand.Behaviors
             if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && agent?.IsPlayerControlled == true)
             {
                 ModLogger.Debug($"OnAgentBuild: Player agent built, applying Infinite Health (Agent Index: {agent.Index})");
-                ApplyInfiniteHealthToAgent(agent);
+                _healthCheatHandler.ApplyInfiniteHealth(agent);
             }
         }
 
@@ -158,19 +228,36 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
+                // Cache agents collection once per tick to avoid repeated property access
+                MBReadOnlyList<Agent>? agents = Mission.Current.Agents;
+                // OPTIMIZED: Early exit if no agents available
+                if (agents == null || agents.Count == 0)
+                {
+                    return;
+                }
+
+                // Get player agent for health cheats
+                Agent? playerAgent = Mission.Current.MainAgent;
+
                 // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
                 // Also try to apply in OnMissionTick as fallback if OnAgentBuild didn't work
-                ApplyInfiniteHealth();
+                if (playerAgent?.IsActive() == true)
+                {
+                    _healthCheatHandler.ApplyInfiniteHealth(playerAgent);
+                    _healthCheatHandler.ApplyUnlimitedHealth(playerAgent);
+                    _healthCheatHandler.ApplyUnlimitedHorseHealth(playerAgent);
+                    _ammoCheatHandler.ApplyUnlimitedAmmo(playerAgent);
+                }
 
-                // Apply continuous combat cheats
-                ApplyUnlimitedHealth();
-                ApplyUnlimitedHorseHealth();
-                ApplyOneHitKills();
+                // Apply one-hit kills to enemies
+                _oneHitKillHandler.ApplyOneHitKills(agents);
 
-                // Apply unlimited ammo - now handled purely by AmmoConsumptionPatch
-                ApplyUnlimitedAmmo();
-
-                // Note: Movement speed for campaign map is handled in CustomPartySpeedModel
+                // Apply NPC cheats (pass cached agents collection)
+                _npcCheatHandler.ApplyNPCUnlimitedHP(agents);
+                _npcCheatHandler.ApplyNPCInfiniteHP(agents);
+                _npcCheatHandler.ApplyNPCUnlimitedHorseHP(agents);
+                _npcCheatHandler.ApplyNPCUnlimitedShieldHP(agents);
+                _npcCheatHandler.ApplyNPCUnlimitedAmmo(agents);
 
             }
             catch (Exception ex)
@@ -214,52 +301,48 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
-                // CRITICAL FIX: Restore health immediately after taking damage if Infinite Health is enabled
-                // This prevents death from one-shot kills that exceed HealthLimit
-                if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                // Handle health restoration for player
+                if (affectedAgent?.IsPlayerControlled == true)
                 {
-                    // Ensure Infinite Health bonus is applied (in case it wasn't applied on spawn)
-                    ApplyInfiniteHealthToAgent(affectedAgent);
-
-                    // Restore health immediately after damage to prevent death
-                    // If health dropped below a safe threshold, restore it
-                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
-                    {
-                        affectedAgent.Health = affectedAgent.HealthLimit;
-                    }
+                    _healthCheatHandler.OnAgentHit(affectedAgent, affectorAgent, blow);
                 }
 
-                // Also restore health if Unlimited Health is enabled (but this won't prevent one-shot kills)
-                if (settings.UnlimitedHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
-                {
-                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
-                    {
-                        affectedAgent.Health = affectedAgent.HealthLimit;
-                    }
-                }
-
-                // Handle One-Hit Kills - ensure enemies die from PLAYER's hits/shots
-                // IMPORTANT: Only works when PLAYER is the attacker (not allies)
-                if (settings.OneHitKills)
-                {
-                    Agent? mainAgent = Mission.Current?.MainAgent;
-
-                    // Check: 1) Player exists, 2) Attacker is player, 3) Victim is enemy, 4) Victim is alive
-                    if (mainAgent is not null &&
-                        affectorAgent?.IsPlayerControlled == true && // Attacker must be player
-                        affectedAgent?.IsEnemyOf(mainAgent) == true &&
-                        affectedAgent.IsActive() && affectedAgent.IsHuman)
-                    {
-                        // Set health to 0 to kill instantly
-                        // Works for: melee hits, ranged shots (arrows/bolts/thrown), horse charges, etc.
-                        affectedAgent.Health = GameConstants.InstantKillHealth;
-                    }
-                }
-
-                // Restore shield durability for player (if enabled and applicable)
+                // Handle one-hit kills (only if agent is not null)
                 if (affectedAgent is not null)
                 {
-                    ApplyUnlimitedShieldDurability(affectedAgent);
+                    _oneHitKillHandler.OnAgentHit(affectedAgent, affectorAgent, blow);
+                }
+
+                // Handle shield durability restoration for player
+                if (affectedAgent is not null)
+                {
+                    _shieldCheatHandler.OnAgentHit(affectedAgent, affectorAgent);
+                }
+
+                // Restore allied NPC hero shield durability if enabled
+                Agent? mainAgent = Mission.Current?.MainAgent;
+                if (mainAgent is not null && affectedAgent is not null && IsAlliedHeroOnPlayerSide(affectedAgent, mainAgent))
+                {
+                    if (settings.NPCUnlimitedShieldHP)
+                    {
+                        // Iterate through weapon slots to find and repair shields
+                        for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+                        {
+                            MissionWeapon equipment = affectedAgent.Equipment[i];
+
+                            // Check if this slot contains a shield
+                            if (equipment.CurrentUsageItem?.IsShield is true)
+                            {
+                                short maxHitPoints = equipment.ModifiedMaxHitPoints;
+
+                                // Only repair if damaged (optimization: avoid unnecessary API calls)
+                                if (equipment.HitPoints < maxHitPoints)
+                                {
+                                    affectedAgent.ChangeWeaponHitPoints(i, maxHitPoints);
+                                }
+                            }
+                        }
+                    }
                 }
 
             }
@@ -272,479 +355,61 @@ namespace BannerWand.Behaviors
 
         #endregion
 
-        #region Shield Durability
+        #region Helper Methods
 
         /// <summary>
-        /// Restores shield durability for player agent after taking damage.
+        /// Checks if an agent is an allied hero fighting on player's side in combat.
+        /// Used to filter NPC cheats to only apply to allied heroes, not regular soldiers or enemies.
         /// </summary>
-        /// <param name="agent">The agent whose shield to restore.</param>
+        /// <param name="agent">The <see cref="Agent"/> to check. Must be non-null, active, human, and a hero.</param>
+        /// <param name="mainAgent">The player's main <see cref="Agent"/>. Used to determine alliance status.</param>
+        /// <returns>
+        /// <c>true</c> if the agent is an allied hero on player's side; otherwise, <c>false</c>.
+        /// Returns <c>false</c> if <paramref name="agent"/> or <paramref name="mainAgent"/> is <c>null</c>,
+        /// if the agent is not active, not human, not a hero, or is player-controlled or an enemy.
+        /// </returns>
         /// <remarks>
         /// <para>
-        /// Shield durability is tracked per equipment slot. This method iterates through
-        /// all weapon slots to find shields and restore their hit points.
+        /// This method performs the following checks in order:
+        /// 1. Null checks for both agents
+        /// 2. Agent must be active and human
+        /// 3. Agent must be a hero (<see cref="Character.IsHero"/>)
+        /// 4. Agent must not be player-controlled
+        /// 5. Agent must not be an enemy of the main agent (<see cref="Agent.IsEnemyOf(Agent)"/>)
         /// </para>
         /// <para>
-        /// Bannerlord shield mechanics: Shields have ModifiedMaxHitPoints (with bonuses)
-        /// and current HitPoints. We restore to the modified max for full effectiveness.
+        /// This filtering ensures that NPC cheats (Unlimited HP, Infinite HP, Unlimited Horse HP,
+        /// Unlimited Shield HP, Unlimited Ammo) only apply to allied heroes fighting alongside the player,
+        /// not to regular soldiers, enemies, or the player themselves.
         /// </para>
         /// </remarks>
-        private static void ApplyUnlimitedShieldDurability(Agent agent)
+        private static bool IsAlliedHeroOnPlayerSide(Agent agent, Agent mainAgent)
         {
-            // Early exit if settings are null
-            if (Settings is null || TargetSettings is null)
+            if (agent is null || mainAgent is null)
             {
-                return;
+                return false;
             }
 
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
+            // Must be active and human
+            if (!agent.IsActive() || !agent.IsHuman)
             {
-                return;
+                return false;
             }
 
-            // Early returns for disabled cheat or non-player agent
-            if (!settings.UnlimitedShieldDurability || !targetSettings.ApplyToPlayer)
+            // Must be a hero, not a regular soldier
+            if (agent.Character?.IsHero != true)
             {
-                return;
+                return false;
             }
 
-            if (agent?.IsPlayerControlled is not true)
+            // Skip player
+            if (agent.IsPlayerControlled)
             {
-                return;
+                return false;
             }
 
-            // Iterate through weapon slots to find and repair shields
-            for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
-            {
-                MissionWeapon equipment = agent.Equipment[i];
-
-                // Check if this slot contains a shield
-                if (equipment.CurrentUsageItem?.IsShield is true)
-                {
-                    short maxHitPoints = equipment.ModifiedMaxHitPoints;
-
-                    // Only repair if damaged (optimization: avoid unnecessary API calls)
-                    if (equipment.HitPoints < maxHitPoints)
-                    {
-                        agent.ChangeWeaponHitPoints(i, maxHitPoints);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Unlimited Ammunition
-
-        /// <summary>
-        /// Unlimited Ammo is now handled PURELY by AmmoConsumptionPatch (Harmony).
-        /// This method is kept as a placeholder for future tick-based fallback if needed.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// CRITICAL FIX: Removed all calls to SetWeaponAmountInSlot() to prevent character model corruption.
-        /// </para>
-        /// <para>
-        /// The previous implementation called SetWeaponAmountInSlot() every frame when ammo decreased,
-        /// which internally triggers UpdateAgentProperties(). This recalculates the entire character
-        /// visual model (mesh, skeleton, animations) 60 times per second during combat.
-        /// </para>
-        /// <para>
-        /// When exiting battle and opening menus (inventory, clan, encyclopedia), this created a
-        /// conflict between:
-        /// - Combat system model updates (from SetWeaponAmountInSlot)
-        /// - Menu system model rendering
-        /// </para>
-        /// <para>
-        /// Result: Character model appears distorted/broken in all menu screens.
-        /// </para>
-        /// <para>
-        /// SOLUTION: Rely ONLY on AmmoConsumptionPatch which blocks ammo consumption at the source
-        /// (Agent.SetWeaponAmountInSlot Prefix) without triggering model updates.
-        /// </para>
-        /// </remarks>
-        private void ApplyUnlimitedAmmo()
-        {
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
-            {
-                return;
-            }
-
-            // Log unlimited ammo activation once per mission
-            if (!_unlimitedAmmoLogged)
-            {
-                _unlimitedAmmoLogged = true;
-                string patchStatus = AmmoConsumptionPatch.IsPatchApplied
-                    ? "Harmony patch ACTIVE (consumption blocked at source); tick restore also enabled"
-                    : "WARNING: Harmony patch NOT applied - using tick-based restoration";
-                ModLogger.Log($"[UnlimitedAmmo] {patchStatus}");
-            }
-
-            Agent? playerAgent = Mission.Current?.MainAgent;
-            if (playerAgent?.IsActive() != true)
-            {
-                return;
-            }
-
-            // Tick-based restoration to max ammo (safe because runs only in mission, on main agent)
-            for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
-            {
-                MissionWeapon weapon = playerAgent.Equipment[i];
-
-                // Skip empty slots or weapons without ammo
-                if (weapon.IsEmpty || weapon.CurrentUsageItem == null || weapon.ModifiedMaxAmount <= 0)
-                {
-                    _ = _ammoMaxBySlot.Remove(i);
-                    continue;
-                }
-
-                // Track max ammo for this slot (account for buffs)
-                short maxAmmo = weapon.ModifiedMaxAmount;
-                if (_ammoMaxBySlot.TryGetValue(i, out short existingMax))
-                {
-                    if (maxAmmo < existingMax)
-                    {
-                        maxAmmo = existingMax;
-                    }
-                    _ammoMaxBySlot[i] = maxAmmo;
-                }
-                else
-                {
-                    _ammoMaxBySlot[i] = maxAmmo;
-                }
-
-                short currentAmmo = weapon.Amount;
-                if (currentAmmo < _ammoMaxBySlot[i])
-                {
-                    bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
-                    if (patchApplied)
-                    {
-                        AmmoConsumptionPatch.IsRestorationInProgress = true;
-                    }
-                    try
-                    {
-                        playerAgent.SetWeaponAmountInSlot(i, _ammoMaxBySlot[i], true);
-                    }
-                    finally
-                    {
-                        if (patchApplied)
-                        {
-                            AmmoConsumptionPatch.IsRestorationInProgress = false;
-                        }
-                    }
-
-                    if (!_ammoRestoredLogged)
-                    {
-                        _ammoRestoredLogged = true;
-                        string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                        ModLogger.Log($"[UnlimitedAmmo] Restored ammo to max via tick: {weaponName} ({currentAmmo} -> {_ammoMaxBySlot[i]})");
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Unlimited Health
-
-        /// <summary>
-        /// Maintains player agent at maximum health.
-        /// WARNING: Does not prevent one-shot kills from damage exceeding HealthLimit.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Performance optimization: Only restores health if below maximum.
-        /// This avoids unnecessary API calls when health is already full.
-        /// </para>
-        /// <para>
-        /// Health vs HealthLimit: HealthLimit is the maximum possible health for an agent.
-        /// We restore to HealthLimit to maintain full health at all times.
-        /// </para>
-        /// <para>
-        /// LIMITATION: If damage exceeds HealthLimit (e.g., 120 damage to 100 HP),
-        /// player will die instantly. Use Infinite Health cheat to prevent this.
-        /// </para>
-        /// </remarks>
-        private static void ApplyUnlimitedHealth()
-        {
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            // Early returns for disabled cheat or missing agent
-            if (!settings.UnlimitedHealth || !targetSettings.ApplyToPlayer)
-            {
-                return;
-            }
-
-            Agent? playerAgent = Mission.Current?.MainAgent;
-            if (playerAgent?.IsActive() != true)
-            {
-                return;
-            }
-
-            // Only restore if health is below maximum (optimization: avoid unnecessary assignments)
-            if (playerAgent.Health < playerAgent.HealthLimit)
-            {
-                float restoredFrom = playerAgent.Health;
-                playerAgent.Health = playerAgent.HealthLimit;
-                ModLogger.Debug($"Unlimited Health: Restored health from {restoredFrom:F1} to {playerAgent.HealthLimit:F1}");
-            }
-        }
-
-        /// <summary>
-        /// Adds +9999 HP to player at the start of battle.
-        /// Prevents one-shot kills from high damage attacks.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This cheat modifies HealthLimit (max HP) rather than just restoring health.
-        /// The +9999 HP bonus makes it virtually impossible to die from any single attack.
-        /// </para>
-        /// <para>
-        /// Applied once per agent using _infiniteHealthApplied dictionary.
-        /// This prevents repeated application every frame.
-        /// </para>
-        /// <para>
-        /// Difference from Unlimited Health:
-        /// - Unlimited HP: Keeps health bar full, but can die from one-shot
-        /// - Infinite Health: Adds +9999 HP, prevents one-shot kills
-        /// </para>
-        /// </remarks>
-        private void ApplyInfiniteHealth()
-        {
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            // Early returns for disabled cheat
-            if (!settings.InfiniteHealth || !targetSettings.ApplyToPlayer)
-            {
-                return;
-            }
-
-            Agent? playerAgent = Mission.Current?.MainAgent;
-            if (playerAgent?.IsActive() != true)
-            {
-                return;
-            }
-
-            // Apply bonus to the agent
-            ApplyInfiniteHealthToAgent(playerAgent);
-        }
-
-        /// <summary>
-        /// Applies Infinite Health bonus to a specific agent.
-        /// </summary>
-        /// <param name="agent">The agent to apply the bonus to.</param>
-        private void ApplyInfiniteHealthToAgent(Agent agent)
-        {
-            if (agent?.IsActive() != true)
-            {
-                return;
-            }
-
-            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
-            // The game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase,
-            // so we must wait until agent is fully ready. Check multiple conditions:
-            if (agent.Character == null || agent.HealthLimit <= 0 || agent.BaseHealthLimit <= 0)
-            {
-                // Agent not fully ready yet, skip for now (will retry next frame)
-                return;
-            }
-
-            // Additional safety check: Ensure agent has been in mission for at least a few frames
-            // This gives the game time to complete all initialization
-            if (!agent.IsActive() || agent.Index < 0)
-            {
-                return;
-            }
-
-            int agentIndex = agent.Index;
-
-            // Check if already applied to this agent
-            if (_infiniteHealthApplied.TryGetValue(agentIndex, out bool applied) && applied)
-            {
-                // Verify bonus is still there (in case HealthLimit was reset)
-                float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
-                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
-                {
-                    // Bonus seems to have been reset, reapply it
-                    ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
-                    _infiniteHealthApplied[agentIndex] = false;
-                }
-                else
-                {
-                    // Bonus is still there, just restore health
-                    if (agent.Health < agent.HealthLimit)
-                    {
-                        agent.Health = agent.HealthLimit;
-                    }
-                    return;
-                }
-            }
-
-            // Store original HealthLimit before applying bonus (for verification)
-            float originalHealthLimit = agent.HealthLimit;
-            float originalBaseHealthLimit = agent.BaseHealthLimit;
-
-            // Set HealthLimit to original base + bonus to ensure consistency
-            if (originalHealthLimit > 0 && originalBaseHealthLimit > 0)
-            {
-                float newHealthLimit = originalBaseHealthLimit + GameConstants.InfiniteHealthBonus;
-                agent.HealthLimit = newHealthLimit;
-                agent.Health = newHealthLimit; // Fill to new max
-
-                // Mark as applied to prevent repeated application
-                _infiniteHealthApplied[agentIndex] = true;
-
-                ModLogger.Debug($"Infinite Health applied to agent {agentIndex}: +{GameConstants.InfiniteHealthBonus} HP (original: {originalHealthLimit}, new limit: {agent.HealthLimit})");
-            }
-        }
-
-        #endregion
-
-        #region Unlimited Horse Health
-
-        /// <summary>
-        /// Maintains player's mount at maximum health.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Mount mechanics: Agents have a MountAgent property that references their horse.
-        /// Mounts are separate agents with their own health pools.
-        /// </para>
-        /// <para>
-        /// Performance: Only processes if player has a mount and mount health is low.
-        /// Multiple early returns minimize overhead when not mounted.
-        /// </para>
-        /// </remarks>
-        private static void ApplyUnlimitedHorseHealth()
-        {
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
-            if (settings is null || targetSettings is null)
-            {
-                return;
-            }
-
-            // Early returns for disabled cheat or missing agent
-            if (!settings.UnlimitedHorseHealth || !targetSettings.ApplyToPlayer)
-            {
-                return;
-            }
-
-            Agent? playerAgent = Mission.Current?.MainAgent;
-            if (playerAgent?.IsActive() != true || !playerAgent.HasMount)
-            {
-                return;
-            }
-
-            Agent? mount = playerAgent.MountAgent;
-            if (mount?.IsActive() != true)
-            {
-                return;
-            }
-
-            // Only restore if health is below maximum (optimization: avoid unnecessary assignments)
-            if (mount.Health < mount.HealthLimit)
-            {
-                mount.Health = mount.HealthLimit;
-            }
-        }
-
-        #endregion
-
-        #region One Hit Kills
-
-        /// <summary>
-        /// Reduces all enemy agents to minimum health for instant kills.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Implementation strategy: Set enemy health to 1 (not 0) each frame.
-        /// This ensures any hit will kill them, but they don't die spontaneously.
-        /// Setting to 0 would kill them immediately, which looks unnatural.
-        /// </para>
-        /// <para>
-        /// The actual killing is also handled in <see cref="OnAgentHit"/> for reliability.
-        /// This method serves as a backup to ensure enemies stay at low health.
-        /// </para>
-        /// <para>
-        /// Performance: Only processes human enemies that are active and alive.
-        /// Early continues for non-enemy, non-human, or already-dead agents.
-        /// </para>
-        /// </remarks>
-        private static void ApplyOneHitKills()
-        {
-            // Early exit if settings are null
-            CheatSettings? settings = Settings;
-            if (settings is null)
-            {
-                return;
-            }
-
-            // Early return if cheat disabled
-            if (!settings.OneHitKills)
-            {
-                return;
-            }
-
-            Agent? mainAgent = Mission.Current?.MainAgent;
-            if (mainAgent is null)
-            {
-                return;
-            }
-
-            // Process all active enemy agents
-            // Using foreach instead of LINQ for better performance (runs every frame)
-            if (Mission.Current?.Agents == null)
-            {
-                return;
-            }
-
-            foreach (Agent agent in Mission.Current.Agents)
-            {
-                // Skip null, inactive, or non-human agents
-                if (agent?.IsActive() != true || !agent.IsHuman)
-                {
-                    continue;
-                }
-
-                // Only process enemies
-                if (!agent.IsEnemyOf(mainAgent))
-                {
-                    continue;
-                }
-
-                // Set health to minimum threshold (low enough for instant kill, but not spontaneous death)
-                // If health somehow exceeded threshold, bring it back down
-                if (agent.Health > GameConstants.OneHitKillHealthThreshold)
-                {
-                    float oldHealth = agent.Health;
-                    agent.Health = GameConstants.OneHitKillHealthThreshold;
-                    ModLogger.Debug($"One-Hit Kills: Set enemy agent {agent.Index} health from {oldHealth:F1} to {GameConstants.OneHitKillHealthThreshold:F1}");
-                }
-            }
+            // Must be friendly (on player's side in combat)
+            return !agent.IsEnemyOf(mainAgent);
         }
 
         #endregion

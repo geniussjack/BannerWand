@@ -1,13 +1,20 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+// System namespaces
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Core
 {
@@ -82,7 +89,8 @@ namespace BannerWand.Core
                 if (Settings == null || TargetSettings == null)
                 {
                     ModLogger.Error("Failed to initialize CheatManager - settings are null");
-                    InformationManager.DisplayMessage(new InformationMessage(MessageConstants.SettingsError, GameConstants.ErrorColor));
+                    TextObject errorMessage = new("{=BW_Message_SettingsError}BannerWand: Settings Error");
+                    InformationManager.DisplayMessage(new InformationMessage(errorMessage.ToString(), GameConstants.ErrorColor));
                     return;
                 }
 
@@ -93,9 +101,10 @@ namespace BannerWand.Core
                 if (showMessage && !_initializationMessageShown)
                 {
                     int activeCheatCount = GetActiveCheatCount();
-                    string welcomeMessage = string.Format(MessageConstants.CheatsInitializedFormat, activeCheatCount);
+                    TextObject welcomeMessage = new("{=BW_Message_CheatsInitialized}{COUNT} cheats successfully initialized");
+                    welcomeMessage.SetTextVariable("COUNT", activeCheatCount);
 
-                    InformationManager.DisplayMessage(new InformationMessage(welcomeMessage, GameConstants.SuccessColor));
+                    InformationManager.DisplayMessage(new InformationMessage(welcomeMessage.ToString(), GameConstants.SuccessColor));
                     ModLogger.Log(string.Format(MessageConstants.ActiveCheatsCountFormat, activeCheatCount));
 
                     _initializationMessageShown = true;
@@ -199,13 +208,21 @@ namespace BannerWand.Core
                             return;
                         }
 
-                        foreach (Hero hero in allHeroes)
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Any())
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                hero.ChangeHeroGold(amount);
-                                affectedHeroCount++;
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    hero.ChangeHeroGold(amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -213,10 +230,19 @@ namespace BannerWand.Core
                     // Display result message to user if any heroes were affected
                     if (affectedHeroCount > 0)
                     {
-                        string resultMessage = affectedHeroCount == 1
-                            ? $"Gold changed by {amount}"
-                            : $"Gold changed by {amount} for {affectedHeroCount} heroes";
-                        InformationManager.DisplayMessage(new InformationMessage(resultMessage, GameConstants.SuccessColor));
+                        TextObject resultMessage;
+                        if (affectedHeroCount == 1)
+                        {
+                            resultMessage = new("{=BW_Message_GoldChanged}Gold changed by {AMOUNT}");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                        }
+                        else
+                        {
+                            resultMessage = new("{=BW_Message_GoldChangedMultiple}Gold changed by {AMOUNT} for {COUNT} heroes");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                            resultMessage.SetTextVariable("COUNT", affectedHeroCount);
+                        }
+                        InformationManager.DisplayMessage(new InformationMessage(resultMessage.ToString(), GameConstants.SuccessColor));
                         ModLogger.Log($"Gold modified for {affectedHeroCount} heroes (amount: {amount})");
                     }
                 }
@@ -289,13 +315,21 @@ namespace BannerWand.Core
                             return;
                         }
 
-                        foreach (Clan clan in allClans)
+                        // OPTIMIZED: Early exit check before loop
+                        if (allClans.Any())
                         {
-                            // Skip player clan and check if clan matches target filter criteria
-                            if (clan != Clan.PlayerClan && TargetFilter.ShouldApplyCheatToClan(clan))
+                            foreach (Clan clan in allClans)
                             {
-                                clan.Influence += amount;
-                                affectedClanCount++;
+                                // Early continue for player clan
+                                if (clan == Clan.PlayerClan)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheatToClan(clan))
+                                {
+                                    clan.Influence += amount;
+                                    affectedClanCount++;
+                                }
                             }
                         }
                     }
@@ -303,10 +337,19 @@ namespace BannerWand.Core
                     // Display result message to user if any clans were affected
                     if (affectedClanCount > 0)
                     {
-                        string resultMessage = affectedClanCount == 1
-                            ? $"Influence changed by {amount:F0}"
-                            : $"Influence changed by {amount:F0} for {affectedClanCount} clans";
-                        InformationManager.DisplayMessage(new InformationMessage(resultMessage, GameConstants.InfoColor));
+                        TextObject resultMessage;
+                        if (affectedClanCount == 1)
+                        {
+                            resultMessage = new("{=BW_Message_InfluenceChanged}Influence changed by {AMOUNT}");
+                            resultMessage.SetTextVariable("AMOUNT", (int)amount);
+                        }
+                        else
+                        {
+                            resultMessage = new("{=BW_Message_InfluenceChangedMultiple}Influence changed by {AMOUNT} for {COUNT} clans");
+                            resultMessage.SetTextVariable("AMOUNT", (int)amount);
+                            resultMessage.SetTextVariable("COUNT", affectedClanCount);
+                        }
+                        InformationManager.DisplayMessage(new InformationMessage(resultMessage.ToString(), GameConstants.InfoColor));
                         ModLogger.Log($"Influence modified for {affectedClanCount} clans (amount: {amount:F0})");
                     }
                 }
@@ -365,13 +408,21 @@ namespace BannerWand.Core
                             return;
                         }
 
-                        foreach (Hero hero in allHeroes)
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Any())
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                ApplyAttributePointsToHero(hero, amount);
-                                affectedHeroCount++;
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    ApplyAttributePointsToHero(hero, amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -379,10 +430,19 @@ namespace BannerWand.Core
                     // Display result message to user if any heroes were affected
                     if (affectedHeroCount > 0)
                     {
-                        string resultMessage = affectedHeroCount == 1
-                            ? $"Attribute points changed by {amount}"
-                            : $"Attribute points changed by {amount} for {affectedHeroCount} heroes";
-                        InformationManager.DisplayMessage(new InformationMessage(resultMessage, GameConstants.SuccessColor));
+                        TextObject resultMessage;
+                        if (affectedHeroCount == 1)
+                        {
+                            resultMessage = new("{=BW_Message_AttributePointsChanged}Attribute points changed by {AMOUNT}");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                        }
+                        else
+                        {
+                            resultMessage = new("{=BW_Message_AttributePointsChangedMultiple}Attribute points changed by {AMOUNT} for {COUNT} heroes");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                            resultMessage.SetTextVariable("COUNT", affectedHeroCount);
+                        }
+                        InformationManager.DisplayMessage(new InformationMessage(resultMessage.ToString(), GameConstants.SuccessColor));
                         ModLogger.Log($"Attribute points modified for {affectedHeroCount} heroes (amount: {amount})");
                     }
                 }
@@ -441,13 +501,21 @@ namespace BannerWand.Core
                             return;
                         }
 
-                        foreach (Hero hero in allHeroes)
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Any())
                         {
-                            // Skip player hero and check if hero matches target filter criteria
-                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            foreach (Hero hero in allHeroes)
                             {
-                                ApplyFocusPointsToHero(hero, amount);
-                                affectedHeroCount++;
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    ApplyFocusPointsToHero(hero, amount);
+                                    affectedHeroCount++;
+                                }
                             }
                         }
                     }
@@ -455,10 +523,19 @@ namespace BannerWand.Core
                     // Display result message to user if any heroes were affected
                     if (affectedHeroCount > 0)
                     {
-                        string resultMessage = affectedHeroCount == 1
-                            ? $"Focus points changed by {amount}"
-                            : $"Focus points changed by {amount} for {affectedHeroCount} heroes";
-                        InformationManager.DisplayMessage(new InformationMessage(resultMessage, GameConstants.SuccessColor));
+                        TextObject resultMessage;
+                        if (affectedHeroCount == 1)
+                        {
+                            resultMessage = new("{=BW_Message_FocusPointsChanged}Focus points changed by {AMOUNT}");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                        }
+                        else
+                        {
+                            resultMessage = new("{=BW_Message_FocusPointsChangedMultiple}Focus points changed by {AMOUNT} for {COUNT} heroes");
+                            resultMessage.SetTextVariable("AMOUNT", amount);
+                            resultMessage.SetTextVariable("COUNT", affectedHeroCount);
+                        }
+                        InformationManager.DisplayMessage(new InformationMessage(resultMessage.ToString(), GameConstants.SuccessColor));
                         ModLogger.Log($"Focus points modified for {affectedHeroCount} heroes (amount: {amount})");
                     }
                 }
@@ -559,11 +636,20 @@ namespace BannerWand.Core
                     return affectedParties;
                 }
 
-                foreach (MobileParty party in allParties)
+                // OPTIMIZED: Early exit check before loop
+                if (allParties.Any())
                 {
-                    if (party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party))
+                    foreach (MobileParty party in allParties)
                     {
-                        affectedParties.Add(party);
+                        // Early continue for player's main party
+                        if (party == MobileParty.MainParty)
+                        {
+                            continue;
+                        }
+                        if (TargetFilter.ShouldApplyCheatToParty(party))
+                        {
+                            affectedParties.Add(party);
+                        }
                     }
                 }
             }
@@ -594,6 +680,11 @@ namespace BannerWand.Core
                     List<MobileParty> affectedParties = GetAffectedParties();
                     int totalHealedTroops = 0;
 
+                    // OPTIMIZED: Early exit if no parties to process
+                    if (affectedParties.Count == 0)
+                    {
+                        return 0;
+                    }
                     // Iterate through all affected parties to heal wounded troops
                     foreach (MobileParty party in affectedParties)
                     {
@@ -622,8 +713,9 @@ namespace BannerWand.Core
                     // Display result to user if any troops were healed
                     if (totalHealedTroops > 0)
                     {
-                        string healMessage = $"Healed {totalHealedTroops} wounded troops";
-                        InformationManager.DisplayMessage(new InformationMessage(healMessage, GameConstants.SuccessColor));
+                        TextObject healMessage = new("{=BW_Message_WoundedTroopsHealed}Healed {COUNT} wounded troops");
+                        healMessage.SetTextVariable("COUNT", totalHealedTroops);
+                        InformationManager.DisplayMessage(new InformationMessage(healMessage.ToString(), GameConstants.SuccessColor));
                         ModLogger.Log($"Healed {totalHealedTroops} troops across {affectedParties.Count} parties");
                     }
 
@@ -671,6 +763,7 @@ namespace BannerWand.Core
 
                 // Boolean cheats - count each enabled cheat
                 activeCheatCount += settings.UnlimitedHealth ? 1 : 0;
+                activeCheatCount += settings.InfiniteHealth ? 1 : 0;
                 activeCheatCount += settings.UnlimitedHorseHealth ? 1 : 0;
                 activeCheatCount += settings.UnlimitedShieldDurability ? 1 : 0;
                 activeCheatCount += settings.UnlimitedAmmo ? 1 : 0;
@@ -690,6 +783,16 @@ namespace BannerWand.Core
                 activeCheatCount += settings.OneDaySettlementsConstruction ? 1 : 0;
                 activeCheatCount += settings.InstantSiegeConstruction ? 1 : 0;
 
+                // Settlement cheats
+                activeCheatCount += settings.GarrisonRecruitmentMultiplier > GameConstants.FloatEpsilon ? 1 : 0;
+                activeCheatCount += settings.GarrisonWagesMultiplier != GameConstants.DefaultGarrisonWagesMultiplier ? 1 : 0;
+                activeCheatCount += settings.MilitiaRecruitmentMultiplier > GameConstants.FloatEpsilon ? 1 : 0;
+                activeCheatCount += settings.MilitiaVeteranChance > GameConstants.FloatEpsilon ? 1 : 0;
+                activeCheatCount += settings.FoodIncreaseMultiplier > 0 ? 1 : 0;
+                activeCheatCount += settings.ProsperityIncreaseMultiplier > 0 ? 1 : 0;
+                activeCheatCount += settings.LoyaltyIncreaseMultiplier > 0 ? 1 : 0;
+                activeCheatCount += settings.SecurityIncreaseMultiplier > 0 ? 1 : 0;
+
                 // Numeric cheats - count if non-zero values are set
                 // MovementSpeed is active when > 0f (matches CustomPartySpeedModel.ShouldApplyPlayerSpeedOverride logic)
                 activeCheatCount += settings.MovementSpeed > 0f ? 1 : 0;
@@ -702,6 +805,18 @@ namespace BannerWand.Core
                 activeCheatCount += settings.EditInfluence != 0 ? 1 : 0;
                 activeCheatCount += settings.EditAttributePoints != 0 ? 1 : 0;
                 activeCheatCount += settings.EditFocusPoints != 0 ? 1 : 0;
+
+                // NPC cheats
+                activeCheatCount += settings.NPCUnlimitedHP ? 1 : 0;
+                activeCheatCount += settings.NPCInfiniteHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedHorseHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedShieldHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedAmmo ? 1 : 0;
+                activeCheatCount += settings.NPCMovementSpeed > 0f ? 1 : 0;
+                activeCheatCount += settings.NPCEditGold != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditInfluence != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditAttributePoints != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditFocusPoints != 0 ? 1 : 0;
 
                 return activeCheatCount;
 
@@ -735,6 +850,7 @@ namespace BannerWand.Core
                 // Early return optimization - check most commonly used cheats first
                 // Returns immediately upon finding any active cheat
                 return settings.UnlimitedHealth ||
+                        settings.InfiniteHealth ||
                         settings.UnlimitedHorseHealth ||
                         settings.UnlimitedShieldDurability ||
                         settings.UnlimitedAmmo ||
@@ -757,11 +873,29 @@ namespace BannerWand.Core
                         settings.PersuasionAlwaysSucceed ||
                         settings.OneDaySettlementsConstruction ||
                         settings.InstantSiegeConstruction ||
+                        settings.GarrisonRecruitmentMultiplier > GameConstants.FloatEpsilon ||
+                        settings.GarrisonWagesMultiplier != GameConstants.DefaultGarrisonWagesMultiplier ||
+                        settings.MilitiaRecruitmentMultiplier > GameConstants.FloatEpsilon ||
+                        settings.MilitiaVeteranChance > GameConstants.FloatEpsilon ||
+                        settings.FoodIncreaseMultiplier > 0 ||
+                        settings.ProsperityIncreaseMultiplier > 0 ||
+                        settings.LoyaltyIncreaseMultiplier > 0 ||
+                        settings.SecurityIncreaseMultiplier > 0 ||
                         settings.GameSpeed > 0f ||
                         settings.EditGold != 0 ||
                         settings.EditInfluence != 0 ||
                         settings.EditAttributePoints != 0 ||
-                        settings.EditFocusPoints != 0;
+                        settings.EditFocusPoints != 0 ||
+                        settings.NPCUnlimitedHP ||
+                        settings.NPCInfiniteHP ||
+                        settings.NPCUnlimitedHorseHP ||
+                        settings.NPCUnlimitedShieldHP ||
+                        settings.NPCUnlimitedAmmo ||
+                        settings.NPCMovementSpeed > 0f ||
+                        settings.NPCEditGold != 0 ||
+                        settings.NPCEditInfluence != 0 ||
+                        settings.NPCEditAttributePoints != 0 ||
+                        settings.NPCEditFocusPoints != 0;
 
             }
             catch (Exception ex)
@@ -849,6 +983,52 @@ namespace BannerWand.Core
                 if (Settings.SkillXPMultiplier > GameConstants.FloatEpsilon)
                 {
                     activeCheatsList.Add($"Skill XP x{Settings.SkillXPMultiplier:F1}");
+                }
+
+                // Settlement cheats
+                if (Settings.GarrisonRecruitmentMultiplier > GameConstants.FloatEpsilon)
+                {
+                    activeCheatsList.Add($"Garrison Recruitment x{Settings.GarrisonRecruitmentMultiplier:F1}");
+                }
+
+                if (Settings.GarrisonWagesMultiplier != GameConstants.DefaultGarrisonWagesMultiplier)
+                {
+                    activeCheatsList.Add($"Garrison Wages x{Settings.GarrisonWagesMultiplier:F1}");
+                }
+
+                if (Settings.MilitiaRecruitmentMultiplier > GameConstants.FloatEpsilon)
+                {
+                    activeCheatsList.Add($"Militia Recruitment x{Settings.MilitiaRecruitmentMultiplier:F1}");
+                }
+
+                if (Settings.MilitiaVeteranChance > GameConstants.FloatEpsilon)
+                {
+                    activeCheatsList.Add($"Militia Veteran Chance {Settings.MilitiaVeteranChance:F0}%");
+                }
+
+                if (Settings.FoodIncreaseMultiplier > 0)
+                {
+                    activeCheatsList.Add($"Food Bonus +{Settings.FoodIncreaseMultiplier}");
+                }
+
+                if (Settings.ProsperityIncreaseMultiplier > 0)
+                {
+                    activeCheatsList.Add($"Prosperity Bonus +{Settings.ProsperityIncreaseMultiplier}");
+                }
+
+                if (Settings.LoyaltyIncreaseMultiplier > 0)
+                {
+                    activeCheatsList.Add($"Loyalty Bonus +{Settings.LoyaltyIncreaseMultiplier}");
+                }
+
+                if (Settings.SecurityIncreaseMultiplier > 0)
+                {
+                    activeCheatsList.Add($"Security Bonus +{Settings.SecurityIncreaseMultiplier}");
+                }
+
+                if (Settings.OneDaySettlementsConstruction)
+                {
+                    activeCheatsList.Add("One Day Settlement Construction");
                 }
 
                 return activeCheatsList.Count == 0 ? "No cheats active" : $"Active cheats: {string.Join(", ", activeCheatsList)}";
