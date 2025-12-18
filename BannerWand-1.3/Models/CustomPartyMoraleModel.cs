@@ -1,11 +1,16 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -99,9 +104,7 @@ namespace BannerWand.Models
                     if (shouldApplyMaxMorale)
                     {
                         ExplainedNumber maxMorale = new(GameConstants.MaxMoraleBaseValue, includeDescription);
-
-                        ModLogger.Debug($"Max Morale applied to {mobileParty.Name}: Base +{GameConstants.MaxMoraleBaseValue}");
-
+                        // Debug log removed for performance - this method is called very frequently
                         return maxMorale;
                     }
                 }
