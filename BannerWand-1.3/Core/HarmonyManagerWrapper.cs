@@ -1,7 +1,10 @@
+#nullable enable
+// System namespaces
+using System;
+
+// Project namespaces
 using BannerWand.Interfaces;
 using BannerWand.Utils;
-using HarmonyLib;
-using System;
 
 namespace BannerWand.Core
 {
@@ -41,7 +44,7 @@ namespace BannerWand.Core
         /// Delegates to <see cref="HarmonyManager.Instance"/>.
         /// Callers should check for null before use if initialization may not have occurred.
         /// </remarks>
-        public Harmony Instance => HarmonyManager.Instance;
+        public HarmonyLib.Harmony? Instance => HarmonyManager.Instance;
 
         /// <summary>
         /// Gets whether Harmony patches have been initialized.
@@ -51,6 +54,7 @@ namespace BannerWand.Core
         /// Delegates to <see cref="HarmonyManager.IsInitialized"/>.
         /// </remarks>
         public bool IsInitialized => HarmonyManager.IsInitialized;
+
 
         /// <summary>
         /// Initializes and applies all Harmony patches.
