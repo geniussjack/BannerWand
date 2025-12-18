@@ -1,9 +1,10 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using Helpers;
+// System namespaces
 using System;
 using System.Reflection;
+
+// Third-party namespaces
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
@@ -13,6 +14,10 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {

@@ -1,10 +1,16 @@
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+#nullable enable
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -34,12 +40,12 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Calculates daily construction progress for settlement buildings with cheat override.
@@ -133,9 +139,15 @@ namespace BannerWand.Models
         /// </remarks>
         private bool ShouldApplyInstantConstructionToTown(Town town)
         {
+            // Early exit if town or owner clan is null
+            if (town?.OwnerClan == null)
+            {
+                return false;
+            }
+
             // Check if this is player's settlement
             // ApplyToPlayer must be enabled for player settlements to receive the cheat
-            if (town.OwnerClan == Clan.PlayerClan && TargetSettings.ApplyToPlayer)
+            if (town.OwnerClan == Clan.PlayerClan && TargetSettings?.ApplyToPlayer == true)
             {
                 return true;
             }
@@ -144,7 +156,7 @@ namespace BannerWand.Models
             // HasAnyNPCTargetEnabled checks if any NPC target options are enabled (companions, vassals, etc.)
             // ShouldApplyCheatToClan checks if the specific clan matches the target criteria
             return town.OwnerClan != Clan.PlayerClan &&
-                TargetSettings.HasAnyNPCTargetEnabled() &&
+                TargetSettings?.HasAnyNPCTargetEnabled() == true &&
                 Utils.TargetFilter.ShouldApplyCheatToClan(town.OwnerClan);
         }
     }

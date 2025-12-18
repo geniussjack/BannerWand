@@ -1,8 +1,9 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using Helpers;
+// System namespaces
 using System;
+
+// Third-party namespaces
+using Helpers;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
@@ -10,6 +11,11 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -38,7 +44,7 @@ namespace BannerWand.Models
         /// <summary>
         /// The default XP multiplier (no boost).
         /// </summary>
-        private const float DefaultMultiplier = 1.0f;
+        private const float DefaultMultiplier = GameConstants.MultiplierFactorBase;
 
 
         /// <summary>

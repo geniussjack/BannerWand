@@ -1,11 +1,17 @@
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+#nullable enable
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -15,7 +21,7 @@ namespace BannerWand.Models
     /// </summary>
     /// <remarks>
     /// <para>
-    /// FIXED: Now properly checks if PLAYER is involved in the barter transaction.
+    /// Properly checks if PLAYER is involved in the barter transaction.
     /// Previously, the cheat affected ALL barter transactions in the game,
     /// causing clans to switch kingdoms unexpectedly.
     /// </para>
@@ -28,13 +34,34 @@ namespace BannerWand.Models
     /// </remarks>
     public class CustomBarterModel : DefaultBarterModel
     {
-        private static CheatSettings Settings => CheatSettings.Instance;
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the barter penalty for an offer.
         /// Adds massive negative penalty to force acceptance ONLY for player's barters.
         /// </summary>
+        /// <param name="faction">The faction evaluating the barter offer.</param>
+        /// <param name="barterable">The item being bartered.</param>
+        /// <param name="originalOwner">The original owner of the item (must be player for cheat to apply).</param>
+        /// <param name="party">The party involved in the barter transaction.</param>
+        /// <returns>
+        /// An <see cref="ExplainedNumber"/> representing the barter penalty.
+        /// Returns base penalty if cheat is disabled or player is not the owner.
+        /// Returns base penalty with <see cref="GameConstants.BarterAutoAcceptPenalty"/> added if cheat is enabled and player is owner.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method only modifies the penalty when:
+        /// 1. <see cref="CheatSettings.BarterAlwaysAccepted"/> is enabled
+        /// 2. <see cref="CheatTargetSettings.ApplyToPlayer"/> is true
+        /// 3. <paramref name="originalOwner"/> is the player (<see cref="Hero.MainHero"/>)
+        /// </para>
+        /// <para>
+        /// The penalty is applied only when the player is giving items away, not when receiving items.
+        /// This prevents unintended behavior when NPCs evaluate offers to the player.
+        /// </para>
+        /// </remarks>
         public override ExplainedNumber GetBarterPenalty(IFaction faction, ItemBarterable barterable, Hero originalOwner, PartyBase party)
         {
             try
@@ -52,7 +79,7 @@ namespace BannerWand.Models
                     return basePenalty;
                 }
 
-                // FIXED: Only apply penalty when PLAYER is the item owner (giving items)
+                // Only apply penalty when PLAYER is the item owner (giving items)
                 // Do NOT apply when player is receiving items (party/faction check)
                 // The penalty should only affect offers where player is giving items away
                 bool playerIsOwner = originalOwner == Hero.MainHero;
