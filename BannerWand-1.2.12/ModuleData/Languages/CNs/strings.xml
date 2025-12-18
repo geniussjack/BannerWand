@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="玩家" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="物品栏" />
 		<string id="BW_Category_Stats" text="属性" />
 		<string id="BW_Category_Enemies" text="敌人" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="最大化所有角色关系" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="立即将所有角色的关系设置为100。" />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="无限生命值" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="盟友NPC英雄的生命条永不减少。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_InfiniteHP" text="无限生命" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="战斗开始时为盟友NPC英雄增加+9999生命值。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedHorseHP" text="无限马匹生命值" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="盟友NPC英雄的马匹不会受到伤害。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedShieldHP" text="无限盾牌耐久度" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="盟友NPC英雄的盾牌不会受到伤害。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedAmmo" text="无限弹药" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="盟友NPC英雄的弹药保持在最大值。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_MovementSpeed" text="设置移动速度" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="适用于地图上的所有队伍，不仅仅是玩家。更改在下一个游戏日生效。" />
+		<string id="BW_NPC_EditGold" text="编辑金币" />
+		<string id="BW_NPC_EditGold_Hint" text="为NPC添加或移除金币（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditInfluence" text="编辑影响力" />
+		<string id="BW_NPC_EditInfluence_Hint" text="为NPC添加或移除影响力（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditAttributePoints" text="编辑属性点" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="为NPC添加或移除属性点（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditFocusPoints" text="编辑专注点" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="为NPC添加或移除专注点（当值改变时应用一次）。" />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="编辑金币" />

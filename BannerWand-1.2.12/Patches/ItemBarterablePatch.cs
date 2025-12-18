@@ -117,7 +117,7 @@ namespace BannerWandRetro.Patches
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[ItemBarterablePatch] Critical error in Prefix: {ex.Message}");
+                ModLogger.Error($"[ItemBarterablePatch] Error in Prefix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
         }
@@ -209,7 +209,7 @@ namespace BannerWandRetro.Patches
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[ItemBarterablePatch] Critical error in Postfix: {ex.Message}");
+                ModLogger.Error($"[ItemBarterablePatch] Error in Postfix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 CleanupBackup();
             }

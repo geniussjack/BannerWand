@@ -53,6 +53,16 @@ namespace BannerWandRetro.Behaviors
         private bool _influenceApplied;
 
         /// <summary>
+        /// Tracks whether NPC gold has been applied to prevent repeated application.
+        /// </summary>
+        private bool _npcGoldApplied;
+
+        /// <summary>
+        /// Tracks whether NPC influence has been applied to prevent repeated application.
+        /// </summary>
+        private bool _npcInfluenceApplied;
+
+        /// <summary>
         /// Flag to track if Max All Character Relationships has been applied.
         /// </summary>
         private static bool _maxAllRelationshipsApplied;
@@ -134,6 +144,8 @@ namespace BannerWandRetro.Behaviors
             // Reset one-time application flags
             _goldApplied = false;
             _influenceApplied = false;
+            _npcGoldApplied = false;
+            _npcInfluenceApplied = false;
             _maxAllRelationshipsApplied = false;
             _inventoryBackupInitialized = false;
         }
@@ -144,7 +156,7 @@ namespace BannerWandRetro.Behaviors
         /// </summary>
         private void OnHourlyTick()
         {
-            // FIXED: Apply gold/influence HOURLY for near-instant response when user changes settings
+            // Apply gold/influence HOURLY for near-instant response when user changes settings
             ApplyGoldAndInfluence();
 
             // Smithing materials - ensure player has enough for unlimited smithing
@@ -228,6 +240,68 @@ namespace BannerWandRetro.Behaviors
                 // Reset flag when setting returns to zero
                 _influenceApplied = false;
             }
+
+            // Apply NPC gold if set and not yet applied
+            if (settings.NPCEditGold != 0 && !_npcGoldApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                    if (allHeroes != null)
+                    {
+                        int affectedCount = 0;
+                        foreach (Hero hero in allHeroes)
+                        {
+                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            {
+                                hero.ChangeHeroGold(settings.NPCEditGold);
+                                affectedCount++;
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Gold Edit", true, settings.NPCEditGold, $"{affectedCount} NPC heroes");
+                        }
+                    }
+                }
+                _npcGoldApplied = true;
+            }
+            else if (settings.NPCEditGold == 0)
+            {
+                // Reset flag when setting returns to zero
+                _npcGoldApplied = false;
+            }
+
+            // Apply NPC influence if set and not yet applied
+            if (settings.NPCEditInfluence != 0 && !_npcInfluenceApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans != null)
+                    {
+                        int affectedCount = 0;
+                        foreach (Clan clan in allClans)
+                        {
+                            if (clan != Clan.PlayerClan && TargetFilter.ShouldApplyCheatToClan(clan))
+                            {
+                                clan.Influence += settings.NPCEditInfluence;
+                                affectedCount++;
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Influence Edit", true, settings.NPCEditInfluence, $"{affectedCount} NPC clans");
+                        }
+                    }
+                }
+                _npcInfluenceApplied = true;
+            }
+            else if (settings.NPCEditInfluence == 0)
+            {
+                // Reset flag when setting returns to zero
+                _npcInfluenceApplied = false;
+            }
         }
 
         #endregion
@@ -242,7 +316,7 @@ namespace BannerWandRetro.Behaviors
         /// <para>
         /// Unlike the old implementation that processed 20 heroes per day, this new version:
         /// - Processes ALL alive heroes immediately when the cheat is first enabled
-        /// - Uses Hero.AllAliveHeroes instead of cached collection for complete coverage
+        /// - Uses CampaignDataCache.AllAliveHeroes for optimized performance
         /// - Sets relationships to maximum (100) in a single tick
         /// - Only runs once when cheat is enabled (uses flag system)
         /// </para>
@@ -296,30 +370,34 @@ namespace BannerWandRetro.Behaviors
 
             // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
             List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
-            if (allHeroes == null)
+            if (allHeroes is null)
             {
                 return;
             }
 
-            foreach (Hero hero in allHeroes)
+            // OPTIMIZED: Early exit check before loop
+            if (allHeroes.Count > 0)
             {
-                totalHeroes++;
-
-                // Skip player hero (player can't have relationship with themselves)
-                if (hero == Hero.MainHero)
+                foreach (Hero hero in allHeroes)
                 {
-                    continue;
-                }
+                    totalHeroes++;
+
+                    // Early continue for player hero (player can't have relationship with themselves)
+                    if (hero == Hero.MainHero)
+                    {
+                        continue;
+                    }
 
                 // Get current relationship
                 int currentRelation = Hero.MainHero.GetRelation(hero);
 
-                // Only update if not already at max to avoid unnecessary work
-                if (currentRelation < GameConstants.MaxRelationship)
-                {
-                    // Use CharacterRelationManager for direct relationship setting
-                    CharacterRelationManager.SetHeroRelation(Hero.MainHero, hero, GameConstants.MaxRelationship);
-                    heroesImproved++;
+                    // Only update if not already at max to avoid unnecessary work
+                    if (currentRelation < GameConstants.MaxRelationship)
+                    {
+                        // Use CharacterRelationManager for direct relationship setting
+                        CharacterRelationManager.SetHeroRelation(Hero.MainHero, hero, GameConstants.MaxRelationship);
+                        heroesImproved++;
+                    }
                 }
             }
 
@@ -691,10 +769,7 @@ namespace BannerWandRetro.Behaviors
         /// </remarks>
         private static void LogException(Exception ex, string methodName)
         {
-            ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
-            ModLogger.Error($"Stack trace: {ex.StackTrace}");
-            ModLogger.Error($"[PlayerCheatBehavior] Error in {methodName}: {ex.Message}");
-            ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            ModLogger.Error($"[PlayerCheatBehavior] Error in {methodName}: {ex}");
         }
 
         #endregion

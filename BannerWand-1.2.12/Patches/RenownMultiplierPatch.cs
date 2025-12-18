@@ -38,7 +38,7 @@ namespace BannerWandRetro.Patches
         /// Explicitly targets the AddRenown method by searching all available overloads.
         /// </summary>
         [HarmonyTargetMethod]
-        public static MethodBase TargetMethod()
+        public static MethodBase? TargetMethod()
         {
             try
             {
@@ -99,7 +99,7 @@ namespace BannerWandRetro.Patches
                 if (method is null)
                 {
                     ModLogger.Error("RenownMultiplierPatch: Could not find any AddRenown method!");
-                    return null!;
+                    return null;
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace BannerWandRetro.Patches
             catch (Exception ex)
             {
                 ModLogger.Error($"RenownMultiplierPatch: Exception in TargetMethod: {ex.Message}");
-                return null!;
+                return null;
             }
         }
 

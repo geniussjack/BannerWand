@@ -1,3 +1,4 @@
+#nullable enable
 using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
@@ -34,12 +35,12 @@ namespace BannerWandRetro.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Calculates daily construction progress for settlement buildings with cheat override.
@@ -133,9 +134,15 @@ namespace BannerWandRetro.Models
         /// </remarks>
         private bool ShouldApplyInstantConstructionToTown(Town town)
         {
+            // Early exit if town or owner clan is null
+            if (town?.OwnerClan == null)
+            {
+                return false;
+            }
+
             // Check if this is player's settlement
             // ApplyToPlayer must be enabled for player settlements to receive the cheat
-            if (town.OwnerClan == Clan.PlayerClan && TargetSettings.ApplyToPlayer)
+            if (town.OwnerClan == Clan.PlayerClan && TargetSettings?.ApplyToPlayer == true)
             {
                 return true;
             }
@@ -144,7 +151,7 @@ namespace BannerWandRetro.Models
             // HasAnyNPCTargetEnabled checks if any NPC target options are enabled (companions, vassals, etc.)
             // ShouldApplyCheatToClan checks if the specific clan matches the target criteria
             return town.OwnerClan != Clan.PlayerClan &&
-                TargetSettings.HasAnyNPCTargetEnabled() &&
+                TargetSettings?.HasAnyNPCTargetEnabled() == true &&
                 Utils.TargetFilter.ShouldApplyCheatToClan(town.OwnerClan);
         }
     }

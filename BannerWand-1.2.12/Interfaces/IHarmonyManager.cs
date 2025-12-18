@@ -1,6 +1,4 @@
 #nullable enable
-using HarmonyLib;
-
 namespace BannerWandRetro.Interfaces
 {
     /// <summary>
@@ -41,7 +39,7 @@ namespace BannerWandRetro.Interfaces
         /// Access to the raw Harmony instance allows for advanced patching scenarios
         /// and debugging patch conflicts with other mods.
         /// </remarks>
-        Harmony? Instance { get; }
+        HarmonyLib.Harmony? Instance { get; }
 
         /// <summary>
         /// Gets whether Harmony patches have been successfully initialized.

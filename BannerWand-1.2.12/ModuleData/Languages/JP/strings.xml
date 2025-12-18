@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="プレイヤー" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="インベントリ" />
 		<string id="BW_Category_Stats" text="統計" />
 		<string id="BW_Category_Enemies" text="敵" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="すべてのキャラクター関係を最大に" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="すべてのキャラクターとの関係を即座に100に設定します。" />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="無制限HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="同盟NPCヒーローの体力バーは減少しません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_InfiniteHP" text="無限体力" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="戦闘開始時に同盟NPCヒーローに+9999 HPを追加します。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedHorseHP" text="無制限馬の体力" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="同盟NPCヒーローの馬はダメージを受けません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedShieldHP" text="無制限盾の耐久性" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="同盟NPCヒーローの盾はダメージを受けません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedAmmo" text="無制限弾薬" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="同盟NPCヒーローの弾薬は最大値に維持されます。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_MovementSpeed" text="移動速度を設定" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="マップ上のすべてのグループに適用され、プレイヤーだけではありません。変更は次のゲーム内日で適用されます。" />
+		<string id="BW_NPC_EditGold" text="金を編集" />
+		<string id="BW_NPC_EditGold_Hint" text="NPCの金を追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditInfluence" text="影響力を編集" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPCの影響力を追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditAttributePoints" text="属性ポイントを編集" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPCの属性ポイントを追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditFocusPoints" text="フォーカスポイントを編集" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPCのフォーカスポイントを追加または削除します（値が変更されたときに一度適用されます）。" />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="金を編集" />

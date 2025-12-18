@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Spieler" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statistiken" />
 		<string id="BW_Category_Enemies" text="Feinde" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Maximale Beziehungen zu allen" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Setzt sofort die Beziehung zu allen Charakteren auf 100." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Unbegrenzte LP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Gesundheitsbalken verbündeter NPC-Helden nimmt nie ab. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_InfiniteHP" text="Unendliche Gesundheit" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Fügt verbündeten NPC-Helden zu Kampfbeginn +9999 LP hinzu. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Unbegrenzte Pferdegesundheit" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Pferde verbündeter NPC-Helden nehmen keinen Schaden. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Unbegrenzte Schildhaltbarkeit" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Schilde verbündeter NPC-Helden nehmen keinen Schaden. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Unbegrenzte Munition" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Munition verbündeter NPC-Helden wird auf Maximum gehalten. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_MovementSpeed" text="Bewegungsgeschwindigkeit setzen" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Gilt für alle Gruppen auf der Karte, nicht nur für den Spieler. Änderungen werden am nächsten Spieltag angewendet." />
+		<string id="BW_NPC_EditGold" text="Gold bearbeiten" />
+		<string id="BW_NPC_EditGold_Hint" text="Gold für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditInfluence" text="Einfluss bearbeiten" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Einfluss für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditAttributePoints" text="Attributspunkte bearbeiten" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Attributspunkte für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditFocusPoints" text="Fokusspunkte bearbeiten" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Fokusspunkte für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Gold bearbeiten" />

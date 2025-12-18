@@ -36,6 +36,10 @@ namespace BannerWandRetro.Utils
 
         private static long _lastCacheTick = -1;
         private static readonly object _lockObject = new();
+        private static List<Hero>? _allAliveHeroes;
+        private static List<Clan>? _allClans;
+        private static List<MobileParty>? _allParties;
+        private static List<Kingdom>? _allKingdoms;
 
         #endregion
 
@@ -58,16 +62,18 @@ namespace BannerWandRetro.Utils
         /// With caching: 1 full enumeration per tick + instant cached access.
         /// </para>
         /// </remarks>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<Hero>? AllAliveHeroes
         {
             get
             {
                 RefreshCacheIfNeeded();
-                field ??= [.. Hero.AllAliveHeroes];
-                return field;
+                _allAliveHeroes ??= [.. Hero.AllAliveHeroes];
+                return _allAliveHeroes;
             }
             private set;
         }
+#pragma warning restore CS9266
 
         /// <summary>
         /// Gets a cached snapshot of all clans in the campaign.
@@ -78,16 +84,18 @@ namespace BannerWandRetro.Utils
         /// <remarks>
         /// Used for influence application to NPC clans.
         /// </remarks>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<Clan>? AllClans
         {
             get
             {
                 RefreshCacheIfNeeded();
-                field ??= [.. Clan.All];
-                return field;
+                _allClans ??= [.. Clan.All];
+                return _allClans;
             }
             private set;
         }
+#pragma warning restore CS9266
 
         /// <summary>
         /// Gets a cached snapshot of all mobile parties in the campaign.
@@ -98,16 +106,18 @@ namespace BannerWandRetro.Utils
         /// <remarks>
         /// Used for troop XP application to NPC parties.
         /// </remarks>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<MobileParty>? AllParties
         {
             get
             {
                 RefreshCacheIfNeeded();
-                field ??= [.. MobileParty.All];
-                return field;
+                _allParties ??= [.. MobileParty.All];
+                return _allParties;
             }
             private set;
         }
+#pragma warning restore CS9266
 
         /// <summary>
         /// Gets a cached snapshot of all kingdoms in the campaign.
@@ -118,16 +128,18 @@ namespace BannerWandRetro.Utils
         /// <remarks>
         /// Used for kingdom-related target filtering in CheatTargetSettings.
         /// </remarks>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<Kingdom>? AllKingdoms
         {
             get
             {
                 RefreshCacheIfNeeded();
-                field ??= [.. Kingdom.All];
-                return field;
+                _allKingdoms ??= [.. Kingdom.All];
+                return _allKingdoms;
             }
             private set;
         }
+#pragma warning restore CS9266
 
         #endregion
 

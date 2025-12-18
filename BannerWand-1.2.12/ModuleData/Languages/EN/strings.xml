@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Player" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventory" />
 		<string id="BW_Category_Stats" text="Stats" />
 		<string id="BW_Category_Enemies" text="Enemies" />
@@ -28,17 +29,39 @@
 		<string id="BW_Player_UnlimitedHealth" text="Unlimited HP" />
 		<string id="BW_Player_UnlimitedHealth_Hint" text="Health bar never decreases. Can still die from damage exceeding max HP." />
 
-		<string id="BW_Player_InfiniteHealth" text="Infinite Health" />
+		<string id="BW_Player_InfiniteHealth" text="Infinite HP" />
 		<string id="BW_Player_InfiniteHealth_Hint" text="Adds +9999 HP at battle start. Prevents one-shot kills." />
 
-		<string id="BW_Player_UnlimitedHorseHealth" text="Unlimited Horse Health" />
+		<string id="BW_Player_UnlimitedHorseHealth" text="Unlimited Horse HP" />
 		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Player's horse takes no damage." />
 
-		<string id="BW_Player_UnlimitedShieldDurability" text="Unlimited Shield Durability" />
+		<string id="BW_Player_UnlimitedShieldDurability" text="Unlimited Shield HP" />
 		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Takes effect when you block enemy attacks." />
 
 		<string id="BW_Player_UnlimitedAmmo" text="Unlimited Ammo" />
 		<string id="BW_Player_UnlimitedAmmo_Hint" text="Ammunition for bows, crossbows, and throwables is maintained at 999." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Unlimited HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_InfiniteHP" text="Infinite HP" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Unlimited Horse HP" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Unlimited Shield HP" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Unlimited Ammo" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_MovementSpeed" text="Set Movement Speed" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Applies to all parties on the map, not just player. Changes apply on the next in-game day." />
+		<string id="BW_NPC_EditGold" text="Edit Gold" />
+		<string id="BW_NPC_EditGold_Hint" text="Add or remove gold for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditInfluence" text="Edit Influence" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Add or remove influence for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditAttributePoints" text="Edit Attribute Points" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Add or remove attribute points for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditFocusPoints" text="Edit Focus Points" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Add or remove focus points for NPCs (applied once when value changed)." />
 
 		<string id="BW_Player_MaxMorale" text="Max Morale" />
 		<string id="BW_Player_MaxMorale_Hint" text="Player's party always has maximum morale." />

@@ -115,6 +115,15 @@ namespace BannerWandRetro.Utils
         /// <returns>
         /// The version string without the "v" prefix, or "Unknown" if the version cannot be read.
         /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method calls <see cref="GetModVersion"/> and removes the "v" prefix if present.
+        /// Useful for display purposes where the prefix is not desired.
+        /// </para>
+        /// <para>
+        /// The version is cached after the first read, so subsequent calls are O(1).
+        /// </para>
+        /// </remarks>
         public static string GetModVersionWithoutPrefix()
         {
             string version = GetModVersion();

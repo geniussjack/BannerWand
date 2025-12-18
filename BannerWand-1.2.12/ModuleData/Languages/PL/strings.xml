@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Gracz" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Ekwipunek" />
 		<string id="BW_Category_Stats" text="Statystyki" />
 		<string id="BW_Category_Enemies" text="Wrogowie" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Maksymalne Relacje ze Wszystkimi" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Natychmiast ustawia relację na 100 ze wszystkimi postaciami." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Nieograniczone HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Pasek zdrowia sojuszniczych bohaterów NPC nigdy nie maleje. Dotyczy tylko bohaterów walczących po stronie gracza, nie zwykłych żołnierzy." />
+		<string id="BW_NPC_InfiniteHP" text="Nieskończone Zdrowie" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Dodaje +9999 HP sojuszniczym bohaterom NPC na początku bitwy. Dotyczy tylko bohaterów walczących po stronie gracza, nie zwykłych żołnierzy." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Nieograniczone Zdrowie Konia" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Konie sojuszniczych bohaterów NPC nie otrzymują obrażeń. Dotyczy tylko bohaterów walczących po stronie gracza, nie zwykłych żołnierzy." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Nieograniczona Wytrzymałość Tarczy" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Tarcze sojuszniczych bohaterów NPC nie otrzymują obrażeń. Dotyczy tylko bohaterów walczących po stronie gracza, nie zwykłych żołnierzy." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Nieograniczona Amunicja" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Amunicja sojuszniczych bohaterów NPC jest utrzymywana na maksimum. Dotyczy tylko bohaterów walczących po stronie gracza, nie zwykłych żołnierzy." />
+		<string id="BW_NPC_MovementSpeed" text="Ustaw Prędkość Ruchu" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Dotyczy wszystkich grup na mapie, nie tylko gracza. Zmiany mają zastosowanie następnego dnia gry." />
+		<string id="BW_NPC_EditGold" text="Edytuj Złoto" />
+		<string id="BW_NPC_EditGold_Hint" text="Dodaj lub usuń złoto dla NPC (stosowane raz, gdy wartość jest zmieniona)." />
+		<string id="BW_NPC_EditInfluence" text="Edytuj Wpływ" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Dodaj lub usuń wpływ dla NPC (stosowane raz, gdy wartość jest zmieniona)." />
+		<string id="BW_NPC_EditAttributePoints" text="Edytuj Punkty Atrybutów" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Dodaj lub usuń punkty atrybutów dla NPC (stosowane raz, gdy wartość jest zmieniona)." />
+		<string id="BW_NPC_EditFocusPoints" text="Edytuj Punkty Fokusa" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Dodaj lub usuń punkty fokusa dla NPC (stosowane raz, gdy wartość jest zmieniona)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edytuj Złoto" />

@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Jucător" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statistici" />
 		<string id="BW_Category_Enemies" text="Inamici" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Relații Maximale cu Toți" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Setează instantaneu relația la 100 cu toți personajele." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="HP Nelimitat" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Bara de viață a eroilor NPC aliați nu scade niciodată. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_InfiniteHP" text="Viață Infinită" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Adaugă +9999 HP eroilor NPC aliați la începutul bătăliei. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Viață Nelimitată pentru Cal" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Caii eroilor NPC aliați nu primesc daune. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Durabilitate Nelimitată pentru Scut" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Scuturile eroilor NPC aliați nu primesc daune. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Muniție Nelimitată" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Muniția eroilor NPC aliați este menținută la maxim. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_MovementSpeed" text="Setează Viteza de Mișcare" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Se aplică tuturor grupurilor de pe hartă, nu doar jucătorului. Schimbările se aplică în ziua următoare din joc." />
+		<string id="BW_NPC_EditGold" text="Editează Aur" />
+		<string id="BW_NPC_EditGold_Hint" text="Adaugă sau elimină aur pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditInfluence" text="Editează Influență" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Adaugă sau elimină influență pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditAttributePoints" text="Editează Puncte de Atribut" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Adaugă sau elimină puncte de atribut pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditFocusPoints" text="Editează Puncte de Focus" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Adaugă sau elimină puncte de focus pentru NPC (aplicat o dată când valoarea este modificată)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Editează Aur" />

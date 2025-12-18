@@ -1,3 +1,4 @@
+#nullable enable
 using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
@@ -52,12 +53,12 @@ namespace BannerWandRetro.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the XP multiplier for a hero with cheat overrides applied.
@@ -91,7 +92,8 @@ namespace BannerWandRetro.Models
         public override float GetXpMultiplier(Hero hero)
         {
             try
-            {                // Early exit for null parameters
+            {
+                // Early exit for null parameters
                 if (hero == null)
                 {
                     return DefaultMultiplier;

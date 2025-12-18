@@ -143,7 +143,7 @@ namespace BannerWandRetro.Core
         /// <para>
         /// This method applies gold changes based on <see cref="CheatTargetSettings"/>.
         /// It will affect:
-        /// - Player hero if <see cref="CheatTargetSettings.ApplyToPlayer"/> is true
+        /// - Player hero if <see cref="CheatTargetSettings.ApplyToPlayer"/> is <c>true</c>
         /// - NPC heroes that match target filters
         /// </para>
         /// <para>
@@ -151,7 +151,7 @@ namespace BannerWandRetro.Core
         /// For player-only mode, this is O(1).
         /// </para>
         /// </remarks>
-        /// <exception cref="ArgumentException">Thrown if amount exceeds reasonable bounds (±1,000,000,000).</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="amount"/> exceeds reasonable bounds (±1,000,000,000).</exception>
         public static void ApplyGold(int amount)
         {
             try
@@ -194,12 +194,23 @@ namespace BannerWandRetro.Core
                     {
                         // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
                         List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
-                        if (allHeroes is not null)
+                        if (allHeroes is null)
+                        {
+                            return;
+                        }
+
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Count > 0)
                         {
                             foreach (Hero hero in allHeroes)
                             {
-                                // Skip player hero and check if hero matches target filter criteria
-                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                
+                                if (TargetFilter.ShouldApplyCheat(hero))
                                 {
                                     hero.ChangeHeroGold(amount);
                                     affectedHeroCount++;
@@ -282,12 +293,23 @@ namespace BannerWandRetro.Core
                     {
                         // OPTIMIZED: Use cached collection instead of direct Clan.All enumeration
                         List<Clan>? allClans = CampaignDataCache.AllClans;
-                        if (allClans is not null)
+                        if (allClans is null)
+                        {
+                            return;
+                        }
+
+                        // OPTIMIZED: Early exit check before loop
+                        if (allClans.Count > 0)
                         {
                             foreach (Clan clan in allClans)
                             {
-                                // Skip player clan and check if clan matches target filter criteria
-                                if (clan != Clan.PlayerClan && TargetFilter.ShouldApplyCheatToClan(clan))
+                                // Early continue for player clan
+                                if (clan == Clan.PlayerClan)
+                                {
+                                    continue;
+                                }
+                                
+                                if (TargetFilter.ShouldApplyCheatToClan(clan))
                                 {
                                     clan.Influence += amount;
                                     affectedClanCount++;
@@ -319,7 +341,7 @@ namespace BannerWandRetro.Core
         /// </summary>
         /// <param name="amount">Amount of attribute points to add (positive) or remove (negative).</param>
         /// <remarks>
-        /// Negative amounts are automatically clamped to prevent negative attribute points.
+        /// Negative <paramref name="amount"/> values are automatically clamped to prevent negative attribute points.
         /// </remarks>
         public static void ApplyAttributePoints(int amount)
         {
@@ -356,12 +378,23 @@ namespace BannerWandRetro.Core
                     {
                         // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
                         List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
-                        if (allHeroes is not null)
+                        if (allHeroes is null)
+                        {
+                            return;
+                        }
+
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Count > 0)
                         {
                             foreach (Hero hero in allHeroes)
                             {
-                                // Skip player hero and check if hero matches target filter criteria
-                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                
+                                if (TargetFilter.ShouldApplyCheat(hero))
                                 {
                                     ApplyAttributePointsToHero(hero, amount);
                                     affectedHeroCount++;
@@ -393,7 +426,7 @@ namespace BannerWandRetro.Core
         /// </summary>
         /// <param name="amount">Amount of focus points to add (positive) or remove (negative).</param>
         /// <remarks>
-        /// Negative amounts are automatically clamped to prevent negative focus points.
+        /// Negative <paramref name="amount"/> values are automatically clamped to prevent negative focus points.
         /// </remarks>
         public static void ApplyFocusPoints(int amount)
         {
@@ -430,12 +463,23 @@ namespace BannerWandRetro.Core
                     {
                         // OPTIMIZED: Use cached collection instead of direct Hero.AllAliveHeroes enumeration
                         List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
-                        if (allHeroes is not null)
+                        if (allHeroes is null)
+                        {
+                            return;
+                        }
+
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Count > 0)
                         {
                             foreach (Hero hero in allHeroes)
                             {
-                                // Skip player hero and check if hero matches target filter criteria
-                                if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                
+                                if (TargetFilter.ShouldApplyCheat(hero))
                                 {
                                     ApplyFocusPointsToHero(hero, amount);
                                     affectedHeroCount++;
@@ -469,7 +513,7 @@ namespace BannerWandRetro.Core
         /// <summary>
         /// Applies attribute points to a specific hero with automatic clamping to prevent negative values.
         /// </summary>
-        /// <param name="hero">The hero to modify.</param>
+        /// <param name="hero">The <see cref="Hero"/> to modify.</param>
         /// <param name="amount">The amount of attribute points to add (can be negative).</param>
         /// <remarks>
         /// This helper method encapsulates the logic for applying and clamping attribute points,
@@ -489,7 +533,7 @@ namespace BannerWandRetro.Core
         /// <summary>
         /// Applies focus points to a specific hero with automatic clamping to prevent negative values.
         /// </summary>
-        /// <param name="hero">The hero to modify.</param>
+        /// <param name="hero">The <see cref="Hero"/> to modify.</param>
         /// <param name="amount">The amount of focus points to add (can be negative).</param>
         /// <remarks>
         /// This helper method encapsulates the logic for applying and clamping focus points,
@@ -523,6 +567,9 @@ namespace BannerWandRetro.Core
         /// Performance: O(n) where n is the number of mobile parties in the game.
         /// Consider caching if called frequently within a short time window.
         /// </para>
+        /// <para>
+        /// Uses <see cref="CampaignDataCache.AllParties"/> for optimized party enumeration.
+        /// </para>
         /// </remarks>
         public static List<MobileParty> GetAffectedParties()
         {
@@ -546,11 +593,23 @@ namespace BannerWandRetro.Core
             {
                 // OPTIMIZED: Use cached collection instead of direct MobileParty.All enumeration
                 List<MobileParty>? allParties = CampaignDataCache.AllParties;
-                if (allParties is not null)
+                if (allParties is null)
+                {
+                    return affectedParties;
+                }
+
+                // OPTIMIZED: Early exit check before loop
+                if (allParties.Count > 0)
                 {
                     foreach (MobileParty party in allParties)
                     {
-                        if (party != MobileParty.MainParty && TargetFilter.ShouldApplyCheatToParty(party))
+                        // Early continue for player's main party
+                        if (party == MobileParty.MainParty)
+                        {
+                            continue;
+                        }
+                        
+                        if (TargetFilter.ShouldApplyCheatToParty(party))
                         {
                             affectedParties.Add(party);
                         }
@@ -573,6 +632,9 @@ namespace BannerWandRetro.Core
         /// <para>
         /// Performance: O(n*m) where n is the number of affected parties and m is the
         /// average roster size. Uses performance logging to track execution time.
+        /// </para>
+        /// <para>
+        /// Uses <see cref="GetAffectedParties"/> to determine which parties should be healed.
         /// </para>
         /// </remarks>
         public static int HealAllTroops()
@@ -695,6 +757,18 @@ namespace BannerWandRetro.Core
                 activeCheatCount += settings.EditAttributePoints != 0 ? 1 : 0;
                 activeCheatCount += settings.EditFocusPoints != 0 ? 1 : 0;
 
+                // NPC cheats
+                activeCheatCount += settings.NPCUnlimitedHP ? 1 : 0;
+                activeCheatCount += settings.NPCInfiniteHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedHorseHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedShieldHP ? 1 : 0;
+                activeCheatCount += settings.NPCUnlimitedAmmo ? 1 : 0;
+                activeCheatCount += settings.NPCMovementSpeed > 0f ? 1 : 0;
+                activeCheatCount += settings.NPCEditGold != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditInfluence != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditAttributePoints != 0 ? 1 : 0;
+                activeCheatCount += settings.NPCEditFocusPoints != 0 ? 1 : 0;
+
                 return activeCheatCount;
 
             }
@@ -709,10 +783,15 @@ namespace BannerWandRetro.Core
         /// <summary>
         /// Checks if any cheat is currently active.
         /// </summary>
-        /// <returns>True if at least one cheat is enabled, false otherwise.</returns>
+        /// <returns><c>true</c> if at least one cheat is enabled; otherwise, <c>false</c>.</returns>
         /// <remarks>
+        /// <para>
         /// This is an optimized version that returns as soon as it finds an active cheat,
         /// unlike <see cref="GetActiveCheatCount"/> which counts all of them.
+        /// </para>
+        /// <para>
+        /// Performance: O(1) average case (early return), O(n) worst case where n is the number of cheats.
+        /// </para>
         /// </remarks>
         public static bool IsAnyCheatActive()
         {
@@ -755,7 +834,17 @@ namespace BannerWandRetro.Core
                         settings.EditGold != 0 ||
                         settings.EditInfluence != 0 ||
                         settings.EditAttributePoints != 0 ||
-                        settings.EditFocusPoints != 0;
+                        settings.EditFocusPoints != 0 ||
+                        settings.NPCUnlimitedHP ||
+                        settings.NPCInfiniteHP ||
+                        settings.NPCUnlimitedHorseHP ||
+                        settings.NPCUnlimitedShieldHP ||
+                        settings.NPCUnlimitedAmmo ||
+                        settings.NPCMovementSpeed > 0f ||
+                        settings.NPCEditGold != 0 ||
+                        settings.NPCEditInfluence != 0 ||
+                        settings.NPCEditAttributePoints != 0 ||
+                        settings.NPCEditFocusPoints != 0;
 
             }
             catch (Exception ex)
@@ -768,7 +857,10 @@ namespace BannerWandRetro.Core
         /// <summary>
         /// Gets a human-readable summary of active cheats.
         /// </summary>
-        /// <returns>A string describing all currently active cheats.</returns>
+        /// <returns>
+        /// A string describing all currently active cheats, or <c>"No cheats active"</c> if none are enabled.
+        /// Returns <c>null</c> if an error occurs.
+        /// </returns>
         /// <remarks>
         /// <para>
         /// This method returns a comma-separated list of active cheat names.
@@ -859,8 +951,13 @@ namespace BannerWandRetro.Core
         /// Logs the current cheat status to the game UI and log file.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// Displays an in-game message with the active cheat summary.
         /// Useful for debugging or user confirmation.
+        /// </para>
+        /// <para>
+        /// Uses <see cref="GetActiveCheatSummary"/> to generate the summary message.
+        /// </para>
         /// </remarks>
         public static void LogCheatStatus()
         {
@@ -884,16 +981,20 @@ namespace BannerWandRetro.Core
         /// <summary>
         /// Logs an exception with consistent formatting for CheatManager methods.
         /// </summary>
-        /// <param name="ex">The exception to log.</param>
+        /// <param name="ex">The <see cref="Exception"/> to log.</param>
         /// <param name="methodName">The name of the method where the exception occurred.</param>
         /// <remarks>
+        /// <para>
         /// This helper method centralizes exception logging to ensure consistent error reporting
         /// and reduce code duplication across all CheatManager methods.
+        /// </para>
+        /// <para>
+        /// Uses <see cref="ModLogger.Error(string)"/> to write the exception details to the log file.
+        /// </para>
         /// </remarks>
         private static void LogException(Exception ex, string methodName)
         {
-            ModLogger.Error($"[CheatManager] Error in {methodName}: {ex.Message}");
-            ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            ModLogger.Error($"[CheatManager] Error in {methodName}: {ex}");
         }
 
         #endregion

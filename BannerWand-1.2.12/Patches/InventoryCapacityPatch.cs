@@ -58,8 +58,7 @@ namespace BannerWandRetro.Patches
         /// 2. Party qualifies (player party or targeted NPC party)
         /// </para>
         /// </remarks>
-#pragma warning disable RCS1213 // Remove unused method declaration
-#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
+#pragma warning disable RCS1213, IDE0060, RCS1163 // Remove unused method declaration and unused parameters - required for Harmony signature match
         private static void Postfix(
             ref ExplainedNumber __result,
             MobileParty mobileParty,
