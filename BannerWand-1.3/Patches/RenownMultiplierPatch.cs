@@ -1,11 +1,17 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -90,7 +96,7 @@ namespace BannerWand.Patches
                 }
 
                 // Last resort - any AddRenown
-                if (method is null && allMethods.Count > 0)
+                if (method is null && allMethods.Any())
                 {
                     ModLogger.Warning("RenownMultiplierPatch: Using first available AddRenown method");
                     method = allMethods[0];

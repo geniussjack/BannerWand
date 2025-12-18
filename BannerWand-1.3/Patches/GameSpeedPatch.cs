@@ -1,9 +1,14 @@
 #nullable enable
-using BannerWand.Settings;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.Reflection;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
+
+// Project namespaces
+using BannerWand.Settings;
 
 namespace BannerWand.Patches
 {
@@ -99,7 +104,8 @@ namespace BannerWand.Patches
                 }
 
                 // Get current time delta
-                float currentDt = (float)(dtField.GetValue(__instance) ?? 0f);
+                object? dtValue = dtField.GetValue(__instance);
+                float currentDt = dtValue != null ? (float)dtValue : 0f;
 
                 // Apply multiplier only if time is advancing (not paused)
                 if (currentDt > 0f)

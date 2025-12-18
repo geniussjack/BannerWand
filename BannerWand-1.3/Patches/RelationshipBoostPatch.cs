@@ -1,8 +1,12 @@
+#nullable enable
+// Third-party namespaces
+using HarmonyLib;
+using TaleWorlds.CampaignSystem;
+
+// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-using HarmonyLib;
-using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Patches
 {
@@ -34,8 +38,8 @@ namespace BannerWand.Patches
         [HarmonyPrefix]
         private static void Prefix(Hero hero1, Hero hero2, ref int value)
         {
-            CheatSettings settings = CheatSettings.Instance;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? settings = CheatSettings.Instance;
+            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
