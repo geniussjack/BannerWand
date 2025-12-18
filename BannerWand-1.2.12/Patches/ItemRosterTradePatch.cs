@@ -27,7 +27,7 @@ namespace BannerWandRetro.Patches
     /// - The roster belongs to player's party (MobileParty.MainParty)
     /// </para>
     /// </remarks>
-    [HarmonyPatch(typeof(ItemRoster), nameof(ItemRoster.AddToCounts), new[] { typeof(ItemObject), typeof(int) })]
+    [HarmonyPatch(typeof(ItemRoster), nameof(ItemRoster.AddToCounts), [typeof(ItemObject), typeof(int)])]
     public static class ItemRosterTradePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;

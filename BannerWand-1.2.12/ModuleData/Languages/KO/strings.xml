@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="플레이어" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="인벤토리" />
 		<string id="BW_Category_Stats" text="통계" />
 		<string id="BW_Category_Enemies" text="적" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="모든 캐릭터 관계 최대화" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="모든 캐릭터와의 관계를 즉시 100으로 설정합니다." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="무제한 HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="동맹 NPC 영웅의 체력 바가 감소하지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_InfiniteHP" text="무한 체력" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="전투 시작 시 동맹 NPC 영웅에게 +9999 HP를 추가합니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="무제한 말 체력" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="동맹 NPC 영웅의 말이 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="무제한 방패 내구도" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="동맹 NPC 영웅의 방패가 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedAmmo" text="무제한 탄약" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="동맹 NPC 영웅의 탄약이 최대값으로 유지됩니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_MovementSpeed" text="이동 속도 설정" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="지도상의 모든 그룹에 적용되며 플레이어에게만 적용되지 않습니다. 변경 사항은 다음 게임 내 날에 적용됩니다." />
+		<string id="BW_NPC_EditGold" text="금 편집" />
+		<string id="BW_NPC_EditGold_Hint" text="NPC의 금을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditInfluence" text="영향력 편집" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPC의 영향을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditAttributePoints" text="속성 포인트 편집" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPC의 속성 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditFocusPoints" text="포커스 포인트 편집" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPC의 포커스 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="금 편집" />

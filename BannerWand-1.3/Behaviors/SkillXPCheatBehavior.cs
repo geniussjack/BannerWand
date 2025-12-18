@@ -1,13 +1,19 @@
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+#nullable enable
+// System namespaces
 using System;
 using System.Collections.Generic;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Behaviors
 {
@@ -141,8 +147,8 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            CheatSettings settings = CheatSettings.Instance;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? settings = CheatSettings.Instance;
+            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
@@ -179,7 +185,7 @@ namespace BannerWand.Behaviors
             // Use cached collection to avoid repeated enumeration (runs hourly)
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                List<Hero> allHeroes = CampaignDataCache.AllAliveHeroes;
+                List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
                 if (allHeroes is null)
                 {
                     return;
@@ -276,8 +282,8 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyTroopXPBoost()
         {
-            CheatSettings settings = CheatSettings.Instance;
-            CheatTargetSettings targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? settings = CheatSettings.Instance;
+            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {
@@ -341,7 +347,7 @@ namespace BannerWand.Behaviors
             // Use cached collection to avoid repeated enumeration (runs hourly)
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                List<MobileParty> allParties = CampaignDataCache.AllParties;
+                List<MobileParty>? allParties = CampaignDataCache.AllParties;
                 if (allParties is null)
                 {
                     return;
@@ -379,8 +385,8 @@ namespace BannerWand.Behaviors
             if (totalTroopsImproved > 0)
             {
                 string mode = unlimitedMode ? "Unlimited" : $"Multiplier x{settings.TroopsXPMultiplier:F1}";
-                // Only log every 10th call to reduce spam when Game Speed is high
-                if (_troopXpLogCounter % 10 == 0)
+                // Only log every Nth call to reduce spam when Game Speed is high
+                if (_troopXpLogCounter % GameConstants.TroopXPLogInterval == 0)
                 {
                     ModLogger.Log($"Troop XP ({mode}): Added {xpToAdd} XP to {totalTroopsImproved} troops across {partiesProcessed} parties (call #{_troopXpLogCounter + 1})");
                 }

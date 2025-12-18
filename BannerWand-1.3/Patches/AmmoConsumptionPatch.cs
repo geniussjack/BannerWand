@@ -1,11 +1,16 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.Reflection;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -29,9 +34,14 @@ namespace BannerWand.Patches
     /// from blocking shots.
     /// </para>
     /// </remarks>
-    // CRITICAL: Do NOT use [HarmonyPatch] attribute - this patch must be applied dynamically
-    // only during combat missions to prevent breaking character models in menus.
-    // The patch is applied manually in OnMissionBehaviorInitialize and removed in OnEndMission.
+    /// <para>
+    /// IMPORTANT: This patch is applied dynamically only during combat missions
+    /// to prevent breaking character models in menus. The patch is applied manually
+    /// in OnMissionBehaviorInitialize and removed in OnEndMission.
+    /// Do NOT use [HarmonyPatch] attribute on the main patch methods to prevent
+    /// automatic application via PatchAll(). OnWeaponAmmoConsume_Prefix is applied
+    /// manually in HarmonyManager.ApplyAmmoConsumptionPatch().
+    /// </para>
     public static class AmmoConsumptionPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
@@ -50,8 +60,24 @@ namespace BannerWand.Patches
         public static bool IsPatchApplied { get; internal set; } = false;
 
         /// <summary>
-        /// Gets the target method for patching - Agent.SetWeaponAmountInSlot
+        /// Gets the target method for patching - <see cref="Agent.SetWeaponAmountInSlot"/>.
         /// </summary>
+        /// <returns>
+        /// The <see cref="MethodBase"/> representing <see cref="Agent.SetWeaponAmountInSlot"/> method,
+        /// or <c>null</c> if the method cannot be found.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method searches for <see cref="Agent.SetWeaponAmountInSlot"/> with multiple possible signatures:
+        /// 1. <c>SetWeaponAmountInSlot(EquipmentIndex, ref short, bool)</c> - Most common signature
+        /// 2. <c>SetWeaponAmountInSlot(EquipmentIndex, ref short)</c> - Alternative signature
+        /// 3. <c>SetWeaponAmountInSlot(EquipmentIndex, short, bool)</c> - Fallback signature
+        /// </para>
+        /// <para>
+        /// The method uses reflection to find the correct overload based on available parameters.
+        /// If no matching method is found, returns <c>null</c> and the patch will not be applied.
+        /// </para>
+        /// </remarks>
         [HarmonyTargetMethod]
         public static MethodBase? TargetMethod()
         {
@@ -152,7 +178,7 @@ namespace BannerWand.Patches
 
         /// <summary>
         /// Prefix patch that prevents ammo decrease for player when Unlimited Ammo is enabled.
-        /// CRITICAL FIX: Instead of blocking the call (return false), we modify the amount parameter
+        /// Instead of blocking the call (return false), we modify the amount parameter
         /// to prevent decrease while still allowing the original method to execute. This prevents
         /// breaking internal game state that might depend on SetWeaponAmountInSlot completing.
         /// </summary>
@@ -168,10 +194,10 @@ namespace BannerWand.Patches
         {
             try
             {
-                // CRITICAL FIX: Only work in ACTIVE COMBAT MISSIONS, NOT in menus or character rendering
-                // The problem: SetWeaponAmountInSlot is called even in menus for character model rendering.
+                // Only work in ACTIVE COMBAT MISSIONS, NOT in menus or character rendering
+                // SetWeaponAmountInSlot is called even in menus for character model rendering.
                 // Even if we return true (skip), the fact that the patch is applied can break character models.
-                // Solution: Add strict checks to ensure we're in an actual combat mission, not just any mission.
+                // Add strict checks to ensure we're in an actual combat mission, not just any mission.
 
                 // First check: Mission must exist
                 Mission? currentMission = Mission.Current;
@@ -233,13 +259,21 @@ namespace BannerWand.Patches
                 // Get current ammo amount
                 short currentAmount = weapon.Amount;
 
-                // CRITICAL FIX: Instead of blocking the call (return false), modify the amount parameter
+                // CRITICAL: Instead of blocking the call (return false), modify the amount parameter
                 // to prevent decrease while still allowing the original method to execute.
-                // This prevents breaking internal game state that might depend on SetWeaponAmountInSlot completing.
-                // Blocking the call can corrupt character models in menus (inventory, party, clan).
+                // 
+                // Why modify instead of block:
+                // 1. SetWeaponAmountInSlot updates internal game state (equipment slots, UI, etc.)
+                // 2. Blocking the call (return false) prevents state updates, causing:
+                //    - Character model corruption in menus (inventory, party, clan screens)
+                //    - UI desynchronization (displayed ammo count doesn't match actual)
+                //    - Potential crashes when game expects state to be updated
+                // 3. Modifying amount to current value allows state updates while preventing actual decrease
+                //
+                // This approach ensures game stability while maintaining cheat functionality.
                 if (amount < currentAmount)
                 {
-                    // Log first block for debugging
+                    // Log first block for debugging (only once to avoid log spam)
                     if (!_firstBlockLogged)
                     {
                         _firstBlockLogged = true;
@@ -247,7 +281,7 @@ namespace BannerWand.Patches
                         ModLogger.Log($"[AmmoConsumptionPatch] PREVENTED ammo decrease: {weaponName} ({currentAmount} → {amount}, setting to {currentAmount})");
                     }
 
-                    // CRITICAL FIX: Modify amount to current value instead of blocking the call
+                    // Modify amount to current value instead of blocking the call
                     // This allows SetWeaponAmountInSlot to execute and update internal state correctly,
                     // while preventing the actual ammo decrease. This fixes character model corruption.
                     amount = currentAmount;
@@ -279,28 +313,26 @@ namespace BannerWand.Patches
         /// instead of SetWeaponAmountInSlot(EquipmentIndex, ref short, bool).
         /// </summary>
         /// <remarks>
-        /// CRITICAL: This Prefix is applied manually via HarmonyManager, NOT through PatchAll().
+        /// This Prefix is applied manually via HarmonyManager, NOT through PatchAll().
         /// Do NOT add [HarmonyPatch] attribute here, as it would conflict with manual patching.
         /// </remarks>
         [HarmonyPrefix]
-#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - required for Harmony signature match
         public static bool Prefix_NoRef(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool enforcePrimaryItem)
-#pragma warning restore IDE0060, RCS1163
         {
             // If method doesn't have ref parameter, we can't modify it directly
             // Instead, we need to block the call (return false) when we want to prevent decrease
             // But this can break character models, so we only do it in combat missions
-            
+
             try
             {
                 // Only log in debug to avoid spam
                 ModLogger.Debug($"[AmmoConsumptionPatch] Prefix_NoRef CALLED: Agent={__instance?.Index}, Slot={equipmentSlot}, Amount={amount}, EnforcePrimary={enforcePrimaryItem}");
-                
+
                 // Same strict checks as main Prefix
                 Mission? currentMission = Mission.Current;
                 if (currentMission == null || currentMission.MainAgent == null)
                 {
-                    ModLogger.Debug($"[AmmoConsumptionPatch] Prefix_NoRef: Early exit - no mission or main agent");
+                    ModLogger.Debug("[AmmoConsumptionPatch] Prefix_NoRef: Early exit - no mission or main agent");
                     return true;
                 }
 
@@ -361,19 +393,26 @@ namespace BannerWand.Patches
         /// Blocks ammo consumption invoked from native side via Agent.OnWeaponAmmoConsume callback.
         /// This is the path used by the engine when ammo is actually decremented.
         /// </summary>
+        /// <remarks>
+        /// This patch is applied manually in HarmonyManager.ApplyAmmoConsumptionPatch(), not via PatchAll().
+        /// Do NOT add [HarmonyPatch] attribute here to prevent double-patching.
+        /// </remarks>
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(Agent), "OnWeaponAmmoConsume")]
-#pragma warning disable IDE0060, RCS1163
         public static bool OnWeaponAmmoConsume_Prefix(Agent __instance, EquipmentIndex slotIndex, short totalAmmo)
-#pragma warning restore IDE0060, RCS1163
         {
             try
             {
+                // Safety checks to avoid conflicts with other mods (e.g., Achievement Unblocker)
+                if (__instance == null || Mission.Current == null)
+                {
+                    return true; // Allow original method to run
+                }
+
                 // Log only for player in debug to reduce noise
-                bool isPlayer = __instance?.IsMainAgent == true && __instance?.IsActive() == true;
+                bool isPlayer = __instance.IsMainAgent && __instance.IsActive();
                 if (isPlayer)
                 {
-                    ModLogger.Debug($"[AmmoConsumptionPatch] OnWeaponAmmoConsume CALLED: Agent={__instance?.Index}, Slot={slotIndex}, totalAmmo={totalAmmo}");
+                    ModLogger.Debug($"[AmmoConsumptionPatch] OnWeaponAmmoConsume CALLED: Agent={__instance.Index}, Slot={slotIndex}, totalAmmo={totalAmmo}");
                 }
 
                 if (!isPlayer)
@@ -382,6 +421,12 @@ namespace BannerWand.Patches
                 }
 
                 if (Settings == null || TargetSettings == null || !Settings.UnlimitedAmmo || !TargetSettings.ApplyToPlayer)
+                {
+                    return true;
+                }
+
+                // Additional safety check - verify agent is still valid
+                if (!__instance.IsActive())
                 {
                     return true;
                 }
@@ -398,8 +443,20 @@ namespace BannerWand.Patches
                 if (current < max)
                 {
                     // Restore to max using the native method that normally updates ammo when picking up
-                    __instance.SetWeaponAmountInSlot(slotIndex, max, true);
-                    ModLogger.Debug($"[AmmoConsumptionPatch] BLOCKED ammo consume via OnWeaponAmmoConsume: {current} -> {totalAmmo}, restored to {max}");
+                    // Set flag to prevent recursive calls from SetWeaponAmountInSlot patch
+                    if (__instance.IsActive())
+                    {
+                        IsRestorationInProgress = true;
+                        try
+                        {
+                            __instance.SetWeaponAmountInSlot(slotIndex, max, true);
+                            ModLogger.Debug($"[AmmoConsumptionPatch] BLOCKED ammo consume via OnWeaponAmmoConsume: {current} -> {totalAmmo}, restored to {max}");
+                        }
+                        finally
+                        {
+                            IsRestorationInProgress = false;
+                        }
+                    }
                 }
                 else
                 {
@@ -410,8 +467,10 @@ namespace BannerWand.Patches
             }
             catch (Exception ex)
             {
+                // Enhanced error handling to avoid conflicts with other mods
                 ModLogger.Error($"[AmmoConsumptionPatch] Error in OnWeaponAmmoConsume_Prefix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                // Always return true on error to allow original method to run and avoid breaking other mods
                 return true;
             }
         }

@@ -1,6 +1,10 @@
 #nullable enable
+// System namespaces
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
+// Third-party namespaces
 using TaleWorlds.Core;
 
 namespace BannerWand.Utils
@@ -33,15 +37,20 @@ namespace BannerWand.Utils
         private const int MaxPoolSize = 4;
 
         /// <summary>
+        /// Thread-local pool instance.
+        /// </summary>
+        [ThreadStatic]
+        private static Stack<Dictionary<TKey, TValue>>? _pool;
+
+        /// <summary>
         /// Gets the thread-local pool instance, creating it if needed.
         /// </summary>
-        [field: ThreadStatic]
         private static Stack<Dictionary<TKey, TValue>> Pool
         {
             get
             {
-                field ??= new Stack<Dictionary<TKey, TValue>>(MaxPoolSize);
-                return field;
+                _pool ??= new Stack<Dictionary<TKey, TValue>>(MaxPoolSize);
+                return _pool;
             }
         }
 
@@ -77,7 +86,7 @@ namespace BannerWand.Utils
         {
             Stack<Dictionary<TKey, TValue>> pool = Pool;
 
-            if (pool.Count > 0)
+            if (pool.Any())
             {
                 Dictionary<TKey, TValue> dict = pool.Pop();
                 // Ensure it's empty (defensive check)

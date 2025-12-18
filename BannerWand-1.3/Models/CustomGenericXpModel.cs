@@ -1,9 +1,15 @@
+#nullable enable
+// System namespaces
+using System;
+
+// Third-party namespaces
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
+
+// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-using System;
-using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
 
 namespace BannerWand.Models
 {
@@ -47,17 +53,17 @@ namespace BannerWand.Models
         /// <summary>
         /// The default XP multiplier (no boost).
         /// </summary>
-        private const float DefaultMultiplier = 1.0f;
+        private const float DefaultMultiplier = GameConstants.MultiplierFactorBase;
 
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the XP multiplier for a hero with cheat overrides applied.
@@ -91,7 +97,8 @@ namespace BannerWand.Models
         public override float GetXpMultiplier(Hero hero)
         {
             try
-            {                // Early exit for null parameters
+            {
+                // Early exit for null parameters
                 if (hero == null)
                 {
                     return DefaultMultiplier;

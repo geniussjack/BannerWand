@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Player" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventory" />
 		<string id="BW_Category_Stats" text="Stats" />
 		<string id="BW_Category_Enemies" text="Enemies" />
 		<string id="BW_Category_Game" text="Game" />
+		<string id="BW_Category_Settlements" text="Settlements" />
 		<string id="BW_Category_CheatTargets" text="Cheat Targets" />
 		<string id="BW_Category_Kingdoms" text="Kingdoms" />
 		<string id="BW_Category_MinorClans" text="Minor Clans" />
@@ -28,23 +30,51 @@
 		<string id="BW_Player_UnlimitedHealth" text="Unlimited HP" />
 		<string id="BW_Player_UnlimitedHealth_Hint" text="Health bar never decreases. Can still die from damage exceeding max HP." />
 
-		<string id="BW_Player_InfiniteHealth" text="Infinite Health" />
+		<string id="BW_Player_InfiniteHealth" text="Infinite HP" />
 		<string id="BW_Player_InfiniteHealth_Hint" text="Adds +9999 HP at battle start. Prevents one-shot kills." />
 
-		<string id="BW_Player_UnlimitedHorseHealth" text="Unlimited Horse Health" />
+		<string id="BW_Player_UnlimitedHorseHealth" text="Unlimited Horse HP" />
 		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Player's horse takes no damage." />
 
-		<string id="BW_Player_UnlimitedShieldDurability" text="Unlimited Shield Durability" />
+		<string id="BW_Player_UnlimitedShieldDurability" text="Unlimited Shield HP" />
 		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Takes effect when you block enemy attacks." />
 
 		<string id="BW_Player_UnlimitedAmmo" text="Unlimited Ammo" />
 		<string id="BW_Player_UnlimitedAmmo_Hint" text="Ammunition for bows, crossbows, and throwables is maintained at 999." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Unlimited HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_InfiniteHP" text="Infinite HP" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Unlimited Horse HP" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Unlimited Shield HP" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Unlimited Ammo" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_MovementSpeed" text="Set Movement Speed" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Applies to all parties on the map, not just player. Changes apply on the next in-game day." />
+		<string id="BW_NPC_EditGold" text="Edit Gold" />
+		<string id="BW_NPC_EditGold_Hint" text="Add or remove gold for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditInfluence" text="Edit Influence" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Add or remove influence for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditAttributePoints" text="Edit Attribute Points" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Add or remove attribute points for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditFocusPoints" text="Edit Focus Points" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Add or remove focus points for NPCs (applied once when value changed)." />
+
+		<string id="BW_NPC_StopNPCAging" text="Stop NPC Aging" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Prevents NPCs from aging once they reach 21 years old. Children under 21 will continue to grow normally." />
 
 		<string id="BW_Player_MaxMorale" text="Max Morale" />
 		<string id="BW_Player_MaxMorale_Hint" text="Player's party always has maximum morale." />
 
 		<string id="BW_Player_MovementSpeed" text="Set Movement Speed" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Only works on map, not in battle. Changes apply on the next in-game day." />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="Clan Companions Limit" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Adds bonus to companion limit for player and NPC clans. Works with mods that allow NPCs to recruit companions." />
 
 		<string id="BW_Player_BarterAlwaysAccepted" text="Barter Offer Always Accepted" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="All barter offers are automatically accepted." />
@@ -57,6 +87,9 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Max All Character Relationships" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Instantly sets relationship to 100 with all characters." />
+
+		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edit Gold" />
@@ -122,6 +155,34 @@
 		<string id="BW_Game_GameSpeed" text="Set Game Speed Multiplier" />
 		<string id="BW_Game_GameSpeed_Hint" text="Multiplies the speed of Play (1x) and Fast Forward (4x) buttons. 1.0 = normal, 2.0 = double speed, etc." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Garrison Recruitment Multiplier" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Increases the number of soldiers recruited into garrison each day. 0 = disabled, 1.0 = normal, 2.0 = double, etc." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Garrison Wages Multiplier" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Controls garrison wage cost. 1.0 = normal, 0 = free, negative values = income for settlement owner." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Militia Recruitment Multiplier" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Increases the number of militiamen recruited each day. 0 = disabled, 1.0 = normal, 2.0 = double, etc." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Militia Veteran Chance" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Percentage chance for veteran militiamen to appear (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Food Increase Multiplier" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Adds the specified value to daily food growth (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Prosperity Increase Multiplier" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Adds the specified value to daily prosperity growth (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Hearth Increase Multiplier" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Adds the specified value to daily hearth growth for villages (0-999). Hearth is the village equivalent of prosperity." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Loyalty Increase Multiplier" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Adds the specified value to daily loyalty growth (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Security Increase Multiplier" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Adds the specified value to daily security growth (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Apply to Player" />
@@ -158,5 +219,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="Multiple options can be combined. Duplicate applications are automatically prevented." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Settings Error" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} successfully initialized" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} cheats successfully initialized" />
+		<string id="BW_Message_GoldChanged" text="Gold changed by {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="Gold changed by {AMOUNT} for {COUNT} heroes" />
+		<string id="BW_Message_InfluenceChanged" text="Influence changed by {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Influence changed by {AMOUNT} for {COUNT} clans" />
+		<string id="BW_Message_AttributePointsChanged" text="Attribute points changed by {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Attribute points changed by {AMOUNT} for {COUNT} heroes" />
+		<string id="BW_Message_FocusPointsChanged" text="Focus points changed by {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Focus points changed by {AMOUNT} for {COUNT} heroes" />
+		<string id="BW_Message_WoundedTroopsHealed" text="Healed {COUNT} wounded troops" />
+		<string id="BW_Message_NoCheatsActive" text="No cheats active" />
+		<string id="BW_Message_ActiveCheats" text="Active cheats: {LIST}" />
+		<string id="BW_Message_Added" text="added" />
+		<string id="BW_Message_Removed" text="removed" />
 	</strings>
 </base>

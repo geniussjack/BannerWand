@@ -2,11 +2,11 @@
 
 A comprehensive cheat mod for **Mount & Blade II: Bannerlord** with fully configurable options through **MCM (Mod Configuration Menu)**.
 
-**All 31 cheats fully functional** - including previously non-working cheats now implemented via Harmony patches!
+**All 32 cheats fully functional** (1.3.x) / **31 cheats** (1.2.12) - including previously non-working cheats now implemented via Harmony patches!
 
 > ⚠️ **Version Notice**: 
-> - **BannerWand v1.0.9** - Supports **Bannerlord 1.3.x** (project BannerWand-1.3)
-> - **BannerWand v1.0.9** - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
+> - **BannerWand v1.1.1** - Supports **Bannerlord 1.3.x** (project BannerWand-1.3)
+> - **BannerWand v1.1.1** - Supports **Bannerlord 1.2.12** (project BannerWand-1.2.12)
 
 ---
 
@@ -115,29 +115,113 @@ Mount & Blade II Bannerlord/Modules/
 
 ## ⚙️ Configuration
 
-Open **Mod Options** in the main menu → **BannerWand**
+### Accessing Settings
 
-All features can be enabled/disabled individually. Configure:
+1. Launch the game and go to **Main Menu**
+2. Click **Mod Options** (or press `F1` if using MCM hotkey)
+3. Select **BannerWand** from the mod list
+4. Configure your desired cheats
+
+### Settings Categories
+
+All features can be enabled/disabled individually:
+
 - **Player Cheats** - Health, morale, movement, etc.
+  - Toggle each cheat on/off
+  - Adjust multipliers (e.g., Movement Speed Multiplier: 1.0x to 10.0x)
+  - Configure relationship boost amounts
+  
 - **Inventory Cheats** - Gold, food, trade, smithing
+  - Set gold/influence amounts to add/remove
+  - Enable unlimited food for parties
+  - Configure smithing material thresholds
+  
 - **Stats Cheats** - XP, renown, attributes, skills
+  - Set XP multipliers (1.0x to 100.0x)
+  - Configure renown gain multipliers
+  - Adjust attribute/focus point amounts
+  
 - **Enemy Cheats** - AI movement speed, one-hit kills
+  - Slow down enemy party movement
+  - Enable one-hit kills for all enemies
+  
 - **Game Cheats** - Time control, persuasion, construction
+  - Freeze/pause campaign time
+  - Speed up campaign time (up to 16x)
+  - Enable instant construction
+  
 - **Target Settings** - Choose which NPCs receive cheats
+  - Apply cheats to player only
+  - Apply to player clan members
+  - Apply to kingdom rulers
+  - Apply to specific clans/kingdoms
+  - Fine-tune targeting for maximum control
+
+### Tips
+
+- **Save Before Enabling**: Some cheats (like unlimited gold) can significantly alter gameplay. Save your game before enabling major cheats.
+- **Start Small**: Begin with low multiplier values and gradually increase if needed.
+- **Disable When Not Needed**: Disable cheats when not actively using them to avoid unintended side effects.
+- **Check Compatibility**: Some cheats may conflict with other mods. See [Known Issues](#-known-issues) section.
 
 ---
 
-## ⚠️ Stealth System Compatibility (v1.3.x)
+## ⚠️ Known Issues & Compatibility
+
+### Stealth System Compatibility (v1.3.x)
 
 Bannerlord 1.3.x introduces new **stealth and disguise systems**. Some cheats may interfere with stealth gameplay:
 
-### Potentially Conflicting Cheats
+**Potentially Conflicting Cheats:**
 - **Unlimited Health / Infinite Health** - May prevent stealth kills from working properly
 - **One-Hit Kills** - May interfere with stealth attack mechanics
 - **Unlimited Shield Durability** - Could affect stealth detection
 
-### Recommendation
-**Disable combat cheats when playing stealth missions** (prison escapes, infiltration quests) for the best experience. You can safely re-enable them after completing stealth sections.
+**Recommendation:** Disable combat cheats when playing stealth missions (prison escapes, infiltration quests) for the best experience. You can safely re-enable them after completing stealth sections.
+
+### Mod Compatibility
+
+**Generally Compatible:**
+- Most gameplay mods (diplomacy, economy, troop mods)
+- Visual mods (graphics, UI)
+- Content mods (new items, troops, factions)
+
+**Potentially Incompatible:**
+- Other cheat mods (may conflict with similar features)
+- Mods that heavily modify game models (may override BannerWand's custom models)
+- Mods that patch the same methods via Harmony (load order matters)
+
+**Load Order Recommendation:**
+1. Core dependencies (Harmony, ButterLib, UIExtenderEx)
+2. MCM v5
+3. BannerWand (should load after most mods)
+4. Other gameplay mods
+
+### Performance Considerations
+
+- **Large Multipliers**: Very high multipliers (e.g., 100x XP) may cause performance issues in some scenarios
+- **NPC Targeting**: Applying cheats to many NPCs simultaneously may impact performance
+- **Campaign Speed**: Maximum game speed (16x) may cause lag on slower systems
+
+### Troubleshooting
+
+**Mod Not Loading:**
+- Verify all dependencies are installed and enabled
+- Check load order (see Installation section)
+- Ensure you're using the correct version for your game (1.3.x vs 1.2.12)
+- Check log files: `C:\ProgramData\Mount and Blade II Bannerlord\logs\BannerWand.log`
+
+**Cheats Not Working:**
+- Verify the cheat is enabled in MCM
+- Check target settings (some cheats require specific target filters)
+- Ensure you're in the correct game state (e.g., some cheats only work in campaign, not in battles)
+- Check log files for error messages
+
+**Game Crashes:**
+- Disable all cheats and re-enable one by one to identify the problematic cheat
+- Check for mod conflicts (disable other mods temporarily)
+- Verify game version compatibility
+- Report the issue with log files attached
 
 ---
 
@@ -155,12 +239,19 @@ To add translations, see [README_TRANSLATION.md](README_TRANSLATION.md)
 
 - **Total Cheats**: 32 (1.3.x) / 31 (1.2.12)
 - **Working**: 32/31 (100%)
-- **NPC Support**: 10 cheats
+- **NPC Support**: 10 cheats (including Unlimited Shield HP for allied heroes) (including new Unlimited Shield HP for NPCs)
 - **Harmony Patches**: 4 cheats (1.3.x) / 3 cheats (1.2.12)
 - **Game Models**: 12 custom models
-- **Behaviors**: 7 custom behaviors
-- **Interfaces**: 6 abstraction interfaces
-- **Code Quality**: Comprehensive XML documentation, explicit typing, optimized C# patterns
+- **Behaviors**: 5 custom behaviors
+- **Interfaces**: 8 abstraction interfaces (IModLogger, ITargetFilter, ISettlementCheatHelper, ICampaignDataCache, IHarmonyManager, ICheatManager, ILogPathResolver, ILogWriter)
+- **Code Quality**: 
+  - C# 14.0 language version with modern features
+  - Comprehensive XML documentation with cref references
+  - Explicit typing (no `var` usage)
+  - All magic numbers extracted to Constants folder
+  - Optimized performance-critical code paths
+  - Thread-safe implementations
+  - Nullable reference types enabled throughout
 
 ---
 
@@ -197,8 +288,11 @@ BannerWand follows modern C# best practices with clean architecture principles:
   - `ILogPathResolver` - Log file path resolution abstraction
   - `ILogWriter` - Log file writing abstraction
   - `ITargetFilter` - Target filtering abstraction
+  - `ISettlementCheatHelper` - Settlement targeting abstraction
   - `ICampaignDataCache` - Data caching abstraction
   - `IHarmonyManager` - Harmony patch management abstraction
+  - `ICheatManager` - Cheat management operations abstraction
+  - `IVersionReader` - Version reading abstraction
 - **Clean Architecture**: Separation of concerns with Behaviors, Models, Core, Utils, Settings, Patches, Constants, Interfaces
 - **Comprehensive XML Documentation**: All public and internal APIs fully documented with XML comments (`summary`, `param`, `returns`, `remarks`)
 - **Code Standards**: No compiler warnings, clean codebase following C# best practices, consistent naming conventions
@@ -229,17 +323,52 @@ This mod is provided as-is for personal use. Feel free to modify for personal us
 
 ---
 
+## 📚 Additional Documentation
+
+For more detailed information, see:
+
+- **[Changelog](CHANGELOG.md)** - Complete version history and changes
+- **[Architecture Documentation](Documentation/ARCHITECTURE.md)** - Detailed architecture overview and design patterns
+- **[API Documentation](Documentation/API.md)** - Complete API reference for developers
+- **[Developer Guide](Documentation/DEVELOPER_GUIDE.md)** - Guide for extending and modifying BannerWand
+- **[Usage Examples](Documentation/EXAMPLES.md)** - Code examples and usage patterns
+- **[Translation Guide](README_TRANSLATION.md)** - How to translate BannerWand to your language
+
 ## 🔗 Links
 
 - **Nexus Mods**: [BannerWand on Nexus](https://www.nexusmods.com/mountandblade2bannerlord/mods/)
-- **Documentation**: See [CHEAT_AUDIT.md](CHEAT_AUDIT.md) for detailed cheat information
-- **Translation Guide**: See [README_TRANSLATION.md](README_TRANSLATION.md)
+- **GitHub Repository**: [BannerWand Source Code](https://github.com/geniussjack/BannerlordCheats)
+- **Issue Tracker**: Report bugs and request features on GitHub Issues
+- **Community**: Join discussions on Nexus Mods comments section
 
 ---
 
 **Enjoy your enhanced Bannerlord experience! 🎉**
 
-**Version v1.0.9** - Major Code Optimization & Refactoring Release!
+**Version v1.1.1** - Major Code Optimization & Refactoring Release!
+
+### Changelog v1.1.1
+- ✅ **Comprehensive Refactoring** - Large-scale code optimization and refactoring:
+  - C# 14.0 language version fully utilized across all projects
+  - All magic numbers extracted to Constants folder (including speed multipliers, health thresholds)
+  - Created ICheatManager and IVersionReader interfaces for improved modularity and testability
+  - Enhanced XML documentation throughout codebase with professional formatting (added `<see cref>` and `<paramref>` tags)
+  - Code style unification and formatting improvements
+  - Removed unused using directives
+  - Optimized complex code sections
+  - Eliminated code duplication (fixed duplicate logging in CheatExtensions)
+  - Fixed all compiler warnings and linter errors (~30+ warnings resolved)
+- ✅ **Constants Organization** - Added new constants:
+  - `InfiniteHealthBonusThresholdMultiplier` - For Infinite Health detection
+  - `MaxSpeedMultiplier` - Maximum speed multiplier cap
+  - `SpeedChangeDetectionThreshold` - For speed change logging
+  - `MultiplierFactorBase` - Base value for multiplier calculations
+- ✅ **Interface-Based Design** - Created ICheatManager and IVersionReader interfaces for dependency injection and testing
+- ✅ **Documentation** - Improved XML documentation for all public APIs with cref references and paramref tags
+- ✅ **Code Quality** - Enhanced maintainability, readability, and consistency
+- ✅ **Performance Optimizations** - Verified CampaignDataCache usage, optimized conditional access patterns
+- ✅ **Null Safety** - Fixed all CS8602 warnings with proper null checks and conditional access operators
+- ✅ **Version Update** - Updated mod version to 1.1.1 in SubModule.xml and documentation
 
 ### Changelog v1.0.9
 - ✅ **Code Optimization** - Comprehensive refactoring and optimization:

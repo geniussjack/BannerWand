@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Giocatore" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventario" />
 		<string id="BW_Category_Stats" text="Statistiche" />
 		<string id="BW_Category_Enemies" text="Nemici" />
 		<string id="BW_Category_Game" text="Gioco" />
+		<string id="BW_Category_Settlements" text="Insediamenti" />
 		<string id="BW_Category_CheatTargets" text="Obiettivi Cheat" />
 		<string id="BW_Category_Kingdoms" text="Regni" />
 		<string id="BW_Category_MinorClans" text="Clan Minori" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="Imposta Velocità di Movimento" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Funziona solo sulla mappa, non in battaglia. Le modifiche si applicano il giorno di gioco successivo." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="Limite Compagni del Clan" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Aggiunge un bonus al limite di compagni per i clan del giocatore e NPC. Funziona con le mod che permettono agli NPC di reclutare compagni." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="Offerte di Baratto Sempre Accettate" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Tutte le offerte di baratto sono automaticamente accettate." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Relazioni Massime con Tutti" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imposta istantaneamente la relazione a 100 con tutti i personaggi." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="PS Illimitati" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="La barra della salute degli eroi NPC alleati non diminuisce mai. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_InfiniteHP" text="Salute Infinita" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Aggiunge +9999 PS agli eroi NPC alleati all'inizio della battaglia. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Salute del Cavallo Illimitata" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="I cavalli degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Durabilità dello Scudo Illimitata" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Gli scudi degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Munizioni Illimitate" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Le munizioni degli eroi NPC alleati sono mantenute al massimo. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_MovementSpeed" text="Imposta Velocità di Movimento" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Si applica a tutti i gruppi sulla mappa, non solo al giocatore. Le modifiche si applicano il giorno di gioco successivo." />
+		<string id="BW_NPC_EditGold" text="Modifica Oro" />
+		<string id="BW_NPC_EditGold_Hint" text="Aggiungi o rimuovi oro per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditInfluence" text="Modifica Influenza" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Aggiungi o rimuovi influenza per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditAttributePoints" text="Modifica Punti Attributo" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Aggiungi o rimuovi punti attributo per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditFocusPoints" text="Modifica Punti Focus" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Aggiungi o rimuovi punti focus per gli NPC (applicato una volta quando il valore è modificato)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Modifica Oro" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="Imposta Moltiplicatore Velocità Gioco" />
 		<string id="BW_Game_GameSpeed_Hint" text="Moltiplica la velocità dei pulsanti Riproduci (1x) e Avanti Veloce (4x). 1.0 = normale, 2.0 = doppia velocità, ecc." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Moltiplicatore Reclutamento Guarnigione" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Aumenta il numero di soldati reclutati nella guarnigione ogni giorno. 0 = disabilitato, 1.0 = normale, 2.0 = doppio, ecc." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Moltiplicatore Salari Guarnigione" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Controlla il costo dei salari della guarnigione. 1.0 = normale, 0 = gratuito, valori negativi = reddito per il proprietario dell'insediamento." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Moltiplicatore Reclutamento Milizia" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Aumenta il numero di miliziani reclutati ogni giorno. 0 = disabilitato, 1.0 = normale, 2.0 = doppio, ecc." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Probabilità Veterani Milizia" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Percentuale di probabilità di apparizione di miliziani veterani (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Bonus Cibo" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera del cibo (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Bonus Prosperità" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della prosperità (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Bonus Focolare" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera del focolare per i villaggi (0-999). Il focolare è l'equivalente della prosperità per i villaggi." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Bonus Lealtà" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della lealtà (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Bonus Sicurezza" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della sicurezza (0-999)." />
+
 		<!-- Target Settings -->
 		<string id="BW_Target_ApplyToPlayer" text="Applica al Giocatore" />
 		<string id="BW_Target_ApplyToPlayer_Hint" text="Applica i cheat selezionati al personaggio del giocatore." />
@@ -154,5 +209,23 @@
 		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Applica i cheat selezionati a tutti gli eroi nobili dei clan minori." />
 
 		<string id="BW_Target_InfoText" text="Più opzioni possono essere combinate. Le applicazioni duplicate sono automaticamente prevenute." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Errore Impostazioni" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inizializzato con successo" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} trucchi inizializzati con successo" />
+		<string id="BW_Message_GoldChanged" text="Oro modificato di {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="Oro modificato di {AMOUNT} per {COUNT} eroi" />
+		<string id="BW_Message_InfluenceChanged" text="Influenza modificata di {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Influenza modificata di {AMOUNT} per {COUNT} clan" />
+		<string id="BW_Message_AttributePointsChanged" text="Punti attributo modificati di {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Punti attributo modificati di {AMOUNT} per {COUNT} eroi" />
+		<string id="BW_Message_FocusPointsChanged" text="Punti focus modificati di {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Punti focus modificati di {AMOUNT} per {COUNT} eroi" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} truppe ferite curate" />
+		<string id="BW_Message_NoCheatsActive" text="Nessun trucco attivo" />
+		<string id="BW_Message_ActiveCheats" text="Trucchi attivi: {LIST}" />
+		<string id="BW_Message_Added" text="aggiunto" />
+		<string id="BW_Message_Removed" text="rimosso" />
 	</strings>
 </base>

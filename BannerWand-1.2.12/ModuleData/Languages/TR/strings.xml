@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Oyuncu" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Envanter" />
 		<string id="BW_Category_Stats" text="İstatistikler" />
 		<string id="BW_Category_Enemies" text="Düşmanlar" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Tüm Karakter İlişkilerini Maksimize Et" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Tüm karakterlerle ilişkiyi anında 100'e ayarlar." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Sınırsız HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Müttefik NPC kahramanlarının can çubuğu asla azalmaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_InfiniteHP" text="Sonsuz Can" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Savaş başlangıcında müttefik NPC kahramanlarına +9999 HP ekler. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Sınırsız At Sağlığı" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Müttefik NPC kahramanlarının atları hasar almaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Sınırsız Kalkan Dayanıklılığı" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Müttefik NPC kahramanlarının kalkanları hasar almaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Sınırsız Cephane" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Müttefik NPC kahramanlarının cephanesi maksimumda tutulur. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_MovementSpeed" text="Hareket Hızını Ayarla" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Haritadaki tüm gruplara uygulanır, sadece oyuncuya değil. Değişiklikler oyun içindeki bir sonraki günde uygulanır." />
+		<string id="BW_NPC_EditGold" text="Altını Düzenle" />
+		<string id="BW_NPC_EditGold_Hint" text="NPC'ler için altın ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditInfluence" text="Etkiyi Düzenle" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPC'ler için etki ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditAttributePoints" text="Özellik Puanlarını Düzenle" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPC'ler için özellik puanları ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditFocusPoints" text="Odak Puanlarını Düzenle" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPC'ler için odak puanları ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Altını Düzenle" />

@@ -1,12 +1,18 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+// System namespaces
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Behaviors
 {
@@ -50,6 +56,16 @@ namespace BannerWand.Behaviors
         /// Tracks whether influence has been applied to prevent repeated application.
         /// </summary>
         private bool _influenceApplied = false;
+
+        /// <summary>
+        /// Tracks whether NPC gold has been applied to prevent repeated application.
+        /// </summary>
+        private bool _npcGoldApplied = false;
+
+        /// <summary>
+        /// Tracks whether NPC influence has been applied to prevent repeated application.
+        /// </summary>
+        private bool _npcInfluenceApplied = false;
 
         /// <summary>
         /// Flag to track if Max All Character Relationships has been applied.
@@ -141,7 +157,7 @@ namespace BannerWand.Behaviors
         /// </summary>
         private void OnHourlyTick()
         {
-            // FIXED: Apply gold/influence HOURLY for near-instant response when user changes settings
+            // Apply gold/influence HOURLY for near-instant response when user changes settings
             ApplyGoldAndInfluence();
 
             // Smithing materials - ensure player has enough for unlimited smithing
@@ -226,6 +242,86 @@ namespace BannerWand.Behaviors
                 // Reset flag when setting returns to zero (ready for next application)
                 _influenceApplied = false;
             }
+
+            // Apply NPC gold if set and not yet applied
+            if (settings.NPCEditGold != 0 && !_npcGoldApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                    if (allHeroes != null)
+                    {
+                        int affectedCount = 0;
+                        // OPTIMIZED: Early exit check before loop
+                        if (allHeroes.Any())
+                        {
+                            foreach (Hero hero in allHeroes)
+                            {
+                                // Early continue for player hero
+                                if (hero == Hero.MainHero)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheat(hero))
+                                {
+                                    hero.ChangeHeroGold(settings.NPCEditGold);
+                                    affectedCount++;
+                                }
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Gold Edit", true, settings.NPCEditGold, $"{affectedCount} NPC heroes");
+                        }
+                    }
+                }
+                _npcGoldApplied = true;
+            }
+            else if (settings.NPCEditGold == 0)
+            {
+                // Reset flag when setting returns to zero (ready for next application)
+                _npcGoldApplied = false;
+            }
+
+            // Apply NPC influence if set and not yet applied
+            if (settings.NPCEditInfluence != 0 && !_npcInfluenceApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Clan>? allClans = CampaignDataCache.AllClans;
+                    if (allClans != null)
+                    {
+                        int affectedCount = 0;
+                        // OPTIMIZED: Early exit check before loop
+                        if (allClans.Any())
+                        {
+                            foreach (Clan clan in allClans)
+                            {
+                                // Early continue for player clan
+                                if (clan == Clan.PlayerClan)
+                                {
+                                    continue;
+                                }
+                                if (TargetFilter.ShouldApplyCheatToClan(clan))
+                                {
+                                    clan.Influence += settings.NPCEditInfluence;
+                                    affectedCount++;
+                                }
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Influence Edit", true, settings.NPCEditInfluence, $"{affectedCount} NPC clans");
+                        }
+                    }
+                }
+                _npcInfluenceApplied = true;
+            }
+            else if (settings.NPCEditInfluence == 0)
+            {
+                // Reset flag when setting returns to zero (ready for next application)
+                _npcInfluenceApplied = false;
+            }
         }
 
         #endregion
@@ -299,25 +395,29 @@ namespace BannerWand.Behaviors
                 return;
             }
 
-            foreach (Hero hero in allHeroes)
+            // OPTIMIZED: Early exit check before loop
+            if (allHeroes.Any())
             {
-                totalHeroes++;
-
-                // Skip player hero (player can't have relationship with themselves)
-                if (hero == Hero.MainHero)
+                foreach (Hero hero in allHeroes)
                 {
-                    continue;
-                }
+                    totalHeroes++;
 
-                // Get current relationship
-                int currentRelation = Hero.MainHero.GetRelation(hero);
+                    // Early continue for player hero (player can't have relationship with themselves)
+                    if (hero == Hero.MainHero)
+                    {
+                        continue;
+                    }
 
-                // Only update if not already at max to avoid unnecessary work
-                if (currentRelation < GameConstants.MaxRelationship)
-                {
-                    // Use CharacterRelationManager for direct relationship setting
-                    CharacterRelationManager.SetHeroRelation(Hero.MainHero, hero, GameConstants.MaxRelationship);
-                    heroesImproved++;
+                    // Get current relationship
+                    int currentRelation = Hero.MainHero.GetRelation(hero);
+
+                    // Only update if not already at max to avoid unnecessary work
+                    if (currentRelation < GameConstants.MaxRelationship)
+                    {
+                        // Use CharacterRelationManager for direct relationship setting
+                        CharacterRelationManager.SetHeroRelation(Hero.MainHero, hero, GameConstants.MaxRelationship);
+                        heroesImproved++;
+                    }
                 }
             }
 
@@ -457,10 +557,7 @@ namespace BannerWand.Behaviors
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in PlayerCheatBehavior.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Debug($"[Smithing] Could not add material '{itemId}': {ex.Message}");
-                // Note: This catch block has additional debug logging, so we keep it separate
+                ModLogger.Error($"[Smithing] Could not add material '{itemId}': {ex.Message}", ex);
             }
         }
 
@@ -634,7 +731,7 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
-                // Check for removed items and restore them
+                // Check for removed items and restore them, then update backup
                 // OPTIMIZED: Iterate directly over dictionary instead of creating ToList() copy
                 foreach (KeyValuePair<ItemObject, int> backupEntry in _inventoryBackup)
                 {
@@ -647,26 +744,12 @@ namespace BannerWand.Behaviors
                     {
                         int amountToRestore = originalAmount - currentAmount;
                         _ = playerRoster.AddToCounts(item, amountToRestore);
-                        // IMPORTANT: Update backup AFTER restoration to reflect post-restoration state
-                        // This ensures backup always stores the correct original amounts
-                        _inventoryBackup[item] = originalAmount;
+                        // After restoration, current amount equals original amount
+                        currentAmount = originalAmount;
                     }
-                    // Update backup with current amount if it increased (player picked up more)
-                    else if (currentAmount > originalAmount)
-                    {
-                        _inventoryBackup[item] = currentAmount;
-                    }
-                }
 
-                // Update backup with new items (after restoration)
-                // IMPORTANT: Preserve all items from old backup, even if they're not in current roster
-                // This ensures items that were completely traded away can still be restored
-                // First, update all existing backup entries with their post-restoration amounts
-                foreach (KeyValuePair<ItemObject, int> backupEntry in _inventoryBackup)
-                {
-                    ItemObject item = backupEntry.Key;
-                    int currentAmount = playerRoster.GetItemNumber(item);
-                    // Update backup with current amount (will be 0 if item was completely traded away)
+                    // Update backup with current amount (after restoration if applicable)
+                    // This ensures backup always stores the correct amounts
                     _inventoryBackup[item] = currentAmount;
                 }
 

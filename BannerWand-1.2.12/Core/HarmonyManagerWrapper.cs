@@ -1,7 +1,6 @@
 #nullable enable
 using BannerWandRetro.Interfaces;
 using BannerWandRetro.Utils;
-using HarmonyLib;
 using System;
 
 namespace BannerWandRetro.Core
@@ -42,7 +41,7 @@ namespace BannerWandRetro.Core
         /// Delegates to <see cref="HarmonyManager.Instance"/>.
         /// Callers should check for null before use if initialization may not have occurred.
         /// </remarks>
-        public Harmony? Instance => HarmonyManager.Instance;
+        public HarmonyLib.Harmony? Instance => HarmonyManager.Instance;
 
         /// <summary>
         /// Gets whether Harmony patches have been initialized.

@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Jucător" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statistici" />
 		<string id="BW_Category_Enemies" text="Inamici" />
 		<string id="BW_Category_Game" text="Joc" />
+		<string id="BW_Category_Settlements" text="Așezări" />
 		<string id="BW_Category_CheatTargets" text="Ținte Cheat" />
 		<string id="BW_Category_Kingdoms" text="Regate" />
 		<string id="BW_Category_MinorClans" text="Clanuri Minore" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="Setează Viteza de Mișcare" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Funcționează doar pe hartă, nu în bătălie. Schimbările se aplică în ziua următoare din joc." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="Limita Companiilor Clanului" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Adaugă un bonus la limita de companioni pentru clanurile jucătorului și NPC. Funcționează cu modurile care permit NPC-urilor să recruteze companioni." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="Ofertă de Schimb Întotdeauna Acceptată" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Toate ofertele de schimb sunt acceptate automat." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Relații Maximale cu Toți" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Setează instantaneu relația la 100 cu toți personajele." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="HP Nelimitat" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Bara de viață a eroilor NPC aliați nu scade niciodată. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_InfiniteHP" text="Viață Infinită" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Adaugă +9999 HP eroilor NPC aliați la începutul bătăliei. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Viață Nelimitată pentru Cal" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Caii eroilor NPC aliați nu primesc daune. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Durabilitate Nelimitată pentru Scut" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Scuturile eroilor NPC aliați nu primesc daune. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Muniție Nelimitată" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Muniția eroilor NPC aliați este menținută la maxim. Se aplică doar eroilor care luptă de partea jucătorului, nu soldaților obișnuiți." />
+		<string id="BW_NPC_MovementSpeed" text="Setează Viteza de Mișcare" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Se aplică tuturor grupurilor de pe hartă, nu doar jucătorului. Schimbările se aplică în ziua următoare din joc." />
+		<string id="BW_NPC_EditGold" text="Editează Aur" />
+		<string id="BW_NPC_EditGold_Hint" text="Adaugă sau elimină aur pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditInfluence" text="Editează Influență" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Adaugă sau elimină influență pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditAttributePoints" text="Editează Puncte de Atribut" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Adaugă sau elimină puncte de atribut pentru NPC (aplicat o dată când valoarea este modificată)." />
+		<string id="BW_NPC_EditFocusPoints" text="Editează Puncte de Focus" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Adaugă sau elimină puncte de focus pentru NPC (aplicat o dată când valoarea este modificată)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Editează Aur" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="Setează Multiplicatorul Vitezei Jocului" />
 		<string id="BW_Game_GameSpeed_Hint" text="Înmulțește viteza butoanelor Redare (1x) și Derulare Rapidă (4x). 1.0 = normal, 2.0 = dublă viteză, etc." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Multiplicator Recrutare Garnizoană" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Crește numărul de soldați recrutați în garnizoană în fiecare zi. 0 = dezactivat, 1.0 = normal, 2.0 = dublu, etc." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Multiplicator Salarii Garnizoană" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Controlează costul salariilor garnizoanei. 1.0 = normal, 0 = gratuit, valori negative = venit pentru proprietarul așezării." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Multiplicator Recrutare Milție" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Crește numărul de milițieni recrutați în fiecare zi. 0 = dezactivat, 1.0 = normal, 2.0 = dublu, etc." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Șansă Veterani Milție" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Procentaj de șansă pentru apariția milițienilor veterani (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Bonus Mâncare" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Adaugă valoarea specificată la creșterea zilnică de mâncare (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Bonus Prosperitate" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Adaugă valoarea specificată la creșterea zilnică de prosperitate (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Bonus Vatră" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Adaugă valoarea specificată la creșterea zilnică a vetrei pentru sate (0-999). Vatra este echivalentul prosperității pentru sate." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Bonus Loialitate" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Adaugă valoarea specificată la creșterea zilnică de loialitate (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Bonus Securitate" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Adaugă valoarea specificată la creșterea zilnică de securitate (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Aplică la Jucător" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="Mai multe opțiuni pot fi combinate. Aplicările duplicate sunt prevenite automat." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Eroare Setări" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inițializat cu succes" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} cheat-uri inițializate cu succes" />
+		<string id="BW_Message_GoldChanged" text="Aur modificat cu {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="Aur modificat cu {AMOUNT} pentru {COUNT} eroi" />
+		<string id="BW_Message_InfluenceChanged" text="Influență modificată cu {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Influență modificată cu {AMOUNT} pentru {COUNT} clanuri" />
+		<string id="BW_Message_AttributePointsChanged" text="Puncte atribut modificate cu {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Puncte atribut modificate cu {AMOUNT} pentru {COUNT} eroi" />
+		<string id="BW_Message_FocusPointsChanged" text="Puncte focus modificate cu {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Puncte focus modificate cu {AMOUNT} pentru {COUNT} eroi" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} trupe rănite vindecate" />
+		<string id="BW_Message_NoCheatsActive" text="Niciun cheat activ" />
+		<string id="BW_Message_ActiveCheats" text="Cheat-uri active: {LIST}" />
+		<string id="BW_Message_Added" text="adăugat" />
+		<string id="BW_Message_Removed" text="eliminat" />
 	</strings>
 </base>

@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="플레이어" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="인벤토리" />
 		<string id="BW_Category_Stats" text="통계" />
 		<string id="BW_Category_Enemies" text="적" />
 		<string id="BW_Category_Game" text="게임" />
+		<string id="BW_Category_Settlements" text="정착지" />
 		<string id="BW_Category_CheatTargets" text="치트 대상" />
 		<string id="BW_Category_Kingdoms" text="왕국" />
 		<string id="BW_Category_MinorClans" text="소규모 클랜" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="이동 속도 설정" />
 		<string id="BW_Player_MovementSpeed_Hint" text="지도에서만 작동하며 전투에서는 작동하지 않습니다. 변경 사항은 다음 게임 내 날에 적용됩니다." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="클랜 동료 한도" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="플레이어 및 NPC 클랜의 동료 한도에 보너스를 추가합니다. NPC가 동료를 모집할 수 있게 하는 모드와 함께 작동합니다." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="거래 항상 수락" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="모든 거래 제안이 자동으로 수락됩니다." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="모든 캐릭터 관계 최대화" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="모든 캐릭터와의 관계를 즉시 100으로 설정합니다." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="무제한 HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="동맹 NPC 영웅의 체력 바가 감소하지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_InfiniteHP" text="무한 체력" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="전투 시작 시 동맹 NPC 영웅에게 +9999 HP를 추가합니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="무제한 말 체력" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="동맹 NPC 영웅의 말이 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="무제한 방패 내구도" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="동맹 NPC 영웅의 방패가 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedAmmo" text="무제한 탄약" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="동맹 NPC 영웅의 탄약이 최대값으로 유지됩니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_MovementSpeed" text="이동 속도 설정" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="지도상의 모든 그룹에 적용되며 플레이어에게만 적용되지 않습니다. 변경 사항은 다음 게임 내 날에 적용됩니다." />
+		<string id="BW_NPC_EditGold" text="금 편집" />
+		<string id="BW_NPC_EditGold_Hint" text="NPC의 금을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditInfluence" text="영향력 편집" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPC의 영향을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditAttributePoints" text="속성 포인트 편집" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPC의 속성 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditFocusPoints" text="포커스 포인트 편집" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPC의 포커스 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="금 편집" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="게임 속도 배율 설정" />
 		<string id="BW_Game_GameSpeed_Hint" text="재생 (1x) 및 빠른 진행 (4x) 버튼의 속도를 배가합니다. 1.0 = 정상 속도, 2.0 = 두 배 속도 등." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="수비대 모병 배율" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="매일 수비대에 모병되는 병사 수를 증가시킵니다. 0 = 비활성화, 1.0 = 정상, 2.0 = 두 배 등." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="수비대 급여 배율" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="수비대 급여 비용을 제어합니다. 1.0 = 정상, 0 = 무료, 음수 값 = 정착지 소유자의 수입." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="민병대 모병 배율" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="매일 모병되는 민병대원 수를 증가시킵니다. 0 = 비활성화, 1.0 = 정상, 2.0 = 두 배 등." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="민병대 베테랑 확률" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="민병대 베테랑이 나타날 확률의 백분율 (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="식량 보너스" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="지정된 값을 매일 식량 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="번영 보너스" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="지정된 값을 매일 번영 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="화로 보너스" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="마을의 매일 화로 성장에 지정된 값을 추가합니다 (0-999). 화로는 마을의 번영에 해당합니다." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="충성도 보너스" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="지정된 값을 매일 충성도 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="보안 보너스" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="지정된 값을 매일 보안 성장에 추가합니다 (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="플레이어에 적용" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="여러 옵션을 결합할 수 있습니다. 중복 적용은 자동으로 방지됩니다." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: 설정 오류" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 성공적으로 초기화됨" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} 치트 성공적으로 초기화됨" />
+		<string id="BW_Message_GoldChanged" text="골드 {AMOUNT} 변경됨" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT}명의 영웅 골드 {AMOUNT} 변경됨" />
+		<string id="BW_Message_InfluenceChanged" text="영향력 {AMOUNT} 변경됨" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT}개 클랜 영향력 {AMOUNT} 변경됨" />
+		<string id="BW_Message_AttributePointsChanged" text="속성 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT}명의 영웅 속성 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_FocusPointsChanged" text="집중 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT}명의 영웅 집중 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT}명의 부상 병사 치료됨" />
+		<string id="BW_Message_NoCheatsActive" text="활성화된 치트 없음" />
+		<string id="BW_Message_ActiveCheats" text="활성화된 치트: {LIST}" />
+		<string id="BW_Message_Added" text="추가됨" />
+		<string id="BW_Message_Removed" text="제거됨" />
 	</strings>
 </base>

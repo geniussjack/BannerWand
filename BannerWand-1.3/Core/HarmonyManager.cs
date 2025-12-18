@@ -1,16 +1,22 @@
 #nullable enable
-using BannerWand.Patches;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
+
+// Project namespaces
+using BannerWand.Core.Harmony;
+using BannerWand.Interfaces;
+using BannerWand.Patches;
+using BannerWand.Utils;
 
 namespace BannerWand.Core
 {
@@ -35,12 +41,22 @@ namespace BannerWand.Core
     /// - InventoryCapacityPatch: Patches inventory capacity calculations
     /// - ItemBarterablePatch: Prevents item loss during barter transactions
     /// - ItemRosterTradePatch: Patches ItemRoster.AddToCounts() to prevent item removal during all trade types (towns, villages, caravans, etc.)
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
+    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
     /// </para>
     /// <para>
     /// Patches applied via HarmonyTargetMethod (require manual application):
     /// - RenownMultiplierPatch: Patches Clan.AddRenown() to multiply renown gains
     /// - AmmoConsumptionPatch: Prevents ammo decrease for player when Unlimited Ammo enabled
     /// - ItemBarterablePatch: Prevents item loss during barter/trade transactions
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
+    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
+    /// - NavalSpeedPatch: Patches naval speed calculations for War Sails DLC
+    ///   (Applied in OnAfterGameInitializationFinished because DLC loads later)
+    /// </para>
+    /// <para>
+    /// This class uses dependency injection components (<see cref="IPatchApplier"/>, <see cref="IPatchValidator"/>, <see cref="IPatchLogger"/>)
+    /// to improve modularity and testability.
     /// </para>
     /// </remarks>
     public static class HarmonyManager
@@ -54,12 +70,31 @@ namespace BannerWand.Core
 
         #endregion
 
+        #region Fields
+
+        /// <summary>
+        /// The patch applier component for applying Harmony patches.
+        /// </summary>
+        private static IPatchApplier? _patchApplier;
+
+        /// <summary>
+        /// The patch validator component for checking patch application status.
+        /// </summary>
+        private static IPatchValidator? _patchValidator;
+
+        /// <summary>
+        /// The patch logger component for logging patch information.
+        /// </summary>
+        private static IPatchLogger? _patchLogger;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Gets the active Harmony instance.
         /// </summary>
-        public static Harmony? Instance { get; private set; }
+        public static HarmonyLib.Harmony? Instance { get; private set; }
 
         /// <summary>
         /// Gets whether Harmony patches have been initialized.
@@ -81,7 +116,7 @@ namespace BannerWand.Core
         {
             try
             {
-                if (IsInitialized)
+                if (IsInitialized && Instance != null)
                 {
                     ModLogger.Warning("Harmony already initialized, skipping re-initialization");
                     return true;
@@ -90,8 +125,16 @@ namespace BannerWand.Core
                 ModLogger.Log("Initializing Harmony patches...");
 
                 // Create Harmony instance with unique mod identifier
-                Instance = new Harmony(HarmonyId);
+                Instance = new HarmonyLib.Harmony(HarmonyId);
 
+                // Initialize dependency injection components
+                _patchApplier = new PatchApplier(Instance);
+                _patchValidator = new PatchValidator();
+                _patchLogger = new PatchLogger(Instance);
+
+                // Strategy: PatchAll() applies patches with [HarmonyPatch] attributes automatically.
+                // Manual patches (with [HarmonyTargetMethod]) are applied separately and checked
+                // via IsPatchAlreadyApplied to prevent double-patching.
                 // Automatically discover and apply all patches in the executing assembly
                 // Patches are marked with [HarmonyPatch] attribute
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -108,6 +151,7 @@ namespace BannerWand.Core
                 }
 
                 // Manually apply patches and track success
+                // These patches use [HarmonyTargetMethod] and are not discovered by PatchAll()
                 // Count patches dynamically to avoid hardcoding the total
                 int patchesApplied = 0;
                 int patchesTotal = 0;
@@ -119,7 +163,7 @@ namespace BannerWand.Core
                     patchesApplied++;
                 }
 
-                // CRITICAL: AmmoConsumptionPatch is NOT applied here during initialization
+                // AmmoConsumptionPatch is NOT applied here during initialization
                 // It is applied dynamically in OnMissionBehaviorInitialize to prevent breaking
                 // character models in menus. See ApplyAmmoConsumptionPatchForMission().
                 // patchesTotal++;
@@ -133,6 +177,11 @@ namespace BannerWand.Core
                 {
                     patchesApplied++;
                 }
+
+                // GarrisonWagesPatch is NOT applied here during initialization
+                // It is applied in OnAfterGameInitializationFinished to prevent TypeInitializationException
+                // because DefaultPartyWageModel's static constructor may depend on uninitialized game components
+                // See ApplyGarrisonWagesPatch() documentation for details
 
                 patchesTotal++;
                 if (ApplyItemBarterablePatch())
@@ -158,7 +207,18 @@ namespace BannerWand.Core
                     patchesApplied++;
                 }
 
-                // NavalSpeedPatch is applied in OnGameStart because DLC loads later
+                patchesTotal++;
+                if (ApplyMobilePartySpeedPatch())
+                {
+                    patchesApplied++;
+                }
+
+                // AgingPatch is disabled - not working in current game version
+                // See ApplyAgingPatch() method for details (commented out)
+
+                // NavalSpeedPatch is applied in OnAfterGameInitializationFinished because DLC loads later
+                // Don't apply it here in OnSubModuleLoad
+                // GarrisonWagesPatch is applied in OnAfterGameInitializationFinished to prevent TypeInitializationException
                 // Don't apply it here in OnSubModuleLoad
 
                 // Only mark as initialized if at least some patches were applied successfully
@@ -174,7 +234,7 @@ namespace BannerWand.Core
                     }
 
                     // Log all patched methods for debugging and conflict detection
-                    LogPatchedMethods();
+                    _patchLogger?.LogPatchedMethods();
 
                     return true;
                 }
@@ -212,6 +272,11 @@ namespace BannerWand.Core
 
                 IsInitialized = false;
 
+                // Clear component references
+                _patchApplier = null;
+                _patchValidator = null;
+                _patchLogger = null;
+
                 ModLogger.Log("Harmony patches removed successfully");
             }
             catch (Exception ex)
@@ -231,41 +296,18 @@ namespace BannerWand.Core
         /// <param name="targetMethod">The method that may be patched.</param>
         /// <param name="patchMethod">The patch method to check for.</param>
         /// <returns>True if the patch is already applied, false otherwise.</returns>
+        /// <remarks>
+        /// Delegates to <see cref="IPatchValidator.IsPatchAlreadyApplied"/> for validation logic.
+        /// </remarks>
         private static bool IsPatchAlreadyApplied(MethodBase targetMethod, MethodInfo patchMethod)
         {
-            try
+            if (_patchValidator == null)
             {
-                HarmonyLib.Patches? existingPatches = Harmony.GetPatchInfo(targetMethod);
-                if (existingPatches == null)
-                {
-                    return false;
-                }
-
-                // Check if our patch method is already in the prefixes or postfixes
-                // CRITICAL FIX: Compare by declaring type and method name, not exact MethodInfo
-                // This handles cases where PatchAll() applied a different overload than what we're checking
-                string patchClassName = patchMethod.DeclaringType?.FullName ?? "";
-                string patchMethodName = patchMethod.Name;
-
-                return existingPatches.Prefixes.Any(p =>
-                           (p.PatchMethod == patchMethod) ||
-                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
-                       existingPatches.Postfixes.Any(p =>
-                           (p.PatchMethod == patchMethod) ||
-                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
-                       existingPatches.Transpilers.Any(p =>
-                           (p.PatchMethod == patchMethod) ||
-                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName)) ||
-                       existingPatches.Finalizers.Any(p =>
-                           (p.PatchMethod == patchMethod) ||
-                           (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName));
-            }
-            catch (Exception ex)
-            {
-                // If we can't check, assume not applied to be safe
-                ModLogger.Warning($"[HarmonyManager] Failed to check if patch is already applied: {ex.Message}");
+                ModLogger.Warning("[HarmonyManager] PatchValidator not initialized - cannot check patch status");
                 return false;
             }
+
+            return _patchValidator.IsPatchAlreadyApplied(targetMethod, patchMethod);
         }
 
         /// <summary>
@@ -308,15 +350,22 @@ namespace BannerWand.Core
                 if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
                 {
                     ModLogger.Log("[RenownMultiplier] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("RenownMultiplier", targetMethod, true);
                     return true;
                 }
 
-                // Apply the patch
-                HarmonyMethod harmonyPrefix = new(prefixMethod);
-                _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
-
-                ModLogger.Log("[RenownMultiplier] Patch applied successfully via manual patching");
-                return true;
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, prefixMethod, "prefix") == true)
+                {
+                    _patchLogger?.LogPatchApplication("RenownMultiplier", targetMethod, true);
+                    ModLogger.Log("[RenownMultiplier] Patch applied successfully via manual patching");
+                    return true;
+                }
+                else
+                {
+                    _patchLogger?.LogPatchApplication("RenownMultiplier", targetMethod, false);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -337,7 +386,6 @@ namespace BannerWand.Core
         {
             bool primaryPatchApplied = false;
             bool nativeConsumePatchApplied = false;
-            bool fallbackPatchApplied = false;
 
             try
             {
@@ -354,24 +402,27 @@ namespace BannerWand.Core
                     // Get target method parameters to determine which Prefix to use
                     ParameterInfo[] targetParams = targetMethod.GetParameters();
                     bool targetHasRef = targetParams.Length >= 2 && targetParams[1].ParameterType.IsByRef;
-                    
-                    string targetSig = string.Join(", ", targetParams.Select(p => 
+
+                    string targetSig = string.Join(", ", targetParams.Select(p =>
                         p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
                     ModLogger.Log($"[AmmoConsumptionPatch] Target method signature: {targetMethod.Name}({targetSig}), hasRef={targetHasRef}");
-                    
+
                     MethodInfo? prefixMethod = null;
 
+                    // CRITICAL: Different game versions have different method signatures for SetWeaponAmountInSlot
+                    // We need to match the exact signature to apply the patch correctly
                     if (targetHasRef)
                     {
                         // Target method has ref parameter - use Prefix with ref
                         // Find the Prefix method with 4 parameters (EquipmentIndex, ref short, bool)
+                        // The ref parameter allows us to modify the amount value directly
                         prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                             null,
                             [typeof(Agent), typeof(EquipmentIndex), typeof(short).MakeByRefType(), typeof(bool)],
                             null);
 
-                        // If not found, try with 3 parameters (ref short)
+                        // If not found, try with 3 parameters (ref short) - fallback for older versions
                         prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethod("Prefix",
                                 BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                 null,
@@ -382,6 +433,7 @@ namespace BannerWand.Core
                     {
                         // Target method does NOT have ref parameter - use Prefix_NoRef
                         // Find the Prefix_NoRef method with 4 parameters (EquipmentIndex, short, bool) - NO ref
+                        // Without ref, we can only block the call, not modify the parameter
                         prefixMethod = typeof(AmmoConsumptionPatch).GetMethod("Prefix_NoRef",
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                             null,
@@ -390,15 +442,16 @@ namespace BannerWand.Core
                     }
 
                     // Last resort - get Prefix or Prefix_NoRef method with most parameters
+                    // This handles edge cases where signature detection fails but a compatible method exists
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
+                        .Where(m => m.Name is "Prefix" or "Prefix_NoRef")
                         .OrderByDescending(m => m.GetParameters().Length)
                         .FirstOrDefault();
 
                     if (prefixMethod != null)
                     {
                         ParameterInfo[] prefixParams = prefixMethod.GetParameters();
-                        string prefixSig = string.Join(", ", prefixParams.Select(p => 
+                        string prefixSig = string.Join(", ", prefixParams.Select(p =>
                             p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
                         ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixParams.Length} parameters ({prefixSig})");
 
@@ -411,28 +464,28 @@ namespace BannerWand.Core
                         }
                         else
                         {
-                            // CRITICAL: Create HarmonyMethod with explicit argument types to ensure proper parameter matching
+                            // Create HarmonyMethod with explicit argument types to ensure proper parameter matching
                             // Harmony may fail to match parameters if types are not explicitly specified
                             HarmonyMethod harmonyPrefix = new(prefixMethod)
                             {
-                                argumentTypes = targetMethod.GetParameters().Select(p => p.ParameterType).ToArray()
+                                argumentTypes = [.. targetMethod.GetParameters().Select(p => p.ParameterType)]
                             };
-                            
+
                             ModLogger.Log($"[AmmoConsumptionPatch] Applying patch: Target={targetMethod.DeclaringType?.FullName}.{targetMethod.Name}, Prefix={prefixMethod.DeclaringType?.FullName}.{prefixMethod.Name}");
                             ModLogger.Log($"[AmmoConsumptionPatch] Target parameters: {string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}");
                             ModLogger.Log($"[AmmoConsumptionPatch] Prefix parameters: {string.Join(", ", prefixMethod.GetParameters().Select(p => p.ParameterType.Name))}");
-                            
+
                             MethodInfo patchResult = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
                             ModLogger.Log($"[AmmoConsumptionPatch] Primary patch applied successfully via manual patching. Patch result: {patchResult}");
-                            
+
                             // Verify patch was actually applied
-                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetMethod);
+                            HarmonyLib.Patches patchInfo = HarmonyLib.Harmony.GetPatchInfo(targetMethod);
                             if (patchInfo != null)
                             {
                                 ModLogger.Debug($"[AmmoConsumptionPatch] Verify: Target method has {patchInfo.Prefixes.Count} prefix(es) applied");
-                                foreach (var prefix in patchInfo.Prefixes)
+                                foreach (Patch? prefix in patchInfo.Prefixes)
                                 {
                                     ModLogger.Debug($"[AmmoConsumptionPatch]   - Prefix: {prefix.owner}.{prefix.PatchMethod.Name}");
                                 }
@@ -457,6 +510,12 @@ namespace BannerWand.Core
             // Apply native ammo consume patch (Agent.OnWeaponAmmoConsume) – this is invoked by the engine when ammo decreases
             try
             {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[AmmoConsumptionPatch] Harmony Instance is null - cannot apply native patch!");
+                    return false;
+                }
+
                 MethodInfo? nativeConsumePrefix = typeof(AmmoConsumptionPatch).GetMethod(
                     "OnWeaponAmmoConsume_Prefix",
                     BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
@@ -475,7 +534,7 @@ namespace BannerWand.Core
                     else
                     {
                         HarmonyMethod harmonyPrefix = new(nativeConsumePrefix);
-                        MethodInfo patchResult = Instance!.Patch(nativeConsumeTarget, prefix: harmonyPrefix);
+                        MethodInfo patchResult = Instance.Patch(nativeConsumeTarget, prefix: harmonyPrefix);
                         nativeConsumePatchApplied = true;
                         ModLogger.Log($"[AmmoConsumptionPatch] Native OnWeaponAmmoConsume patch applied. Patch result: {patchResult}");
                     }
@@ -500,8 +559,8 @@ namespace BannerWand.Core
             ModLogger.Log("[MissionEquipmentAmmoSafetyPatch] Using primary SetWeaponAmountInSlot patch only");
 
             // Summary
-            bool success = primaryPatchApplied || nativeConsumePatchApplied || fallbackPatchApplied;
-            ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Native={nativeConsumePatchApplied}, Fallback={fallbackPatchApplied}");
+            bool success = primaryPatchApplied || nativeConsumePatchApplied;
+            ModLogger.Log($"[AmmoConsumptionPatch] Ammo patches status: Primary={primaryPatchApplied}, Native={nativeConsumePatchApplied}");
             if (!success)
             {
                 ModLogger.Warning("[AmmoConsumptionPatch] No ammo patches could be applied!");
@@ -554,11 +613,34 @@ namespace BannerWand.Core
                     return;
                 }
 
+                // Also remove OnWeaponAmmoConsume patch if it was applied
+                MethodInfo? nativeConsumeTarget = typeof(Agent).GetMethod(
+                    "OnWeaponAmmoConsume",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+
+                if (nativeConsumeTarget != null)
+                {
+                    try
+                    {
+                        MethodInfo? nativeConsumePrefix = typeof(AmmoConsumptionPatch).GetMethod(
+                            "OnWeaponAmmoConsume_Prefix",
+                            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                        if (nativeConsumePrefix != null)
+                        {
+                            Instance.Unpatch(nativeConsumeTarget, nativeConsumePrefix);
+                        }
+                    }
+                    catch
+                    {
+                        // Patch might not be applied, which is fine
+                    }
+                }
+
                 // Get all Prefix methods and try to unpatch each one
                 // This handles both ref and non-ref versions
-                MethodInfo[] prefixMethods = typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
-                    .ToArray();
+                MethodInfo[] prefixMethods = [.. typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(m => m.Name is "Prefix" or "Prefix_NoRef")];
 
                 bool anyUnpatched = false;
                 foreach (MethodInfo prefixMethod in prefixMethods)
@@ -574,10 +656,39 @@ namespace BannerWand.Core
                     }
                 }
 
+                // Use UnpatchAll as fallback to ensure all patches from this mod are removed
+                // This is more reliable than trying to unpatch individual methods
                 if (anyUnpatched)
                 {
                     AmmoConsumptionPatch.IsPatchApplied = false;
                     ModLogger.Debug("[AmmoConsumptionPatch] Patch removed after mission end");
+                }
+                else
+                {
+                    // If individual unpatch failed, try removing all patches from this method by our mod
+                    // This ensures patches applied via PatchAll() are also removed
+                    try
+                    {
+                        // Remove all patches from this method that belong to our mod
+                        HarmonyLib.Patches? patchInfo = HarmonyLib.Harmony.GetPatchInfo(targetMethod);
+                        if (patchInfo != null)
+                        {
+                            // Remove all prefixes from our mod
+                            foreach (HarmonyLib.Patch prefix in patchInfo.Prefixes.ToList())
+                            {
+                                if (prefix.owner == HarmonyId)
+                                {
+                                    Instance.Unpatch(targetMethod, prefix.PatchMethod);
+                                }
+                            }
+                        }
+                        AmmoConsumptionPatch.IsPatchApplied = false;
+                        ModLogger.Debug("[AmmoConsumptionPatch] Patch removed via fallback method after mission end");
+                    }
+                    catch
+                    {
+                        // Patch might not be applied, which is fine
+                    }
                 }
             }
             catch (Exception ex)
@@ -669,17 +780,106 @@ namespace BannerWand.Core
                 // Check if patch is already applied (e.g., by PatchAll())
                 if (IsPatchAlreadyApplied(targetMethod, postfixMethod))
                 {
+                    _patchLogger?.LogPatchApplication("InventoryCapacity", targetMethod, true);
                     return true;
                 }
 
-                // Apply the patch
-                HarmonyMethod harmonyPostfix = new(postfixMethod);
-                _ = Instance.Patch(targetMethod, postfix: harmonyPostfix);
-                return true;
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, postfixMethod, "postfix") == true)
+                {
+                    _patchLogger?.LogPatchApplication("InventoryCapacity", targetMethod, true);
+                    return true;
+                }
+                else
+                {
+                    _patchLogger?.LogPatchApplication("InventoryCapacity", targetMethod, false);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
                 ModLogger.Error($"[InventoryCapacityPatch] Error applying patch: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Manually applies the GarrisonWagesPatch.
+        /// </summary>
+        /// <returns>True if patch was applied successfully or already applied, false otherwise.</returns>
+        /// <remarks>
+        /// <para>
+        /// This patch modifies garrison wage calculations to apply the configured multiplier.
+        /// Applied manually because it uses [HarmonyTargetMethod] which PatchAll() doesn't handle well.
+        /// Patches the concrete implementation DefaultPartyWageModel.GetTotalWage, not the abstract method.
+        /// </para>
+        /// <para>
+        /// IMPORTANT: This patch MUST be applied in OnGameStart, NOT in OnSubModuleLoad or OnAfterGameInitializationFinished.
+        /// Reasons:
+        /// 1. Patching DefaultPartyWageModel.GetTotalWage triggers the static constructor of DefaultPartyWageModel,
+        ///    which may depend on game components that are not yet initialized during OnSubModuleLoad.
+        ///    This causes TypeInitializationException.
+        /// 2. OnAfterGameInitializationFinished is only called once on first game launch, not when loading saved games.
+        ///    OnGameStart is called for both new games and loaded saves, ensuring the patch is always applied.
+        /// 3. The patch method checks if it's already applied to prevent double-patching.
+        /// </para>
+        /// </remarks>
+        public static bool ApplyGarrisonWagesPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[GarrisonWagesPatch] Harmony Instance is null - cannot apply patch!");
+                    return false;
+                }
+
+                // Get the target method using HarmonyTargetMethod
+                MethodBase? targetMethod = typeof(GarrisonWagesPatch).GetMethod("TargetMethod",
+                    BindingFlags.Static | BindingFlags.Public)?.Invoke(null, null) as MethodBase;
+
+                if (targetMethod == null)
+                {
+                    ModLogger.Warning("[GarrisonWagesPatch] Could not find target method via HarmonyTargetMethod");
+                    return false;
+                }
+
+                // Get the Postfix method from GarrisonWagesPatch
+                MethodInfo? postfixMethod = typeof(GarrisonWagesPatch).GetMethod("GetTotalWage_Postfix",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (postfixMethod == null)
+                {
+                    ModLogger.Warning("[GarrisonWagesPatch] Postfix method not found!");
+                    return false;
+                }
+
+                // Check if patch is already applied (e.g., by PatchAll())
+                if (IsPatchAlreadyApplied(targetMethod, postfixMethod))
+                {
+                    ModLogger.Log("[GarrisonWagesPatch] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("GarrisonWages", targetMethod, true);
+                    return true;
+                }
+
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, postfixMethod, "postfix") == true)
+                {
+                    ModLogger.Log($"[GarrisonWagesPatch] Successfully applied patch to {targetMethod.DeclaringType?.Name}.{targetMethod.Name}");
+                    _patchLogger?.LogPatchApplication("GarrisonWages", targetMethod, true);
+                    return true;
+                }
+                else
+                {
+                    ModLogger.Warning($"[GarrisonWagesPatch] Failed to apply patch to {targetMethod.DeclaringType?.Name}.{targetMethod.Name}");
+                    _patchLogger?.LogPatchApplication("GarrisonWages", targetMethod, false);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[GarrisonWagesPatch] Error applying patch: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 return false;
             }
@@ -723,13 +923,18 @@ namespace BannerWand.Core
                 if (IsPatchAlreadyApplied(targetMethod, prefixMethod) || IsPatchAlreadyApplied(targetMethod, postfixMethod))
                 {
                     ModLogger.Log("[ItemBarterablePatch] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("ItemBarterable", targetMethod, true);
                     return true;
                 }
 
+                // Apply prefix and postfix patches
+                // Note: PatchApplier doesn't support applying both prefix and postfix in one call,
+                // so we use Instance.Patch directly for this case
                 HarmonyMethod harmonyPrefix = new(prefixMethod);
                 HarmonyMethod harmonyPostfix = new(postfixMethod);
                 _ = Instance.Patch(targetMethod, prefix: harmonyPrefix, postfix: harmonyPostfix);
 
+                _patchLogger?.LogPatchApplication("ItemBarterable", targetMethod, true);
                 ModLogger.Log("[ItemBarterablePatch] Patch applied successfully via manual patching");
                 return true;
             }
@@ -877,15 +1082,22 @@ namespace BannerWand.Core
                 if (IsPatchAlreadyApplied(targetMethod, postfixMethod))
                 {
                     ModLogger.Log("[GameSpeedPatch] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("GameSpeed", targetMethod, true);
                     return true;
                 }
 
-                // Apply the patch
-                HarmonyMethod harmonyPostfix = new(postfixMethod);
-                _ = Instance.Patch(targetMethod, postfix: harmonyPostfix);
-
-                ModLogger.Log("[GameSpeedPatch] Patch applied successfully via manual patching");
-                return true;
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, postfixMethod, "postfix") == true)
+                {
+                    _patchLogger?.LogPatchApplication("GameSpeed", targetMethod, true);
+                    ModLogger.Log("[GameSpeedPatch] Patch applied successfully via manual patching");
+                    return true;
+                }
+                else
+                {
+                    _patchLogger?.LogPatchApplication("GameSpeed", targetMethod, false);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -937,19 +1149,164 @@ namespace BannerWand.Core
                 if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
                 {
                     ModLogger.Log("[MapTimeTrackerTickPatch] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("MapTimeTrackerTick", targetMethod, true);
                     return true;
                 }
 
-                // Apply the patch
-                HarmonyMethod harmonyPrefix = new(prefixMethod);
-                _ = Instance.Patch(targetMethod, prefix: harmonyPrefix);
-
-                ModLogger.Log("[MapTimeTrackerTickPatch] Patch applied successfully via manual patching");
-                return true;
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, prefixMethod, "prefix") == true)
+                {
+                    _patchLogger?.LogPatchApplication("MapTimeTrackerTick", targetMethod, true);
+                    ModLogger.Log("[MapTimeTrackerTickPatch] Patch applied successfully via manual patching");
+                    return true;
+                }
+                else
+                {
+                    _patchLogger?.LogPatchApplication("MapTimeTrackerTick", targetMethod, false);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
                 ModLogger.Error($"[MapTimeTrackerTickPatch] Error applying patch: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// DISABLED: AgingPatch is currently disabled because aging prevention is not working
+        /// in the current game version. The functionality has been removed from the codebase.
+        /// </summary>
+        /// <remarks>
+        /// This method is kept for reference only. It is not called and the patch is not applied.
+        /// TODO: Re-implement aging prevention in the future when the game API supports it.
+        /// </remarks>
+        /*
+        private static bool ApplyAgingPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[AgingPatch] Harmony Instance is null - cannot apply patch!");
+                    return false;
+                }
+
+                // Get the target method from the patch class
+                MethodBase? targetMethod = AgingPatch.TargetMethod();
+                if (targetMethod == null)
+                {
+                    ModLogger.Warning("[AgingPatch] TargetMethod() returned null - patch cannot be applied!");
+                    ModLogger.Warning("[AgingPatch] This is OK if the BirthDay property setter doesn't exist in this game version.");
+                    return false;
+                }
+
+                // Get the prefix method
+                MethodInfo? prefixMethod = typeof(AgingPatch).GetMethod("Prefix",
+                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (prefixMethod == null)
+                {
+                    ModLogger.Error("[AgingPatch] Prefix method not found!");
+                    return false;
+                }
+
+                // Check if patch is already applied (e.g., by PatchAll())
+                if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
+                {
+                    ModLogger.Log("[AgingPatch] Patch already applied (likely by PatchAll()), skipping manual application");
+                    _patchLogger?.LogPatchApplication("Aging", targetMethod, true);
+                    return true;
+                }
+
+                // Apply the patch using PatchApplier
+                if (_patchApplier?.ApplyPatch(targetMethod, prefixMethod, "prefix") == true)
+                {
+                    _patchLogger?.LogPatchApplication("Aging", targetMethod, true);
+                    ModLogger.Log("[AgingPatch] Patch applied successfully via manual patching");
+                    return true;
+                }
+                else
+                {
+                    _patchLogger?.LogPatchApplication("Aging", targetMethod, false);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[AgingPatch] Error applying patch: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                return false;
+            }
+        }
+        */
+
+        /// <summary>
+        /// Manually applies the MobilePartySpeedPatch to add a fixed speed bonus.
+        /// </summary>
+        /// <returns>True if patch was applied successfully, false otherwise.</returns>
+        /// <remarks>
+        /// This patch ensures that when the "Set Movement Speed" cheat is enabled,
+        /// a fixed speed bonus is added to the party speed. The bonus is constant and doesn't fluctuate.
+        /// It patches MobileParty.SpeedExplained to add the bonus (we don't patch CalculateSpeed
+        /// because it typically calls SpeedExplained internally, which would cause double application).
+        /// </remarks>
+        public static bool ApplyMobilePartySpeedPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[MobilePartySpeedPatch] Harmony Instance is null - cannot apply patch!");
+                    return false;
+                }
+
+                // NOTE: We only patch SpeedExplained, not CalculateSpeed, because:
+                // 1. CalculateSpeed typically calls SpeedExplained internally and returns ResultNumber
+                // 2. Patching both would cause double application of the bonus
+                // 3. SpeedExplained is the primary method used by the game for speed calculations
+
+                // Apply SpeedExplained patch
+                MethodBase? targetSpeedExplainedMethod = MobilePartySpeedPatch.TargetSpeedExplainedMethod();
+                if (targetSpeedExplainedMethod != null)
+                {
+                    ModLogger.Log($"[MobilePartySpeedPatch] Target method found: {targetSpeedExplainedMethod.DeclaringType?.FullName}.{targetSpeedExplainedMethod.Name}");
+
+                    MethodInfo? postfixMethod = typeof(MobilePartySpeedPatch).GetMethod(
+                        "SpeedExplained_Postfix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (postfixMethod != null)
+                    {
+                        if (IsPatchAlreadyApplied(targetSpeedExplainedMethod, postfixMethod))
+                        {
+                            ModLogger.Log("[MobilePartySpeedPatch] SpeedExplained patch already applied (likely by PatchAll()), skipping manual application");
+                        }
+                        else
+                        {
+                            HarmonyMethod harmonyPostfix = new(postfixMethod);
+                            MethodInfo patchResult = Instance.Patch(targetSpeedExplainedMethod, postfix: harmonyPostfix);
+                            ModLogger.Log($"[MobilePartySpeedPatch] SpeedExplained patch applied successfully. Patch result: {patchResult}");
+                        }
+                    }
+                    else
+                    {
+                        ModLogger.Warning("[MobilePartySpeedPatch] SpeedExplained_Postfix method not found!");
+                        return false;
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[MobilePartySpeedPatch] TargetSpeedExplainedMethod returned null!");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[MobilePartySpeedPatch] Error applying patch: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 return false;
             }
@@ -1016,7 +1373,7 @@ namespace BannerWand.Core
                             ModLogger.Log($"[NavalSpeedPatch] CalculateBaseSpeed patch applied successfully via manual patching. Patch result: {patchResult}");
 
                             // Verify patch was actually applied
-                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetBaseSpeedMethod);
+                            HarmonyLib.Patches patchInfo = HarmonyLib.Harmony.GetPatchInfo(targetBaseSpeedMethod);
                             if (patchInfo != null)
                             {
                                 ModLogger.Log($"[NavalSpeedPatch] Verify: CalculateBaseSpeed has {patchInfo.Postfixes.Count} postfix(es) applied");
@@ -1060,7 +1417,7 @@ namespace BannerWand.Core
                             ModLogger.Log($"[NavalSpeedPatch] CalculateFinalSpeed patch applied successfully via manual patching. Patch result: {patchResult}");
 
                             // Verify patch was actually applied
-                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetFinalSpeedMethod);
+                            HarmonyLib.Patches patchInfo = HarmonyLib.Harmony.GetPatchInfo(targetFinalSpeedMethod);
                             if (patchInfo != null)
                             {
                                 ModLogger.Log($"[NavalSpeedPatch] Verify: CalculateFinalSpeed has {patchInfo.Postfixes.Count} postfix(es) applied");
@@ -1094,55 +1451,6 @@ namespace BannerWand.Core
             }
         }
 
-        /// <summary>
-        /// Logs all methods that have been patched by this mod.
-        /// </summary>
-        private static void LogPatchedMethods()
-        {
-            if (Instance == null)
-            {
-                return;
-            }
-
-            try
-            {
-                IEnumerable<MethodBase> patchedMethods = Instance.GetPatchedMethods();
-                int patchedMethodCount = 0;
-
-                ModLogger.Log("Patched methods:");
-
-                foreach (MethodBase method in patchedMethods)
-                {
-                    HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(method);
-                    string declaringTypeName = method.DeclaringType?.FullName ?? "Unknown";
-                    ModLogger.Log($"  - {declaringTypeName}.{method.Name}");
-
-                    if (patchInfo != null)
-                    {
-                        int prefixCount = patchInfo.Prefixes.Count;
-                        int postfixCount = patchInfo.Postfixes.Count;
-
-                        if (prefixCount > 0)
-                        {
-                            ModLogger.Debug($"    Prefixes: {prefixCount}");
-                        }
-
-                        if (postfixCount > 0)
-                        {
-                            ModLogger.Debug($"    Postfixes: {postfixCount}");
-                        }
-                    }
-
-                    patchedMethodCount++;
-                }
-
-                ModLogger.Log($"Total patched methods: {patchedMethodCount}");
-            }
-            catch (Exception exception)
-            {
-                ModLogger.Warning($"Failed to log patched methods: {exception.Message}");
-            }
-        }
 
         #endregion
     }

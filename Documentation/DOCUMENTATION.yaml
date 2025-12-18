@@ -1,10 +1,19 @@
-﻿id: BannerWand
+id: BannerWand
 name: BannerWand
-version: 1.0.0
+version: 1.1.1
+last_updated: 2024
+refactoring_status: completed
 author: geniussjack
 description: |
-  Comprehensive cheat mod for Mount & Blade II: Bannerlord with configurable options.
+  Comprehensive cheat mod for Mount & Blade II: Bannerlord with fully configurable options through MCM (Mod Configuration Menu).
   Inspired by WeMod (Wand) cheats and integrated directly into the game.
+  Supports both Bannerlord 1.3.x and 1.2.12 with separate project builds.
+
+documentation:
+  - ARCHITECTURE.md: Detailed architecture overview, design patterns, and component organization
+  - API.md: Complete API reference for all public APIs, interfaces, and extension points
+  - DEVELOPER_GUIDE.md: Step-by-step guide for extending and modifying BannerWand
+  - EXAMPLES.md: Practical code examples for common tasks and patterns
 
 features:
   player:
@@ -50,8 +59,19 @@ dependencies:
     - Bannerlord.MBOptionScreen (MCMv5): ">=5.10.1"
 
 compatibility:
-  game_version: "v1.2.12"
+  game_versions:
+    - "v1.3.x (beta) - BannerWand-1.3 project"
+    - "v1.2.12 - BannerWand-1.2.12 project"
   platform: "PC (Steam/Epic/GOG)"
+  framework: ".NET Framework 4.7.2"
+  language_version: "C# 14.0"
+  code_quality:
+    compiler_warnings: 0
+    linter_errors: 0
+    xml_documentation: "Complete for all public APIs"
+    interfaces: 9
+    constants_organized: true
+    code_duplication: "Minimal - centralized exception handling"
   
 installation:
   - Extract the mod folder to "Mount & Blade II Bannerlord/Modules/"

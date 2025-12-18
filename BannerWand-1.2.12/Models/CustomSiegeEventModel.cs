@@ -83,18 +83,16 @@ namespace BannerWandRetro.Models
             {
                 float baseProgress = base.GetConstructionProgressPerHour(siegeEngineType, siegeEvent, siegeEventSide);
 
-                if (Settings == null || TargetSettings == null)
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
                 {
                     return baseProgress;
                 }
 
                 // Apply instant siege construction when enabled
-                if (Settings.InstantSiegeConstruction && ShouldApplyInstantConstructionToSiege(siegeEvent))
+                if (settings.InstantSiegeConstruction && ShouldApplyInstantConstructionToSiege(siegeEvent))
                 {
-                    // Log for test characters
-                    MobileParty attackerLeader = siegeEvent.BesiegerCamp?.LeaderParty!;
-                    Settlement defenderSettlement = siegeEvent.BesiegedSettlement;
-
                     return GameConstants.InstantSiegeConstructionProgress;
                 }
 

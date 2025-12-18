@@ -515,3 +515,43 @@ fix-*.ps1
 ## BannerWand project bin directories
 BannerWand-1.2.12/bin/
 BannerWand-1.3/bin/
+
+## BannerWand project obj directories
+BannerWand-1.2.12/obj/
+BannerWand-1.3/obj/
+
+## Cursor IDE and debug files
+.cursor/
+debug.log
+*.debug.log
+
+## Visual Studio Code workspace files
+*.code-workspace
+
+## JetBrains Rider additional files
+.idea/
+*.sln.iml
+.idea_modules/
+
+## Temporary analysis files
+*.sarif
+*.trx
+
+## Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+
+## Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+## Package files
+*.nupkg
+*.snupkg
+packages/
+
+## Bannerlord module deployment (if copying directly)
+ModuleData/bin/
+ModuleData/obj/

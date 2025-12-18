@@ -54,8 +54,9 @@ namespace BannerWandRetro.Patches
 
                 return tickMapTimeMethod;
             }
-            catch
+            catch (Exception ex)
             {
+                ModLogger.Warning($"[GameSpeedPatch] Error in TargetMethod: {ex.Message}");
                 return null;
             }
         }
@@ -161,8 +162,9 @@ namespace BannerWandRetro.Patches
 
                 return tickMethod;
             }
-            catch
+            catch (Exception ex)
             {
+                ModLogger.Warning($"[MapTimeTrackerTickPatch] Error in TargetMethod: {ex.Message}");
                 return null;
             }
         }

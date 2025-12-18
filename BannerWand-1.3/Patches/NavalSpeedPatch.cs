@@ -1,13 +1,19 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.IO;
 using System.Reflection;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Localization;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -40,9 +46,71 @@ namespace BannerWand.Patches
         private static float _lastDesiredSpeed = 0f;
 
         /// <summary>
-        /// Text object for speed override description (cached to avoid allocations).
+        /// Cached type for NavalDLCPartySpeedCalculationModel to avoid repeated reflection calls.
         /// </summary>
-        private static readonly TextObject SpeedOverrideText = new("BannerWand Speed Override");
+        private static Type? _navalDlcModelType;
+
+        /// <summary>
+        /// Gets the NavalDLC model type, caching it for performance.
+        /// </summary>
+        private static Type? GetNavalDlcModelType()
+        {
+            if (_navalDlcModelType != null)
+            {
+                return _navalDlcModelType;
+            }
+
+            try
+            {
+                _navalDlcModelType = Type.GetType("NavalDLC.GameComponents.NavalDLCPartySpeedCalculationModel, NavalDLC");
+                if (_navalDlcModelType == null)
+                {
+                    foreach (System.Reflection.Assembly assembly in System.AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        try
+                        {
+                            if (assembly.GetName().Name == "NavalDLC")
+                            {
+                                _navalDlcModelType = assembly.GetType("NavalDLC.GameComponents.NavalDLCPartySpeedCalculationModel");
+                                if (_navalDlcModelType != null)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // Ignore errors when checking assemblies
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // If we can't find the type, cache null to avoid repeated attempts
+            }
+
+            return _navalDlcModelType;
+        }
+
+        /// <summary>
+        /// Checks if the instance is of the NavalDLC model type.
+        /// </summary>
+        private static bool IsNavalDlcModel(object instance)
+        {
+            if (instance == null)
+            {
+                return false;
+            }
+
+            Type? navalDlcType = GetNavalDlcModelType();
+            if (navalDlcType == null)
+            {
+                return false;
+            }
+
+            return navalDlcType.IsAssignableFrom(instance.GetType());
+        }
 
         /// <summary>
         /// Checks if NavalDLC folder exists in the Modules directory.
@@ -258,7 +326,7 @@ namespace BannerWand.Patches
                 }
 
                 // Additional safety check: verify that __instance is actually from NavalDLC
-                if (__instance.GetType().Namespace != "NavalDLC.GameComponents")
+                if (!IsNavalDlcModel(__instance))
                 {
                     return;
                 }
@@ -270,17 +338,19 @@ namespace BannerWand.Patches
                     return;
                 }
 
-                // DLC FIX: The DLC model's CalculateNavalBaseSpeed has already been called
-                // and the result is in __result. The fix is in CustomPartySpeedModel which calls
-                // base.BaseModel correctly, ensuring this method is called for ALL parties at sea.
-                // No modification needed here - the DLC model already calculates correctly.
-                // This ensures the fix works for ALL parties at sea, not just the player.
-
                 // Apply speed override cheat if enabled (applies to all parties on the map)
-                // This is a CHEAT feature, separate from the DLC fix
-                if (Settings != null && TargetSettings != null && ShouldApplyPlayerSpeedOverride(party))
+                if (Settings != null && TargetSettings != null)
                 {
-                    ApplyPlayerSpeedBoost(ref __result);
+                    // Check for player speed override first (only for player's main party)
+                    if (ShouldApplyPlayerSpeedOverride(party))
+                    {
+                        ApplySpeedBoost(ref __result, Settings.MovementSpeed);
+                    }
+                    // Check for NPC speed override (only for non-player parties)
+                    else if (ShouldApplyNPCSpeedOverride(party))
+                    {
+                        ApplySpeedBoost(ref __result, Settings.NPCMovementSpeed);
+                    }
                 }
             }
             catch (Exception ex)
@@ -309,27 +379,25 @@ namespace BannerWand.Patches
                 }
 
                 // Additional safety check: verify that __instance is actually from NavalDLC
-                // This prevents the patch from running if NavalDLC is not available
-                // (though TargetMethod() should already prevent this, this is a double-check)
-                if (__instance.GetType().Namespace != "NavalDLC.GameComponents")
+                if (!IsNavalDlcModel(__instance))
                 {
                     return;
                 }
 
-                // DLC FIX: The DLC model's CalculateFinalSpeed has already been called
-                // and added all naval modifiers (wind, crew, terrain, etc.) to __result.
-                // The fix is in CustomPartySpeedModel which calls base.BaseModel correctly,
-                // ensuring this method is called for ALL parties at sea.
-                // No modification needed here - the DLC model already calculates correctly.
-                // This ensures the fix works for ALL parties at sea, not just the player.
-
                 // Apply speed override cheat if enabled (applies to all parties on the map)
-                // This is a CHEAT feature, separate from the DLC fix
                 // We apply it in CalculateFinalSpeed to ensure it works after all naval modifiers
-                // (wind, crew, terrain, etc.). This is the final step in speed calculation.
-                if (Settings != null && TargetSettings != null && ShouldApplyPlayerSpeedOverride(mobileParty))
+                if (Settings != null && TargetSettings != null)
                 {
-                    ApplyPlayerSpeedBoost(ref __result);
+                    // Check for player speed override first (only for player's main party)
+                    if (ShouldApplyPlayerSpeedOverride(mobileParty))
+                    {
+                        ApplySpeedBoost(ref __result, Settings.MovementSpeed);
+                    }
+                    // Check for NPC speed override (only for non-player parties)
+                    else if (ShouldApplyNPCSpeedOverride(mobileParty))
+                    {
+                        ApplySpeedBoost(ref __result, Settings.NPCMovementSpeed);
+                    }
                 }
             }
             catch (Exception ex)
@@ -341,36 +409,39 @@ namespace BannerWand.Patches
 
         /// <summary>
         /// Determines if player speed override should be applied.
+        /// Only applies to the player's main party when MovementSpeed > 0 and ApplyToPlayer is enabled.
         /// </summary>
-#pragma warning disable IDE0060, RCS1163 // Remove unused parameter - parameter name required for method signature
         private static bool ShouldApplyPlayerSpeedOverride(MobileParty mobileParty)
-#pragma warning restore IDE0060, RCS1163
         {
             // Early exit if settings are null
-            if (Settings is null || TargetSettings is null)
-            {
-                return false;
-            }
-
-            bool movementSpeedOk = Settings.MovementSpeed > 0f;
-            bool applyToPlayer = TargetSettings.ApplyToPlayer;
-            bool campaignActive = Campaign.Current is not null;
-
-            // Apply to ALL parties on the map when MovementSpeed > 0 and ApplyToPlayer is enabled
-            // This ensures all parties (player, AI, etc.) get the speed boost
-            return movementSpeedOk && applyToPlayer && campaignActive;
+            return Settings is not null && TargetSettings is not null && Settings.MovementSpeed > 0f &&
+                   mobileParty == MobileParty.MainParty &&
+                   TargetSettings.ApplyToPlayer &&
+                   Campaign.Current != null;
         }
 
         /// <summary>
-        /// Applies player speed boost by calculating a multiplier factor.
-        /// Preserves all terrain, composition, and naval modifiers.
+        /// Determines if NPC speed override should be applied.
+        /// Applies only to non-player parties when NPCMovementSpeed > 0.
+        /// Player's party should use Player speed override instead.
         /// </summary>
-        private static void ApplyPlayerSpeedBoost(ref ExplainedNumber speed)
+        private static bool ShouldApplyNPCSpeedOverride(MobileParty mobileParty)
         {
-            // MovementSpeed setting is the FINAL speed value the user wants
-            float desiredSpeed = Settings?.MovementSpeed ?? 0f;
-            bool speedChanged = desiredSpeed != _lastDesiredSpeed;
+            // Early exit if settings are null
+            // Do NOT apply NPC speed to player's main party - player should use Player speed instead
+            return Settings?.NPCMovementSpeed > 0f &&
+                   Campaign.Current != null &&
+                   mobileParty != MobileParty.MainParty;
+        }
 
+        /// <summary>
+        /// Applies speed boost by setting a fixed final speed value.
+        /// The speed will always equal the desired speed, regardless of base speed changes.
+        /// </summary>
+        /// <param name="speed">The speed ExplainedNumber to modify</param>
+        /// <param name="desiredSpeed">The FINAL speed value the user wants (0-16)</param>
+        private static void ApplySpeedBoost(ref ExplainedNumber speed, float desiredSpeed)
+        {
             if (desiredSpeed <= 0f)
             {
                 // Disabled - reset tracking
@@ -378,45 +449,34 @@ namespace BannerWand.Patches
                 return;
             }
 
-            // Calculate the multiplier needed to achieve the desired speed
-            // This preserves all terrain, composition, and naval modifiers
-            float currentBaseSpeed = speed.BaseNumber;
-
-            // Cap the multiplier to prevent extreme values when base speed is very small
-            const float maxMultiplier = 100f;
-            const float minBaseSpeedThreshold = 0.01f;
-
-            if (currentBaseSpeed > minBaseSpeedThreshold)
+            // Cap desired speed to maximum allowed value
+            // This prevents speed from exceeding the maximum set in MCM settings
+            if (desiredSpeed > GameConstants.AbsoluteMaxGameSpeed)
             {
-                // Calculate multiplier: desiredSpeed / currentBaseSpeed
-                float multiplier = desiredSpeed / currentBaseSpeed;
-                if (multiplier > maxMultiplier)
-                {
-                    // If multiplier would be too large, cap the desired speed instead
-                    desiredSpeed = currentBaseSpeed * maxMultiplier;
-                    multiplier = maxMultiplier;
-                }
-                // Then add factor = (multiplier - 1.0) to get the desired result
-                float factorToAdd = multiplier - 1.0f;
-                speed.AddFactor(factorToAdd, SpeedOverrideText);
-            }
-            else
-            {
-                // If base speed is too low, use multiplicative approach with capped multiplier
-                float cappedDesiredSpeed = Math.Min(desiredSpeed, currentBaseSpeed * maxMultiplier);
-                float multiplier = cappedDesiredSpeed / Math.Max(currentBaseSpeed, minBaseSpeedThreshold);
-                float factorToAdd = multiplier - 1.0f;
-                speed.AddFactor(factorToAdd, SpeedOverrideText);
+                desiredSpeed = GameConstants.AbsoluteMaxGameSpeed;
             }
 
-            // Track desired speed
+            // CRITICAL FIX: Create a new ExplainedNumber with the desired speed as the base value
+            // and NO additional modifiers. This ensures the speed is ALWAYS exactly equal to desiredSpeed.
+            //
+            // Previous issue: speed.Add(0f, SpeedOverrideText) was being called, which might have
+            // affected the result or allowed other modifiers to stack. Now we create a completely
+            // fresh ExplainedNumber with ONLY the desired speed as the base value.
+            //
+            // Why this works:
+            // 1. ExplainedNumber stores modifiers internally and calculates ResultNumber = BaseNumber + sum of modifiers
+            // 2. By creating a new ExplainedNumber with desiredSpeed as BaseNumber and NO modifiers,
+            //    ResultNumber will ALWAYS equal desiredSpeed
+            // 3. This prevents any fluctuations or stacking of modifiers from multiple calls
+            // 4. The speed becomes completely static and constant at the desired value
+            //
+            // We preserve the includeDescriptions flag from the original speed for UI display
+            bool includeDescriptions = speed.IncludeDescriptions;
+            speed = new ExplainedNumber(desiredSpeed, includeDescriptions, null);
+            // DO NOT call speed.Add() - this ensures no modifiers are added that could affect the result
+
+            // Track desired speed for debugging and state tracking
             _lastDesiredSpeed = desiredSpeed;
-
-            // Log once for debugging or when speed changes
-            if (speedChanged)
-            {
-                // Removed excessive logging - speed boost is applied silently
-            }
         }
     }
 }

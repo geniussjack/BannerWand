@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="玩家" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="物品欄" />
 		<string id="BW_Category_Stats" text="屬性" />
 		<string id="BW_Category_Enemies" text="敵人" />

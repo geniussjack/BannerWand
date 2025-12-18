@@ -1,5 +1,8 @@
 #nullable enable
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
@@ -89,6 +92,9 @@ namespace BannerWand.Utils
 
                 Kingdom? heroKingdom = heroClan.Kingdom;
 
+                // Cache player kingdom once to avoid repeated lookups
+                Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+
                 // Check kingdom-related targets
                 if (heroKingdom != null)
                 {
@@ -96,7 +102,6 @@ namespace BannerWand.Utils
                     if (heroKingdom.Leader == hero)
                     {
                         // Check if this is the player's kingdom ruler
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && settings.ApplyToPlayerKingdomRuler)
                         {
                             return true;
@@ -112,7 +117,6 @@ namespace BannerWand.Utils
                     if (heroClan.Leader == hero && heroClan != heroKingdom.RulingClan)
                     {
                         // Check if this is a player kingdom vassal
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && heroClan != Clan.PlayerClan && settings.ApplyToPlayerKingdomVassals)
                         {
                             return true;
@@ -128,7 +132,6 @@ namespace BannerWand.Utils
                     if (hero.CharacterObject?.IsHero == true)
                     {
                         // Check if this is in player's kingdom
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && settings.ApplyToPlayerKingdomNobles)
                         {
                             return true;
@@ -214,11 +217,13 @@ namespace BannerWand.Utils
 
                 Kingdom? clanKingdom = clan.Kingdom;
 
+                // Cache player kingdom once to avoid repeated lookups
+                Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+
                 // Check if clan has a kingdom
                 if (clanKingdom != null)
                 {
                     // Check if clan belongs to player's kingdom (vassal)
-                    Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                     if (clanKingdom == playerKingdom && clan != Clan.PlayerClan)
                     {
                         // Check if this is the ruling clan (ruler)

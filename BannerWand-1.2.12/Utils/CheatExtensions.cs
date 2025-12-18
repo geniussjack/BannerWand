@@ -67,7 +67,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return hero?.Clan != null && hero == hero.Clan.Leader;
-
             }
             catch (Exception ex)
             {
@@ -90,7 +89,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return hero?.Clan != null && hero.Clan.Kingdom == null;
-
             }
             catch (Exception ex)
             {
@@ -112,7 +110,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return hero?.Clan == Clan.PlayerClan;
-
             }
             catch (Exception ex)
             {
@@ -142,7 +139,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return (hero?.Clan) != null && (Clan.PlayerClan?.Kingdom) != null && hero.Clan.Kingdom == Clan.PlayerClan.Kingdom && hero.Clan != Clan.PlayerClan;
-
             }
             catch (Exception ex)
             {
@@ -186,7 +182,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return clan?.Kingdom == null;
-
             }
             catch (Exception ex)
             {
@@ -208,7 +203,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return clan != null && (Clan.PlayerClan?.Kingdom) != null && clan.Kingdom == Clan.PlayerClan.Kingdom && clan != Clan.PlayerClan;
-
             }
             catch (Exception ex)
             {
@@ -242,7 +236,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return party != null && MobileParty.MainParty != null && party.MapFaction?.IsAtWarWith(MobileParty.MainParty.MapFaction) == false;
-
             }
             catch (Exception ex)
             {
@@ -264,7 +257,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return party?.MemberRoster?.TotalManCount ?? 0;
-
             }
             catch (Exception ex)
             {
@@ -286,7 +278,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return party?.MemberRoster?.TotalHealthyCount ?? 0;
-
             }
             catch (Exception ex)
             {
@@ -338,7 +329,6 @@ namespace BannerWandRetro.Utils
                 }
 
                 return totalHealed;
-
             }
             catch (Exception ex)
             {
@@ -366,7 +356,6 @@ namespace BannerWandRetro.Utils
             {
                 Agent? mainAgent = Mission.Current?.MainAgent;
                 return mainAgent != null && agent?.IsEnemyOf(mainAgent) == true;
-
             }
             catch (Exception ex)
             {
@@ -417,7 +406,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return agent?.IsPlayerControlled == true;
-
             }
             catch (Exception ex)
             {
@@ -444,7 +432,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return item?.IsFood == true;
-
             }
             catch (Exception ex)
             {
@@ -467,7 +454,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return item?.WeaponComponent != null;
-
             }
             catch (Exception ex)
             {
@@ -489,7 +475,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 return item?.ArmorComponent != null;
-
             }
             catch (Exception ex)
             {
@@ -580,10 +565,7 @@ namespace BannerWandRetro.Utils
         /// </remarks>
         private static void LogException(Exception ex, string methodName)
         {
-            ModLogger.Error($"Exception in CheatExtensions.cs - {ex}: {ex.Message}");
-            ModLogger.Error($"Stack trace: {ex.StackTrace}");
-            ModLogger.Error($"[CheatExtensions] Error in {methodName}: {ex.Message}");
-            ModLogger.Error($"Stack trace: {ex.StackTrace}");
+            ModLogger.Error($"[CheatExtensions] Error in {methodName}: {ex}");
         }
 
         #endregion

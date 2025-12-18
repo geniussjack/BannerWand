@@ -1,13 +1,18 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.Collections.Generic;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -27,7 +32,7 @@ namespace BannerWand.Patches
     /// - The roster belongs to player's party (MobileParty.MainParty)
     /// </para>
     /// </remarks>
-    [HarmonyPatch(typeof(ItemRoster), nameof(ItemRoster.AddToCounts), new[] { typeof(ItemObject), typeof(int) })]
+    [HarmonyPatch(typeof(ItemRoster), nameof(ItemRoster.AddToCounts), [typeof(ItemObject), typeof(int)])]
     public static class ItemRosterTradePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;

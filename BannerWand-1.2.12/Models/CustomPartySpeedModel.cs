@@ -1,5 +1,6 @@
 #nullable enable
 using BannerWandRetro.Constants;
+using BannerWandRetro.Patches;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
@@ -13,6 +14,13 @@ namespace BannerWandRetro.Models
     /// Custom party speed model that handles player movement speed override and AI slowdown.
     /// Extends <see cref="DefaultPartySpeedCalculatingModel"/> to modify party movement speeds.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This model works together with MobilePartySpeedPatch. When MobilePartySpeedPatch is active,
+    /// this model skips its speed modification to prevent conflicts. The patch adds a fixed speed bonus
+    /// directly to MobileParty.SpeedExplained, ensuring constant speed without fluctuations.
+    /// </para>
+    /// </remarks>
     public class CustomPartySpeedModel : DefaultPartySpeedCalculatingModel
     {
         private CheatSettings? Settings => CheatSettings.Instance;
@@ -43,15 +51,34 @@ namespace BannerWandRetro.Models
                     additionalTroopOnFootCount,
                     additionalTroopOnHorseCount);
 
-                // Check if player speed override is enabled
+                // NOTE: Speed bonus is now applied via MobilePartySpeedPatch, which patches
+                // MobileParty.SpeedExplained directly. This ensures the bonus is constant and doesn't fluctuate.
+                // We skip applying speed here if the patch is active to avoid conflicts.
+                if (MobilePartySpeedPatch.IsActive())
+                {
+                    return baseSpeed;
+                }
+
+                // Check if player speed override is enabled (only for player's main party)
                 if (ShouldApplyPlayerSpeedOverride(mobileParty))
                 {
                     float speedBefore = baseSpeed.ResultNumber;
-                    ApplyPlayerSpeedBoost(ref baseSpeed);
+                    ApplyPlayerSpeedBoost(ref baseSpeed, Settings.MovementSpeed);
                     float speedAfter = baseSpeed.ResultNumber;
                     if (Math.Abs(speedBefore - speedAfter) > 0.01f)
                     {
                         ModLogger.Debug($"Movement Speed: Applied to {mobileParty.Name} - Speed changed from {speedBefore:F2} to {speedAfter:F2}");
+                    }
+                }
+                // Check for NPC speed override (only for non-player parties)
+                else if (ShouldApplyNPCSpeedOverride(mobileParty))
+                {
+                    float speedBefore = baseSpeed.ResultNumber;
+                    ApplyPlayerSpeedBoost(ref baseSpeed, Settings.NPCMovementSpeed);
+                    float speedAfter = baseSpeed.ResultNumber;
+                    if (Math.Abs(speedBefore - speedAfter) > 0.01f)
+                    {
+                        ModLogger.Debug($"NPC Movement Speed: Applied to {mobileParty.Name} - Speed changed from {speedBefore:F2} to {speedAfter:F2}");
                     }
                 }
 
@@ -77,17 +104,32 @@ namespace BannerWandRetro.Models
         }
 
         /// <summary>
+        /// Determines if NPC speed override should be applied.
+        /// Applies only to non-player parties when NPCMovementSpeed > 0.
+        /// Player's party should use Player speed override instead.
+        /// </summary>
+        private bool ShouldApplyNPCSpeedOverride(MobileParty mobileParty)
+        {
+            // Early exit if settings are null
+            // Do NOT apply NPC speed to player's main party - player should use Player speed instead
+            return Settings?.NPCMovementSpeed > 0f && 
+                   Campaign.Current != null &&
+                   mobileParty != MobileParty.MainParty;
+        }
+
+        /// <summary>
         /// Applies player speed boost by calculating a multiplier factor.
         /// Preserves all terrain, composition, and other modifiers.
         /// </summary>
-        private void ApplyPlayerSpeedBoost(ref ExplainedNumber speed)
+        private void ApplyPlayerSpeedBoost(ref ExplainedNumber speed, float desiredSpeed)
         {
-            float desiredSpeed = Settings!.MovementSpeed;
+            // desiredSpeed is the FINAL speed value the user wants
+            // Settings is already validated in ShouldApplyPlayerSpeedOverride() or ShouldApplyNPCSpeedOverride()
             float currentBaseSpeed = speed.BaseNumber;
 
             // Cap the multiplier to prevent extreme values when base speed is very small
             // Maximum multiplier of 100x prevents distortion while still allowing significant speed boosts
-            const float maxMultiplier = 100f;
+            const float maxMultiplier = GameConstants.MaxSpeedMultiplier;
 
             if (currentBaseSpeed > GameConstants.MinBaseSpeedThreshold)
             {
@@ -101,7 +143,7 @@ namespace BannerWandRetro.Models
                     multiplier = maxMultiplier;
                 }
                 // Then add factor = (multiplier - 1.0) to get the desired result
-                float factorToAdd = multiplier - 1.0f;
+                float factorToAdd = multiplier - GameConstants.MultiplierFactorBase;
                 speed.AddFactor(factorToAdd, new TaleWorlds.Localization.TextObject("BannerWand Speed Override"));
             }
             else

@@ -1,9 +1,13 @@
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+#nullable enable
+// Third-party namespaces
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -28,12 +32,12 @@ namespace BannerWand.Patches
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Postfix patch that adds maximum capacity after base calculation.
@@ -125,6 +129,12 @@ namespace BannerWand.Patches
         /// </remarks>
         private static bool ShouldApplyMaxCapacityToParty(MobileParty mobileParty)
         {
+            // Early exit if party is null
+            if (mobileParty == null || TargetSettings == null)
+            {
+                return false;
+            }
+
             // Check if this is player party
             if (mobileParty == MobileParty.MainParty && TargetSettings.ApplyToPlayer)
             {

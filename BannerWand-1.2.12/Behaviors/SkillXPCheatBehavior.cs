@@ -2,6 +2,7 @@ using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
@@ -171,7 +172,13 @@ namespace BannerWandRetro.Behaviors
             // Use cached collection to avoid repeated enumeration (runs hourly)
             if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                foreach (Hero hero in CampaignDataCache.AllAliveHeroes!)
+                List<Hero> allHeroes = CampaignDataCache.AllAliveHeroes;
+                if (allHeroes is null)
+                {
+                    ModLogger.Warning("[SkillXPCheatBehavior] CampaignDataCache.AllAliveHeroes returned null. Skipping NPC skill XP application.");
+                    return;
+                }
+                foreach (Hero hero in allHeroes)
                 {
                     // Skip player hero (already handled)
                     if (hero == Hero.MainHero)

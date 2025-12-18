@@ -1,9 +1,16 @@
+#nullable enable
+#pragma warning disable CS0169 // Fields _npcAttributePointsApplied and _npcFocusPointsApplied are used in conditional logic
+// System namespaces
+using System;
+using System.Collections.Generic;
+
+// Third-party namespaces
+using TaleWorlds.CampaignSystem;
+
+// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-using System;
-using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Behaviors
 {
@@ -32,12 +39,12 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Tracks whether attribute points have been applied to prevent repeated application.
@@ -48,6 +55,18 @@ namespace BannerWand.Behaviors
         /// Tracks whether focus points have been applied to prevent repeated application.
         /// </summary>
         private bool _focusPointsApplied = false;
+
+        /// <summary>
+        /// Tracks whether NPC attribute points have been applied to prevent repeated application.
+        /// Used in conditional logic: if (settings.NPCEditAttributePoints != 0 && !_npcAttributePointsApplied)
+        /// </summary>
+        private bool _npcAttributePointsApplied = false;
+
+        /// <summary>
+        /// Tracks whether NPC focus points have been applied to prevent repeated application.
+        /// Used in conditional logic: if (settings.NPCEditFocusPoints != 0 && !_npcFocusPointsApplied)
+        /// </summary>
+        private bool _npcFocusPointsApplied = false;
 
         #endregion
 
@@ -109,6 +128,12 @@ namespace BannerWand.Behaviors
             // Reset one-time application flags
             _attributePointsApplied = false;
             _focusPointsApplied = false;
+            _npcAttributePointsApplied = false;
+            _npcFocusPointsApplied = false;
+
+            // Explicit usage to suppress CS0169 warnings (fields are used in conditional logic in ApplyAttributeAndFocusPoints)
+            _ = _npcAttributePointsApplied;
+            _ = _npcFocusPointsApplied;
         }
 
         /// <summary>
@@ -152,13 +177,20 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private void ApplyAttributeAndFocusPoints()
         {
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // === ATTRIBUTE POINTS (PLAYER ONLY) ===
 
-            if (Settings.EditAttributePoints != 0 && !_attributePointsApplied)
+            if (settings.EditAttributePoints != 0 && !_attributePointsApplied)
             {
-                if (TargetSettings.ApplyToPlayer && Hero.MainHero is not null)
+                if (targetSettings.ApplyToPlayer && Hero.MainHero is not null)
                 {
-                    Hero.MainHero.HeroDeveloper.UnspentAttributePoints += Settings.EditAttributePoints;
+                    Hero.MainHero.HeroDeveloper.UnspentAttributePoints += settings.EditAttributePoints;
 
                     // Clamp to prevent negative values
                     if (Hero.MainHero.HeroDeveloper.UnspentAttributePoints < 0)
@@ -166,12 +198,12 @@ namespace BannerWand.Behaviors
                         Hero.MainHero.HeroDeveloper.UnspentAttributePoints = 0;
                     }
 
-                    ModLogger.LogCheat("Attribute Points Edit", true, Settings.EditAttributePoints, "player");
+                    ModLogger.LogCheat("Attribute Points Edit", true, settings.EditAttributePoints, "player");
                 }
 
                 _attributePointsApplied = true;
             }
-            else if (Settings.EditAttributePoints == 0)
+            else if (settings.EditAttributePoints == 0)
             {
                 // Reset flag when setting returns to zero (ready for next application)
                 _attributePointsApplied = false;
@@ -179,11 +211,11 @@ namespace BannerWand.Behaviors
 
             // === FOCUS POINTS (PLAYER ONLY) ===
 
-            if (Settings.EditFocusPoints != 0 && !_focusPointsApplied)
+            if (settings.EditFocusPoints != 0 && !_focusPointsApplied)
             {
-                if (TargetSettings.ApplyToPlayer && Hero.MainHero is not null)
+                if (targetSettings.ApplyToPlayer && Hero.MainHero is not null)
                 {
-                    Hero.MainHero.HeroDeveloper.UnspentFocusPoints += Settings.EditFocusPoints;
+                    Hero.MainHero.HeroDeveloper.UnspentFocusPoints += settings.EditFocusPoints;
 
                     // Clamp to prevent negative values
                     if (Hero.MainHero.HeroDeveloper.UnspentFocusPoints < 0)
@@ -191,15 +223,93 @@ namespace BannerWand.Behaviors
                         Hero.MainHero.HeroDeveloper.UnspentFocusPoints = 0;
                     }
 
-                    ModLogger.LogCheat("Focus Points Edit", true, Settings.EditFocusPoints, "player");
+                    ModLogger.LogCheat("Focus Points Edit", true, settings.EditFocusPoints, "player");
                 }
 
                 _focusPointsApplied = true;
             }
-            else if (Settings.EditFocusPoints == 0)
+            else if (settings.EditFocusPoints == 0)
             {
                 // Reset flag when setting returns to zero (ready for next application)
                 _focusPointsApplied = false;
+            }
+
+            // === NPC ATTRIBUTE POINTS ===
+
+            if (settings.NPCEditAttributePoints != 0 && !_npcAttributePointsApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                    if (allHeroes is not null)
+                    {
+                        int affectedCount = 0;
+                        foreach (Hero hero in allHeroes)
+                        {
+                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            {
+                                hero.HeroDeveloper.UnspentAttributePoints += settings.NPCEditAttributePoints;
+
+                                // Clamp to prevent negative values
+                                if (hero.HeroDeveloper.UnspentAttributePoints < 0)
+                                {
+                                    hero.HeroDeveloper.UnspentAttributePoints = 0;
+                                }
+
+                                affectedCount++;
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Attribute Points Edit", true, settings.NPCEditAttributePoints, $"{affectedCount} NPC heroes");
+                        }
+                    }
+                }
+                _npcAttributePointsApplied = true;
+            }
+            else if (settings.NPCEditAttributePoints == 0)
+            {
+                // Reset flag when setting returns to zero (ready for next application)
+                _npcAttributePointsApplied = false;
+            }
+
+            // === NPC FOCUS POINTS ===
+
+            if (settings.NPCEditFocusPoints != 0 && !_npcFocusPointsApplied)
+            {
+                if (targetSettings.HasAnyNPCTargetEnabled())
+                {
+                    List<Hero>? allHeroes = CampaignDataCache.AllAliveHeroes;
+                    if (allHeroes is not null)
+                    {
+                        int affectedCount = 0;
+                        foreach (Hero hero in allHeroes)
+                        {
+                            if (hero != Hero.MainHero && TargetFilter.ShouldApplyCheat(hero))
+                            {
+                                hero.HeroDeveloper.UnspentFocusPoints += settings.NPCEditFocusPoints;
+
+                                // Clamp to prevent negative values
+                                if (hero.HeroDeveloper.UnspentFocusPoints < 0)
+                                {
+                                    hero.HeroDeveloper.UnspentFocusPoints = 0;
+                                }
+
+                                affectedCount++;
+                            }
+                        }
+                        if (affectedCount > 0)
+                        {
+                            ModLogger.LogCheat("NPC Focus Points Edit", true, settings.NPCEditFocusPoints, $"{affectedCount} NPC heroes");
+                        }
+                    }
+                }
+                _npcFocusPointsApplied = true;
+            }
+            else if (settings.NPCEditFocusPoints == 0)
+            {
+                // Reset flag when setting returns to zero (ready for next application)
+                _npcFocusPointsApplied = false;
             }
         }
 
@@ -229,14 +339,21 @@ namespace BannerWand.Behaviors
         /// </remarks>
         private static void ApplyRenown()
         {
+            CheatSettings? settings = Settings;
+            CheatTargetSettings? targetSettings = TargetSettings;
+            if (settings is null || targetSettings is null)
+            {
+                return;
+            }
+
             // Early return if cheat not enabled
-            if (!Settings.UnlimitedRenown)
+            if (!settings.UnlimitedRenown)
             {
                 return;
             }
 
             // Apply to player clan
-            if (TargetSettings.ApplyToPlayer && Clan.PlayerClan is not null)
+            if (targetSettings.ApplyToPlayer && Clan.PlayerClan is not null)
             {
                 Clan playerClan = Clan.PlayerClan;
 
@@ -256,9 +373,9 @@ namespace BannerWand.Behaviors
             }
 
             // Apply to NPC clans if any NPC targets are enabled
-            if (TargetSettings.HasAnyNPCTargetEnabled())
+            if (targetSettings.HasAnyNPCTargetEnabled())
             {
-                List<Clan> allClans = CampaignDataCache.AllClans;
+                List<Clan>? allClans = CampaignDataCache.AllClans;
                 if (allClans is null)
                 {
                     return;
@@ -292,3 +409,4 @@ namespace BannerWand.Behaviors
         #endregion
     }
 }
+#pragma warning restore CS0169

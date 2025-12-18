@@ -24,6 +24,15 @@ namespace BannerWandRetro.Constants
         public const int MaxSkillLevel = 330;
 
         /// <summary>
+        /// Minimum age for NPC aging to be stopped (21 years old).
+        /// Children under this age will continue to grow normally.
+        /// </summary>
+        /// <remarks>
+        /// Used by aging prevention cheats to determine when NPCs should stop aging.
+        /// </remarks>
+        public const int MinimumAgeForStopAging = 21;
+
+        /// <summary>
         /// Maximum number of heroes to process per daily tick for relationship improvements.
         /// </summary>
         /// <remarks>
@@ -47,8 +56,11 @@ namespace BannerWandRetro.Constants
 
         /// <summary>
         /// Base XP amount used for troop XP multiplier calculations.
+        /// Increased to 2000 for more noticeable effect.
+        /// Typical troop upgrade requires 1000-5000 XP depending on tier.
+        /// With multiplier x16, this gives 32000 XP per hour, which should be very noticeable.
         /// </summary>
-        public const int TroopXPBaseAmount = 100;
+        public const int TroopXPBaseAmount = 2000;
 
         /// <summary>
         /// Amount of renown added per hour when Unlimited Renown is enabled.
@@ -228,6 +240,75 @@ namespace BannerWandRetro.Constants
         /// Game blocks shots when ammo is 0 or 1, so we maintain at least this amount.
         /// </remarks>
         public const short SafeMinimumAmmo = 5;
+
+        /// <summary>
+        /// Health bonus threshold multiplier for Infinite Health detection.
+        /// </summary>
+        /// <remarks>
+        /// Used to check if Infinite Health bonus has been applied (90% of bonus value).
+        /// Prevents re-applying the bonus if it's already been applied.
+        /// </remarks>
+        public const float InfiniteHealthBonusThresholdMultiplier = 0.9f;
+
+        /// <summary>
+        /// Maximum speed multiplier cap to prevent extreme values.
+        /// </summary>
+        /// <remarks>
+        /// Used in speed calculations to prevent distortion when base speed is very small.
+        /// Maximum multiplier of 100x prevents distortion while still allowing significant speed boosts.
+        /// </remarks>
+        public const float MaxSpeedMultiplier = 100f;
+
+        /// <summary>
+        /// Speed change detection threshold for logging.
+        /// </summary>
+        /// <remarks>
+        /// Used to determine if speed has changed significantly enough to log.
+        /// Prevents excessive logging for minor speed fluctuations.
+        /// </remarks>
+        public const float SpeedChangeDetectionThreshold = 0.01f;
+
+        /// <summary>
+        /// Multiplier factor base value (1.0 = no change).
+        /// </summary>
+        /// <remarks>
+        /// Used when calculating factor to add: factorToAdd = multiplier - 1.0f.
+        /// </remarks>
+        public const float MultiplierFactorBase = 1.0f;
+
+        #endregion
+
+        #region Settlement Constants
+
+        /// <summary>
+        /// Maximum value for numerical settlement bonuses (Food, Prosperity, Loyalty, Security).
+        /// </summary>
+        public const int MaxSettlementBonusValue = 999;
+
+        /// <summary>
+        /// Default value for garrison wages multiplier (1.0 = normal wages).
+        /// </summary>
+        public const float DefaultGarrisonWagesMultiplier = 1.0f;
+
+        /// <summary>
+        /// Maximum multiplier for garrison wages (10.0 = 10x wages).
+        /// </summary>
+        public const float MaxGarrisonWagesMultiplier = 10.0f;
+
+        /// <summary>
+        /// Minimum multiplier for garrison wages (-10.0 = negative wages, income for owner).
+        /// </summary>
+        public const float MinGarrisonWagesMultiplier = -10.0f;
+
+        /// <summary>
+        /// Maximum multiplier for recruitment rates (100.0 = 100x recruitment).
+        /// </summary>
+        public const float MaxRecruitmentMultiplier = 100.0f;
+
+        /// <summary>
+        /// Maximum chance percentage for veteran militiamen (100.0 = 100% chance).
+        /// </summary>
+        public const float MaxMilitiaVeteranChance = 100.0f;
 
         #endregion
 

@@ -99,7 +99,7 @@ namespace BannerWandRetro.Settings
         /// Prevents death from high damage attacks.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_InfiniteHealth}Infinite Health", Order = 1, RequireRestart = false, HintText = "{=BW_Player_InfiniteHealth_Hint}Adds +9999 HP at battle start. Prevents one-shot kills.")]
+        [SettingPropertyBool("{=BW_Player_InfiniteHealth}Infinite HP", Order = 1, RequireRestart = false, HintText = "{=BW_Player_InfiniteHealth_Hint}Adds +9999 HP at battle start. Prevents one-shot kills.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteHealth { get; set; } = false;
 
@@ -107,7 +107,7 @@ namespace BannerWandRetro.Settings
         /// Player's mount never loses health.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_UnlimitedHorseHealth}Unlimited Horse Health", Order = 2, RequireRestart = false, HintText = "{=BW_Player_UnlimitedHorseHealth_Hint}Player's horse takes no damage.")]
+        [SettingPropertyBool("{=BW_Player_UnlimitedHorseHealth}Unlimited Horse HP", Order = 2, RequireRestart = false, HintText = "{=BW_Player_UnlimitedHorseHealth_Hint}Player's horse takes no damage.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool UnlimitedHorseHealth { get; set; } = false;
 
@@ -115,7 +115,7 @@ namespace BannerWandRetro.Settings
         /// Player's shield never breaks.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_UnlimitedShieldDurability}Unlimited Shield Durability", Order = 3, RequireRestart = false, HintText = "{=BW_Player_UnlimitedShieldDurability_Hint}Takes effect when you block enemy attacks.")]
+        [SettingPropertyBool("{=BW_Player_UnlimitedShieldDurability}Unlimited Shield HP", Order = 3, RequireRestart = false, HintText = "{=BW_Player_UnlimitedShieldDurability_Hint}Takes effect when you block enemy attacks.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool UnlimitedShieldDurability { get; set; } = false;
 
@@ -137,13 +137,25 @@ namespace BannerWandRetro.Settings
         public bool MaxMorale { get; set; } = false;
 
         /// <summary>
-        /// Campaign map movement speed multiplier (1.0 = normal, 2.0 = double).
-        /// Implemented in <see cref="Models.CustomPartySpeedModel"/>.
-        /// NOTE: Changes apply on the next in-game day.
+        /// Campaign map movement speed bonus (adds fixed speed value, 0-16).
+        /// Implemented in <see cref="Patches.MobilePartySpeedPatch"/> (patches MobileParty.SpeedExplained).
+        /// NOTE: Speed bonus is added as a fixed value, not a multiplier. Changes apply immediately.
         /// </summary>
         [SettingPropertyFloatingInteger("{=BW_Player_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 5, RequireRestart = false, HintText = "{=BW_Player_MovementSpeed_Hint}Only works on map, not in battle. Changes apply on the next in-game day.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public float MovementSpeed { get; set; } = 0f;
+
+        /// <summary>
+        /// Additional companion limit bonus for player and NPC clans (0-100).
+        /// Implemented in <see cref="Models.CustomClanTierModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// This setting allows players to increase the companion limit for all clans (player and NPC).
+        /// Works with mods that allow NPCs to recruit companions.
+        /// </remarks>
+        [SettingPropertyInteger("{=BW_Player_ClanCompanionsLimit}Clan Companions Limit", 0, 100, Order = 6, RequireRestart = false, HintText = "{=BW_Player_ClanCompanionsLimit_Hint}Adds bonus to companion limit for player and NPC clans. Works with mods that allow NPCs to recruit companions.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public int ClanCompanionsLimit { get; set; } = 0;
 
         /// <summary>
         /// Any barter/trade offer is automatically accepted by NPCs.
@@ -176,6 +188,96 @@ namespace BannerWandRetro.Settings
         [SettingPropertyBool("{=BW_Player_MaxAllCharacterRelationships}Max All Character Relationships", Order = 9, RequireRestart = false, HintText = "{=BW_Player_MaxAllCharacterRelationships_Hint}Instantly sets relationship to 100 with all characters.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool MaxAllCharacterRelationships { get; set; } = false;
+
+        #endregion
+
+        #region NPC Category
+
+        /// <summary>
+        /// NPC heroes' health bar never decreases (based on max HP limit).
+        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_UnlimitedHP}Unlimited HP", Order = 0, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHP_Hint}Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public bool NPCUnlimitedHP { get; set; } = false;
+
+        /// <summary>
+        /// Adds +9999 health to NPC heroes at the start of each battle.
+        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_InfiniteHP}Infinite HP", Order = 1, RequireRestart = false, HintText = "{=BW_NPC_InfiniteHP_Hint}Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public bool NPCInfiniteHP { get; set; } = false;
+
+        /// <summary>
+        /// NPC heroes' mounts never lose health.
+        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_UnlimitedHorseHP}Unlimited Horse HP", Order = 2, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHorseHP_Hint}Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public bool NPCUnlimitedHorseHP { get; set; } = false;
+
+        /// <summary>
+        /// NPC heroes' shields never lose durability.
+        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_UnlimitedShieldHP}Unlimited Shield HP", Order = 3, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedShieldHP_Hint}Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public bool NPCUnlimitedShieldHP { get; set; } = false;
+
+        /// <summary>
+        /// NPC heroes never run out of ammunition for ranged weapons.
+        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_UnlimitedAmmo}Unlimited Ammo", Order = 5, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedAmmo_Hint}Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public bool NPCUnlimitedAmmo { get; set; } = false;
+
+        /// <summary>
+        /// Campaign map movement speed bonus for NPC parties (adds fixed speed value, 0-16).
+        /// Implemented in <see cref="Patches.MobilePartySpeedPatch"/> (patches MobileParty.SpeedExplained).
+        /// NOTE: Speed bonus is added as a fixed value, not a multiplier. Changes apply immediately.
+        /// </summary>
+        [SettingPropertyFloatingInteger("{=BW_NPC_MovementSpeed}Set Movement Speed", 0f, 16f, Order = 6, RequireRestart = false, HintText = "{=BW_NPC_MovementSpeed_Hint}Applies to all parties on the map, not just player. Changes apply on the next in-game day.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public float NPCMovementSpeed { get; set; } = 0f;
+
+        /// <summary>
+        /// Add or remove gold for NPCs (applies once when value changed).
+        /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_NPC_EditGold}Edit Gold", -1000000, 1000000, Order = 7, RequireRestart = false, HintText = "{=BW_NPC_EditGold_Hint}Add or remove gold for NPCs (applied once when value changed).")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public int NPCEditGold { get; set; } = 0;
+
+        /// <summary>
+        /// Add or remove clan influence for NPCs (applies once when value changed).
+        /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_NPC_EditInfluence}Edit Influence", -10000, 10000, Order = 8, RequireRestart = false, HintText = "{=BW_NPC_EditInfluence_Hint}Add or remove influence for NPCs (applied once when value changed).")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public int NPCEditInfluence { get; set; } = 0;
+
+        /// <summary>
+        /// Add or remove unspent attribute points for NPCs (applies once when value changed).
+        /// Implemented in <see cref="Behaviors.NPCCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_NPC_EditAttributePoints}Edit Attribute Points", -1000, 1000, Order = 9, RequireRestart = false, HintText = "{=BW_NPC_EditAttributePoints_Hint}Add or remove attribute points for NPCs (applied once when value changed).")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public int NPCEditAttributePoints { get; set; } = 0;
+
+        /// <summary>
+        /// Add or remove unspent focus points for NPCs (applies once when value changed).
+        /// Implemented in <see cref="Behaviors.NPCCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_NPC_EditFocusPoints}Edit Focus Points", -1000, 1000, Order = 10, RequireRestart = false, HintText = "{=BW_NPC_EditFocusPoints_Hint}Add or remove focus points for NPCs (applied once when value changed).")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 1)]
+        public int NPCEditFocusPoints { get; set; } = 0;
 
         #endregion
 
@@ -215,7 +317,7 @@ namespace BannerWandRetro.Settings
 
         /// <summary>
         /// Sets carrying capacity to ~1 million (effectively unlimited).
-        /// Implemented in <see cref="Models.CustomInventoryCapacityModel"/>.
+        /// Implemented via <see cref="Patches.InventoryCapacityPatch"/> (Harmony patch).
         /// </summary>
         [SettingPropertyBool("{=BW_Inventory_MaxCarryingCapacity}Max Carrying Capacity", Order = 4, RequireRestart = false, HintText = "{=BW_Inventory_MaxCarryingCapacity_Hint}Party has unlimited carrying capacity.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
@@ -333,14 +435,6 @@ namespace BannerWandRetro.Settings
         public bool PersuasionAlwaysSucceed { get; set; } = false;
 
         /// <summary>
-        /// All settlement buildings complete construction in one day.
-        /// Implemented in <see cref="Models.CustomBuildingConstructionModel"/>.
-        /// </summary>
-        [SettingPropertyBool("{=BW_Game_OneDaySettlementsConstruction}One Day Settlements Construction", Order = 2, RequireRestart = false, HintText = "{=BW_Game_OneDaySettlementsConstruction_Hint}Only one building can be constructed at a time. Building/upgrading multiple buildings still requires multiple days.")]
-        [SettingPropertyGroup("{=BW_Category_Game}Game", GroupOrder = 4)]
-        public bool OneDaySettlementsConstruction { get; set; } = false;
-
-        /// <summary>
         /// Siege equipment builds instantly for player.
         /// Implemented in <see cref="Models.CustomSiegeEventModel"/>.
         /// </summary>
@@ -354,8 +448,8 @@ namespace BannerWandRetro.Settings
         /// Example: 2.0 means Play becomes 2x speed, Fast Forward becomes 8x speed.
         /// </summary>
         /// <remarks>
-        /// FIXED: Default value is now enforced to be 1.0, not 0.1 (minimum value from attribute).
-        /// This fixes the issue where MCM might use the minimum value (0.1f) as default.
+        /// Default value is enforced to be 1.0, not 0.1 (minimum value from attribute).
+        /// This prevents MCM from using the minimum value (0.1f) as default.
         /// </remarks>
         [SettingPropertyFloatingInteger("{=BW_Game_GameSpeed}Set Game Speed Multiplier", 0.1f, 10f, Order = 4, RequireRestart = false, HintText = "{=BW_Game_GameSpeed_Hint}Multiplies the speed of Play (1x) and Fast Forward (4x) buttons. 1.0 = normal, 2.0 = double speed, etc.")]
         [SettingPropertyGroup("{=BW_Category_Game}Game", GroupOrder = 4)]
@@ -382,6 +476,97 @@ namespace BannerWandRetro.Settings
                 field = value;
             }
         } = 1.0f;
+
+        #endregion
+
+        #region Settlements Category
+
+        /// <summary>
+        /// Multiplier for garrison wages (1.0 = normal, 0 = free, greater than 1.0 = increase wages).
+        /// Implemented in <see cref="Models.CustomPartyWageModel"/>.
+        /// </summary>
+        /// <remarks>
+        /// This setting allows players to modify garrison wage costs:
+        /// - 1.0 = normal wages (no change)
+        /// - 0.0 = free garrison (wages set to 0)
+        /// - Greater than 1.0 = increase wages (e.g., 2.0 = double wages)
+        /// - Between 0 and 1.0 = divide wages (e.g., 0.5 = half wages)
+        /// </remarks>
+        [SettingPropertyFloatingInteger("{=BW_Settlements_GarrisonWagesMultiplier}Garrison Wages Multiplier", 0f, 10f, Order = 1, RequireRestart = false, HintText = "{=BW_Settlements_GarrisonWagesMultiplier_Hint}Controls garrison wage cost. 1.0 = normal, 0 = free, greater than 1.0 = increase wages.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public float GarrisonWagesMultiplier { get; set; } = 1f;
+
+        /// <summary>
+        /// Additive bonus for daily garrison recruitment (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementGarrisonModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_GarrisonRecruitmentMultiplier}Garrison Recruitment Bonus", 0, 999, Order = 2, RequireRestart = false, HintText = "{=BW_Settlements_GarrisonRecruitmentMultiplier_Hint}Adds soldiers to garrison each day. 0 = disabled, 10 = adds 10 soldiers per day, etc.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int GarrisonRecruitmentMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Additive bonus for daily militia recruitment (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementMilitiaModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_MilitiaRecruitmentMultiplier}Militia Recruitment Bonus", 0, 999, Order = 3, RequireRestart = false, HintText = "{=BW_Settlements_MilitiaRecruitmentMultiplier_Hint}Adds militiamen each day. 0 = disabled, 10 = adds 10 militiamen per day, etc.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int MilitiaRecruitmentMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Chance percentage for veteran militiamen to appear.
+        /// Implemented in <see cref="Models.CustomSettlementMilitiaModel"/>.
+        /// </summary>
+        [SettingPropertyFloatingInteger("{=BW_Settlements_MilitiaVeteranChance}Militia Veteran Chance", 0f, 100f, Order = 4, RequireRestart = false, HintText = "{=BW_Settlements_MilitiaVeteranChance_Hint}Percentage chance for veteran militiamen to appear (0-100%).")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public float MilitiaVeteranChance { get; set; } = 0f;
+
+        /// <summary>
+        /// Numerical addition to daily food growth (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementFoodModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_FoodIncreaseMultiplier}Food Increase Multiplier", 0, 999, Order = 5, RequireRestart = false, HintText = "{=BW_Settlements_FoodIncreaseMultiplier_Hint}Adds the specified value to daily food growth (0-999).")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int FoodIncreaseMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Numerical addition to daily prosperity growth (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementProsperityModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_ProsperityIncreaseMultiplier}Prosperity Increase Multiplier", 0, 999, Order = 6, RequireRestart = false, HintText = "{=BW_Settlements_ProsperityIncreaseMultiplier_Hint}Adds the specified value to daily prosperity growth (0-999).")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int ProsperityIncreaseMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Numerical addition to daily hearth growth for villages (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementProsperityModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_HearthIncreaseMultiplier}Hearth Increase Multiplier", 0, 999, Order = 7, RequireRestart = false, HintText = "{=BW_Settlements_HearthIncreaseMultiplier_Hint}Adds the specified value to daily hearth growth for villages (0-999). Hearth is the village equivalent of prosperity.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int HearthIncreaseMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Numerical addition to daily loyalty growth (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementLoyaltyModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_LoyaltyIncreaseMultiplier}Loyalty Increase Multiplier", 0, 999, Order = 8, RequireRestart = false, HintText = "{=BW_Settlements_LoyaltyIncreaseMultiplier_Hint}Adds the specified value to daily loyalty growth (0-999).")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int LoyaltyIncreaseMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// Numerical addition to daily security growth (0-999).
+        /// Implemented in <see cref="Models.CustomSettlementSecurityModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_SecurityIncreaseMultiplier}Security Increase Multiplier", 0, 999, Order = 9, RequireRestart = false, HintText = "{=BW_Settlements_SecurityIncreaseMultiplier_Hint}Adds the specified value to daily security growth (0-999).")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int SecurityIncreaseMultiplier { get; set; } = 0;
+
+        /// <summary>
+        /// All settlement buildings complete construction in one day.
+        /// Implemented in <see cref="Models.CustomBuildingConstructionModel"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Game_OneDaySettlementsConstruction}One Day Settlements Construction", Order = 10, RequireRestart = false, HintText = "{=BW_Game_OneDaySettlementsConstruction_Hint}Only one building can be constructed at a time. Building/upgrading multiple buildings still requires multiple days.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public bool OneDaySettlementsConstruction { get; set; } = false;
 
         #endregion
 

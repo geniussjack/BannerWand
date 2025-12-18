@@ -87,7 +87,7 @@ namespace BannerWandRetro.Core
         /// Gets the active Harmony instance.
         /// </summary>
         /// <value>The Harmony instance, or null if not initialized.</value>
-        public static Harmony? Instance { get; private set; }
+        public static HarmonyLib.Harmony? Instance { get; private set; }
 
         /// <summary>
         /// Gets whether Harmony patches have been initialized.
@@ -135,8 +135,11 @@ namespace BannerWandRetro.Core
                     ModLogger.Log("Initializing Harmony patches...");
 
                     // Create Harmony instance with unique mod identifier
-                    Instance = new Harmony(HarmonyId);
+                    Instance = new HarmonyLib.Harmony(HarmonyId);
 
+                    // Strategy: PatchAll() applies patches with [HarmonyPatch] attributes automatically.
+                    // Manual patches (with [HarmonyTargetMethod]) are applied separately and checked
+                    // via IsPatchAlreadyApplied to prevent double-patching.
                     // Automatically discover and apply all patches in the executing assembly
                     // Patches are marked with [HarmonyPatch] attribute
                     Assembly executingAssembly = Assembly.GetExecutingAssembly();
@@ -153,6 +156,7 @@ namespace BannerWandRetro.Core
                     }
 
                     // Manually apply patches and track success
+                    // These patches use [HarmonyTargetMethod] and are not discovered by PatchAll()
                     // Count patches dynamically to avoid hardcoding the total
                     int patchesApplied = 0;
                     int patchesTotal = 0;
@@ -164,7 +168,7 @@ namespace BannerWandRetro.Core
                         patchesApplied++;
                     }
 
-                    // CRITICAL: AmmoConsumptionPatch is NOT applied here during initialization
+                    // AmmoConsumptionPatch is NOT applied here during initialization
                     // It is applied dynamically in OnMissionBehaviorInitialize to prevent breaking
                     // character models in menus. See ApplyAmmoConsumptionPatchForMission().
                     // patchesTotal++;
@@ -199,6 +203,12 @@ namespace BannerWandRetro.Core
 
                     patchesTotal++;
                     if (ApplyMapTimeTrackerTickPatch())
+                    {
+                        patchesApplied++;
+                    }
+
+                    patchesTotal++;
+                    if (ApplyMobilePartySpeedPatch())
                     {
                         patchesApplied++;
                     }
@@ -307,14 +317,14 @@ namespace BannerWandRetro.Core
         {
             try
             {
-                HarmonyLib.Patches? existingPatches = Harmony.GetPatchInfo(targetMethod);
+                HarmonyLib.Patches? existingPatches = HarmonyLib.Harmony.GetPatchInfo(targetMethod);
                 if (existingPatches == null)
                 {
                     return false;
                 }
 
                 // Check if our patch method is already in the prefixes or postfixes
-                // CRITICAL FIX: Compare by declaring type and method name, not exact MethodInfo
+                // Compare by declaring type and method name, not exact MethodInfo
                 // This handles cases where PatchAll() applied a different overload than what we're checking
                 string patchClassName = patchMethod.DeclaringType?.FullName ?? "";
                 string patchMethodName = patchMethod.Name;
@@ -426,11 +436,11 @@ namespace BannerWandRetro.Core
                     // Get target method parameters to determine which Prefix to use
                     ParameterInfo[] targetParams = targetMethod.GetParameters();
                     bool targetHasRef = targetParams.Length >= 2 && targetParams[1].ParameterType.IsByRef;
-                    
-                    string targetSig = string.Join(", ", targetParams.Select(p => 
+
+                    string targetSig = string.Join(", ", targetParams.Select(p =>
                         p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
                     ModLogger.Log($"[AmmoConsumptionPatch] Target method signature: {targetMethod.Name}({targetSig}), hasRef={targetHasRef}");
-                    
+
                     MethodInfo? prefixMethod = null;
 
                     if (targetHasRef)
@@ -463,14 +473,14 @@ namespace BannerWandRetro.Core
 
                     // Last resort - get Prefix or Prefix_NoRef method with most parameters
                     prefixMethod ??= typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
+                        .Where(m => m.Name is "Prefix" or "Prefix_NoRef")
                         .OrderByDescending(m => m.GetParameters().Length)
                         .FirstOrDefault();
 
                     if (prefixMethod != null)
                     {
                         ParameterInfo[] prefixParams = prefixMethod.GetParameters();
-                        string prefixSig = string.Join(", ", prefixParams.Select(p => 
+                        string prefixSig = string.Join(", ", prefixParams.Select(p =>
                             p.ParameterType.IsByRef ? $"ref {p.ParameterType.GetElementType()?.Name ?? p.ParameterType.Name}" : p.ParameterType.Name));
                         ModLogger.Log($"[AmmoConsumptionPatch] Found Prefix method: {prefixMethod.Name} with {prefixParams.Length} parameters ({prefixSig})");
 
@@ -483,28 +493,28 @@ namespace BannerWandRetro.Core
                         }
                         else
                         {
-                            // CRITICAL: Create HarmonyMethod with explicit argument types to ensure proper parameter matching
+                            // Create HarmonyMethod with explicit argument types to ensure proper parameter matching
                             // Harmony may fail to match parameters if types are not explicitly specified
                             HarmonyMethod harmonyPrefix = new(prefixMethod)
                             {
-                                argumentTypes = targetMethod.GetParameters().Select(p => p.ParameterType).ToArray()
+                                argumentTypes = [.. targetMethod.GetParameters().Select(p => p.ParameterType)]
                             };
-                            
+
                             ModLogger.Log($"[AmmoConsumptionPatch] Applying patch: Target={targetMethod.DeclaringType?.FullName}.{targetMethod.Name}, Prefix={prefixMethod.DeclaringType?.FullName}.{prefixMethod.Name}");
                             ModLogger.Log($"[AmmoConsumptionPatch] Target parameters: {string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}");
                             ModLogger.Log($"[AmmoConsumptionPatch] Prefix parameters: {string.Join(", ", prefixMethod.GetParameters().Select(p => p.ParameterType.Name))}");
-                            
+
                             MethodInfo patchResult = Instance.Patch(targetMethod, prefix: harmonyPrefix);
                             primaryPatchApplied = true;
                             AmmoConsumptionPatch.IsPatchApplied = true;
                             ModLogger.Log($"[AmmoConsumptionPatch] Primary patch applied successfully via manual patching. Patch result: {patchResult}");
-                            
+
                             // Verify patch was actually applied
-                            HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(targetMethod);
+                            HarmonyLib.Patches patchInfo = HarmonyLib.Harmony.GetPatchInfo(targetMethod);
                             if (patchInfo != null)
                             {
                                 ModLogger.Debug($"[AmmoConsumptionPatch] Verify: Target method has {patchInfo.Prefixes.Count} prefix(es) applied");
-                                foreach (var prefix in patchInfo.Prefixes)
+                                foreach (Patch? prefix in patchInfo.Prefixes)
                                 {
                                     ModLogger.Debug($"[AmmoConsumptionPatch]   - Prefix: {prefix.owner}.{prefix.PatchMethod.Name}");
                                 }
@@ -654,9 +664,8 @@ namespace BannerWandRetro.Core
 
                 // Get all Prefix methods and try to unpatch each one
                 // This handles both ref and non-ref versions
-                MethodInfo[] prefixMethods = typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                    .Where(m => m.Name == "Prefix" || m.Name == "Prefix_NoRef")
-                    .ToArray();
+                MethodInfo[] prefixMethods = [.. typeof(AmmoConsumptionPatch).GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                    .Where(m => m.Name is "Prefix" or "Prefix_NoRef")];
 
                 bool anyUnpatched = false;
                 foreach (MethodInfo prefixMethod in prefixMethods)
@@ -1101,7 +1110,7 @@ namespace BannerWandRetro.Core
                 // Enumerate and log each patched method with its patch details
                 foreach (MethodBase method in patchedMethods)
                 {
-                    HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(method);
+                    HarmonyLib.Patches patchInfo = HarmonyLib.Harmony.GetPatchInfo(method);
                     string declaringTypeName = method.DeclaringType?.FullName ?? "Unknown";
                     ModLogger.Log($"  - {declaringTypeName}.{method.Name}");
 
@@ -1130,6 +1139,78 @@ namespace BannerWandRetro.Core
             catch (Exception exception)
             {
                 ModLogger.Warning($"Failed to log patched methods: {exception.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Manually applies the MobilePartySpeedPatch to add a fixed speed bonus.
+        /// </summary>
+        /// <returns>True if patch was applied successfully, false otherwise.</returns>
+        /// <remarks>
+        /// This patch ensures that when the "Set Movement Speed" cheat is enabled,
+        /// a fixed speed bonus is added to the party speed. The bonus is constant and doesn't fluctuate.
+        /// It patches MobileParty.SpeedExplained to add the bonus (we don't patch CalculateSpeed
+        /// because it typically calls SpeedExplained internally, which would cause double application).
+        /// </remarks>
+        public static bool ApplyMobilePartySpeedPatch()
+        {
+            try
+            {
+                if (Instance == null)
+                {
+                    ModLogger.Warning("[MobilePartySpeedPatch] Harmony Instance is null - cannot apply patch!");
+                    return false;
+                }
+
+                // NOTE: We only patch SpeedExplained, not CalculateSpeed, because:
+                // 1. CalculateSpeed typically calls SpeedExplained internally and returns ResultNumber
+                // 2. Patching both would cause double application of the bonus
+                // 3. SpeedExplained is the primary method used by the game for speed calculations
+
+                // Apply SpeedExplained patch
+                MethodBase? targetSpeedExplainedMethod = MobilePartySpeedPatch.TargetSpeedExplainedMethod();
+                if (targetSpeedExplainedMethod != null)
+                {
+                    ModLogger.Log($"[MobilePartySpeedPatch] Target method found: {targetSpeedExplainedMethod.DeclaringType?.FullName}.{targetSpeedExplainedMethod.Name}");
+
+                    MethodInfo? postfixMethod = typeof(MobilePartySpeedPatch).GetMethod(
+                        "SpeedExplained_Postfix",
+                        BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (postfixMethod != null)
+                    {
+                        if (IsPatchAlreadyApplied(targetSpeedExplainedMethod, postfixMethod))
+                        {
+                            ModLogger.Log("[MobilePartySpeedPatch] SpeedExplained patch already applied (likely by PatchAll()), skipping manual application");
+                            MobilePartySpeedPatch.SetPatchApplied(true);
+                        }
+                        else
+                        {
+                            HarmonyMethod harmonyPostfix = new(postfixMethod);
+                            MethodInfo patchResult = Instance.Patch(targetSpeedExplainedMethod, postfix: harmonyPostfix);
+                            ModLogger.Log($"[MobilePartySpeedPatch] SpeedExplained patch applied successfully. Patch result: {patchResult}");
+                            MobilePartySpeedPatch.SetPatchApplied(true);
+                        }
+                    }
+                    else
+                    {
+                        ModLogger.Warning("[MobilePartySpeedPatch] SpeedExplained_Postfix method not found!");
+                        return false;
+                    }
+                }
+                else
+                {
+                    ModLogger.Warning("[MobilePartySpeedPatch] TargetSpeedExplainedMethod returned null!");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[MobilePartySpeedPatch] Error applying patch: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                return false;
             }
         }
 

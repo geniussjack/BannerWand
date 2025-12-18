@@ -15,9 +15,9 @@ namespace BannerWandRetro.Utils
     /// <remarks>
     /// <para>
     /// Log levels: DEBUG, INFO, WARN, ERROR, CHEAT, PATCH, PERFORMANCE
-    /// Log file location: [GamePath]\Modules\BannerWand\logs\[LogFileName]
-    /// Logs are created in the module directory for easy access.
-    /// Example: D:\Mount &amp; Blade II Bannerlord\Modules\BannerWand\logs\BannerWandRetro.log
+    /// Log file location: [CommonApplicationData]\[LogSubdirectory]\[LogsFolderName]\[LogFileName]
+    /// Platform-independent path that doesn't depend on game installation location.
+    /// Example Windows: C:\ProgramData\Mount and Blade II Bannerlord\logs\BannerWandRetro.log
     /// </para>
     /// <para>
     /// This static class provides the default implementation of logging functionality.
@@ -29,19 +29,22 @@ namespace BannerWandRetro.Utils
     {
         private static readonly object _lock = new();
         private static bool _initialized = false;
+        private static string? _logFilePath;
 
         /// <summary>
         /// Gets or sets the log file path, initializing it if necessary.
         /// </summary>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         private static string? LogFilePath
         {
             get
             {
-                field ??= DetermineLogFilePath();
-                return field;
+                _logFilePath ??= DetermineLogFilePath();
+                return _logFilePath;
             }
             set;
         }
+#pragma warning restore CS9266
 
         /// <summary>
         /// Determines the module directory and returns log file path (BannerWand\logs\BannerWand.log).
@@ -96,7 +99,7 @@ namespace BannerWandRetro.Utils
                 }
 
                 string logPath = Path.Combine(logDirectory, LogConstants.LogFileName);
-                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Primary log path: {logPath}");
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Final log path: {logPath}");
 
                 // Test if we can write to this location
                 try
@@ -117,37 +120,31 @@ namespace BannerWandRetro.Utils
                     {
                         TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Could not create initial log file: {initEx.Message}");
                     }
-
-                    return logPath;
                 }
                 catch (Exception writeEx)
                 {
                     TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: ✗ Write test FAILED for {logPath}: {writeEx.Message}");
-                    // Fall through to fallback logic
                 }
+
+                // Log path determined successfully (logged to file only)
+
+                return logPath;
             }
             catch (Exception ex)
             {
-                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: EXCEPTION in primary path: {ex.Message}");
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: EXCEPTION: {ex.Message}");
                 TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: StackTrace: {ex.StackTrace}");
-                // Fall through to fallback logic
-            }
 
-            // Fallback: Try current directory
-            try
-            {
-                string currentDir = Directory.GetCurrentDirectory();
-                string fallbackPath = Path.Combine(currentDir, LogConstants.LogFileName);
-                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Using fallback path: {fallbackPath}");
+                // Final fallback: use current directory
+                string fallbackPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    LogConstants.LogFileName
+                );
+                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Using final fallback: {fallbackPath}");
+
+                // Fallback path determined (error logged to file only)
+
                 return fallbackPath;
-            }
-            catch (Exception fallbackEx)
-            {
-                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Fallback path failed: {fallbackEx.Message}");
-                // Last resort: use temp directory
-                string tempPath = Path.Combine(Path.GetTempPath(), LogConstants.LogFileName);
-                TaleWorlds.Library.Debug.Print($"[BannerWand] DetermineLogFilePath: Using temp directory: {tempPath}");
-                return tempPath;
             }
         }
 
@@ -412,7 +409,7 @@ namespace BannerWandRetro.Utils
                 return;
             }
 
-            string status = enabled ? "ENABLED" : "DISABLED";
+            string status = enabled ? Constants.MessageConstants.CheatStatusEnabled : Constants.MessageConstants.CheatStatusDisabled;
             string valueInfo = value != null ? $" (value: {value})" : string.Empty;
             string targetInfo = !string.IsNullOrEmpty(target) ? $" for {target}" : string.Empty;
             string message = $"{cheatName} {status}{valueInfo}{targetInfo}";
@@ -477,7 +474,7 @@ namespace BannerWandRetro.Utils
         }
 
         /// <summary>
-        /// Writes a log entry to both file and game log with optional caller information.
+        /// Writes a log entry to file with optional caller information.
         /// </summary>
         /// <param name="level">Log level (INFO, WARN, ERROR, etc.).</param>
         /// <param name="message">Message to log.</param>

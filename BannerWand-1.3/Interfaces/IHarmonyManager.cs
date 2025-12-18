@@ -1,5 +1,3 @@
-using HarmonyLib;
-
 namespace BannerWand.Interfaces
 {
     /// <summary>
@@ -40,7 +38,7 @@ namespace BannerWand.Interfaces
         /// and debugging patch conflicts with other mods.
         /// Callers should check for null before use.
         /// </remarks>
-        Harmony Instance { get; }
+        HarmonyLib.Harmony Instance { get; }
 
         /// <summary>
         /// Gets whether Harmony patches have been successfully initialized.

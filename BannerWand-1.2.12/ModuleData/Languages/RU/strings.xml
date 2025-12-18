@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Игрок" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Инвентарь" />
 		<string id="BW_Category_Stats" text="Характеристики" />
 		<string id="BW_Category_Enemies" text="Враги" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Бесконечное HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Полоса здоровья союзных героев NPC никогда не уменьшается. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_InfiniteHP" text="Бесконечное HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Добавляет +9999 HP союзным героям NPC в начале боя. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Бесконечное HP лошади" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Лошади союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Бесконечное HP щита" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Щиты союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Бесконечные боеприпасы" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Боеприпасы союзных героев NPC поддерживаются на максимуме. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_MovementSpeed" text="Установить скорость передвижения" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Применяется ко всем отрядам на карте, не только к игроку. Изменения применяются на следующий игровой день." />
+		<string id="BW_NPC_EditGold" text="Изменить золото" />
+		<string id="BW_NPC_EditGold_Hint" text="Добавить или удалить золото для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditInfluence" text="Изменить влияние" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Добавить или удалить влияние для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditAttributePoints" text="Изменить очки атрибутов" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Добавить или удалить очки атрибутов для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditFocusPoints" text="Изменить очки фокусировки" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Добавить или удалить очки фокусировки для NPC (применяется один раз при изменении значения)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Изменить золото" />

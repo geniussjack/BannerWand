@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Гулец" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Інвентар" />
 		<string id="BW_Category_Stats" text="Статыстыка" />
 		<string id="BW_Category_Enemies" text="Воражыны" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максімальныя адносіны са ўсімі" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Імгненна ўсталёўвае адносіны на ўзроўні 100 са ўсімі персанажамі." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Неабмежаванае HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Паласа здароўя саюзных герояў NPC ніколі не памяншаецца. Прымяняецца толькі да герояў, якія змагаюцца на баку гульца, не да звычайных салдат." />
+		<string id="BW_NPC_InfiniteHP" text="Неабмежаванае HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Дадае +9999 HP саюзным героям NPC у пачатку бою. Прымяняецца толькі да герояў, якія змагаюцца на баку гульца, не да звычайных салдат." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Неабмежаванае HP каня" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Коні саюзных герояў NPC не атрымліваюць пашкоджанняў. Прымяняецца толькі да герояў, якія змагаюцца на баку гульца, не да звычайных салдат." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Неабмежаванае HP шчыта" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Шчыты саюзных герояў NPC не атрымліваюць пашкоджанняў. Прымяняецца толькі да герояў, якія змагаюцца на баку гульца, не да звычайных салдат." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Неабмежаваныя боепрыпасы" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Боепрыпасы саюзных герояў NPC падтрымліваюцца на максімуме. Прымяняецца толькі да герояў, якія змагаюцца на баку гульца, не да звычайных салдат." />
+		<string id="BW_NPC_MovementSpeed" text="Усталяваць хуткасць перамяшчэння" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Прымяняецца да ўсіх атрадаў на карце, не толькі да гульца. Змены прымяняюцца на наступны гульнявы дзень." />
+		<string id="BW_NPC_EditGold" text="Змяніць золата" />
+		<string id="BW_NPC_EditGold_Hint" text="Дадаць або выдаліць золата для NPC (прымяняецца адзін раз пры змяненні значэння)." />
+		<string id="BW_NPC_EditInfluence" text="Змяніць уплыў" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Дадаць або выдаліць уплыў для NPC (прымяняецца адзін раз пры змяненні значэння)." />
+		<string id="BW_NPC_EditAttributePoints" text="Змяніць ачкі атрыбутаў" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Дадаць або выдаліць ачкі атрыбутаў для NPC (прымяняецца адзін раз пры змяненні значэння)." />
+		<string id="BW_NPC_EditFocusPoints" text="Змяніць ачкі фокуса" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Дадаць або выдаліць ачкі фокуса для NPC (прымяняецца адзін раз пры змяненні значэння)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Змяніць золата" />

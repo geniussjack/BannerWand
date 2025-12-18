@@ -28,7 +28,7 @@ namespace BannerWandRetro.Core
     /// </para>
     /// <para>
     /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.2.12 ONLY
-    /// Mod Version: 1.1.0
+    /// Mod Version: 1.1.1
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
@@ -92,7 +92,7 @@ namespace BannerWandRetro.Core
         /// </remarks>
         private void CheckLocalization()
         {
-            ModLogger.Log("=== Localization Check ===");
+            ModLogger.Log(MessageConstants.LocalizationCheckHeader);
 
             try
             {
@@ -108,21 +108,19 @@ namespace BannerWandRetro.Core
                 string playerString = playerCategoryText.ToString();
                 if (playerString.Contains("{=BW_Category_Player}"))
                 {
-                    ModLogger.Warning("Localization NOT working - strings contain {=ID} tags!");
-                    ModLogger.Warning("Make sure ModuleData/Languages/ folder structure is correct");
-                    ModLogger.Warning("Required files: language_data.xml and strings.xml in each language folder");
+                    ModLogger.Warning(MessageConstants.LocalizationNotWorking);
+                    ModLogger.Warning(MessageConstants.LocalizationFolderStructure);
+                    ModLogger.Warning(MessageConstants.LocalizationRequiredFiles);
                 }
                 else
                 {
-                    ModLogger.Log($"Localization working! Loaded text: '{playerString}'");
+                    ModLogger.Log(string.Format(MessageConstants.LocalizationWorking, playerString));
                 }
             }
             catch (Exception exception)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {exception}: {exception.Message}");
-                ModLogger.Error($"Stack trace: {exception.StackTrace}");
-                ModLogger.Error($"Error checking localization: {exception.Message}");
-                ModLogger.Log("=== End Localization Check ===");
+                ModLogger.Error($"Error checking localization: {exception.Message}", exception);
+                ModLogger.Log(MessageConstants.LocalizationCheckFooter);
             }
         }
 
@@ -207,7 +205,7 @@ namespace BannerWandRetro.Core
         /// Models registered (in order):
         /// 1. <see cref="CustomPartySpeedModel"/> - Controls party movement speed on campaign map
         /// 2. <see cref="CustomPartyMoraleModel"/> - Controls party morale calculations
-        /// 3. <see cref="CustomInventoryCapacityModel"/> - Controls carrying capacity limits
+        /// 3. InventoryCapacityPatch (Harmony) - Controls carrying capacity limits
         /// 4. <see cref="CustomBarterModel"/> - Controls barter success rates
         /// 5. <see cref="CustomPersuasionModel"/> - Controls persuasion difficulty
         /// 6. <see cref="CustomBuildingConstructionModel"/> - Controls settlement building speed
@@ -221,6 +219,9 @@ namespace BannerWandRetro.Core
             ModLogger.Log("Registering custom game models...");
 
             // Movement speed - replaces DefaultPartySpeedCalculatingModel
+            // NOTE: Speed bonus is now applied via MobilePartySpeedPatch, which patches
+            // MobileParty.SpeedExplained directly. CustomPartySpeedModel checks if the patch
+            // is active and skips its speed modification to avoid conflicts.
             campaignStarter.AddModel(new CustomPartySpeedModel());
             ModLogger.LogModelRegistration(nameof(CustomPartySpeedModel), "Controls party movement speed and AI slowdown");
 
@@ -247,6 +248,38 @@ namespace BannerWandRetro.Core
             // Smithing - replaces DefaultSmithingModel
             campaignStarter.AddModel(new CustomSmithingModel());
             ModLogger.LogModelRegistration(nameof(CustomSmithingModel), "Controls smithing stamina consumption");
+
+            // Party wage - DISABLED for Bannerlord 1.2.12
+            // GetTotalWage method is not virtual/overrideable in DefaultPartyWageModel for 1.2.12
+            // This method was made virtual in version 1.3.x
+            // For 1.2.12, garrison wages multiplier should be implemented via Harmony patch instead
+            // See GarrisonWagesPatch.cs for the patch implementation (if available)
+            // campaignStarter.AddModel(new CustomPartyWageModel());
+            // ModLogger.LogModelRegistration(nameof(CustomPartyWageModel), "Controls garrison wages multiplier");
+
+            // Settlement garrison - replaces DefaultSettlementGarrisonModel
+            campaignStarter.AddModel(new CustomSettlementGarrisonModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementGarrisonModel), "Controls garrison recruitment multiplier");
+
+            // Settlement militia - replaces DefaultSettlementMilitiaModel
+            campaignStarter.AddModel(new CustomSettlementMilitiaModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementMilitiaModel), "Controls militia recruitment multiplier and veteran chance");
+
+            // Settlement food - replaces DefaultSettlementFoodModel
+            campaignStarter.AddModel(new CustomSettlementFoodModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementFoodModel), "Controls food growth bonus");
+
+            // Settlement prosperity - replaces DefaultSettlementProsperityModel
+            campaignStarter.AddModel(new CustomSettlementProsperityModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementProsperityModel), "Controls prosperity growth bonus (towns/castles) and hearth growth bonus (villages)");
+
+            // Settlement loyalty - replaces DefaultSettlementLoyaltyModel
+            campaignStarter.AddModel(new CustomSettlementLoyaltyModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementLoyaltyModel), "Controls loyalty growth bonus");
+
+            // Settlement security - replaces DefaultSettlementSecurityModel
+            campaignStarter.AddModel(new CustomSettlementSecurityModel());
+            ModLogger.LogModelRegistration(nameof(CustomSettlementSecurityModel), "Controls security growth bonus");
 
             // Prisoner recruitment - DISABLED due to API changes in Bannerlord 1.2.12+
             // GetDailyRecruitedPrisoners method no longer exists in DefaultPrisonerRecruitmentCalculationModel
@@ -287,6 +320,9 @@ namespace BannerWandRetro.Core
                 ModLogger.Warning($"CustomPartyTrainingModel could not be registered: {ex.Message}");
             }
 
+            // CombatSimulationModel - REMOVED (Party cheats removed)
+            // CustomCombatSimulationModel registration removed as Unlimited Party HP and All Units Dead cheats have been removed
+
             ModLogger.Log("All custom game models registered successfully");
         }
 
@@ -324,6 +360,10 @@ namespace BannerWandRetro.Core
             campaignStarter.AddBehavior(new FoodCheatBehavior());
             ModLogger.LogBehaviorRegistration(nameof(FoodCheatBehavior), "Handles unlimited food cheat");
 
+            // Automatic building queue (starts next project after completion)
+            campaignStarter.AddBehavior(new Behaviors.AutoBuildingQueueBehavior());
+            ModLogger.LogBehaviorRegistration(nameof(Behaviors.AutoBuildingQueueBehavior), "Handles automatic building queue for settlements");
+
             // Skill and troop XP management
             campaignStarter.AddBehavior(new SkillXPCheatBehavior());
             ModLogger.LogBehaviorRegistration(nameof(SkillXPCheatBehavior), "Handles skill and troop XP multipliers");
@@ -356,7 +396,7 @@ namespace BannerWandRetro.Core
 
                 // Apply AmmoConsumptionPatch dynamically for this combat mission
                 // This prevents the patch from breaking character models in menus
-                Core.HarmonyManager.ApplyAmmoConsumptionPatchForMission();
+                _ = Core.HarmonyManager.ApplyAmmoConsumptionPatchForMission();
 
                 // Add combat cheat behavior to all missions
                 mission.AddMissionBehavior(new CombatCheatBehavior());
@@ -365,10 +405,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[SubModule] Error in OnMissionBehaviorInitialize: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnMissionBehaviorInitialize: {ex.Message}", ex);
             }
         }
 
@@ -403,10 +440,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[SubModule] Error in OnGameLoaded: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnGameLoaded: {ex.Message}", ex);
             }
         }
 
@@ -436,10 +470,7 @@ namespace BannerWandRetro.Core
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Exception in SubModule.cs - {ex}: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                ModLogger.Error($"[SubModule] Error in OnGameEnd: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                ModLogger.Error($"[SubModule] Error in OnGameEnd: {ex.Message}", ex);
             }
         }
 

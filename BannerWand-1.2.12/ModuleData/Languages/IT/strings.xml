@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Giocatore" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventario" />
 		<string id="BW_Category_Stats" text="Statistiche" />
 		<string id="BW_Category_Enemies" text="Nemici" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Relazioni Massime con Tutti" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imposta istantaneamente la relazione a 100 con tutti i personaggi." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="PS Illimitati" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="La barra della salute degli eroi NPC alleati non diminuisce mai. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_InfiniteHP" text="Salute Infinita" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Aggiunge +9999 PS agli eroi NPC alleati all'inizio della battaglia. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Salute del Cavallo Illimitata" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="I cavalli degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Durabilità dello Scudo Illimitata" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Gli scudi degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Munizioni Illimitate" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Le munizioni degli eroi NPC alleati sono mantenute al massimo. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_MovementSpeed" text="Imposta Velocità di Movimento" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Si applica a tutti i gruppi sulla mappa, non solo al giocatore. Le modifiche si applicano il giorno di gioco successivo." />
+		<string id="BW_NPC_EditGold" text="Modifica Oro" />
+		<string id="BW_NPC_EditGold_Hint" text="Aggiungi o rimuovi oro per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditInfluence" text="Modifica Influenza" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Aggiungi o rimuovi influenza per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditAttributePoints" text="Modifica Punti Attributo" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Aggiungi o rimuovi punti attributo per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditFocusPoints" text="Modifica Punti Focus" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Aggiungi o rimuovi punti focus per gli NPC (applicato una volta quando il valore è modificato)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Modifica Oro" />

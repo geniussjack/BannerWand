@@ -89,6 +89,9 @@ namespace BannerWandRetro.Utils
 
                 Kingdom? heroKingdom = heroClan.Kingdom;
 
+                // Cache player kingdom once to avoid repeated lookups
+                Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+
                 // Check kingdom-related targets
                 if (heroKingdom != null)
                 {
@@ -96,7 +99,6 @@ namespace BannerWandRetro.Utils
                     if (heroKingdom.Leader == hero)
                     {
                         // Check if this is the player's kingdom ruler
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && settings.ApplyToPlayerKingdomRuler)
                         {
                             return true;
@@ -112,7 +114,6 @@ namespace BannerWandRetro.Utils
                     if (heroClan.Leader == hero && heroClan != heroKingdom.RulingClan)
                     {
                         // Check if this is a player kingdom vassal
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && heroClan != Clan.PlayerClan && settings.ApplyToPlayerKingdomVassals)
                         {
                             return true;
@@ -128,7 +129,6 @@ namespace BannerWandRetro.Utils
                     if (hero.CharacterObject?.IsHero == true)
                     {
                         // Check if this is in player's kingdom
-                        Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                         if (playerKingdom == heroKingdom && settings.ApplyToPlayerKingdomNobles)
                         {
                             return true;

@@ -1,8 +1,14 @@
-using BannerWand.Settings;
-using BannerWand.Utils;
+#nullable enable
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -39,12 +45,12 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
-        private static CheatSettings Settings => CheatSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Determines whether a party consumes food, with cheat override for unlimited food.
@@ -87,8 +93,8 @@ namespace BannerWand.Models
                 }
 
                 // Safe null checks
-                CheatSettings settings = Settings;
-                CheatTargetSettings targetSettings = TargetSettings;
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
 
                 if (settings == null || targetSettings == null || mobileParty == null)
                 {
@@ -111,6 +117,12 @@ namespace BannerWand.Models
         /// </summary>
         private bool ShouldApplyUnlimitedFoodToParty(MobileParty mobileParty)
         {
+            // Early exit if party is null
+            if (mobileParty == null || TargetSettings == null)
+            {
+                return false;
+            }
+
             // Check if this is player's party
             if (mobileParty == MobileParty.MainParty && TargetSettings.ApplyToPlayer)
             {

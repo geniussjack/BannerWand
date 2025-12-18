@@ -1,14 +1,19 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Settings;
-using BannerWand.Utils;
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Models
 {
@@ -93,10 +98,6 @@ namespace BannerWand.Models
                 // Apply instant siege construction when enabled
                 if (settings.InstantSiegeConstruction && ShouldApplyInstantConstructionToSiege(siegeEvent))
                 {
-                    // Log for test characters
-                    MobileParty attackerLeader = siegeEvent.BesiegerCamp?.LeaderParty!;
-                    Settlement defenderSettlement = siegeEvent.BesiegedSettlement;
-
                     return GameConstants.InstantSiegeConstructionProgress;
                 }
 

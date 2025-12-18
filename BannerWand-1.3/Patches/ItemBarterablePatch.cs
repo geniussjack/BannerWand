@@ -1,14 +1,19 @@
 #nullable enable
-using BannerWand.Settings;
-using BannerWand.Utils;
-using HarmonyLib;
+// System namespaces
 using System;
 using System.Collections.Generic;
+
+// Third-party namespaces
+using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+
+// Project namespaces
+using BannerWand.Settings;
+using BannerWand.Utils;
 
 namespace BannerWand.Patches
 {
@@ -117,7 +122,7 @@ namespace BannerWand.Patches
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[ItemBarterablePatch] Critical error in Prefix: {ex.Message}");
+                ModLogger.Error($"[ItemBarterablePatch] Error in Prefix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
             }
         }
@@ -209,7 +214,7 @@ namespace BannerWand.Patches
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[ItemBarterablePatch] Critical error in Postfix: {ex.Message}");
+                ModLogger.Error($"[ItemBarterablePatch] Error in Postfix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 CleanupBackup();
             }

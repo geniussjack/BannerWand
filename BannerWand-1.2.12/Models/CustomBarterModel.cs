@@ -1,3 +1,4 @@
+#nullable enable
 using BannerWandRetro.Constants;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
@@ -15,7 +16,7 @@ namespace BannerWandRetro.Models
     /// </summary>
     /// <remarks>
     /// <para>
-    /// FIXED: Now properly checks if PLAYER is involved in the barter transaction.
+    /// Properly checks if PLAYER is involved in the barter transaction.
     /// Previously, the cheat affected ALL barter transactions in the game,
     /// causing clans to switch kingdoms unexpectedly.
     /// </para>
@@ -28,8 +29,8 @@ namespace BannerWandRetro.Models
     /// </remarks>
     public class CustomBarterModel : DefaultBarterModel
     {
-        private static CheatSettings Settings => CheatSettings.Instance;
-        private static CheatTargetSettings TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? Settings => CheatSettings.Instance;
+        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
         /// <summary>
         /// Gets the barter penalty for an offer.
@@ -52,7 +53,7 @@ namespace BannerWandRetro.Models
                     return basePenalty;
                 }
 
-                // FIXED: Only apply penalty when PLAYER is the item owner (giving items)
+                // Only apply penalty when PLAYER is the item owner (giving items)
                 // Do NOT apply when player is receiving items (party/faction check)
                 // The penalty should only affect offers where player is giving items away
                 bool playerIsOwner = originalOwner == Hero.MainHero;

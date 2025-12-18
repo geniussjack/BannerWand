@@ -14,8 +14,7 @@ namespace BannerWandRetro.Patches
     /// </summary>
     /// <remarks>
     /// <para>
-    /// FIXED (v1.0.9): Now properly checks if PLAYER is involved in the barter transaction.
-    /// Updated (v1.1.0): Version bump.
+    /// Properly checks if PLAYER is involved in the barter transaction.
     /// Previously, the cheat affected ALL barter transactions in the game,
     /// causing clans to switch kingdoms unexpectedly due to AI-to-AI barters being affected.
     /// </para>
@@ -64,7 +63,7 @@ namespace BannerWandRetro.Patches
                     return;
                 }
 
-                // CRITICAL FIX: Only manipulate values when player is the actual item owner
+                // Only manipulate values when player is the actual item owner
                 // Do NOT manipulate based on evaluator faction - this would affect NPC-to-NPC barters
                 // that just happen to be evaluated by player's faction
                 bool playerIsOwner = __instance.OriginalOwner == Hero.MainHero;

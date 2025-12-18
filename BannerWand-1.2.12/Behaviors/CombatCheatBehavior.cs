@@ -1,12 +1,12 @@
 #nullable enable
 using BannerWandRetro.Constants;
-using BannerWandRetro.Core;
 using BannerWandRetro.Patches;
 using BannerWandRetro.Settings;
 using BannerWandRetro.Utils;
 using System;
-using System.Reflection;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace BannerWandRetro.Behaviors
@@ -157,11 +157,34 @@ namespace BannerWandRetro.Behaviors
                 // Apply Infinite Health bonus once when player spawns (uses flag to run only once)
                 ApplyInfiniteHealth();
 
+                // Early exit if settings are null
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                // Cache agents collection once per tick to avoid repeated property access
+                MBReadOnlyList<Agent>? agents = Mission.Current.Agents;
+                // OPTIMIZED: Early exit if no agents available
+                if (agents == null || agents.Count == 0)
+                {
+                    return;
+                }
+
                 // Apply continuous combat cheats
                 ApplyUnlimitedHealth();
                 ApplyUnlimitedHorseHealth();
-                ApplyOneHitKills();
+                ApplyOneHitKills(agents);
                 ApplyUnlimitedAmmo();
+
+                // Apply NPC cheats (pass cached agents collection)
+                ApplyNPCUnlimitedHP(agents);
+                ApplyNPCInfiniteHP(agents);
+                ApplyNPCUnlimitedHorseHP(agents);
+                ApplyNPCUnlimitedShieldHP(agents);
+                ApplyNPCUnlimitedAmmo(agents);
 
                 // Note: Movement speed for campaign map is handled in CustomPartySpeedModel
 
@@ -207,12 +230,16 @@ namespace BannerWandRetro.Behaviors
                     return;
                 }
 
-                // CRITICAL FIX: Restore health immediately after taking damage if Infinite Health is enabled
-                // This prevents death from one-shot kills that exceed HealthLimit
-                if (settings.InfiniteHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
+                // Restore health immediately after taking damage if Infinite Health or Unlimited Health is enabled
+                // Infinite Health prevents death from one-shot kills that exceed HealthLimit
+                // Unlimited Health restores health but won't prevent one-shot kills
+                if ((settings.InfiniteHealth || settings.UnlimitedHealth) && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
                 {
                     // Ensure Infinite Health bonus is applied (in case it wasn't applied on spawn)
-                    ApplyInfiniteHealthToAgent(affectedAgent);
+                    if (settings.InfiniteHealth)
+                    {
+                        ApplyInfiniteHealthToAgent(affectedAgent);
+                    }
 
                     // Restore health immediately after damage to prevent death
                     // If health dropped below a safe threshold, restore it
@@ -222,24 +249,15 @@ namespace BannerWandRetro.Behaviors
                     }
                 }
 
-                // Also restore health if Unlimited Health is enabled (but this won't prevent one-shot kills)
-                if (settings.UnlimitedHealth && targetSettings.ApplyToPlayer && affectedAgent?.IsPlayerControlled == true)
-                {
-                    if (affectedAgent.IsActive() && affectedAgent.Health < affectedAgent.HealthLimit)
-                    {
-                        affectedAgent.Health = affectedAgent.HealthLimit;
-                    }
-                }
+                // Get main agent once for use in multiple checks
+                Agent? mainAgent = Mission.Current?.MainAgent;
 
                 // Handle One-Hit Kills - ensure enemies die from PLAYER's hits/shots
                 // IMPORTANT: Only works when PLAYER is the attacker (not allies)
-                if (settings.OneHitKills)
+                if (settings.OneHitKills && mainAgent is not null)
                 {
-                    Agent? mainAgent = Mission.Current?.MainAgent;
-
                     // Check: 1) Player exists, 2) Attacker is player, 3) Victim is enemy, 4) Victim is alive
-                    if (mainAgent is not null &&
-                        affectorAgent?.IsPlayerControlled == true && // Attacker must be player
+                    if (affectorAgent?.IsPlayerControlled == true && // Attacker must be player
                         affectedAgent?.IsEnemyOf(mainAgent) == true &&
                         affectedAgent.IsActive() && affectedAgent.IsHuman)
                     {
@@ -253,6 +271,31 @@ namespace BannerWandRetro.Behaviors
                 if (affectedAgent is not null)
                 {
                     ApplyUnlimitedShieldDurability(affectedAgent);
+                }
+
+                // Restore allied NPC hero shield durability if enabled
+                if (mainAgent is not null && affectedAgent is not null && IsAlliedHeroOnPlayerSide(affectedAgent, mainAgent))
+                {
+                    if (settings.NPCUnlimitedShieldHP)
+                    {
+                        // Iterate through weapon slots to find and repair shields
+                        for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+                        {
+                            MissionWeapon equipment = affectedAgent.Equipment[i];
+
+                            // Check if this slot contains a shield
+                            if (equipment.CurrentUsageItem?.IsShield is true)
+                            {
+                                short maxHitPoints = equipment.ModifiedMaxHitPoints;
+
+                                // Only repair if damaged (optimization: avoid unnecessary API calls)
+                                if (equipment.HitPoints < maxHitPoints)
+                                {
+                                    affectedAgent.ChangeWeaponHitPoints(i, maxHitPoints);
+                                }
+                            }
+                        }
+                    }
                 }
 
             }
@@ -331,7 +374,7 @@ namespace BannerWandRetro.Behaviors
         /// </summary>
         /// <remarks>
         /// <para>
-        /// CRITICAL FIX: Removed all calls to SetWeaponAmountInSlot() when patch is active to prevent character model corruption.
+        /// Removed all calls to SetWeaponAmountInSlot() when patch is active to prevent character model corruption.
         /// </para>
         /// <para>
         /// The previous implementation called SetWeaponAmountInSlot() every frame when ammo decreased,
@@ -365,8 +408,27 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
+            // Early exit if cheat is not enabled
+            if (!settings.UnlimitedAmmo || !targetSettings.ApplyToPlayer)
+            {
+                return;
+            }
+
+            // If patch is active, we don't need to restore ammo every tick
+            // The patch prevents consumption at the source
+            bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
+            if (patchApplied)
+            {
+                // Only check occasionally (e.g., every 60 ticks = ~1 second at 60 FPS)
+                // to ensure ammo is restored if something bypasses the patch
+                if (Mission.Current?.CurrentTime % 60 != 0)
+                {
+                    return;
+                }
+            }
+
             // Log unlimited ammo activation once per mission
-            if (settings.UnlimitedAmmo && targetSettings.ApplyToPlayer && !_unlimitedAmmoLogged)
+            if (!_unlimitedAmmoLogged)
             {
                 _unlimitedAmmoLogged = true;
                 string patchStatus = AmmoConsumptionPatch.IsPatchApplied
@@ -411,7 +473,6 @@ namespace BannerWandRetro.Behaviors
 
                 if (currentAmmo < _ammoMaxBySlot[i])
                 {
-                    bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
                     if (patchApplied)
                     {
                         AmmoConsumptionPatch.IsRestorationInProgress = true;
@@ -419,10 +480,6 @@ namespace BannerWandRetro.Behaviors
                     try
                     {
                         playerAgent.SetWeaponAmountInSlot(i, _ammoMaxBySlot[i], true);
-                    }
-                    catch (Exception ex)
-                    {
-                        ModLogger.Error($"[UnlimitedAmmo] Error restoring ammo for slot {i}: {ex.Message}");
                     }
                     finally
                     {
@@ -551,7 +608,7 @@ namespace BannerWandRetro.Behaviors
                 return;
             }
 
-            // CRITICAL: Ensure agent is fully initialized before modifying HealthLimit
+            // Ensure agent is fully initialized before modifying HealthLimit
             // The game modifies HealthLimit AFTER OnAgentBuild in SpawningBehaviorBase,
             // so we must wait until agent is fully ready. Check multiple conditions:
             if (agent.Character == null || agent.HealthLimit <= 0 || agent.BaseHealthLimit <= 0)
@@ -574,7 +631,7 @@ namespace BannerWandRetro.Behaviors
             {
                 // Verify bonus is still there (in case HealthLimit was reset)
                 float expectedMinHealth = agent.HealthLimit - GameConstants.InfiniteHealthBonus;
-                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * 0.9f))
+                if (agent.HealthLimit < expectedMinHealth + (GameConstants.InfiniteHealthBonus * GameConstants.InfiniteHealthBonusThresholdMultiplier))
                 {
                     // Bonus seems to have been reset, reapply it
                     ModLogger.Debug($"Infinite Health bonus was reset for agent {agentIndex}, reapplying...");
@@ -683,7 +740,8 @@ namespace BannerWandRetro.Behaviors
         /// Early continues for non-enemy, non-human, or already-dead agents.
         /// </para>
         /// </remarks>
-        private static void ApplyOneHitKills()
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private static void ApplyOneHitKills(MBReadOnlyList<Agent> agents)
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
@@ -706,7 +764,7 @@ namespace BannerWandRetro.Behaviors
 
             // Process all active enemy agents
             // Using foreach instead of LINQ for better performance (runs every frame)
-            foreach (Agent agent in Mission.Current!.Agents)
+            foreach (Agent agent in agents)
             {
                 // Skip null, inactive, or non-human agents
                 if (agent?.IsActive() != true || !agent.IsHuman)
@@ -732,5 +790,241 @@ namespace BannerWandRetro.Behaviors
         }
 
         #endregion
+
+        #region NPC Cheats
+
+        /// <summary>
+        /// Checks if an agent is an allied hero fighting on player's side in combat.
+        /// </summary>
+        /// <param name="agent">The agent to check.</param>
+        /// <param name="mainAgent">The player's main agent.</param>
+        /// <returns>True if the agent is an allied hero on player's side, false otherwise.</returns>
+        private static bool IsAlliedHeroOnPlayerSide(Agent agent, Agent mainAgent)
+        {
+            if (agent is null || mainAgent is null)
+            {
+                return false;
+            }
+
+            // Must be active and human
+            if (!agent.IsActive() || !agent.IsHuman)
+            {
+                return false;
+            }
+
+            // Must be a hero, not a regular soldier
+            if (agent.Character?.IsHero != true)
+            {
+                return false;
+            }
+
+            // Skip player
+            if (agent.IsPlayerControlled)
+            {
+                return false;
+            }
+
+            // Must be friendly (on player's side in combat)
+            return !agent.IsEnemyOf(mainAgent);
+        }
+
+        /// <summary>
+        /// Applies unlimited HP to allied NPC heroes fighting on player's side (health bar never decreases).
+        /// Only applies to heroes (lords, wanderers, etc.), not regular soldiers.
+        /// </summary>
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private static void ApplyNPCUnlimitedHP(MBReadOnlyList<Agent> agents)
+        {
+            CheatSettings? settings = Settings;
+            if (settings?.NPCUnlimitedHP != true)
+            {
+                return;
+            }
+
+            Agent? mainAgent = Mission.Current?.MainAgent;
+            if (mainAgent is null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in agents)
+            {
+                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                {
+                    continue;
+                }
+
+                // Restore health if below max
+                if (agent.Health < agent.HealthLimit)
+                {
+                    agent.Health = agent.HealthLimit;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies infinite HP (+9999) to allied NPC heroes fighting on player's side at battle start.
+        /// Only applies to heroes (lords, wanderers, etc.), not regular soldiers.
+        /// </summary>
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private void ApplyNPCInfiniteHP(MBReadOnlyList<Agent> agents)
+        {
+            CheatSettings? settings = Settings;
+            if (settings?.NPCInfiniteHP != true)
+            {
+                return;
+            }
+
+            Agent? mainAgent = Mission.Current?.MainAgent;
+            if (mainAgent is null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in agents)
+            {
+                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                {
+                    continue;
+                }
+
+                // Apply infinite health bonus (same logic as player)
+                int agentIndex = agent.Index;
+                if (!_infiniteHealthApplied.ContainsKey(agentIndex))
+                {
+                    ApplyInfiniteHealthToAgent(agent);
+                    _infiniteHealthApplied[agentIndex] = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies unlimited horse HP to allied NPC heroes fighting on player's side.
+        /// Only applies to heroes (lords, wanderers, etc.), not regular soldiers.
+        /// </summary>
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private static void ApplyNPCUnlimitedHorseHP(MBReadOnlyList<Agent> agents)
+        {
+            CheatSettings? settings = Settings;
+            if (settings?.NPCUnlimitedHorseHP != true)
+            {
+                return;
+            }
+
+            Agent? mainAgent = Mission.Current?.MainAgent;
+            if (mainAgent is null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in agents)
+            {
+                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                {
+                    continue;
+                }
+
+                // Restore mount health if agent has a mount
+                Agent? mount = agent.MountAgent;
+                if (mount?.IsActive() == true && mount.Health < mount.HealthLimit)
+                {
+                    mount.Health = mount.HealthLimit;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies unlimited shield HP to allied NPC heroes fighting on player's side.
+        /// Only applies to heroes (lords, wanderers, etc.), not regular soldiers.
+        /// </summary>
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private static void ApplyNPCUnlimitedShieldHP(MBReadOnlyList<Agent> agents)
+        {
+            CheatSettings? settings = Settings;
+            if (settings?.NPCUnlimitedShieldHP != true)
+            {
+                return;
+            }
+
+            Agent? mainAgent = Mission.Current?.MainAgent;
+            if (mainAgent is null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in agents)
+            {
+                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                {
+                    continue;
+                }
+
+                // Iterate through weapon slots to find and repair shields
+                for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+                {
+                    MissionWeapon equipment = agent.Equipment[i];
+
+                    // Check if this slot contains a shield
+                    if (equipment.CurrentUsageItem?.IsShield is true)
+                    {
+                        short maxHitPoints = equipment.ModifiedMaxHitPoints;
+
+                        // Only repair if damaged (optimization: avoid unnecessary API calls)
+                        if (equipment.HitPoints < maxHitPoints)
+                        {
+                            agent.ChangeWeaponHitPoints(i, maxHitPoints);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Applies unlimited ammo to allied NPC heroes fighting on player's side.
+        /// Only applies to heroes (lords, wanderers, etc.), not regular soldiers.
+        /// </summary>
+        /// <param name="agents">Cached collection of all agents in the mission.</param>
+        private static void ApplyNPCUnlimitedAmmo(MBReadOnlyList<Agent> agents)
+        {
+            CheatSettings? settings = Settings;
+            if (settings?.NPCUnlimitedAmmo != true)
+            {
+                return;
+            }
+
+            Agent? mainAgent = Mission.Current?.MainAgent;
+            if (mainAgent is null)
+            {
+                return;
+            }
+
+            foreach (Agent agent in agents)
+            {
+                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                {
+                    continue;
+                }
+
+                // Restore ammo for all weapon slots (same logic as player)
+                for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.NumAllWeaponSlots; i++)
+                {
+                    MissionWeapon weapon = agent.Equipment[i];
+                    if (weapon.IsEmpty || weapon.CurrentUsageItem == null || weapon.ModifiedMaxAmount <= 0)
+                    {
+                        continue;
+                    }
+
+                    short maxAmmo = weapon.ModifiedMaxAmount;
+                    short currentAmmo = weapon.Amount;
+
+                    if (currentAmmo < maxAmmo)
+                    {
+                        agent.SetWeaponAmountInSlot(i, maxAmmo, true);
+                    }
+                }
+            }
+        }
     }
 }

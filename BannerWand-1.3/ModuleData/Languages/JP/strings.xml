@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="プレイヤー" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="インベントリ" />
 		<string id="BW_Category_Stats" text="統計" />
 		<string id="BW_Category_Enemies" text="敵" />
 		<string id="BW_Category_Game" text="ゲーム" />
+		<string id="BW_Category_Settlements" text="集落" />
 		<string id="BW_Category_CheatTargets" text="チートターゲット" />
 		<string id="BW_Category_Kingdoms" text="王国" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="移動速度を設定" />
 		<string id="BW_Player_MovementSpeed_Hint" text="マップ上でのみ機能し、戦闘では機能しません。変更は次のゲーム内日で適用されます。" />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="クラン仲間の上限" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="プレイヤーとNPCのクランの仲間上限にボーナスを追加します。NPCが仲間を募集できるMODと互換性があります。" />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="取引オファー常時受け入れ" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="すべての取引オファーが自動的に受け入れられます。" />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="すべてのキャラクター関係を最大に" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="すべてのキャラクターとの関係を即座に100に設定します。" />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="無制限HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="同盟NPCヒーローの体力バーは減少しません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_InfiniteHP" text="無限体力" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="戦闘開始時に同盟NPCヒーローに+9999 HPを追加します。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedHorseHP" text="無制限馬の体力" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="同盟NPCヒーローの馬はダメージを受けません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedShieldHP" text="無制限盾の耐久性" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="同盟NPCヒーローの盾はダメージを受けません。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_UnlimitedAmmo" text="無制限弾薬" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="同盟NPCヒーローの弾薬は最大値に維持されます。プレイヤーの側で戦うヒーローにのみ適用され、通常の兵士には適用されません。" />
+		<string id="BW_NPC_MovementSpeed" text="移動速度を設定" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="マップ上のすべてのグループに適用され、プレイヤーだけではありません。変更は次のゲーム内日で適用されます。" />
+		<string id="BW_NPC_EditGold" text="金を編集" />
+		<string id="BW_NPC_EditGold_Hint" text="NPCの金を追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditInfluence" text="影響力を編集" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPCの影響力を追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditAttributePoints" text="属性ポイントを編集" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPCの属性ポイントを追加または削除します（値が変更されたときに一度適用されます）。" />
+		<string id="BW_NPC_EditFocusPoints" text="フォーカスポイントを編集" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPCのフォーカスポイントを追加または削除します（値が変更されたときに一度適用されます）。" />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="金を編集" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="ゲーム速度倍率を設定" />
 		<string id="BW_Game_GameSpeed_Hint" text="再生（1x）と早送り（4x）ボタンの速度を倍増します。1.0 = 通常速度、2.0 = 2倍速度など。" />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="駐屯地徴兵倍率" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="駐屯地に毎日徴兵される兵士の数を増やします。0 = 無効、1.0 = 通常、2.0 = 2倍など。" />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="駐屯地給与倍率" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="駐屯地の給与コストを制御します。1.0 = 通常、0 = 無料、負の値 = 集落所有者の収入。" />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="民兵徴兵倍率" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="毎日徴兵される民兵の数を増やします。0 = 無効、1.0 = 通常、2.0 = 2倍など。" />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="民兵ベテラン確率" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="民兵ベテランが出現する確率のパーセンテージ（0-100%）。" />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="食料ボーナス" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="指定された値を毎日の食料成長に追加します（0-999）。" />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="繁栄ボーナス" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="指定された値を毎日の繁栄成長に追加します（0-999）。" />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="炉床ボーナス" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="指定された値を村の毎日の炉床成長に追加します（0-999）。炉床は村の繁栄に相当します。" />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="忠誠ボーナス" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="指定された値を毎日の忠誠成長に追加します（0-999）。" />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="セキュリティボーナス" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="指定された値を毎日のセキュリティ成長に追加します（0-999）。" />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="プレイヤーに適用" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="複数のオプションを組み合わせることができます。重複する適用は自動的に防止されます。" />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: 設定エラー" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} が正常に初期化されました" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} のチートが正常に初期化されました" />
+		<string id="BW_Message_GoldChanged" text="ゴールドが {AMOUNT} 変更されました" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} 人のヒーローのゴールドが {AMOUNT} 変更されました" />
+		<string id="BW_Message_InfluenceChanged" text="影響力が {AMOUNT} 変更されました" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} のクランの影響力が {AMOUNT} 変更されました" />
+		<string id="BW_Message_AttributePointsChanged" text="属性ポイントが {AMOUNT} 変更されました" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} 人のヒーローの属性ポイントが {AMOUNT} 変更されました" />
+		<string id="BW_Message_FocusPointsChanged" text="フォーカスポイントが {AMOUNT} 変更されました" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} 人のヒーローのフォーカスポイントが {AMOUNT} 変更されました" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} 人の負傷した部隊が治療されました" />
+		<string id="BW_Message_NoCheatsActive" text="アクティブなチートはありません" />
+		<string id="BW_Message_ActiveCheats" text="アクティブなチート: {LIST}" />
+		<string id="BW_Message_Added" text="追加" />
+		<string id="BW_Message_Removed" text="削除" />
 	</strings>
 </base>

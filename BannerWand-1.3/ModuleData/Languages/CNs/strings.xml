@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="玩家" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="物品栏" />
 		<string id="BW_Category_Stats" text="属性" />
 		<string id="BW_Category_Enemies" text="敌人" />
 		<string id="BW_Category_Game" text="游戏" />
+		<string id="BW_Category_Settlements" text="定居点" />
 		<string id="BW_Category_CheatTargets" text="作弊目标" />
 		<string id="BW_Category_Kingdoms" text="王国" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="设置移动速度" />
 		<string id="BW_Player_MovementSpeed_Hint" text="仅在地图上有效，战斗中无效。更改在下一个游戏日生效。" />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="家族同伴上限" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="为玩家和NPC家族添加同伴上限奖励。与允许NPC招募同伴的模组兼容。" />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="交易总是被接受" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="所有交易提议都会自动接受。" />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="最大化所有角色关系" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="立即将所有角色的关系设置为100。" />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="无限生命值" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="盟友NPC英雄的生命条永不减少。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_InfiniteHP" text="无限生命" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="战斗开始时为盟友NPC英雄增加+9999生命值。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedHorseHP" text="无限马匹生命值" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="盟友NPC英雄的马匹不会受到伤害。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedShieldHP" text="无限盾牌耐久度" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="盟友NPC英雄的盾牌不会受到伤害。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_UnlimitedAmmo" text="无限弹药" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="盟友NPC英雄的弹药保持在最大值。仅适用于在玩家一方战斗的英雄，不适用于普通士兵。" />
+		<string id="BW_NPC_MovementSpeed" text="设置移动速度" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="适用于地图上的所有队伍，不仅仅是玩家。更改在下一个游戏日生效。" />
+		<string id="BW_NPC_EditGold" text="编辑金币" />
+		<string id="BW_NPC_EditGold_Hint" text="为NPC添加或移除金币（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditInfluence" text="编辑影响力" />
+		<string id="BW_NPC_EditInfluence_Hint" text="为NPC添加或移除影响力（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditAttributePoints" text="编辑属性点" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="为NPC添加或移除属性点（当值改变时应用一次）。" />
+		<string id="BW_NPC_EditFocusPoints" text="编辑专注点" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="为NPC添加或移除专注点（当值改变时应用一次）。" />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="编辑金币" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="设置游戏速度倍数" />
 		<string id="BW_Game_GameSpeed_Hint" text="倍增播放（1x）和快进（4x）按钮的速度。1.0 = 正常速度，2.0 = 双倍速度等。" />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="驻军招募倍数" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="增加每天招募到驻军的士兵数量。0 = 禁用，1.0 = 正常，2.0 = 双倍等。" />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="驻军工资倍数" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="控制驻军工资成本。1.0 = 正常，0 = 免费，负值 = 定居点所有者的收入。" />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="民兵招募倍数" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="增加每天招募的民兵数量。0 = 禁用，1.0 = 正常，2.0 = 双倍等。" />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="民兵老兵概率" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="民兵老兵出现的概率百分比（0-100%）。" />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="食物加成" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="将指定值添加到每日食物增长（0-999）。" />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="繁荣加成" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="将指定值添加到每日繁荣增长（0-999）。" />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="炉床加成" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="将指定值添加到村庄的每日炉床增长（0-999）。炉床是村庄的繁荣等价物。" />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="忠诚度加成" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="将指定值添加到每日忠诚度增长（0-999）。" />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="安全加成" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="将指定值添加到每日安全增长（0-999）。" />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="应用于玩家" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="可以组合多个选项。重复应用会自动防止。" />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: 设置错误" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 成功初始化" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} 个作弊成功初始化" />
+		<string id="BW_Message_GoldChanged" text="金币已更改 {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} 个英雄的金币已更改 {AMOUNT}" />
+		<string id="BW_Message_InfluenceChanged" text="影响力已更改 {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} 个家族的影响力已更改 {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChanged" text="属性点已更改 {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} 个英雄的属性点已更改 {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChanged" text="专精点已更改 {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} 个英雄的专精点已更改 {AMOUNT}" />
+		<string id="BW_Message_WoundedTroopsHealed" text="已治愈 {COUNT} 名受伤士兵" />
+		<string id="BW_Message_NoCheatsActive" text="没有激活的作弊" />
+		<string id="BW_Message_ActiveCheats" text="激活的作弊: {LIST}" />
+		<string id="BW_Message_Added" text="已添加" />
+		<string id="BW_Message_Removed" text="已移除" />
 	</strings>
 </base>

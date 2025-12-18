@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Oyuncu" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Envanter" />
 		<string id="BW_Category_Stats" text="İstatistikler" />
 		<string id="BW_Category_Enemies" text="Düşmanlar" />
 		<string id="BW_Category_Game" text="Oyun" />
+		<string id="BW_Category_Settlements" text="Yerleşimler" />
 		<string id="BW_Category_CheatTargets" text="Hile Hedefleri" />
 		<string id="BW_Category_Kingdoms" text="Krallıklar" />
 		<string id="BW_Category_MinorClans" text="Küçük Klanlar" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="Hareket Hızını Ayarla" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Sadece haritada çalışır, savaşta çalışmaz. Değişiklikler oyun içindeki bir sonraki günde uygulanır." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="Klan Yoldaş Limiti" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Oyuncu ve NPC klanları için yoldaş limitine bonus ekler. NPC'lerin yoldaş işe almasına izin veren modlarla çalışır." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="Takas Teklifi Her Zaman Kabul Edilir" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Tüm takas teklifleri otomatik olarak kabul edilir." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Tüm Karakter İlişkilerini Maksimize Et" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Tüm karakterlerle ilişkiyi anında 100'e ayarlar." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Sınırsız HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Müttefik NPC kahramanlarının can çubuğu asla azalmaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_InfiniteHP" text="Sonsuz Can" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Savaş başlangıcında müttefik NPC kahramanlarına +9999 HP ekler. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Sınırsız At Sağlığı" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Müttefik NPC kahramanlarının atları hasar almaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Sınırsız Kalkan Dayanıklılığı" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Müttefik NPC kahramanlarının kalkanları hasar almaz. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Sınırsız Cephane" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Müttefik NPC kahramanlarının cephanesi maksimumda tutulur. Sadece oyuncunun tarafında savaşan kahramanlara uygulanır, normal askerlere değil." />
+		<string id="BW_NPC_MovementSpeed" text="Hareket Hızını Ayarla" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Haritadaki tüm gruplara uygulanır, sadece oyuncuya değil. Değişiklikler oyun içindeki bir sonraki günde uygulanır." />
+		<string id="BW_NPC_EditGold" text="Altını Düzenle" />
+		<string id="BW_NPC_EditGold_Hint" text="NPC'ler için altın ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditInfluence" text="Etkiyi Düzenle" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPC'ler için etki ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditAttributePoints" text="Özellik Puanlarını Düzenle" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPC'ler için özellik puanları ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
+		<string id="BW_NPC_EditFocusPoints" text="Odak Puanlarını Düzenle" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPC'ler için odak puanları ekler veya kaldırır (değer değiştirildiğinde bir kez uygulanır)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Altını Düzenle" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="Oyun Hızı Çarpanını Ayarla" />
 		<string id="BW_Game_GameSpeed_Hint" text="Oynat (1x) ve Hızlı İleri (4x) düğmelerinin hızını çarpar. 1.0 = normal, 2.0 = çift hız, vb." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Garnizon İşe Alma Çarpanı" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Garnizona her gün işe alınan asker sayısını artırır. 0 = devre dışı, 1.0 = normal, 2.0 = iki katı vb." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Garnizon Maaş Çarpanı" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Garnizon maaş maliyetini kontrol eder. 1.0 = normal, 0 = ücretsiz, negatif değerler = yerleşim sahibi için gelir." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Milis İşe Alma Çarpanı" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Her gün işe alınan milis sayısını artırır. 0 = devre dışı, 1.0 = normal, 2.0 = iki katı vb." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Milis Gazisi Şansı" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Milis gazilerinin görünme şansı yüzdesi (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Yiyecek Bonusu" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Belirtilen değeri günlük yiyecek büyümesine ekler (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Refah Bonusu" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Belirtilen değeri günlük refah büyümesine ekler (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Ocak Bonusu" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Belirtilen değeri köyler için günlük ocak büyümesine ekler (0-999). Ocak, köyler için refahın eşdeğeridir." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Sadakat Bonusu" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Belirtilen değeri günlük sadakat büyümesine ekler (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Güvenlik Bonusu" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Belirtilen değeri günlük güvenlik büyümesine ekler (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Oyuncuya Uygula" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="Birden fazla seçenek birleştirilebilir. Yinelenen uygulamalar otomatik olarak önlenir." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Ayar Hatası" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} başarıyla başlatıldı" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} hile başarıyla başlatıldı" />
+		<string id="BW_Message_GoldChanged" text="Altın {AMOUNT} değiştirildi" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} kahraman için altın {AMOUNT} değiştirildi" />
+		<string id="BW_Message_InfluenceChanged" text="Etki {AMOUNT} değiştirildi" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} klan için etki {AMOUNT} değiştirildi" />
+		<string id="BW_Message_AttributePointsChanged" text="Nitelik puanları {AMOUNT} değiştirildi" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} kahraman için nitelik puanları {AMOUNT} değiştirildi" />
+		<string id="BW_Message_FocusPointsChanged" text="Odak puanları {AMOUNT} değiştirildi" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} kahraman için odak puanları {AMOUNT} değiştirildi" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} yaralı asker iyileştirildi" />
+		<string id="BW_Message_NoCheatsActive" text="Aktif hile yok" />
+		<string id="BW_Message_ActiveCheats" text="Aktif hileler: {LIST}" />
+		<string id="BW_Message_Added" text="eklendi" />
+		<string id="BW_Message_Removed" text="kaldırıldı" />
 	</strings>
 </base>

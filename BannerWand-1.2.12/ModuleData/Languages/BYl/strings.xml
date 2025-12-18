@@ -10,6 +10,7 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Huliec" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statystyka" />
 		<string id="BW_Category_Enemies" text="Varazhyny" />
@@ -57,6 +58,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Maksimalnyja adnosiny sa ŭsimi" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imhienna ŭstaloŭvaje adnosiny na ŭzroŭni 100 sa ŭsimi personasami." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Neabmiezhavanae HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Palasa zdarouja sajuznych herojaŭ NPC nikoli nie pamianšajecca. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_InfiniteHP" text="Neabmiezhavanae HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Dadaje +9999 HP sajuznym herojam NPC u pačatku boju. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Neabmiezhavanae HP kania" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Koni sajuznych herojaŭ NPC nie atrymlivajuć paškodžanniaŭ. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Neabmiezhavanaje HP ščyta" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Ščyty sajuznych herojaŭ NPC nie atrymlivajuć paškodžanniaŭ. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Neabmiezhavanyja bojeprypasy" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Bojeprypasy sajuznych herojaŭ NPC padtrymlivajucca na maksimume. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_MovementSpeed" text="Ustaliavać chutkaść pieramiasčennia" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Prymianajecca da ŭsich atradau na karcie, nie tolki da hulca. Zmeny prymianajucca na nastupny hulniavy dzień." />
+		<string id="BW_NPC_EditGold" text="Zmiańić zołata" />
+		<string id="BW_NPC_EditGold_Hint" text="Dadaci abo vydalić zołata dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditInfluence" text="Zmiańić upłyŭ" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Dadaci abo vydalić upłyŭ dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditAttributePoints" text="Zmiańić ački atrybutau" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Dadaci abo vydalić ački atrybutau dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditFocusPoints" text="Zmiańić ački fokusa" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Dadaci abo vydalić ački fokusa dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Zmiańić zołata" />

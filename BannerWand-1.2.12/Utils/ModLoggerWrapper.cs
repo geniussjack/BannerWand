@@ -68,7 +68,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.Log(message, memberName, sourceFilePath, sourceLineNumber);
-
             }
             catch (Exception ex)
             {
@@ -90,7 +89,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.Warning(message, memberName);
-
             }
             catch (Exception ex)
             {
@@ -113,7 +111,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.Error(message, exception, memberName);
-
             }
             catch (Exception ex)
             {
@@ -138,7 +135,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.Debug(message, memberName, sourceLineNumber);
-
             }
             catch (Exception ex)
             {
@@ -160,7 +156,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.LogModelRegistration(modelName, details);
-
             }
             catch (Exception ex)
             {
@@ -182,7 +177,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.LogBehaviorRegistration(behaviorName, details);
-
             }
             catch (Exception ex)
             {
@@ -206,7 +200,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.LogCheat(cheatName, enabled, value, target);
-
             }
             catch (Exception ex)
             {
@@ -229,7 +222,6 @@ namespace BannerWandRetro.Utils
             try
             {
                 ModLogger.LogPerformance(operationName, elapsedMs, itemCount);
-
             }
             catch (Exception ex)
             {
@@ -251,14 +243,22 @@ namespace BannerWandRetro.Utils
             try
             {
                 return ModLogger.BeginPerformanceScope(operationName);
-
             }
             catch (Exception ex)
             {
                 ModLogger.Error($"[ModLoggerWrapper] Error in BeginPerformanceScope: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                return null!;
+                // Return empty disposable to prevent NullReferenceException when using 'using' statement
+                return new EmptyDisposable();
             }
+        }
+
+        /// <summary>
+        /// Empty disposable implementation for error fallback.
+        /// </summary>
+        private class EmptyDisposable : IDisposable
+        {
+            public void Dispose() { }
         }
 
         /// <summary>

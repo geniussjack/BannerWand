@@ -141,6 +141,46 @@ namespace BannerWand.Constants
         /// </summary>
         public const string ActiveCheatsCountFormat = "Active cheats count: {0}";
 
+        /// <summary>
+        /// Header for localization check section in logs.
+        /// </summary>
+        public const string LocalizationCheckHeader = "=== Localization Check ===";
+
+        /// <summary>
+        /// Footer for localization check section in logs.
+        /// </summary>
+        public const string LocalizationCheckFooter = "=== End Localization Check ===";
+
+        /// <summary>
+        /// Warning message when localization is not working.
+        /// </summary>
+        public const string LocalizationNotWorking = "Localization NOT working - strings contain {=ID} tags!";
+
+        /// <summary>
+        /// Instruction message for localization folder structure.
+        /// </summary>
+        public const string LocalizationFolderStructure = "Make sure ModuleData/Languages/ folder structure is correct";
+
+        /// <summary>
+        /// Required files message for localization.
+        /// </summary>
+        public const string LocalizationRequiredFiles = "Required files: language_data.xml and strings.xml in each language folder";
+
+        /// <summary>
+        /// Success message when localization is working.
+        /// </summary>
+        public const string LocalizationWorking = "Localization working! Loaded text: '{0}'";
+
+        /// <summary>
+        /// Status text for enabled cheats.
+        /// </summary>
+        public const string CheatStatusEnabled = "ENABLED";
+
+        /// <summary>
+        /// Status text for disabled cheats.
+        /// </summary>
+        public const string CheatStatusDisabled = "DISABLED";
+
         #endregion
     }
 }

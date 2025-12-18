@@ -1,11 +1,16 @@
 #nullable enable
-using BannerWand.Utils;
+// System namespaces
+using System;
+using System.Collections.Generic;
+
+// Third-party namespaces
 using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;
-using System;
-using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
+
+// Project namespaces
+using BannerWand.Utils;
 
 namespace BannerWand.Settings
 {
@@ -179,6 +184,9 @@ namespace BannerWand.Settings
 
             try
             {
+                // Cache player kingdom once to avoid repeated lookups
+                Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+
                 // Category: Player
                 if (ApplyToPlayer && Hero.MainHero != null)
                 {
@@ -217,7 +225,6 @@ namespace BannerWand.Settings
 
                 if (ApplyToPlayerKingdomRuler)
                 {
-                    Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                     if (playerKingdom?.Leader != null)
                     {
                         _ = targets.Add(playerKingdom.Leader);
@@ -251,7 +258,6 @@ namespace BannerWand.Settings
 
                 if (ApplyToPlayerKingdomVassals)
                 {
-                    Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                     if (playerKingdom != null)
                     {
                         foreach (Clan clan in playerKingdom.Clans)
@@ -298,7 +304,6 @@ namespace BannerWand.Settings
 
                 if (ApplyToPlayerKingdomNobles)
                 {
-                    Kingdom? playerKingdom = Hero.MainHero?.Clan?.Kingdom;
                     if (playerKingdom != null)
                     {
                         foreach (Clan clan in playerKingdom.Clans)

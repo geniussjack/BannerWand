@@ -1,4 +1,5 @@
 #nullable enable
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
