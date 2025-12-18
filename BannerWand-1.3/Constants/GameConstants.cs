@@ -24,6 +24,15 @@ namespace BannerWand.Constants
         public const int MaxSkillLevel = 330;
 
         /// <summary>
+        /// Minimum age for NPC aging to be stopped (21 years old).
+        /// Children under this age will continue to grow normally.
+        /// </summary>
+        /// <remarks>
+        /// Used by aging prevention cheats to determine when NPCs should stop aging.
+        /// </remarks>
+        public const int MinimumAgeForStopAging = 21;
+
+        /// <summary>
         /// Maximum number of heroes to process per daily tick for relationship improvements.
         /// </summary>
         /// <remarks>
@@ -246,6 +255,12 @@ namespace BannerWand.Constants
         public const int MaxRepeatLogCount = 3;
 
         /// <summary>
+        /// Interval for logging troop XP progress (log every Nth call).
+        /// Used to reduce log spam when game speed is high.
+        /// </summary>
+        public const int TroopXPLogInterval = 10;
+
+        /// <summary>
         /// AI slowdown factor (reduces speed to 50%).
         /// </summary>
         /// <remarks>
@@ -268,6 +283,75 @@ namespace BannerWand.Constants
         /// Used to check if float values are effectively zero or non-zero.
         /// </remarks>
         public const float FloatEpsilon = 0.01f;
+
+        /// <summary>
+        /// Health bonus threshold multiplier for Infinite Health detection.
+        /// </summary>
+        /// <remarks>
+        /// Used to check if Infinite Health bonus has been applied (90% of bonus value).
+        /// Prevents re-applying the bonus if it's already been applied.
+        /// </remarks>
+        public const float InfiniteHealthBonusThresholdMultiplier = 0.9f;
+
+        /// <summary>
+        /// Maximum speed multiplier cap to prevent extreme values.
+        /// </summary>
+        /// <remarks>
+        /// Used in speed calculations to prevent distortion when base speed is very small.
+        /// Maximum multiplier of 100x prevents distortion while still allowing significant speed boosts.
+        /// </remarks>
+        public const float MaxSpeedMultiplier = 100f;
+
+        /// <summary>
+        /// Speed change detection threshold for logging.
+        /// </summary>
+        /// <remarks>
+        /// Used to determine if speed has changed significantly enough to log.
+        /// Prevents excessive logging for minor speed fluctuations.
+        /// </remarks>
+        public const float SpeedChangeDetectionThreshold = 0.01f;
+
+        /// <summary>
+        /// Multiplier factor base value (1.0 = no change).
+        /// </summary>
+        /// <remarks>
+        /// Used when calculating factor to add: factorToAdd = multiplier - 1.0f.
+        /// </remarks>
+        public const float MultiplierFactorBase = 1.0f;
+
+        #endregion
+
+        #region Settlement Constants
+
+        /// <summary>
+        /// Maximum value for numerical settlement bonuses (Food, Prosperity, Loyalty, Security).
+        /// </summary>
+        public const int MaxSettlementBonusValue = 999;
+
+        /// <summary>
+        /// Default value for garrison wages multiplier (1.0 = normal wages).
+        /// </summary>
+        public const float DefaultGarrisonWagesMultiplier = 1.0f;
+
+        /// <summary>
+        /// Maximum multiplier for garrison wages (10.0 = 10x wages).
+        /// </summary>
+        public const float MaxGarrisonWagesMultiplier = 10.0f;
+
+        /// <summary>
+        /// Minimum multiplier for garrison wages (-10.0 = negative wages, income for owner).
+        /// </summary>
+        public const float MinGarrisonWagesMultiplier = -10.0f;
+
+        /// <summary>
+        /// Maximum multiplier for recruitment rates (100.0 = 100x recruitment).
+        /// </summary>
+        public const float MaxRecruitmentMultiplier = 100.0f;
+
+        /// <summary>
+        /// Maximum chance percentage for veteran militiamen (100.0 = 100% chance).
+        /// </summary>
+        public const float MaxMilitiaVeteranChance = 100.0f;
 
         #endregion
 
