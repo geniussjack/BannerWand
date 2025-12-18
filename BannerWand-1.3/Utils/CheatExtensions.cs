@@ -1,6 +1,9 @@
 #nullable enable
+// System namespaces
 using System;
 using System.Collections.Generic;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.CampaignSystem.Party;
@@ -299,17 +302,18 @@ namespace BannerWand.Utils
         /// Heals all wounded troops in a party.
         /// </summary>
         /// <param name="party">The party whose troops to heal.</param>
-        /// <returns>The total number of troops healed.</returns>
+        /// <returns>The total number of troops healed, or 0 if the party or roster is null.</returns>
         /// <remarks>
         /// <para>
         /// This method iterates through the party roster and moves wounded troops
-        /// back to healthy status by manipulating the roster counts.
+        /// back to healthy status by manipulating the roster counts using <see cref="TroopRoster.AddToCountsAtIndex"/>.
         /// </para>
         /// <para>
         /// Performance: O(n) where n is the number of different troop types in the roster.
         /// Typically 10-30 iterations for most parties.
         /// </para>
         /// </remarks>
+        /// <exception cref="Exception">May throw exceptions if roster manipulation fails. Exceptions are caught and logged.</exception>
         public static int HealAllWounded(this MobileParty party)
         {
             try

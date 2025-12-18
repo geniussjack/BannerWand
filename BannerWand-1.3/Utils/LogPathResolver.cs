@@ -1,8 +1,11 @@
 #nullable enable
-using BannerWand.Constants;
-using BannerWand.Interfaces;
+// System namespaces
 using System;
 using System.IO;
+
+// Project namespaces
+using BannerWand.Constants;
+using BannerWand.Interfaces;
 
 namespace BannerWand.Utils
 {

@@ -1,8 +1,13 @@
 #nullable enable
-using BannerWand.Interfaces;
+// System namespaces
 using System;
+
+// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+
+// Project namespaces
+using BannerWand.Interfaces;
 
 namespace BannerWand.Utils
 {

@@ -1,9 +1,12 @@
 #nullable enable
-using BannerWand.Constants;
+// System namespaces
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+
+// Project namespaces
+using BannerWand.Constants;
 
 namespace BannerWand.Utils
 {
@@ -29,19 +32,22 @@ namespace BannerWand.Utils
     {
         private static readonly object _lock = new();
         private static bool _initialized = false;
+        private static string? _logFilePath;
 
         /// <summary>
         /// Gets or sets the log file path, initializing it if necessary.
         /// </summary>
+#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         private static string? LogFilePath
         {
             get
             {
-                field ??= DetermineLogFilePath();
-                return field;
+                _logFilePath ??= DetermineLogFilePath();
+                return _logFilePath;
             }
             set;
         }
+#pragma warning restore CS9266
 
         /// <summary>
         /// Determines the module directory and returns log file path (BannerWand\logs\BannerWand.log).
@@ -405,7 +411,7 @@ namespace BannerWand.Utils
                 return;
             }
 
-            string status = enabled ? "ENABLED" : "DISABLED";
+            string status = enabled ? Constants.MessageConstants.CheatStatusEnabled : Constants.MessageConstants.CheatStatusDisabled;
             string valueInfo = value != null ? $" (value: {value})" : string.Empty;
             string targetInfo = !string.IsNullOrEmpty(target) ? $" for {target}" : string.Empty;
             string message = $"{cheatName} {status}{valueInfo}{targetInfo}";
