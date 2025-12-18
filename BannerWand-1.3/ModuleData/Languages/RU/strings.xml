@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Игрок" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Инвентарь" />
 		<string id="BW_Category_Stats" text="Характеристики" />
 		<string id="BW_Category_Enemies" text="Враги" />
 		<string id="BW_Category_Game" text="Игра" />
+		<string id="BW_Category_Settlements" text="Поселения" />
 		<string id="BW_Category_CheatTargets" text="Цели читов" />
 		<string id="BW_Category_Kingdoms" text="Королевства" />
 		<string id="BW_Category_MinorClans" text="Малые кланы" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="Скорость передвижения" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Работает только на карте, не в бою. Изменения применяются на следующий игровой день." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="Лимит компаньонов клана" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Добавляет бонус к лимиту компаньонов для клана игрока и NPC. Работает с модами, которые позволяют NPC нанимать компаньонов." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="Торговля всегда принимается" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Все торговые предложения автоматически принимаются." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Бесконечное HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Полоса здоровья союзных героев NPC никогда не уменьшается. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_InfiniteHP" text="Бесконечное HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Добавляет +9999 HP союзным героям NPC в начале боя. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Бесконечное HP лошади" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Лошади союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Бесконечное HP щита" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Щиты союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Бесконечные боеприпасы" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Боеприпасы союзных героев NPC поддерживаются на максимуме. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_MovementSpeed" text="Установить скорость передвижения" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Применяется ко всем отрядам на карте, не только к игроку. Изменения применяются на следующий игровой день." />
+		<string id="BW_NPC_EditGold" text="Изменить золото" />
+		<string id="BW_NPC_EditGold_Hint" text="Добавить или удалить золото для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditInfluence" text="Изменить влияние" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Добавить или удалить влияние для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditAttributePoints" text="Изменить очки атрибутов" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Добавить или удалить очки атрибутов для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditFocusPoints" text="Изменить очки фокусировки" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Добавить или удалить очки фокусировки для NPC (применяется один раз при изменении значения)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Изменить золото" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="Множитель скорости игры" />
 		<string id="BW_Game_GameSpeed_Hint" text="Умножает скорость кнопок Воспроизведение (1x) и Быстрая перемотка (4x). 1.0 = нормальная скорость, 2.0 = двойная скорость и т.д." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Множитель набора гарнизона" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Увеличивает количество солдат, нанимаемых в гарнизон каждый день. 0 = отключено, 1.0 = норма, 2.0 = двойной набор и т.д." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Множитель зарплаты гарнизона" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Управляет стоимостью гарнизона. 1.0 = норма, 0 = бесплатно, отрицательные значения = доход для владельца поселения." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Множитель набора ополчения" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Увеличивает количество ополченцев, нанимаемых каждый день. 0 = отключено, 1.0 = норма, 2.0 = двойной набор и т.д." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Шанс ветеранов ополчения" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Процент шанса появления ополченцев-ветеранов (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Бонус к росту еды" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту еды (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Бонус к росту процветания" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту процветания (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Бонус к росту очага" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту очага в деревнях (0-999). Очаг - это аналог процветания для деревень." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Бонус к росту лояльности" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту лояльности (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Бонус к росту безопасности" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту безопасности (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Применить к игроку" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="Несколько опций можно комбинировать. Дублирующие применения автоматически предотвращаются." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Ошибка настроек" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} успешно инициализирован" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} читов успешно инициализировано" />
+		<string id="BW_Message_GoldChanged" text="Золото изменено на {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="Золото изменено на {AMOUNT} для {COUNT} героев" />
+		<string id="BW_Message_InfluenceChanged" text="Влияние изменено на {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Влияние изменено на {AMOUNT} для {COUNT} кланов" />
+		<string id="BW_Message_AttributePointsChanged" text="Очки атрибутов изменены на {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Очки атрибутов изменены на {AMOUNT} для {COUNT} героев" />
+		<string id="BW_Message_FocusPointsChanged" text="Очки фокусировки изменены на {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Очки фокусировки изменены на {AMOUNT} для {COUNT} героев" />
+		<string id="BW_Message_WoundedTroopsHealed" text="Вылечено {COUNT} раненых войск" />
+		<string id="BW_Message_NoCheatsActive" text="Нет активных читов" />
+		<string id="BW_Message_ActiveCheats" text="Активные читы: {LIST}" />
+		<string id="BW_Message_Added" text="добавлено" />
+		<string id="BW_Message_Removed" text="удалено" />
 	</strings>
 </base>

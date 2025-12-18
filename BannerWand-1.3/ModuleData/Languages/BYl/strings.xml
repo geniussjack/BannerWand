@@ -10,10 +10,12 @@
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Huliec" />
+		<string id="BW_Category_NPC" text="NPC" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statystyka" />
 		<string id="BW_Category_Enemies" text="Varazhyny" />
 		<string id="BW_Category_Game" text="Hulnia" />
+		<string id="BW_Category_Settlements" text="Pasielishchy" />
 		<string id="BW_Category_CheatTargets" text="Mety chyta" />
 		<string id="BW_Category_Kingdoms" text="Karaleustvy" />
 		<string id="BW_Category_MinorClans" text="Malyja klany" />
@@ -46,6 +48,9 @@
 		<string id="BW_Player_MovementSpeed" text="Chutkaść pieramiasčennia" />
 		<string id="BW_Player_MovementSpeed_Hint" text="Pracuje tolki na karcie, nie ŭ bai. Zmeny prymianajucca na nastupny hulniavy dzień." />
 
+		<string id="BW_Player_ClanCompanionsLimit" text="Limita paplečnikaŭ klana" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Dadae bonus da limiti paplečnikaŭ dla klana hulca i NPC. Pracuje z modami, jakija dazvolajuć NPC najmać paplečnikaŭ." />
+
 		<string id="BW_Player_BarterAlwaysAccepted" text="Handlovaja prapanova zaŭsiody prymajecca" />
 		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Usie handlovyja prapanovy aŭtamatyčna prymajucca." />
 
@@ -57,6 +62,28 @@
 
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Maksimalnyja adnosiny sa ŭsimi" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imhienna ŭstaloŭvaje adnosiny na ŭzroŭni 100 sa ŭsimi personasami." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Neabmiezhavanae HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Palasa zdarouja sajuznych herojaŭ NPC nikoli nie pamianšajecca. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_InfiniteHP" text="Neabmiezhavanae HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Dadaje +9999 HP sajuznym herojam NPC u pačatku boju. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Neabmiezhavanae HP kania" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Koni sajuznych herojaŭ NPC nie atrymlivajuć paškodžanniaŭ. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Neabmiezhavanaje HP ščyta" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Ščyty sajuznych herojaŭ NPC nie atrymlivajuć paškodžanniaŭ. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Neabmiezhavanyja bojeprypasy" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Bojeprypasy sajuznych herojaŭ NPC padtrymlivajucca na maksimume. Prymianajecca tolki da herojaŭ, jakija zmahajucca na baku hulca, nie da zvyčajnych saldat." />
+		<string id="BW_NPC_MovementSpeed" text="Ustaliavać chutkaść pieramiasčennia" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Prymianajecca da ŭsich atradau na karcie, nie tolki da hulca. Zmeny prymianajucca na nastupny hulniavy dzień." />
+		<string id="BW_NPC_EditGold" text="Zmiańić zołata" />
+		<string id="BW_NPC_EditGold_Hint" text="Dadaci abo vydalić zołata dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditInfluence" text="Zmiańić upłyŭ" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Dadaci abo vydalić upłyŭ dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditAttributePoints" text="Zmiańić ački atrybutau" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Dadaci abo vydalić ački atrybutau dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
+		<string id="BW_NPC_EditFocusPoints" text="Zmiańić ački fokusa" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Dadaci abo vydalić ački fokusa dla NPC (prymianajecca adzin raz pry zmianienni značennia)." />
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Zmiańić zołata" />
@@ -122,6 +149,34 @@
 		<string id="BW_Game_GameSpeed" text="Množnik chutkaści hulni" />
 		<string id="BW_Game_GameSpeed_Hint" text="Množyć chutkaść knopak Prajhravańnie (1x) i Chutkaja pieramotka (4x). 1.0 = narmalnaja chutkaść, 2.0 = padvojenaja chutkaść i h.d." />
 
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Množnik nabaru harhizonu" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Pavialičvaje kolkaść saldat, jakija nabirajucca ŭ harhizon štodnia. 0 = vyklučana, 1.0 = narma, 2.0 = padvojny nabar i h.d." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Množnik zarabku harhizonu" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Kantroluje košt harhizonu. 1.0 = narma, 0 = biaplatna, admoŭnyja značeńni = dochod dla ŭładalnika pasielishča." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Množnik nabaru apalčeńnia" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Pavialičvaje kolkaść apalčencaŭ, jakija nabirajucca štodnia. 0 = vyklučana, 1.0 = narma, 2.0 = padvojny nabar i h.d." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Šans vjetjeranaŭ apalčeńnia" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Pracjent šansu źjaŭleńnia apalčencaŭ-vjetjeranaŭ (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Bonus da rostu ježy" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Dadae pakazanae značeńnie da štodziennaha rostu ježy (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Bonus da rostu dabrabytu" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Dadae pakazanae značeńnie da štodziennaha rostu dabrabytu (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Bonus da rostu ahnu" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Dadae pakazanae značeńnie da štodziennaha rostu ahnu ŭ vioskach (0-999). Ahoń - heta analoh dabrabytu dla viosek." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Bonus da rostu lajalnaści" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Dadae pakazanae značeńnie da štodziennaha rostu lajalnaści (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Bonus da rostu biaspieki" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Dadae pakazanae značeńnie da štodziennaha rostu biaspieki (0-999)." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Prymianić da hulca" />
@@ -158,5 +213,23 @@
 
 		<!-- Info Text -->
 		<string id="BW_Target_InfoText" text="Nekalki opcyj možna kambinavać. Dublujučyja prymianienni aŭtamatyčna praduchilajucca." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Pamyłka nastrojkaŭ" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} paśpiachova ini cyjalizavany" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} čytaŭ paśpiachova ini cyjalizavana" />
+		<string id="BW_Message_GoldChanged" text="Zołata źmieniena na {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="Zołata źmieniena na {AMOUNT} dla {COUNT} herojaŭ" />
+		<string id="BW_Message_InfluenceChanged" text="Uplyŭ źmienieny na {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Uplyŭ źmienieny na {AMOUNT} dla {COUNT} klanaŭ" />
+		<string id="BW_Message_AttributePointsChanged" text="Ački atrybutaŭ źmienieny na {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Ački atrybutaŭ źmienieny na {AMOUNT} dla {COUNT} herojaŭ" />
+		<string id="BW_Message_FocusPointsChanged" text="Ački fokusu źmienieny na {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Ački fokusu źmienieny na {AMOUNT} dla {COUNT} herojaŭ" />
+		<string id="BW_Message_WoundedTroopsHealed" text="Vyličana {COUNT} paranienych vojskaŭ" />
+		<string id="BW_Message_NoCheatsActive" text="Niama aktyŭnych čytaŭ" />
+		<string id="BW_Message_ActiveCheats" text="Aktyŭnyja čyty: {LIST}" />
+		<string id="BW_Message_Added" text="dadana" />
+		<string id="BW_Message_Removed" text="vydaliena" />
 	</strings>
 </base>
