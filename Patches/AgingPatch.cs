@@ -7,130 +7,95 @@ using BannerWand.Utils;
 // Third-party namespaces
 using HarmonyLib;
 using System;
-using System.Reflection;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Patches
 {
     /// <summary>
-    /// Harmony patch to prevent character aging for player and NPCs.
+    /// Harmony patch to prevent character aging for the player and, once they reach
+    /// <see cref="GameConstants.MinimumAgeForStopAging"/>, NPC heroes.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// DISABLED: This patch is currently disabled because aging prevention is not working
-    /// in the current game version. The functionality has been removed from the codebase.
+    /// As of the currently installed game version, <c>Hero.BirthDay</c> no longer has a public
+    /// setter, so aging can no longer be stopped by preventing writes to it (the approach this
+    /// patch originally used, which is why it was disabled). Age is a value computed live from
+    /// <c>BirthDay</c> and the current campaign time, so instead this patches the getter of
+    /// <c>Hero.Age</c> directly: the first time it is read for an eligible hero, the returned
+    /// value is cached as that hero's frozen age, and every later read for that hero returns the
+    /// cached value instead of the real, still-advancing one.
     /// </para>
     /// <para>
-    /// This class is kept for reference only. The [HarmonyPatch] attribute has been removed
-    /// to prevent PatchAll() from applying it automatically.
+    /// The frozen age is captured once per hero for the lifetime of the game process and is not
+    /// reset when the cheat is toggled off and back on - re-enabling continues from the
+    /// originally captured age rather than re-freezing at whatever the real age has become in
+    /// the meantime.
     /// </para>
     /// </remarks>
-    // [HarmonyPatch] - REMOVED: Patch is disabled, functionality not working in current game version
-    public static class AgingPatch
+    [HarmonyPatch(typeof(Hero), "get_Age")]
+    internal static class AgingPatch
     {
-        // MinimumAgeForStopAging moved to GameConstants for consistency
+        /// <summary>
+        /// Frozen age per hero, populated the first time an eligible hero's age is read.
+        /// </summary>
+        private static readonly Dictionary<Hero, float> _frozenAges = [];
 
         /// <summary>
-        /// Stores the original birthday for each hero to prevent it from changing.
-        /// Key: Hero, Value: Original BirthDay (CampaignTime)
+        /// Postfix that freezes the returned age for eligible heroes.
         /// </summary>
-        private static System.Collections.Generic.Dictionary<Hero, CampaignTime>? _originalBirthdays;
-
-        /// <summary>
-        /// Finds the target method to patch: Hero.BirthDay property setter.
-        /// </summary>
-        /// <returns>The MethodInfo for the BirthDay property setter, or null if not found.</returns>
-        /// <remarks>
-        /// <para>
-        /// In Bannerlord, character aging is handled by updating Hero.BirthDay property.
-        /// This method finds the setter for this property and patches it to prevent updates.
-        /// </para>
-        /// </remarks>
-        public static MethodBase? TargetMethod()
+        /// <param name="__instance">The hero whose age was just computed.</param>
+        /// <param name="__result">The freshly computed age, overwritten if this hero is eligible.</param>
+        [HarmonyPostfix]
+        private static void Postfix(Hero __instance, ref float __result)
         {
             try
             {
-                // Try to find BirthDay property setter in Hero class
-                Type? heroType = typeof(Hero);
-                if (heroType != null)
+                if (__instance is null)
                 {
-                    // Look for BirthDay property
-                    PropertyInfo? birthDayProperty = heroType.GetProperty("BirthDay",
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-                    if (birthDayProperty != null)
-                    {
-                        // Get the setter method
-                        MethodInfo? setter = birthDayProperty.GetSetMethod(true);
-                        if (setter != null)
-                        {
-                            ModLogger.Log($"[AgingPatch] Found BirthDay property setter: {setter.DeclaringType?.Name}.{setter.Name}");
-                            _originalBirthdays = [];
-                            return setter;
-                        }
-                    }
+                    return;
                 }
 
-                ModLogger.Warning("[AgingPatch] Could not find Hero.BirthDay property setter. Aging prevention may not work.");
-                return null;
+                CheatSettings? settings = CheatSettings.Instance;
+                CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                bool isPlayer = __instance == Hero.MainHero;
+
+                bool eligible = isPlayer
+                    ? settings.StopPlayerAging && targetSettings.ApplyToPlayer
+                    : settings.StopNPCAging && __result >= GameConstants.MinimumAgeForStopAging;
+
+                if (!eligible)
+                {
+                    return;
+                }
+
+                if (!_frozenAges.TryGetValue(__instance, out float frozenAge))
+                {
+                    frozenAge = __result;
+                    _frozenAges[__instance] = frozenAge;
+                }
+
+                __result = frozenAge;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[AgingPatch] Error in TargetMethod: {ex.Message}");
+                ModLogger.Error($"[AgingPatch] Error in Postfix: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                return null;
             }
         }
 
         /// <summary>
-        /// Prefix patch that prevents birthday updates for characters that should not age.
+        /// Clears all frozen ages. Called on new game/save load so a previous campaign's frozen
+        /// ages never leak into a new one.
         /// </summary>
-        /// <param name="__instance">The Hero instance whose birthday is being updated.</param>
-        /// <param name="_">The new BirthDay value being set (unused).</param>
-        /// <returns>False to skip the original setter if aging should be prevented, true otherwise.</returns>
-        /// <remarks>
-        /// <para>
-        /// This patch intercepts the BirthDay property setter and prevents the update if:
-        /// 1. Stop Player Aging is enabled and the hero is the player
-        /// 2. Stop NPC Aging is enabled and the hero is an NPC aged <see cref="GameConstants.MinimumAgeForStopAging"/> or older
-        /// </para>
-        /// <para>
-        /// If the patch returns false, the original setter is skipped, preventing the birthday update.
-        /// We also store the original birthday to restore it if needed.
-        /// </para>
-        /// </remarks>
-        [HarmonyPrefix]
-        public static bool Prefix(Hero __instance, CampaignTime _)
+        public static void ResetTracking()
         {
-            try
-            {
-                // Early exit if hero is null
-                if (__instance == null)
-                {
-                    return true; // Allow original method to run
-                }
-
-                // Early exit if settings are null
-                CheatSettings? settings = CheatSettings.Instance;
-                CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
-                if (settings == null || targetSettings == null)
-                {
-                    return true; // Allow original method to run
-                }
-
-                // DISABLED: Aging prevention cheats removed - not working in current game version
-                // This patch is kept for reference but is currently disabled
-                // Always allow original setter to run (aging prevention disabled)
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[AgingPatch] Error in Prefix: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                // On error, allow original method to run to avoid breaking the game
-                return true;
-            }
+            _frozenAges.Clear();
         }
     }
 }
-
