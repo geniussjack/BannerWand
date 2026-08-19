@@ -401,6 +401,14 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public int SmithyMaterialsQuantity { get; set; } = 9999;
 
+        /// <summary>
+        /// Enables a rebindable hotkey (Ctrl+X by default) that grants the amount set by
+        /// <see cref="EditGold"/> whenever pressed on the campaign map, mirroring Mount &amp; Blade:
+        /// Warband's cheat_mode hotkeys. Implemented in <see cref="Behaviors.HotkeyCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Inventory_EnableAddGoldHotkey}Enable Add Gold Hotkey", Order = 7, RequireRestart = false, HintText = "{=BW_Inventory_EnableAddGoldHotkey_Hint}Adds the amount set in Edit Gold above every time the hotkey is pressed (default Ctrl+X, rebindable in Options > Key Bindings). Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value.")]
+        [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
+        public bool EnableAddGoldHotkey { get; set; } = false;
 
         #endregion
 

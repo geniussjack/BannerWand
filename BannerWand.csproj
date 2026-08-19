@@ -100,6 +100,7 @@
     <Compile Include="Behaviors\Handlers\NPCCheatHandler.cs" />
     <Compile Include="Behaviors\Handlers\OneHitKillHandler.cs" />
     <Compile Include="Behaviors\Handlers\ShieldCheatHandler.cs" />
+    <Compile Include="Behaviors\HotkeyCheatBehavior.cs" />
     <Compile Include="Behaviors\NPCCheatBehavior.cs" />
     <Compile Include="Behaviors\PlayerCheatBehavior.cs" />
     <Compile Include="Behaviors\SkillXPCheatBehavior.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Core\HarmonyManager.cs" />
     <Compile Include="Core\HarmonyManagerWrapper.cs" />
     <Compile Include="Core\SubModule.cs" />
+    <Compile Include="Input\BannerWandHotkeyCategory.cs" />
     <Compile Include="Interfaces\IAmmoCheatHandler.cs" />
     <Compile Include="Interfaces\ICampaignDataCache.cs" />
     <Compile Include="Interfaces\ICheatManager.cs" />
