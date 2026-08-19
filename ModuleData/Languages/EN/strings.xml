@@ -44,15 +44,18 @@
 
 		<!-- NPC Cheats -->
 		<string id="BW_NPC_UnlimitedHP" text="Unlimited HP" />
-		<string id="BW_NPC_UnlimitedHP_Hint" text="Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below." />
 		<string id="BW_NPC_InfiniteHP" text="Infinite HP" />
-		<string id="BW_NPC_InfiniteHP_Hint" text="Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below." />
 		<string id="BW_NPC_UnlimitedHorseHP" text="Unlimited Horse HP" />
-		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below." />
 		<string id="BW_NPC_UnlimitedShieldHP" text="Unlimited Shield HP" />
-		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below." />
 		<string id="BW_NPC_UnlimitedAmmo" text="Unlimited Ammo" />
-		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side, not regular soldiers." />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below." />
+
+		<string id="BW_NPC_ApplyToRegularTroops" text="Also Apply to Regular Soldiers" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Extends the enabled NPC cheats above from allied heroes only to every allied soldier fighting on player's side. Can noticeably slow down large battles and make them drag on, since every friendly unit becomes hard to kill." />
 		<string id="BW_NPC_MovementSpeed" text="Set Movement Speed" />
 		<string id="BW_NPC_MovementSpeed_Hint" text="Applies to all parties on the map, not just player. Changes apply on the next in-game day." />
 		<string id="BW_NPC_EditGold" text="Edit Gold" />
@@ -95,6 +98,9 @@
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Ships owned by the player's party never take damage. Requires War Sails DLC." />
 		<string id="BW_Player_UnlockAllSmithyParts" text="Unlock All Smithy Parts" />
 		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders." />
+
+		<string id="BW_Player_AllowBothPerks" text="Allow Both Perks" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed." />
 
 		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
 		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />

@@ -210,12 +210,19 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 
+        /// Whenever the player picks a perk that has an alternative, the alternative is granted
+        /// too - no save reload needed. Implemented in <see cref="Patches.BothPerksPatch"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_AllowBothPerks}Allow Both Perks", Order = 14, RequireRestart = false, HintText = "{=BW_Player_AllowBothPerks_Hint}Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool AllowBothPerks { get; set; } = false;
+
         /// <summary>
         /// Unlocks every crafting piece for every weapon template in the Smithy screen, as if
         /// each one had already been discovered through smelting or completing crafting orders.
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_UnlockAllSmithyParts}Unlock All Smithy Parts", Order = 14, RequireRestart = false, HintText = "{=BW_Player_UnlockAllSmithyParts_Hint}Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders.")]
+        [SettingPropertyBool("{=BW_Player_UnlockAllSmithyParts}Unlock All Smithy Parts", Order = 15, RequireRestart = false, HintText = "{=BW_Player_UnlockAllSmithyParts_Hint}Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool UnlockAllSmithyParts { get; set; } = false;
 
@@ -225,48 +232,64 @@ namespace BannerWand.Settings
 
         /// <summary>
         /// NPC heroes' health bar never decreases (based on max HP limit).
-        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Applies to allied heroes fighting on player's side; also covers regular soldiers if
+        /// <see cref="NPCApplyToRegularTroops"/> is enabled.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_NPC_UnlimitedHP}Unlimited HP", Order = 0, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHP_Hint}Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyBool("{=BW_NPC_UnlimitedHP}Unlimited HP", Order = 0, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHP_Hint}Allied NPC heroes' health bar never decreases. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public bool NPCUnlimitedHP { get; set; } = false;
 
         /// <summary>
         /// Adds +9999 health to NPC heroes at the start of each battle.
-        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Applies to allied heroes fighting on player's side; also covers regular soldiers if
+        /// <see cref="NPCApplyToRegularTroops"/> is enabled.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_NPC_InfiniteHP}Infinite HP", Order = 1, RequireRestart = false, HintText = "{=BW_NPC_InfiniteHP_Hint}Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyBool("{=BW_NPC_InfiniteHP}Infinite HP", Order = 1, RequireRestart = false, HintText = "{=BW_NPC_InfiniteHP_Hint}Adds +9999 HP to allied NPC heroes at battle start. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public bool NPCInfiniteHP { get; set; } = false;
 
         /// <summary>
         /// NPC heroes' mounts never lose health.
-        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Applies to allied heroes fighting on player's side; also covers regular soldiers if
+        /// <see cref="NPCApplyToRegularTroops"/> is enabled.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_NPC_UnlimitedHorseHP}Unlimited Horse HP", Order = 2, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHorseHP_Hint}Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyBool("{=BW_NPC_UnlimitedHorseHP}Unlimited Horse HP", Order = 2, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedHorseHP_Hint}Allied NPC heroes' horses take no damage. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public bool NPCUnlimitedHorseHP { get; set; } = false;
 
         /// <summary>
         /// NPC heroes' shields never lose durability.
-        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Applies to allied heroes fighting on player's side; also covers regular soldiers if
+        /// <see cref="NPCApplyToRegularTroops"/> is enabled.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_NPC_UnlimitedShieldHP}Unlimited Shield HP", Order = 3, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedShieldHP_Hint}Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyBool("{=BW_NPC_UnlimitedShieldHP}Unlimited Shield HP", Order = 3, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedShieldHP_Hint}Allied NPC heroes' shields take no damage. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public bool NPCUnlimitedShieldHP { get; set; } = false;
 
         /// <summary>
         /// NPC heroes never run out of ammunition for ranged weapons.
-        /// Only applies to allied heroes fighting on player's side, not regular soldiers.
+        /// Applies to allied heroes fighting on player's side; also covers regular soldiers if
+        /// <see cref="NPCApplyToRegularTroops"/> is enabled.
         /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_NPC_UnlimitedAmmo}Unlimited Ammo", Order = 5, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedAmmo_Hint}Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side, not regular soldiers.")]
+        [SettingPropertyBool("{=BW_NPC_UnlimitedAmmo}Unlimited Ammo", Order = 5, RequireRestart = false, HintText = "{=BW_NPC_UnlimitedAmmo_Hint}Allied NPC heroes' ammunition is maintained at max. Only applies to heroes fighting on player's side unless Also Apply to Regular Soldiers is enabled below.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public bool NPCUnlimitedAmmo { get; set; } = false;
+
+        /// <summary>
+        /// Widens Unlimited HP, Infinite HP, Unlimited Horse HP, Unlimited Shield HP, and
+        /// Unlimited Ammo above (whichever are enabled) to also cover regular allied soldiers
+        /// fighting on player's side, not just heroes.
+        /// Implemented in <see cref="Behaviors.CombatCheatBehavior"/> and
+        /// <see cref="Behaviors.Handlers.NPCCheatHandler"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_ApplyToRegularTroops}Also Apply to Regular Soldiers", Order = 12, RequireRestart = false, HintText = "{=BW_NPC_ApplyToRegularTroops_Hint}Extends the enabled NPC cheats above from allied heroes only to every allied soldier fighting on player's side. Can noticeably slow down large battles and make them drag on, since every friendly unit becomes hard to kill.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
+        public bool NPCApplyToRegularTroops { get; set; } = false;
 
         /// <summary>
         /// Campaign map movement speed multiplier for all parties on the map.

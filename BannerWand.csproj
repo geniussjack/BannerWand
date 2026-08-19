@@ -154,6 +154,7 @@
     <Compile Include="Patches\AgingPatch.cs" />
     <Compile Include="Patches\AmmoConsumptionPatch.cs" />
     <Compile Include="Patches\AutoBuildingQueuePatch.cs" />
+    <Compile Include="Patches\BothPerksPatch.cs" />
     <Compile Include="Patches\BarterableValuePatch.cs" />
     <Compile Include="Patches\GarrisonWagesPatch.cs" />
     <Compile Include="Patches\GameSpeedPatch.cs" />

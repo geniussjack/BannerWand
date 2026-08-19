@@ -317,9 +317,9 @@ namespace BannerWand.Behaviors
                     _shieldCheatHandler.OnAgentHit(affectedAgent, affectorAgent);
                 }
 
-                // Restore allied NPC hero shield durability if enabled
+                // Restore allied NPC shield durability if enabled
                 Agent? mainAgent = Mission.Current?.MainAgent;
-                if (mainAgent is not null && affectedAgent is not null && IsAlliedHeroOnPlayerSide(affectedAgent, mainAgent))
+                if (mainAgent is not null && affectedAgent is not null && IsAlliedAgentOnPlayerSide(affectedAgent, mainAgent))
                 {
                     if (settings.NPCUnlimitedShieldHP)
                     {
@@ -356,32 +356,38 @@ namespace BannerWand.Behaviors
         #region Helper Methods
 
         /// <summary>
-        /// Checks if an agent is an allied hero fighting on player's side in combat.
-        /// Used to filter NPC cheats to only apply to allied heroes, not regular soldiers or enemies.
+        /// Checks if an agent is an allied hero, or - when
+        /// <see cref="CheatSettings.NPCApplyToRegularTroops"/> is enabled - any allied human agent,
+        /// fighting on player's side in combat.
+        /// Used to filter NPC cheats to allied heroes (and optionally regular soldiers), never enemies.
         /// </summary>
-        /// <param name="agent">The <see cref="Agent"/> to check. Must be non-null, active, human, and a hero.</param>
+        /// <param name="agent">The <see cref="Agent"/> to check. Must be non-null, active, and human.</param>
         /// <param name="mainAgent">The player's main <see cref="Agent"/>. Used to determine alliance status.</param>
         /// <returns>
-        /// <c>true</c> if the agent is an allied hero on player's side; otherwise, <c>false</c>.
+        /// <c>true</c> if the agent qualifies as an allied NPC target; otherwise, <c>false</c>.
         /// Returns <c>false</c> if <paramref name="agent"/> or <paramref name="mainAgent"/> is <c>null</c>,
-        /// if the agent is not active, not human, not a hero, or is player-controlled or an enemy.
+        /// if the agent is not active, not human, is player-controlled, is an enemy, or - unless
+        /// <see cref="CheatSettings.NPCApplyToRegularTroops"/> is enabled - is not a hero.
         /// </returns>
         /// <remarks>
         /// <para>
         /// This method performs the following checks in order:
         /// 1. Null checks for both agents
         /// 2. Agent must be active and human
-        /// 3. Agent must be a hero (<see cref="Character.IsHero"/>)
-        /// 4. Agent must not be player-controlled
+        /// 3. Agent must not be player-controlled
+        /// 4. Agent must be a hero (<see cref="Character.IsHero"/>), unless
+        ///    <see cref="CheatSettings.NPCApplyToRegularTroops"/> is enabled, in which case any
+        ///    human agent qualifies
         /// 5. Agent must not be an enemy of the main agent (<see cref="Agent.IsEnemyOf(Agent)"/>)
         /// </para>
         /// <para>
         /// This filtering ensures that NPC cheats (Unlimited HP, Infinite HP, Unlimited Horse HP,
-        /// Unlimited Shield HP, Unlimited Ammo) only apply to allied heroes fighting alongside the player,
-        /// not to regular soldiers, enemies, or the player themselves.
+        /// Unlimited Shield HP, Unlimited Ammo) apply to allied heroes fighting alongside the player
+        /// by default, and to every allied soldier when the player opts into that wider scope, but
+        /// never to enemies or the player themselves.
         /// </para>
         /// </remarks>
-        private static bool IsAlliedHeroOnPlayerSide(Agent agent, Agent mainAgent)
+        private static bool IsAlliedAgentOnPlayerSide(Agent agent, Agent mainAgent)
         {
             if (agent is null || mainAgent is null)
             {
@@ -394,14 +400,15 @@ namespace BannerWand.Behaviors
                 return false;
             }
 
-            // Must be a hero, not a regular soldier
-            if (agent.Character?.IsHero != true)
+            // Skip player
+            if (agent.IsPlayerControlled)
             {
                 return false;
             }
 
-            // Skip player
-            if (agent.IsPlayerControlled)
+            // Must be a hero unless the player opted into applying cheats to regular soldiers too
+            bool isHero = agent.Character?.IsHero == true;
+            if (!isHero && Settings?.NPCApplyToRegularTroops != true)
             {
                 return false;
             }
