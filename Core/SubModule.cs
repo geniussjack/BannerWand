@@ -3,6 +3,7 @@
 // Project namespaces
 using BannerWand.Behaviors;
 using BannerWand.Constants;
+using BannerWand.Input;
 using BannerWand.Models;
 using BannerWand.Patches;
 using BannerWand.Utils;
@@ -83,10 +84,34 @@ namespace BannerWand.Core
                 ModLogger.Error("Failed to initialize Harmony patches - some cheats may not work");
             }
 
+            // Register custom hotkeys with the game's native key-binding system
+            RegisterHotkeys();
+
             // Check if localization is working
             CheckLocalization();
 
             ModLogger.Log("BannerWand mod loaded successfully");
+        }
+
+        /// <summary>
+        /// Registers BannerWand's custom hotkey category so it shows up under Options -&gt; Key
+        /// Bindings and can be rebound by the player.
+        /// </summary>
+        /// <remarks>
+        /// Must run once, early enough for the game's key-binding screen to pick it up. The
+        /// actual per-frame polling of the hotkey happens in <see cref="Behaviors.HotkeyCheatBehavior"/>.
+        /// </remarks>
+        private void RegisterHotkeys()
+        {
+            try
+            {
+                TaleWorlds.InputSystem.HotKeyManager.RegisterContext(new BannerWandHotkeyCategory(), ignoreSerialize: false);
+                ModLogger.Log("BannerWand hotkeys registered successfully");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[SubModule] Error registering hotkeys: {ex.Message}", ex);
+            }
         }
 
         /// <summary>
@@ -437,6 +462,10 @@ namespace BannerWand.Core
             // Automatic building queue (starts next project after completion)
             campaignStarter.AddBehavior(new AutoBuildingQueueBehavior());
             ModLogger.LogBehaviorRegistration(nameof(AutoBuildingQueueBehavior), "Handles automatic building queue for settlements");
+
+            // Custom hotkeys (add gold, etc.)
+            campaignStarter.AddBehavior(new HotkeyCheatBehavior());
+            ModLogger.LogBehaviorRegistration(nameof(HotkeyCheatBehavior), "Handles BannerWand's custom rebindable hotkeys");
 
 
             ModLogger.Log("All campaign behaviors registered successfully");

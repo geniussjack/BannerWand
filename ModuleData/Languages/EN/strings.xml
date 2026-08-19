@@ -127,6 +127,9 @@
 		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Smithy Materials Quantity" />
 		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Set the target amount for smithy materials (100-9999). Only works when Unlimited Smithy Materials is enabled." />
 
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Enable Add Gold Hotkey" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adds the amount set in Edit Gold above every time the hotkey is pressed (default Ctrl+X, rebindable in Options &gt; Key Bindings). Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value." />
+
 		<!-- Stats Category -->
 		<string id="BW_Stats_EditAttributePoints" text="Edit Attribute Points" />
 		<string id="BW_Stats_EditAttributePoints_Hint" text="Takes effect when opening the character menu twice. To disable this option, you need to set the value to -1." />
