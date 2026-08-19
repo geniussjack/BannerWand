@@ -1,6 +1,4 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using System;
 using System.IO;

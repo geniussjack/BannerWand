@@ -1,6 +1,4 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using System;
 using System.Diagnostics;
@@ -20,35 +18,19 @@ namespace BannerWand.Utils
     /// Log file location: [MyDocuments]\[LogSubdirectory]\[LogConfigsFolderName]\[LogsFolderName]\BannerWand_yyyyMMdd.log
     /// One file per calendar day; files older than <see cref="LogConstants.LogRetentionDays"/> days are deleted
     /// automatically. Platform-independent path that doesn't depend on game installation location.
-    /// Example Windows: C:\Users\&lt;user&gt;\Documents\Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_20260819.log
-    /// (redirected to the OneDrive-backed Documents folder when OneDrive Known Folder Move is enabled).
-    /// </para>
-    /// <para>
-    /// This static class provides the default implementation of logging functionality.
-    /// For dependency injection scenarios, use <see cref="Interfaces.IModLogger"/> interface
-    /// with <see cref="ModLoggerWrapper"/> wrapper class.
+    /// Example Windows: C:\Users\&lt;user&gt;\Documents\Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_20260819.log.
+    /// Redirected to the OneDrive-backed Documents folder when OneDrive Known Folder Move is enabled.
     /// </para>
     /// </remarks>
     public static class ModLogger
     {
         private static readonly object _lock = new();
         private static bool _initialized = false;
-        private static string? _logFilePath;
 
         /// <summary>
-        /// Gets or sets the log file path, initializing it if necessary.
+        /// Gets the log file path, determining and caching it on first access.
         /// </summary>
-#pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
-        private static string? LogFilePath
-        {
-            get
-            {
-                _logFilePath ??= DetermineLogFilePath();
-                return _logFilePath;
-            }
-            set;
-        }
-#pragma warning restore CS9266
+        private static string? LogFilePath => field ??= DetermineLogFilePath();
 
         /// <summary>
         /// Determines today's log file path (Documents\Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_yyyyMMdd.log),
@@ -110,10 +92,12 @@ namespace BannerWand.Utils
                         File.Delete(filePath);
                     }
                 }
+#pragma warning disable RCS1075 // Intentionally silent: one locked/inaccessible file must not abort the rest of the pass.
                 catch (Exception)
                 {
                     // Skip this file and keep pruning the rest.
                 }
+#pragma warning restore RCS1075
             }
         }
 
@@ -270,7 +254,7 @@ namespace BannerWand.Utils
 
         /// <summary>
         /// Default throttle interval for debug messages (1 second).
-        /// Prevents log spam when methods are called frequently (e.g., every frame/tick).
+        /// Prevents log spam when methods are called frequently, such as every frame or tick.
         /// </summary>
         private static readonly TimeSpan _defaultThrottleInterval = TimeSpan.FromSeconds(1);
 
@@ -542,7 +526,7 @@ namespace BannerWand.Utils
             try
             {
                 Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
-                Settings.CheatTargetSettings? targetSettings = Settings.CheatTargetSettings.Instance;
+                Settings.CheatSettings? targetSettings = Settings.CheatSettings.Instance;
 
                 if (settings == null || targetSettings == null)
                 {

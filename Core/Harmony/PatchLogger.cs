@@ -1,6 +1,6 @@
 #nullable enable
-using BannerWand.Interfaces;
 using BannerWand.Utils;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -9,26 +9,20 @@ namespace BannerWand.Core.Harmony
     /// <summary>
     /// Logs Harmony patch information for debugging and conflict detection.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates patch logging logic, making it easier to test
-    /// and maintain. It implements <see cref="IPatchLogger"/> for dependency injection.
-    /// </remarks>
-    public class PatchLogger : IPatchLogger
+    /// <param name="harmonyInstance">The Harmony instance to use for logging.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="harmonyInstance"/> is null.</exception>
+    public class PatchLogger(HarmonyLib.Harmony harmonyInstance)
     {
-        private readonly HarmonyLib.Harmony _harmonyInstance;
+        private readonly HarmonyLib.Harmony _harmonyInstance = harmonyInstance ?? throw new ArgumentNullException(nameof(harmonyInstance));
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PatchLogger"/> class.
+        /// Logs information about all patched methods.
         /// </summary>
-        /// <param name="harmonyInstance">The Harmony instance to use for logging.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="harmonyInstance"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = ".NET Framework 4.7.2 does not support primary constructors")]
-        public PatchLogger(HarmonyLib.Harmony harmonyInstance)
-        {
-            _harmonyInstance = harmonyInstance ?? throw new System.ArgumentNullException(nameof(harmonyInstance));
-        }
-
-        /// <inheritdoc />
+        /// <remarks>
+        /// This method logs all methods that have been patched by this mod,
+        /// including the patch owner, patch method name, and patch type.
+        /// Useful for debugging patch conflicts with other mods.
+        /// </remarks>
         public void LogPatchedMethods()
         {
             try
@@ -65,13 +59,18 @@ namespace BannerWand.Core.Harmony
 
                 ModLogger.Log($"Total patched methods: {patchedMethodCount}");
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 ModLogger.Warning($"Failed to log patched methods: {exception.Message}");
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Logs information about a specific patch application.
+        /// </summary>
+        /// <param name="patchName">The name of the patch being applied.</param>
+        /// <param name="targetMethod">The target method being patched.</param>
+        /// <param name="success">Whether the patch was applied successfully.</param>
         public void LogPatchApplication(string patchName, MethodBase? targetMethod, bool success)
         {
             if (targetMethod == null)

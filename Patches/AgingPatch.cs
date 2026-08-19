@@ -1,10 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -57,7 +54,7 @@ namespace BannerWand.Patches
                 }
 
                 CheatSettings? settings = CheatSettings.Instance;
-                CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+                CheatSettings? targetSettings = CheatSettings.Instance;
                 if (settings is null || targetSettings is null)
                 {
                     return;

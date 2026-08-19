@@ -4,22 +4,20 @@
 		<tag language="Türkçe" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Hedefler" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Oyuncu" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Demircilik" />
+		<string id="BW_Category_Social" text="Sosyal" />
 		<string id="BW_Category_Inventory" text="Envanter" />
 		<string id="BW_Category_Stats" text="İstatistikler" />
 		<string id="BW_Category_Enemies" text="Düşmanlar" />
-		<string id="BW_Category_Game" text="Oyun" />
 		<string id="BW_Category_Settlements" text="Yerleşimler" />
-		<string id="BW_Category_CheatTargets" text="Hile Hedefleri" />
-		<string id="BW_Category_Kingdoms" text="Krallıklar" />
-		<string id="BW_Category_MinorClans" text="Küçük Klanlar" />
-		<string id="BW_Category_Info" text="Bilgi" />
+		<string id="BW_Category_Game" text="Oyun" />
+		<string id="BW_Category_TargetPlayer" text="Hedef: Oyuncu ve Klan" />
+		<string id="BW_Category_TargetKingdoms" text="Hedef: Krallıklar" />
+		<string id="BW_Category_TargetMinorClans" text="Hedef: Küçük Klanlar" />
 		<string id="BW_Category_Debug" text="Hata Ayıklama" />
 
 		<!-- Debug Category -->
@@ -220,19 +218,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Ayar Hatası" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} başarıyla başlatıldı" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} hile başarıyla başlatıldı" />
-		<string id="BW_Message_GoldChanged" text="Altın {AMOUNT} değiştirildi" />
-		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} kahraman için altın {AMOUNT} değiştirildi" />
-		<string id="BW_Message_InfluenceChanged" text="Etki {AMOUNT} değiştirildi" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} klan için etki {AMOUNT} değiştirildi" />
-		<string id="BW_Message_AttributePointsChanged" text="Nitelik puanları {AMOUNT} değiştirildi" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} kahraman için nitelik puanları {AMOUNT} değiştirildi" />
-		<string id="BW_Message_FocusPointsChanged" text="Odak puanları {AMOUNT} değiştirildi" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} kahraman için odak puanları {AMOUNT} değiştirildi" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} yaralı asker iyileştirildi" />
-		<string id="BW_Message_NoCheatsActive" text="Aktif hile yok" />
-		<string id="BW_Message_ActiveCheats" text="Aktif hileler: {LIST}" />
-		<string id="BW_Message_Added" text="eklendi" />
-		<string id="BW_Message_Removed" text="kaldırıldı" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Tüm Savaşlarda Yaralanma Yok" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Geliştirme aşamasında, henüz tam olarak çalışmıyor. Haritadaki otomatik çözülen her tarla savaşında -kişisel olarak katılmadığınız savaşlar dahil- birliklerin yaralanmak veya esir alınmak yerine ölmesini sağlamayı amaçlar. Yalnızca kendi savaştığınız çarpışmaları etkileyen Tek Vuruşta Öldürme özelliğini tamamlar. Kuşatmaları veya esir alınan kahramanları etkilemez." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Altın Ekleme Kısayolunu Etkinleştir" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Kısayola her basıldığında yukarıdaki Altını Düzenle ayarında belirlenen miktarı ekler. Varsayılan olarak Ctrl+X'tir, Seçenekler &gt; Tuş Atamaları bölümünden yeniden atanabilir. Sadece kampanya haritasında çalışır, savaşta çalışmaz. Altını Düzenle değerinin sıfırdan farklı olmasını gerektirir." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Sıradan Askerlere de Uygula" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Yukarıda etkinleştirilen NPC hilelerini yalnızca müttefik kahramanlardan, oyuncu tarafında savaşan tüm müttefik askerlere genişletir. Her dost birimin öldürülmesi zorlaştığından büyük savaşları belirgin şekilde yavaşlatıp uzatabilir." />
+		<string id="BW_NPC_StopNPCAging" text="NPC Yaşlanmasını Durdur" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="NPC'lerin 21 yaşına ulaştıktan sonra yaşlanmasını engeller. 21 yaşın altındaki çocuklar normal şekilde büyümeye devam eder." />
+		<string id="BW_Player_AllowBothPerks" text="Her İki Yeteneği de Ver" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Bir çiftten birini her seçtiğinizde alternatif yeteneği otomatik olarak verir, böylece ikisine de sahip olursunuz - anında etkilidir, kayıt yeniden yüklemeye gerek yoktur." />
+		<string id="BW_Player_InfiniteShipHealth" text="Sonsuz Gemi Canı" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Oyuncu grubuna ait gemiler asla hasar almaz. War Sails DLC'sini gerektirir." />
+		<string id="BW_Player_StopPlayerAging" text="Oyuncu Yaşlanmasını Durdur" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Oyuncu karakterinin yaşlanmasını engeller." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Tüm Demircilik Parçalarının Kilidini Aç" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Sanki eritme veya üretim siparişleri yoluyla zaten keşfetmişsiniz gibi, her silah türü için tüm üretim parçalarının kilidini açar. Etkinleştirildikten sonra etkili olması bir oyun gününe kadar sürebilir." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Garnizon Kapasitesi Bonusu" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Bir garnizonun barındırabileceği maksimum birlik sayısına ekleme yapar. 0 = devre dışı." />
 	</strings>
 </base>

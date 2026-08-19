@@ -1,10 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.IO;
@@ -35,7 +32,7 @@ namespace BannerWand.Patches
     public static class NavalSpeedPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks the last desired speed value to detect changes for logging.
@@ -115,7 +112,7 @@ namespace BannerWand.Patches
             }
 
             Type? navalDlcType = GetNavalDlcModelType();
-            return navalDlcType != null && navalDlcType.IsAssignableFrom(instance.GetType());
+            return navalDlcType?.IsAssignableFrom(instance.GetType()) == true;
         }
 
         /// <summary>

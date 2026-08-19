@@ -1,11 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Core.Harmony;
-using BannerWand.Interfaces;
 using BannerWand.Patches;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Linq;
@@ -39,22 +35,22 @@ namespace BannerWand.Core
     /// - InventoryCapacityPatch: Patches inventory capacity calculations
     /// - ItemBarterablePatch: Prevents item loss during barter transactions
     /// - ItemRosterTradePatch: Patches ItemRoster.AddToCounts() to prevent item removal during all trade types (towns, villages, caravans, etc.)
-    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
-    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead, since
+    ///   Harmony patching DefaultPartyWageModel causes TypeInitializationException
     /// </para>
     /// <para>
     /// Patches applied via HarmonyTargetMethod (require manual application):
     /// - RenownMultiplierPatch: Patches Clan.AddRenown() to multiply renown gains
     /// - AmmoConsumptionPatch: Prevents ammo decrease for player when Unlimited Ammo enabled
     /// - ItemBarterablePatch: Prevents item loss during barter/trade transactions
-    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
-    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
-    /// - NavalSpeedPatch: Patches naval speed calculations for War Sails DLC
-    ///   (Applied in OnAfterGameInitializationFinished because DLC loads later)
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead, since
+    ///   Harmony patching DefaultPartyWageModel causes TypeInitializationException
+    /// - NavalSpeedPatch: Patches naval speed calculations for War Sails DLC, applied in
+    ///   OnAfterGameInitializationFinished since the DLC loads later
     /// </para>
     /// <para>
-    /// This class uses dependency injection components (<see cref="IPatchApplier"/>, <see cref="IPatchValidator"/>, <see cref="IPatchLogger"/>)
-    /// to improve modularity and testability.
+    /// This class delegates to <see cref="PatchApplier"/>, <see cref="PatchValidator"/>, and
+    /// <see cref="PatchLogger"/> to keep patch application, validation, and logging concerns separate.
     /// </para>
     /// </remarks>
     public static class HarmonyManager
@@ -73,17 +69,17 @@ namespace BannerWand.Core
         /// <summary>
         /// The patch applier component for applying Harmony patches.
         /// </summary>
-        private static IPatchApplier? _patchApplier;
+        private static PatchApplier? _patchApplier;
 
         /// <summary>
         /// The patch validator component for checking patch application status.
         /// </summary>
-        private static IPatchValidator? _patchValidator;
+        private static PatchValidator? _patchValidator;
 
         /// <summary>
         /// The patch logger component for logging patch information.
         /// </summary>
-        private static IPatchLogger? _patchLogger;
+        private static PatchLogger? _patchLogger;
 
         #endregion
 
@@ -296,7 +292,7 @@ namespace BannerWand.Core
         /// <param name="patchMethod">The patch method to check for.</param>
         /// <returns>True if the patch is already applied, false otherwise.</returns>
         /// <remarks>
-        /// Delegates to <see cref="IPatchValidator.IsPatchAlreadyApplied"/> for validation logic.
+        /// Delegates to <see cref="PatchValidator.IsPatchAlreadyApplied"/> for validation logic.
         /// </remarks>
         private static bool IsPatchAlreadyApplied(MethodBase targetMethod, MethodInfo patchMethod)
         {

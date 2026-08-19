@@ -1,11 +1,8 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 
@@ -40,7 +37,7 @@ namespace BannerWand.Models
     /// </para>
     /// <para>
     /// IMPORTANT: This model may not exist in all Bannerlord versions.
-    /// The game engine gracefully handles registration failures (see <see cref="Core.SubModule.RegisterCustomModels"/>).
+    /// The game engine gracefully handles registration failures; see <see cref="Core.SubModule.RegisterCustomModels"/>.
     /// For versions without this model, <see cref="Behaviors.SkillXPCheatBehavior"/> provides a fallback.
     /// </para>
     /// </remarks>
@@ -61,7 +58,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the XP multiplier for a hero with cheat overrides applied.

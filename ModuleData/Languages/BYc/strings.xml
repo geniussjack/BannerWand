@@ -4,22 +4,20 @@
 		<tag language="Беларуская" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Мэты" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Гулец" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Кузня" />
+		<string id="BW_Category_Social" text="Сацыяльнае" />
 		<string id="BW_Category_Inventory" text="Інвентар" />
 		<string id="BW_Category_Stats" text="Статыстыка" />
 		<string id="BW_Category_Enemies" text="Воражыны" />
-		<string id="BW_Category_Game" text="Гульня" />
 		<string id="BW_Category_Settlements" text="Паселішчы" />
-		<string id="BW_Category_CheatTargets" text="Мэты чыта" />
-		<string id="BW_Category_Kingdoms" text="Каралеўствы" />
-		<string id="BW_Category_MinorClans" text="Малыя кланы" />
-		<string id="BW_Category_Info" text="Інфармацыя" />
+		<string id="BW_Category_Game" text="Гульня" />
+		<string id="BW_Category_TargetPlayer" text="Мэта: Гулец і клан" />
+		<string id="BW_Category_TargetKingdoms" text="Мэта: Каралеўствы" />
+		<string id="BW_Category_TargetMinorClans" text="Мэта: Малыя кланы" />
 		<string id="BW_Category_Debug" text="Адладка" />
 
 		<!-- Debug Category -->
@@ -220,19 +218,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Памылка наладак" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} паспяхова ініцыялізаваны" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} чытаў паспяхова ініцыялізавана" />
-		<string id="BW_Message_GoldChanged" text="Золата зменена на {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Золата зменена на {AMOUNT} для {COUNT} герояў" />
-		<string id="BW_Message_InfluenceChanged" text="Уплыў зменены на {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Уплыў зменены на {AMOUNT} для {COUNT} кланаў" />
-		<string id="BW_Message_AttributePointsChanged" text="Ачкі атрыбутаў зменены на {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Ачкі атрыбутаў зменены на {AMOUNT} для {COUNT} герояў" />
-		<string id="BW_Message_FocusPointsChanged" text="Ачкі фокусу зменены на {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Ачкі фокусу зменены на {AMOUNT} для {COUNT} герояў" />
-		<string id="BW_Message_WoundedTroopsHealed" text="Вылечана {COUNT} параненых войскаў" />
-		<string id="BW_Message_NoCheatsActive" text="Няма актыўных чытаў" />
-		<string id="BW_Message_ActiveCheats" text="Актыўныя чыты: {LIST}" />
-		<string id="BW_Message_Added" text="дадана" />
-		<string id="BW_Message_Removed" text="выдалена" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Усе бітвы без параненняў" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="У распрацоўцы, пакуль не працуе цалкам. Мае на мэце рабіць так, каб войскі гінулі, а не атрымлівалі раненні ці траплялі ў палон у кожнай аўтаматычна разлічанай бітве на карце, уключаючы бітвы, у якіх вы асабіста не ўдзельнічаеце. Дапаўняе Забойства з аднаго ўдару, якое дзейнічае толькі ў бітвах, дзе вы ўдзельнічаеце самі. Не ўплывае на аблогі ці захопленых герояў." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Уключыць хуткую клавішу дадання золата" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Дадае колькасць, устаноўленую ў Змяніць золата вышэй, пры кожным націску клавішы. Па змаўчанні Ctrl+X, можна пераназначыць у Опцыі &gt; Прывязкі клавіш. Працуе толькі на карце кампаніі, не ў баі. Патрабуе, каб Змяніць золата было ўстаноўлена ў ненулявое значэнне." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Таксама прымяняць да звычайных салдат" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Пашырае ўключаныя вышэй чыты для NPC з саюзных герояў на ўсіх саюзных салдат, якія б'юцца на баку гульца. Можа заўважна запаволіць вялікія бітвы, бо кожную саюзную адзінку становіцца цяжка забіць." />
+		<string id="BW_NPC_StopNPCAging" text="Спыніць старэнне NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Не дазваляе NPC старэць пасля дасягнення 21 года. Дзеці да 21 года працягваюць рост звычайна." />
+		<string id="BW_Player_AllowBothPerks" text="Дазволіць абодва перкі" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Аўтаматычна дае альтэрнатыўны перк кожны раз, калі вы выбіраеце адзін з пары, каб у выніку атрымаць абодва - дзейнічае адразу, без неабходнасці перазагрузкі захавання." />
+		<string id="BW_Player_InfiniteShipHealth" text="Бясконцае ХП карабля" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Караблі партыі гульца ніколі не атрымліваюць пашкоджанняў. Патрабуе War Sails DLC." />
+		<string id="BW_Player_StopPlayerAging" text="Спыніць старэнне гульца" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Не дазваляе персанажу гульца старэць." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Разблакаваць усе часткі кузні" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Разблакоўвае кожную дэталь вырабу для кожнага тыпу зброі, як быццам вы ўжо адкрылі іх праз плаўку ці заказы на вырабы. Дзейнічае на працягу аднаго ігравога дня пасля ўключэння." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Бонус ёмістасці гарнізона" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Дадае да максімальнай колькасці войскаў, якія можа ўтрымліваць гарнізон. 0 = адключана." />
 	</strings>
 </base>

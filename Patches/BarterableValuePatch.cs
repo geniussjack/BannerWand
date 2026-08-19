@@ -1,9 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using TaleWorlds.CampaignSystem;
@@ -31,15 +28,15 @@ namespace BannerWand.Patches
     /// trade - so it can never inflate the value of a war declaration, kingdom membership
     /// change, fief transfer, marriage, or prisoner exchange. An earlier attempt at fixing
     /// this only checked whether the player was the item's OriginalOwner, which still let
-    /// the multiplier reach every non-trade Barterable subtype and destabilized AI diplomacy
-    /// (kingdoms losing/gaining clans and fiefs seemingly at random).
+    /// the multiplier reach every non-trade Barterable subtype and destabilized AI diplomacy,
+    /// with kingdoms losing or gaining clans and fiefs seemingly at random.
     /// </para>
     /// </remarks>
     [HarmonyPatch(typeof(Barterable), nameof(Barterable.GetValueForFaction))]
     public static class BarterableValuePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
         private static bool _firstLogDone = false;
 
         /// <summary>

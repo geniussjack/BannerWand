@@ -1,6 +1,4 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Behaviors;
 using BannerWand.Constants;
 using BannerWand.Input;
@@ -10,7 +8,6 @@ using BannerWand.Utils;
 using System;
 using System.Linq;
 using System.Reflection;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -35,9 +32,8 @@ namespace BannerWand.Core
     /// by game models alone, such as gold/influence editing and relationship management.
     /// </para>
     /// <para>
-    /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.3.x ONLY
-    /// Mod Version: 1.1.1
-    /// For Bannerlord 1.2.12, use BannerWand v1.0.9 (BannerWand-1.2.12 project)
+    /// Compatible with .NET Framework 4.7.2 and Bannerlord 1.4.8. The mod version is read from
+    /// SubModule.xml at runtime via <see cref="VersionReader"/>, not hardcoded here.
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
@@ -73,9 +69,9 @@ namespace BannerWand.Core
             {
                 // Fallback if version detection fails
                 ModLogger.Warning($"Failed to detect game version: {ex.Message}. Using fallback.");
-                ModLogger.Log("Game Version: 1.3.x (fallback)");
+                ModLogger.Log("Game Version: 1.4.8 (fallback)");
             }
-            ModLogger.Log("Build Configuration: VERSION_1_3_X");
+            ModLogger.Log("Build Configuration: VERSION_1_4_8");
             ModLogger.Log("=================================");
             ModLogger.Log("BannerWand mod loading...");
             ModLogger.Log("Using Bannerlord's Game Model system + Harmony patches for advanced features");
@@ -211,7 +207,7 @@ namespace BannerWand.Core
                 }
 
                 // Step 1: Initialize cheat manager (silently, no duplicate messages - SubModule already showed init message)
-                CheatManager.Initialize(showMessage: false);
+                CheatManager.Initialize();
                 ModLogger.Log("CheatManager initialized successfully");
 
                 // Step 1.5: Remove GarrisonWagesPatch if it was applied (prevents TypeInitializationException)
@@ -535,7 +531,7 @@ namespace BannerWand.Core
                 }
 
                 // Re-initialize cheat manager for loaded game (silently, no duplicate messages)
-                CheatManager.Initialize(showMessage: false);
+                CheatManager.Initialize();
 
             }
             catch (Exception ex)
@@ -603,7 +599,7 @@ namespace BannerWand.Core
         {
             base.OnApplicationTick(dt);
 
-            _hotkeyCheatBehavior.Tick(dt);
+            _hotkeyCheatBehavior.Tick();
         }
 
         /// <summary>
@@ -612,7 +608,7 @@ namespace BannerWand.Core
         /// <remarks>
         /// <para>
         /// This method removes the Harmony patch for DefaultPartyWageModel.GetTotalWage
-        /// if it was applied (e.g., by PatchAll() before we removed the [HarmonyPatch] attribute).
+        /// if it was applied, for example by PatchAll() before we removed the [HarmonyPatch] attribute.
         /// We now use CustomPartyWageModel instead, so the patch is no longer needed.
         /// </para>
         /// <para>

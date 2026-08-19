@@ -1,6 +1,4 @@
 #nullable enable
-// Third-party namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
@@ -36,7 +34,7 @@ namespace BannerWand.Patches
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Postfix patch that adds maximum capacity after base calculation.

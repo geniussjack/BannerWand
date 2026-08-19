@@ -1,7 +1,5 @@
 #nullable enable
-// Project namespaces
 using BannerWand.Settings;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;
@@ -49,12 +47,9 @@ namespace BannerWand.Models
         /// <returns>0f while the cheat is enabled; otherwise the base game's blunt damage chance.</returns>
         public override float GetBluntDamageChance(CharacterObject strikerTroop, CharacterObject strikedTroop, PartyBase strikerParty, PartyBase strikedParty, MapEvent battle)
         {
-            if (Settings?.AllBattlesNoWounding == true)
-            {
-                return 0f;
-            }
-
-            return base.GetBluntDamageChance(strikerTroop, strikedTroop, strikerParty, strikedParty, battle);
+            return Settings?.AllBattlesNoWounding == true
+                ? 0f
+                : base.GetBluntDamageChance(strikerTroop, strikedTroop, strikerParty, strikedParty, battle);
         }
     }
 }

@@ -1,9 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Reflection;
@@ -31,7 +28,6 @@ namespace BannerWand.Patches
     /// property always reports at least 1 for the player, preventing the "no ammo" check
     /// from blocking shots.
     /// </para>
-    /// </remarks>
     /// <para>
     /// IMPORTANT: This patch is applied dynamically only during combat missions
     /// to prevent breaking character models in menus. The patch is applied manually
@@ -40,10 +36,11 @@ namespace BannerWand.Patches
     /// automatic application via PatchAll(). OnWeaponAmmoConsume_Prefix is applied
     /// manually in HarmonyManager.ApplyAmmoConsumptionPatch().
     /// </para>
+    /// </remarks>
     public static class AmmoConsumptionPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Flag to track if restoration is in progress (to avoid blocking our own restore calls).
@@ -192,11 +189,10 @@ namespace BannerWand.Patches
         {
             try
             {
-                // Optimized null checks using pattern matching (C# 14)
+                // Optimized null checks using pattern matching
                 // Combines multiple checks into single expression for better performance
                 if (Mission.Current?.MainAgent == null ||
-                    __instance == null ||
-                    !__instance.IsMainAgent ||
+                    __instance?.IsMainAgent != true ||
                     !__instance.IsActive())
                 {
                     return true; // No mission, no main agent, or not main agent - skip patch
@@ -277,14 +273,15 @@ namespace BannerWand.Patches
         /// Do NOT add [HarmonyPatch] attribute here, as it would conflict with manual patching.
         /// </remarks>
         [HarmonyPrefix]
+#pragma warning disable IDE0060, RCS1163 // enforcePrimaryItem is unused here but must keep this exact name - Harmony binds prefix parameters to the patched method's parameters by name.
         public static bool Prefix_NoRef(Agent __instance, EquipmentIndex equipmentSlot, short amount, bool enforcePrimaryItem)
+#pragma warning restore IDE0060, RCS1163
         {
             try
             {
-                // Optimized null checks using pattern matching (C# 14)
+                // Optimized null checks using pattern matching
                 if (Mission.Current?.MainAgent == null ||
-                    __instance == null ||
-                    !__instance.IsMainAgent ||
+                    __instance?.IsMainAgent != true ||
                     !__instance.IsActive())
                 {
                     return true;

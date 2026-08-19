@@ -1,10 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using System;
 using System.Collections.Generic;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
@@ -44,7 +41,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         #region Event Registration
 
@@ -105,7 +102,7 @@ namespace BannerWand.Behaviors
             {
                 // Early exit if settings not available or cheat disabled
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings == null || targetSettings == null)
                 {
                     return;
@@ -209,7 +206,7 @@ namespace BannerWand.Behaviors
                 return false;
             }
 
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (targetSettings == null)
             {
                 return false;

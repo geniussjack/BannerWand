@@ -4,22 +4,20 @@
 		<tag language="German" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Ziele" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Spieler" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Schmiede" />
+		<string id="BW_Category_Social" text="Soziales" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statistiken" />
 		<string id="BW_Category_Enemies" text="Feinde" />
-		<string id="BW_Category_Game" text="Spiel" />
 		<string id="BW_Category_Settlements" text="Siedlungen" />
-		<string id="BW_Category_CheatTargets" text="Cheat-Ziele" />
-		<string id="BW_Category_Kingdoms" text="Königreiche" />
-		<string id="BW_Category_MinorClans" text="Kleine Clans" />
-		<string id="BW_Category_Info" text="Info" />
+		<string id="BW_Category_Game" text="Spiel" />
+		<string id="BW_Category_TargetPlayer" text="Ziel: Spieler &amp; Clan" />
+		<string id="BW_Category_TargetKingdoms" text="Ziel: Königreiche" />
+		<string id="BW_Category_TargetMinorClans" text="Ziel: Kleine Clans" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->
@@ -216,19 +214,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Einstellungsfehler" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} erfolgreich initialisiert" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} Cheats erfolgreich initialisiert" />
-		<string id="BW_Message_GoldChanged" text="Gold um {AMOUNT} geändert" />
-		<string id="BW_Message_GoldChangedMultiple" text="Gold um {AMOUNT} für {COUNT} Helden geändert" />
-		<string id="BW_Message_InfluenceChanged" text="Einfluss um {AMOUNT} geändert" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Einfluss um {AMOUNT} für {COUNT} Clans geändert" />
-		<string id="BW_Message_AttributePointsChanged" text="Attributspunkte um {AMOUNT} geändert" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Attributspunkte um {AMOUNT} für {COUNT} Helden geändert" />
-		<string id="BW_Message_FocusPointsChanged" text="Fokusspunkte um {AMOUNT} geändert" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Fokusspunkte um {AMOUNT} für {COUNT} Helden geändert" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} verwundete Truppen geheilt" />
-		<string id="BW_Message_NoCheatsActive" text="Keine Cheats aktiv" />
-		<string id="BW_Message_ActiveCheats" text="Aktive Cheats: {LIST}" />
-		<string id="BW_Message_Added" text="hinzugefügt" />
-		<string id="BW_Message_Removed" text="entfernt" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Alle Schlachten ohne Verwundung" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="In Arbeit, funktioniert noch nicht vollständig. Soll bewirken, dass Truppen sterben statt verwundet oder gefangen genommen zu werden, in jeder automatisch abgewickelten Feldschlacht auf der Karte, einschließlich Schlachten, an denen Sie nicht persönlich teilnehmen. Ergänzt Ein-Treffer-Tötungen, das nur Schlachten betrifft, die Sie selbst bestreiten. Betrifft keine Belagerungen oder gefangene Helden." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Hotkey zum Hinzufügen von Gold aktivieren" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Fügt den oben unter Gold bearbeiten festgelegten Betrag jedes Mal hinzu, wenn der Hotkey gedrückt wird. Standard ist Strg+X, neu belegbar unter Optionen &gt; Tastenbelegung. Funktioniert nur auf der Kampagnenkarte, nicht im Kampf. Erfordert, dass Gold bearbeiten auf einen Wert ungleich null gesetzt ist." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Auch auf einfache Soldaten anwenden" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Erweitert die oben aktivierten NPC-Cheats von verbündeten Helden auf jeden verbündeten Soldaten auf der Seite des Spielers. Kann große Schlachten spürbar verlangsamen und in die Länge ziehen, da jede befreundete Einheit schwer zu töten wird." />
+		<string id="BW_NPC_StopNPCAging" text="NPC-Alterung stoppen" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Verhindert, dass NPCs altern, sobald sie 21 Jahre erreichen. Kinder unter 21 wachsen weiterhin normal." />
+		<string id="BW_Player_AllowBothPerks" text="Beide Talente erlauben" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Gewährt automatisch das alternative Talent, sobald eines aus einem Paar gewählt wird, sodass Sie am Ende beide besitzen - wirkt sofort, kein Neuladen des Spielstands nötig." />
+		<string id="BW_Player_InfiniteShipHealth" text="Unendliche Schiffs-LP" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Schiffe im Besitz der Gruppe des Spielers nehmen nie Schaden. Erfordert das War Sails DLC." />
+		<string id="BW_Player_StopPlayerAging" text="Spieleralterung stoppen" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Verhindert, dass der Spielercharakter altert." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Alle Schmiedeteile freischalten" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Schaltet jedes Herstellungsteil für jeden Waffentyp frei, als hätten Sie sie bereits durch Einschmelzen oder Herstellungsaufträge entdeckt. Braucht bis zu einen Spieltag, um nach Aktivierung zu wirken." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus für Garnisonskapazität" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Erhöht die maximale Anzahl an Truppen, die eine Garnison aufnehmen kann. 0 = deaktiviert." />
 	</strings>
 </base>

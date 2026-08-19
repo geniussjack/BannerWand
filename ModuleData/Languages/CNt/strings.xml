@@ -4,22 +4,20 @@
 		<tag language="繁體中文" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - 目標" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="玩家" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="鍛造" />
+		<string id="BW_Category_Social" text="社交" />
 		<string id="BW_Category_Inventory" text="物品欄" />
 		<string id="BW_Category_Stats" text="屬性" />
 		<string id="BW_Category_Enemies" text="敵人" />
-		<string id="BW_Category_Game" text="遊戲" />
 		<string id="BW_Category_Settlements" text="定居點" />
-		<string id="BW_Category_CheatTargets" text="作弊目標" />
-		<string id="BW_Category_Kingdoms" text="王國" />
-		<string id="BW_Category_MinorClans" text="小氏族" />
-		<string id="BW_Category_Info" text="資訊" />
+		<string id="BW_Category_Game" text="遊戲" />
+		<string id="BW_Category_TargetPlayer" text="目標：玩家與氏族" />
+		<string id="BW_Category_TargetKingdoms" text="目標：王國" />
+		<string id="BW_Category_TargetMinorClans" text="目標：小氏族" />
 		<string id="BW_Category_Debug" text="除錯" />
 
 		<!-- Debug Category -->
@@ -220,19 +218,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: 設定錯誤" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 成功初始化" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} 個作弊成功初始化" />
-		<string id="BW_Message_GoldChanged" text="金幣已更改 {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} 個英雄的金幣已更改 {AMOUNT}" />
-		<string id="BW_Message_InfluenceChanged" text="影響力已更改 {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} 個家族的影響力已更改 {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChanged" text="屬性點已更改 {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} 個英雄的屬性點已更改 {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChanged" text="專精點已更改 {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} 個英雄的專精點已更改 {AMOUNT}" />
-		<string id="BW_Message_WoundedTroopsHealed" text="已治癒 {COUNT} 名受傷士兵" />
-		<string id="BW_Message_NoCheatsActive" text="沒有啟用的作弊" />
-		<string id="BW_Message_ActiveCheats" text="啟用的作弊: {LIST}" />
-		<string id="BW_Message_Added" text="已新增" />
-		<string id="BW_Message_Removed" text="已移除" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] 所有戰鬥不再受傷" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="開發中，尚未完全生效。旨在讓部隊在地圖上每一場自動結算的野戰中戰死，而不是受傷或被俘，包括你沒有親自參與的戰鬥。與「一擊必殺」互補，後者只影響你親自參與的戰鬥。不影響圍城戰或被俘的英雄。" />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="啟用新增金幣快捷鍵" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="每次按下快捷鍵時，增加上方「編輯金幣」設定的數額。預設按鍵為 Ctrl+X，可在 選項 &gt; 按鍵綁定 中重新綁定。僅在戰役地圖上生效，戰鬥中無效。需要將「編輯金幣」設定為非零值。" />
+		<string id="BW_NPC_ApplyToRegularTroops" text="同時套用於普通士兵" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="將上方已啟用的 NPC 作弊從僅對盟友英雄擴展到玩家一方的所有盟友士兵。可能會顯著拖慢大規模戰鬥，因為每個友軍單位都變得難以殺死。" />
+		<string id="BW_NPC_StopNPCAging" text="停止 NPC 衰老" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="NPC 達到 21 歲後不再衰老。21 歲以下的兒童將繼續正常成長。" />
+		<string id="BW_Player_AllowBothPerks" text="允許同時獲得兩個天賦" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="每當你從一對天賦中選擇一個時，自動授予其對應的另一個天賦，讓你兩者兼得——立即生效，無需重新載入存檔。" />
+		<string id="BW_Player_InfiniteShipHealth" text="無限船隻生命值" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="玩家隊伍擁有的船隻永不受損。需要 War Sails DLC。" />
+		<string id="BW_Player_StopPlayerAging" text="停止玩家角色衰老" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="阻止玩家角色衰老。" />
+		<string id="BW_Player_UnlockAllSmithyParts" text="解鎖所有鍛造部件" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="解鎖每種武器類型的所有鍛造部件，如同你已經透過熔煉或鍛造訂單發現了它們。啟用後最多需要一個遊戲日才能生效。" />
+		<string id="BW_Settlements_GarrisonCapacity" text="駐軍容量加成" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="增加駐軍可容納的最大部隊數量。0 = 停用。" />
 	</strings>
 </base>

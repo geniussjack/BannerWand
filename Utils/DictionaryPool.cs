@@ -1,10 +1,8 @@
 #nullable enable
-// System namespaces
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// Third-party namespaces
 using TaleWorlds.Core;
 
 namespace BannerWand.Utils
@@ -27,7 +25,7 @@ namespace BannerWand.Utils
     /// </para>
     /// <para>
     /// Thread safety: Uses [ThreadStatic] to ensure each thread has its own pool.
-    /// Safe for concurrent barter operations (though rare in Bannerlord).
+    /// Safe for concurrent barter operations, though that's rare in Bannerlord.
     /// </para>
     /// </remarks>
     public static class DictionaryPool<TKey, TValue> where TKey : notnull

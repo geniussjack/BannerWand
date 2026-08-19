@@ -1,13 +1,10 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Naval;
@@ -46,7 +43,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks whether gold has been applied to prevent repeated application.
@@ -224,7 +221,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -375,7 +372,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -489,7 +486,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -684,7 +681,7 @@ namespace BannerWand.Behaviors
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;
@@ -729,7 +726,7 @@ namespace BannerWand.Behaviors
 
                     foreach (CraftingPiece piece in template.Pieces)
                     {
-                        if (piece is null || piece.IsEmptyPiece || craftingBehavior.IsOpened(piece, template))
+                        if (piece?.IsEmptyPiece != false || craftingBehavior.IsOpened(piece, template))
                         {
                             continue;
                         }
@@ -777,7 +774,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -813,7 +810,7 @@ namespace BannerWand.Behaviors
             {
                 // Early exit if settings are null
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;
@@ -900,7 +897,7 @@ namespace BannerWand.Behaviors
 
         /// <summary>
         /// Tracks ships this behavior made invulnerable, so the cheat can be turned back off
-        /// without touching ships that were invulnerable for some other reason (e.g. a quest ship).
+        /// without touching ships that were invulnerable for some other reason, such as a quest ship.
         /// </summary>
         private static readonly HashSet<Ship> _invulnerableShips = [];
 
@@ -918,7 +915,7 @@ namespace BannerWand.Behaviors
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;

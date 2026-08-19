@@ -4,22 +4,20 @@
 		<tag language="Biełaruskaja" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Mety" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Huliec" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Kuźnia" />
+		<string id="BW_Category_Social" text="Sacyjalnaje" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statystyka" />
 		<string id="BW_Category_Enemies" text="Varazhyny" />
-		<string id="BW_Category_Game" text="Hulnia" />
 		<string id="BW_Category_Settlements" text="Pasielishchy" />
-		<string id="BW_Category_CheatTargets" text="Mety chyta" />
-		<string id="BW_Category_Kingdoms" text="Karaleustvy" />
-		<string id="BW_Category_MinorClans" text="Malyja klany" />
-		<string id="BW_Category_Info" text="Infarmacyja" />
+		<string id="BW_Category_Game" text="Hulnia" />
+		<string id="BW_Category_TargetPlayer" text="Meta: Huliec i klan" />
+		<string id="BW_Category_TargetKingdoms" text="Meta: Karaleustvy" />
+		<string id="BW_Category_TargetMinorClans" text="Meta: Malyja klany" />
 		<string id="BW_Category_Debug" text="Adładka" />
 
 		<!-- Debug Category -->
@@ -220,19 +218,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Pamyłka nastrojkaŭ" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} paśpiachova ini cyjalizavany" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} čytaŭ paśpiachova ini cyjalizavana" />
-		<string id="BW_Message_GoldChanged" text="Zołata źmieniena na {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Zołata źmieniena na {AMOUNT} dla {COUNT} herojaŭ" />
-		<string id="BW_Message_InfluenceChanged" text="Uplyŭ źmienieny na {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Uplyŭ źmienieny na {AMOUNT} dla {COUNT} klanaŭ" />
-		<string id="BW_Message_AttributePointsChanged" text="Ački atrybutaŭ źmienieny na {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Ački atrybutaŭ źmienieny na {AMOUNT} dla {COUNT} herojaŭ" />
-		<string id="BW_Message_FocusPointsChanged" text="Ački fokusu źmienieny na {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Ački fokusu źmienieny na {AMOUNT} dla {COUNT} herojaŭ" />
-		<string id="BW_Message_WoundedTroopsHealed" text="Vyličana {COUNT} paranienych vojskaŭ" />
-		<string id="BW_Message_NoCheatsActive" text="Niama aktyŭnych čytaŭ" />
-		<string id="BW_Message_ActiveCheats" text="Aktyŭnyja čyty: {LIST}" />
-		<string id="BW_Message_Added" text="dadana" />
-		<string id="BW_Message_Removed" text="vydaliena" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Usie bitvy biez paraniennaŭ" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="U raspracoŭcy, pakul nie pracuje całkam. Maje na mecie rabić tak, kab vojski hinuli, a nie atrymlivali raniennia ci trapliali ŭ palon u kožnaj aŭtamatyčna različanaj bitvie na karcie, uklučajučy bitvy, u jakich vy asabista nie ŭdzielničajecie. Dapaŭniaje čyt Zabojstva z adnaho ŭdaru, jaki dziejničaje tolki ŭ bitvach, dzie vy ŭdzielničajecie sami. Nie ŭplyvaje na abłohi ci zachoplenych herojaŭ." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Uklučyć chutkuju klavišu dadannia złota" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Dadaje kolkaść, ustaliavanuju ŭ Zmianić złota vyšej, pry kožnym naciśnie klavišy. Pa zmaŭčanni Ctrl+X, možna pieranaznačyć u Opcyi &gt; Pryviazki klavišaŭ. Pracuje tolki na karcie kampanii, nie ŭ boi. Patrabuje, kab Zmianić złota było ŭstaliavana ŭ nienulavoje značennie." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Taksama prymianiać da zvyčajnych sałdat" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Pašyraje ŭkliučanyja vyšej čyty dla NPC z sajuznych herojaŭ na ŭsich sajuznych sałdat, jakija b'juccia na baku hulca. Moža zaŭvažna zapavolić vialikija bitvy, bo kožnuju sajuznuju adzinku stanoviccia ciažka zabić." />
+		<string id="BW_NPC_StopNPCAging" text="Spynić stareńnie NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Nie dazvaliaje NPC starać paslia dasiahnennia 21 hoda. Dzieci da 21 hoda praciahvajuć rost zvyčajna." />
+		<string id="BW_Player_AllowBothPerks" text="Dazvolić abodva perki" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Aŭtamatyčna daje alternatyŭny perk kožny raz, kali vy vybirajecie adzin z pary, kab u vyniku atrymać abodva - dziejničaje adrazu, biez neabchodnaści pierazahruzki zachavannia." />
+		<string id="BW_Player_InfiniteShipHealth" text="Biaskoncaje ChP karablia" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Karabli partyi hulca nikoli nie atrymlivajuć paškodžannaŭ. Patrabuje War Sails DLC." />
+		<string id="BW_Player_StopPlayerAging" text="Spynić stareńnie hulca" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Nie dazvaliaje persanažu hulca starać." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Razbłakavać usie častki kuzni" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Razbłakoŭvaje kožnuju detal vyrabu dla kožnaha typu zbroi, jak byccam vy ŭžo adkryli ich praz płaŭku ci zakazy na vyraby. Dziejničaje na praciahu adnaho ihravoha dnia paslia ŭkliučennia." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus jomistaści harnizona" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Dadaje da maksimalnaj kolkaści vojskaŭ, jakija moža ŭtrymlivać harnizon. 0 = adkliučana." />
 	</strings>
 </base>

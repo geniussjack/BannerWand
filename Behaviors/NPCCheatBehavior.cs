@@ -1,13 +1,10 @@
 #nullable enable
 #pragma warning disable CS0169 // Fields _npcAttributePointsApplied and _npcFocusPointsApplied are used in conditional logic
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Behaviors
@@ -42,7 +39,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks whether attribute points have been applied to prevent repeated application.
@@ -176,7 +173,7 @@ namespace BannerWand.Behaviors
         private void ApplyAttributeAndFocusPoints()
         {
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -338,7 +335,7 @@ namespace BannerWand.Behaviors
         private static void ApplyRenown()
         {
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;

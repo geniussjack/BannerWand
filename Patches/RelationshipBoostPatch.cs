@@ -1,6 +1,4 @@
 #nullable enable
-// Third-party namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
@@ -38,7 +36,7 @@ namespace BannerWand.Patches
         private static void Prefix(Hero hero1, Hero hero2, ref int value)
         {
             CheatSettings? settings = CheatSettings.Instance;
-            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? targetSettings = CheatSettings.Instance;
 
             if (settings is null || targetSettings is null)
             {

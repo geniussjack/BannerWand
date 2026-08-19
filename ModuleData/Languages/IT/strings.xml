@@ -4,22 +4,20 @@
 		<tag language="Italian" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Obiettivi" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Giocatore" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Fucina" />
+		<string id="BW_Category_Social" text="Sociale" />
 		<string id="BW_Category_Inventory" text="Inventario" />
 		<string id="BW_Category_Stats" text="Statistiche" />
 		<string id="BW_Category_Enemies" text="Nemici" />
-		<string id="BW_Category_Game" text="Gioco" />
 		<string id="BW_Category_Settlements" text="Insediamenti" />
-		<string id="BW_Category_CheatTargets" text="Obiettivi Cheat" />
-		<string id="BW_Category_Kingdoms" text="Regni" />
-		<string id="BW_Category_MinorClans" text="Clan Minori" />
-		<string id="BW_Category_Info" text="Info" />
+		<string id="BW_Category_Game" text="Gioco" />
+		<string id="BW_Category_TargetPlayer" text="Bersaglio: Giocatore e Clan" />
+		<string id="BW_Category_TargetKingdoms" text="Bersaglio: Regni" />
+		<string id="BW_Category_TargetMinorClans" text="Bersaglio: Clan Minori" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->
@@ -216,19 +214,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Errore Impostazioni" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inizializzato con successo" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} trucchi inizializzati con successo" />
-		<string id="BW_Message_GoldChanged" text="Oro modificato di {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Oro modificato di {AMOUNT} per {COUNT} eroi" />
-		<string id="BW_Message_InfluenceChanged" text="Influenza modificata di {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Influenza modificata di {AMOUNT} per {COUNT} clan" />
-		<string id="BW_Message_AttributePointsChanged" text="Punti attributo modificati di {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Punti attributo modificati di {AMOUNT} per {COUNT} eroi" />
-		<string id="BW_Message_FocusPointsChanged" text="Punti focus modificati di {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Punti focus modificati di {AMOUNT} per {COUNT} eroi" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} truppe ferite curate" />
-		<string id="BW_Message_NoCheatsActive" text="Nessun trucco attivo" />
-		<string id="BW_Message_ActiveCheats" text="Trucchi attivi: {LIST}" />
-		<string id="BW_Message_Added" text="aggiunto" />
-		<string id="BW_Message_Removed" text="rimosso" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Tutte le Battaglie Senza Ferite" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="In lavorazione, non funziona ancora completamente. Ha lo scopo di far morire le truppe invece di ferirle o catturarle in ogni battaglia campale risolta automaticamente sulla mappa, comprese le battaglie a cui non partecipi personalmente. Completa Uccisioni in Un Colpo, che riguarda solo le battaglie che combatti tu stesso. Non influisce sugli assedi né sugli eroi catturati." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Attiva Scorciatoia Aggiungi Oro" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Aggiunge l'importo impostato in Modifica Oro sopra ogni volta che la scorciatoia viene premuta. Predefinita su Ctrl+X, riassegnabile in Opzioni &gt; Tasti di Scelta Rapida. Funziona solo sulla mappa di campagna, non in battaglia. Richiede che Modifica Oro sia impostato su un valore diverso da zero." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Applica Anche ai Soldati Regolari" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Estende i cheat NPC abilitati sopra dai soli eroi alleati a ogni soldato alleato che combatte dalla parte del giocatore. Può rallentare notevolmente le grandi battaglie e farle trascinare, poiché ogni unità amica diventa difficile da uccidere." />
+		<string id="BW_NPC_StopNPCAging" text="Ferma l'Invecchiamento degli NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Impedisce agli NPC di invecchiare una volta raggiunti i 21 anni. I bambini sotto i 21 anni continueranno a crescere normalmente." />
+		<string id="BW_Player_AllowBothPerks" text="Consenti Entrambi i Talenti" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Concede automaticamente il talento alternativo ogni volta che ne scegli uno da una coppia, così finisci per averli entrambi - ha effetto immediato, non serve ricaricare il salvataggio." />
+		<string id="BW_Player_InfiniteShipHealth" text="PS Nave Infiniti" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Le navi possedute dal gruppo del giocatore non subiscono mai danni. Richiede il DLC War Sails." />
+		<string id="BW_Player_StopPlayerAging" text="Ferma l'Invecchiamento del Giocatore" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Impedisce al personaggio del giocatore di invecchiare." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Sblocca Tutti i Pezzi da Fabbro" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Sblocca ogni pezzo di fabbricazione per ogni tipo di arma, come se li avessi già scoperti fondendo armi o tramite ordini di fabbricazione. Richiede fino a un giorno di gioco per avere effetto dopo l'attivazione." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus Capacità Guarnigione" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Aggiunge al numero massimo di truppe che una guarnigione può contenere. 0 = disabilitato." />
 	</strings>
 </base>

@@ -4,22 +4,20 @@
 		<tag language="한국어" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - 대상" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="플레이어" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="대장간" />
+		<string id="BW_Category_Social" text="사교" />
 		<string id="BW_Category_Inventory" text="인벤토리" />
 		<string id="BW_Category_Stats" text="통계" />
 		<string id="BW_Category_Enemies" text="적" />
-		<string id="BW_Category_Game" text="게임" />
 		<string id="BW_Category_Settlements" text="정착지" />
-		<string id="BW_Category_CheatTargets" text="치트 대상" />
-		<string id="BW_Category_Kingdoms" text="왕국" />
-		<string id="BW_Category_MinorClans" text="소규모 클랜" />
-		<string id="BW_Category_Info" text="정보" />
+		<string id="BW_Category_Game" text="게임" />
+		<string id="BW_Category_TargetPlayer" text="대상: 플레이어 및 클랜" />
+		<string id="BW_Category_TargetKingdoms" text="대상: 왕국" />
+		<string id="BW_Category_TargetMinorClans" text="대상: 소규모 클랜" />
 		<string id="BW_Category_Debug" text="디버그" />
 
 		<!-- Debug Category -->
@@ -220,19 +218,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: 설정 오류" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 성공적으로 초기화됨" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} 치트 성공적으로 초기화됨" />
-		<string id="BW_Message_GoldChanged" text="골드 {AMOUNT} 변경됨" />
-		<string id="BW_Message_GoldChangedMultiple" text="{COUNT}명의 영웅 골드 {AMOUNT} 변경됨" />
-		<string id="BW_Message_InfluenceChanged" text="영향력 {AMOUNT} 변경됨" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT}개 클랜 영향력 {AMOUNT} 변경됨" />
-		<string id="BW_Message_AttributePointsChanged" text="속성 포인트 {AMOUNT} 변경됨" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT}명의 영웅 속성 포인트 {AMOUNT} 변경됨" />
-		<string id="BW_Message_FocusPointsChanged" text="집중 포인트 {AMOUNT} 변경됨" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT}명의 영웅 집중 포인트 {AMOUNT} 변경됨" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT}명의 부상 병사 치료됨" />
-		<string id="BW_Message_NoCheatsActive" text="활성화된 치트 없음" />
-		<string id="BW_Message_ActiveCheats" text="활성화된 치트: {LIST}" />
-		<string id="BW_Message_Added" text="추가됨" />
-		<string id="BW_Message_Removed" text="제거됨" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] 모든 전투 부상 없음" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="개발 중이며 아직 완전히 작동하지 않습니다. 플레이어가 직접 참여하지 않는 전투를 포함하여 지도에서 자동으로 해결되는 모든 야전에서 부대가 부상당하거나 포로가 되는 대신 사망하도록 하기 위한 기능입니다. 플레이어가 직접 싸우는 전투에만 영향을 주는 원샷 킬과 함께 사용됩니다. 공성전이나 포로로 잡힌 영웅에게는 영향을 주지 않습니다." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="금 추가 단축키 활성화" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="단축키를 누를 때마다 위의 금 편집에 설정된 금액을 추가합니다. 기본값은 Ctrl+X이며 옵션 &gt; 키 바인딩에서 재설정할 수 있습니다. 전역 지도에서만 작동하며 전투 중에는 작동하지 않습니다. 금 편집을 0이 아닌 값으로 설정해야 합니다." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="일반 병사에게도 적용" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="위에서 활성화한 NPC 치트를 동맹 영웅뿐만 아니라 플레이어 편에서 싸우는 모든 동맹 병사에게 확장합니다. 모든 아군 유닛을 죽이기 어려워지므로 대규모 전투가 눈에 띄게 느려지고 길어질 수 있습니다." />
+		<string id="BW_NPC_StopNPCAging" text="NPC 노화 정지" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="NPC가 21세에 도달하면 더 이상 나이를 먹지 않습니다. 21세 미만의 어린이는 계속 정상적으로 성장합니다." />
+		<string id="BW_Player_AllowBothPerks" text="두 특성 모두 허용" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="한 쌍 중 하나를 선택할 때마다 대체 특성도 자동으로 부여되어 결국 둘 다 얻게 됩니다 - 즉시 적용되며 저장 파일을 다시 불러올 필요가 없습니다." />
+		<string id="BW_Player_InfiniteShipHealth" text="선박 무한 HP" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="플레이어 부대가 소유한 선박은 절대 피해를 입지 않습니다. War Sails DLC가 필요합니다." />
+		<string id="BW_Player_StopPlayerAging" text="플레이어 노화 정지" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="플레이어 캐릭터가 나이를 먹지 않도록 합니다." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="모든 대장간 부품 잠금 해제" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="이미 제련이나 제작 주문을 통해 발견한 것처럼 모든 무기 유형의 모든 제작 부품을 잠금 해제합니다. 활성화 후 효과가 나타나기까지 최대 하루의 게임 내 시간이 걸립니다." />
+		<string id="BW_Settlements_GarrisonCapacity" text="수비대 수용 인원 보너스" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="수비대가 보유할 수 있는 최대 병력 수를 늘립니다. 0 = 비활성화." />
 	</strings>
 </base>

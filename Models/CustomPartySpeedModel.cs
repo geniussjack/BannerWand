@@ -1,11 +1,8 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -43,7 +40,7 @@ namespace BannerWand.Models
     public class CustomPartySpeedModel : DefaultPartySpeedCalculatingModel
     {
         private CheatSettings? Settings => CheatSettings.Instance;
-        private CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks the last desired speed value to detect changes for logging.

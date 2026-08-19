@@ -1,8 +1,5 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Reflection;
@@ -88,12 +85,12 @@ namespace BannerWand.Patches
             try
             {
                 // Early return if cheat not enabled
-                if (CheatSettings.Instance == null || CheatTargetSettings.Instance == null)
+                if (CheatSettings.Instance == null || CheatSettings.Instance == null)
                 {
                     return;
                 }
 
-                if (CheatSettings.Instance.GameSpeed <= 0f || !CheatTargetSettings.Instance.ApplyToPlayer)
+                if (CheatSettings.Instance.GameSpeed <= 0f || !CheatSettings.Instance.ApplyToPlayer)
                 {
                     return;
                 }
@@ -206,12 +203,12 @@ namespace BannerWand.Patches
             try
             {
                 // Early return if cheat not enabled
-                if (CheatSettings.Instance == null || CheatTargetSettings.Instance == null)
+                if (CheatSettings.Instance == null || CheatSettings.Instance == null)
                 {
                     return;
                 }
 
-                if (CheatSettings.Instance.GameSpeed <= 0f || !CheatTargetSettings.Instance.ApplyToPlayer)
+                if (CheatSettings.Instance.GameSpeed <= 0f || !CheatSettings.Instance.ApplyToPlayer)
                 {
                     return;
                 }

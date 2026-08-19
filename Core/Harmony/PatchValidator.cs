@@ -1,8 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
-using BannerWand.Interfaces;
 using BannerWand.Utils;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -11,13 +9,20 @@ namespace BannerWand.Core.Harmony
     /// <summary>
     /// Validates Harmony patch application status.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates patch validation logic, making it easier to test
-    /// and maintain. It implements <see cref="IPatchValidator"/> for dependency injection.
-    /// </remarks>
-    public class PatchValidator : IPatchValidator
+    public class PatchValidator
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Checks if a patch is already applied to a target method.
+        /// </summary>
+        /// <param name="targetMethod">The method that may be patched.</param>
+        /// <param name="patchMethod">The patch method to check for.</param>
+        /// <returns>
+        /// <c>true</c> if the patch is already applied; otherwise, <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// This method checks if the patch method is already in the prefixes,
+        /// postfixes, transpilers, or finalizers of the target method.
+        /// </remarks>
         public bool IsPatchAlreadyApplied(MethodBase targetMethod, MethodInfo patchMethod)
         {
             try
@@ -52,7 +57,7 @@ namespace BannerWand.Core.Harmony
                            (p.PatchMethod == patchMethod) ||
                            (p.PatchMethod.DeclaringType?.FullName == patchClassName && p.PatchMethod.Name == patchMethodName));
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 // If we can't check, assume not applied to be safe
                 ModLogger.Warning($"[PatchValidator] Failed to check if patch is already applied: {ex.Message}");

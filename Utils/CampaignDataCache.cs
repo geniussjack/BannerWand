@@ -1,9 +1,7 @@
 #nullable enable
-// System namespaces
 using System;
 using System.Collections.Generic;
 
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
@@ -26,11 +24,6 @@ namespace BannerWand.Utils
     /// <para>
     /// Thread safety: All cached collections are read-only snapshots. The cache itself uses
     /// lazy initialization which is safe for single-threaded campaign execution.
-    /// </para>
-    /// <para>
-    /// This static class provides the default implementation of campaign data caching.
-    /// For dependency injection scenarios, use <see cref="Interfaces.ICampaignDataCache"/> interface
-    /// with <see cref="CampaignDataCacheWrapper"/> wrapper class.
     /// </para>
     /// </remarks>
     public static class CampaignDataCache
@@ -147,7 +140,7 @@ namespace BannerWand.Utils
         /// Read-only list of kingdoms. Cache is refreshed each campaign tick.
         /// </returns>
         /// <remarks>
-        /// Used for kingdom-related target filtering in CheatTargetSettings.
+        /// Used for kingdom-related target filtering in CheatSettings.
         /// </remarks>
 #pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<Kingdom>? AllKingdoms
@@ -187,7 +180,7 @@ namespace BannerWand.Utils
         /// </para>
         /// <para>
         /// Thread safety: Uses lock to prevent race conditions when multiple threads
-        /// access the cache simultaneously (though rare in Bannerlord's single-threaded campaign).
+        /// access the cache simultaneously, though that's rare in Bannerlord's single-threaded campaign.
         /// </para>
         /// </remarks>
         private static void RefreshCacheIfNeeded()

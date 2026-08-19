@@ -1,8 +1,6 @@
 #nullable enable
-// System namespaces
 using System;
 
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
@@ -14,7 +12,7 @@ namespace BannerWand.Utils
     /// </summary>
     /// <remarks>
     /// <para>
-    /// This class works in conjunction with <see cref="Settings.CheatTargetSettings"/> to implement
+    /// This class works in conjunction with <see cref="Settings.CheatSettings"/> to implement
     /// a flexible targeting system. It evaluates heroes, clans, and parties against configured
     /// target criteria to determine if they should receive cheat effects.
     /// </para>
@@ -26,7 +24,7 @@ namespace BannerWand.Utils
     /// </para>
     /// <para>
     /// Performance: For single-hero checks, use <see cref="ShouldApplyCheat(Hero)"/> (O(1)).
-    /// For bulk operations, use <see cref="Settings.CheatTargetSettings.CollectTargetHeroes()"/>
+    /// For bulk operations, use <see cref="Settings.CheatSettings.CollectTargetHeroes()"/>
     /// to get a HashSet of all targets (O(n) but called once).
     /// </para>
     /// </remarks>
@@ -65,7 +63,7 @@ namespace BannerWand.Utils
                     return false;
                 }
 
-                Settings.CheatTargetSettings? settings = Settings.CheatTargetSettings.Instance;
+                Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
                 if (settings is null)
                 {
                     return false;
@@ -190,7 +188,7 @@ namespace BannerWand.Utils
         /// <para>
         /// Note: Uses a simplified heuristic for non-player clans. For precise control,
         /// use <see cref="ShouldApplyCheat(Hero)"/> with the clan leader or use
-        /// <see cref="Settings.CheatTargetSettings.CollectTargetHeroes()"/>.
+        /// <see cref="Settings.CheatSettings.CollectTargetHeroes()"/>.
         /// </para>
         /// </remarks>
         public static bool ShouldApplyCheatToClan(Clan? clan)
@@ -203,7 +201,7 @@ namespace BannerWand.Utils
                     return false;
                 }
 
-                Settings.CheatTargetSettings? settings = Settings.CheatTargetSettings.Instance;
+                Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
                 if (settings is null)
                 {
                     return false;

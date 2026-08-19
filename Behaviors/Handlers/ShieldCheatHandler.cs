@@ -1,7 +1,4 @@
 #nullable enable
-// Third-party namespaces
-// Project namespaces
-using BannerWand.Interfaces;
 using BannerWand.Settings;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -11,11 +8,7 @@ namespace BannerWand.Behaviors.Handlers
     /// <summary>
     /// Handles shield-related cheats in combat.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates shield cheat logic, making it easier to test
-    /// and maintain. It implements <see cref="IShieldCheatHandler"/> for dependency injection.
-    /// </remarks>
-    public class ShieldCheatHandler : IShieldCheatHandler
+    public class ShieldCheatHandler
     {
         /// <summary>
         /// Gets the current cheat settings instance.
@@ -25,13 +18,16 @@ namespace BannerWand.Behaviors.Handlers
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited shield durability to an agent.
+        /// </summary>
+        /// <param name="agent">The agent whose shield to apply the cheat to.</param>
         public void ApplyUnlimitedShieldDurability(Agent agent)
         {
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -66,7 +62,11 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Handles shield durability restoration after an agent is hit.
+        /// </summary>
+        /// <param name="affectedAgent">The agent that was hit.</param>
+        /// <param name="affectorAgent">The agent that dealt the damage.</param>
         public void OnAgentHit(Agent affectedAgent, Agent? affectorAgent)
         {
             // Restore shield durability for player (if enabled and applicable)

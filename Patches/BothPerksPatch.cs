@@ -1,9 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Reflection;
@@ -30,7 +27,7 @@ namespace BannerWand.Patches
     /// also covers perks granted by quests or other mods, not just manual selection.
     /// </para>
     /// <para>
-    /// Previous "both perks" implementations (including the player's own, no longer available)
+    /// Previous "both perks" implementations, including the player's own no-longer-available one,
     /// reportedly required reloading the save for the second perk's effects to take hold. This
     /// fires <see cref="CampaignEventDispatcher.OnPerkOpened"/> for the alternative right after
     /// granting it, the same event the game raises for a normal selection, so that whatever the
@@ -50,7 +47,7 @@ namespace BannerWand.Patches
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Cached reflection handle for the internal <c>Hero.SetPerkValueInternal(PerkObject, bool)</c>
@@ -83,7 +80,7 @@ namespace BannerWand.Patches
                 }
 
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null || !settings.AllowBothPerks)
                 {
                     return;
@@ -145,7 +142,7 @@ namespace BannerWand.Patches
                 }
 
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null || !settings.AllowBothPerks)
                 {
                     return true;
@@ -159,12 +156,7 @@ namespace BannerWand.Patches
                 // If this perk's alternative is currently active, this pair was granted by us -
                 // do not let it be cleared back to false.
                 PerkObject? alternative = perk.AlternativePerk;
-                if (alternative is not null && __instance.GetPerkValue(alternative))
-                {
-                    return false;
-                }
-
-                return true;
+                return alternative is null || !__instance.GetPerkValue(alternative);
             }
             catch (Exception ex)
             {

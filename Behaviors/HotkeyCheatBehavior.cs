@@ -1,12 +1,9 @@
 #nullable enable
-// System namespaces
-using System;
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Input;
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
@@ -29,8 +26,8 @@ namespace BannerWand.Behaviors
     /// <see cref="CampaignBehaviorBase"/>: <see cref="CampaignEvents.TickEvent"/> and
     /// <see cref="CampaignEvents.HourlyTickEvent"/> only fire while campaign time is actually
     /// running, so a hotkey wired to either of them silently stops responding whenever the
-    /// campaign is paused (e.g. in a menu screen) - exactly where a player is most likely to want
-    /// to use one. <c>OnApplicationTick</c> fires every engine frame regardless of campaign pause
+    /// campaign is paused - in a menu screen, for instance, exactly where a player is most likely
+    /// to want to use one. <c>OnApplicationTick</c> fires every engine frame regardless of campaign pause
     /// state, matching how the game's own cheat hotkeys behave.
     /// </para>
     /// </remarks>
@@ -44,7 +41,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Input context used to poll BannerWand's hotkeys. <see cref="HotKey"/>/<see cref="GameKey"/>
@@ -68,13 +65,12 @@ namespace BannerWand.Behaviors
         /// Checks whether the "add gold" hotkey was just pressed and, if so, applies the
         /// configured gold amount. Intended to be called once per engine frame.
         /// </summary>
-        /// <param name="dt">Time in seconds since the last frame (unused, kept for symmetry with other per-frame hooks).</param>
-        public void Tick(float dt)
+        public void Tick()
         {
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;

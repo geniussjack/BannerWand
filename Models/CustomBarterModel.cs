@@ -1,11 +1,8 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.BarterSystem.Barterables;
 using TaleWorlds.CampaignSystem.GameComponents;
@@ -33,7 +30,7 @@ namespace BannerWand.Models
     public class CustomBarterModel : DefaultBarterModel
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the barter penalty for an offer.
@@ -52,7 +49,7 @@ namespace BannerWand.Models
         /// <para>
         /// This method only modifies the penalty when:
         /// 1. <see cref="CheatSettings.BarterAlwaysAccepted"/> is enabled
-        /// 2. <see cref="CheatTargetSettings.ApplyToPlayer"/> is true
+        /// 2. <see cref="CheatSettings.ApplyToPlayer"/> is true
         /// 3. <paramref name="originalOwner"/> is the player (<see cref="Hero.MainHero"/>)
         /// </para>
         /// <para>

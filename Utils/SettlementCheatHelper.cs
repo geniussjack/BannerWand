@@ -1,9 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using System;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
@@ -57,7 +54,7 @@ namespace BannerWand.Utils
             }
 
             // Early exit if target settings are null
-            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? targetSettings = CheatSettings.Instance;
             if (targetSettings == null)
             {
                 return false;
