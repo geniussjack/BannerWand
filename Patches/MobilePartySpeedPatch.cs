@@ -87,7 +87,7 @@ namespace BannerWand.Patches
         /// Harmony patch target method - MobileParty.SpeedExplained
         /// </summary>
         /// <remarks>
-        /// As of game version 1.4.8, SpeedExplained is a read-only property
+        /// As of game version 1.3.4, SpeedExplained is a read-only property
         /// (<c>ExplainedNumber SpeedExplained { get; }</c>), not a method taking a
         /// <c>bool includeDescriptions</c> parameter as in earlier versions. We patch its
         /// getter method (<c>get_SpeedExplained</c>), falling back to the old method lookup

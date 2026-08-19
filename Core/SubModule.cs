@@ -32,9 +32,8 @@ namespace BannerWand.Core
     /// by game models alone, such as gold/influence editing and relationship management.
     /// </para>
     /// <para>
-    /// Compatible with: .NET Framework 4.7.2, Bannerlord 1.3.x ONLY
-    /// Mod Version: 1.1.1
-    /// For Bannerlord 1.2.12, use BannerWand v1.0.9 (BannerWand-1.2.12 project)
+    /// Compatible with .NET Framework 4.7.2 and Bannerlord 1.3.x. The mod version is read from
+    /// SubModule.xml at runtime via <see cref="VersionReader"/>, not hardcoded here.
     /// </para>
     /// </remarks>
     public class SubModule : MBSubModuleBase
