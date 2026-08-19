@@ -89,11 +89,27 @@ namespace BannerWand.Patches
         /// <summary>
         /// Harmony patch target method - MobileParty.SpeedExplained
         /// </summary>
+        /// <remarks>
+        /// As of game version 1.4.8, SpeedExplained is a read-only property
+        /// (<c>ExplainedNumber SpeedExplained { get; }</c>), not a method taking a
+        /// <c>bool includeDescriptions</c> parameter as in earlier versions. We patch its
+        /// getter method (<c>get_SpeedExplained</c>), falling back to the old method lookup
+        /// for compatibility with earlier game versions where it was still a method.
+        /// </remarks>
         [HarmonyTargetMethod]
         public static MethodBase? TargetSpeedExplainedMethod()
         {
             try
             {
+                MethodInfo? getter = typeof(MobileParty).GetProperty(
+                    "SpeedExplained",
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.GetGetMethod(true);
+                if (getter != null)
+                {
+                    ModLogger.Log("[MobilePartySpeedPatch] Found MobileParty.SpeedExplained property getter");
+                    return getter;
+                }
+
                 MethodInfo? method = typeof(MobileParty).GetMethod(
                     "SpeedExplained",
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
@@ -106,12 +122,12 @@ namespace BannerWand.Patches
                     return method;
                 }
 
-                ModLogger.Warning("[MobilePartySpeedPatch] MobileParty.SpeedExplained method not found");
+                ModLogger.Warning("[MobilePartySpeedPatch] MobileParty.SpeedExplained not found as property or method");
                 return null;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[MobilePartySpeedPatch] Error finding SpeedExplained method: {ex.Message}");
+                ModLogger.Error($"[MobilePartySpeedPatch] Error finding SpeedExplained target: {ex.Message}");
                 return null;
             }
         }
