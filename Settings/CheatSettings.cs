@@ -653,10 +653,11 @@ namespace BannerWand.Settings
 
         /// <summary>
         /// Apply cheats to the player character (the main hero).
+        /// Defaults to enabled so cheats work on the player out of the box.
         /// </summary>
         [SettingPropertyBool("{=BW_Target_ApplyToPlayer}Apply to Player", Order = 0, RequireRestart = false, HintText = "{=BW_Target_ApplyToPlayer_Hint}Applies selected cheats to the player character.")]
         [SettingPropertyGroup("{=BW_Category_TargetPlayer}Target: Player & Clan", GroupOrder = 9)]
-        public bool ApplyToPlayer { get; set; } = false;
+        public bool ApplyToPlayer { get; set; } = true;
 
         /// <summary>
         /// Apply cheats to all members of the player's clan (companions, family).
