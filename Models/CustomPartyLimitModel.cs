@@ -55,10 +55,10 @@ namespace BannerWand.Models
         private static readonly TextObject PartySizeBonusText = new("BannerWand Party Size Bonus");
 
         /// <summary>
-        /// Calculates the party size limit for a mobile party.
+        /// Calculates the party size limit for a party.
         /// Adds bonus to player's main party if enabled.
         /// </summary>
-        /// <param name="party">The mobile party to calculate limit for. Cannot be null.</param>
+        /// <param name="party">The party to calculate limit for. Cannot be null.</param>
         /// <param name="includeDescriptions">Whether to include detailed explanations in the result.</param>
         /// <returns>
         /// An <see cref="ExplainedNumber"/> containing the party size limit value.
@@ -76,8 +76,13 @@ namespace BannerWand.Models
         /// - Only applies to MobileParty.MainParty (player's party)
         /// - Does not affect clan parties or NPC parties
         /// </para>
+        /// <para>
+        /// The base method now takes a <see cref="PartyBase"/> instead of a <see cref="MobileParty"/> -
+        /// this override narrows to <see cref="PartyBase.MobileParty"/> to keep the same targeting as
+        /// before.
+        /// </para>
         /// </remarks>
-        public override ExplainedNumber GetPartyMemberSizeLimit(MobileParty party, bool includeDescriptions = false)
+        public override ExplainedNumber GetPartyMemberSizeLimit(PartyBase party, bool includeDescriptions = false)
         {
             try
             {
@@ -85,13 +90,13 @@ namespace BannerWand.Models
                 ExplainedNumber baseLimit = base.GetPartyMemberSizeLimit(party, includeDescriptions);
 
                 // Early exit if settings not available or party is null
-                if (Settings == null || TargetSettings == null || party == null)
+                if (Settings == null || TargetSettings == null || party?.MobileParty == null)
                 {
                     return baseLimit;
                 }
 
                 // Only apply to player's main party
-                if (party != MobileParty.MainParty)
+                if (party.MobileParty != MobileParty.MainParty)
                 {
                     return baseLimit;
                 }
