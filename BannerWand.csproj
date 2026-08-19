@@ -137,6 +137,7 @@
     <Compile Include="Models\CustomGenericXpModel.cs" />
     <Compile Include="Models\CustomPartyTrainingModel.cs" />
     <Compile Include="Models\CustomMobilePartyFoodConsumptionModel.cs" />
+    <Compile Include="Models\CustomPartyLimitModel.cs" />
     <Compile Include="Models\CustomPartyMoraleModel.cs" />
     <Compile Include="Models\CustomPartySpeedModel.cs" />
     <Compile Include="Models\CustomPersuasionModel.cs" />

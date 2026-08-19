@@ -334,11 +334,9 @@ namespace BannerWand.Core
             campaignStarter.AddModel(new CustomClanTierModel());
             ModLogger.LogModelRegistration(nameof(CustomClanTierModel), "Controls clan companion limit bonus");
 
-            // Party size limit - replaces DefaultPartySizeLimitModel - DISABLED, work in progress
-            // CustomPartyLimitModel.GetPartyMemberSizeLimit does not match any overridable member
-            // on the currently installed DefaultPartySizeLimitModel - needs an API signature fix
-            // campaignStarter.AddModel(new CustomPartyLimitModel());
-            // ModLogger.LogModelRegistration(nameof(CustomPartyLimitModel), "Controls party size limit bonus for player");
+            // Party size limit - replaces DefaultPartySizeLimitModel
+            campaignStarter.AddModel(new CustomPartyLimitModel());
+            ModLogger.LogModelRegistration(nameof(CustomPartyLimitModel), "Controls party size limit bonus for player");
 
             // Siege construction - replaces DefaultSiegeEventModel
             campaignStarter.AddModel(new CustomSiegeEventModel());
