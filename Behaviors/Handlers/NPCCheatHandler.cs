@@ -34,14 +34,27 @@ namespace BannerWand.Behaviors.Handlers
         private static CheatSettings? Settings => CheatSettings.Instance;
 
         /// <summary>
-        /// Checks if an agent is an allied hero fighting on player's side in combat.
+        /// Checks if an agent is an allied hero, or - when
+        /// <see cref="CheatSettings.NPCApplyToRegularTroops"/> is enabled - any allied human agent,
+        /// fighting on player's side in combat.
         /// </summary>
         /// <param name="agent">The agent to check.</param>
         /// <param name="mainAgent">The player's main agent.</param>
-        /// <returns><c>true</c> if the agent is an allied hero on player's side; otherwise, <c>false</c>.</returns>
-        private static bool IsAlliedHeroOnPlayerSide(Agent agent, Agent mainAgent)
+        /// <returns><c>true</c> if the agent qualifies as an allied NPC target; otherwise, <c>false</c>.</returns>
+        private static bool IsAlliedAgentOnPlayerSide(Agent agent, Agent mainAgent)
         {
-            return agent?.IsActive() == true && agent.IsHuman && agent.Character?.IsHero == true && !agent.IsPlayerControlled && !agent.IsEnemyOf(mainAgent);
+            if (agent?.IsActive() != true || !agent.IsHuman || agent.IsPlayerControlled)
+            {
+                return false;
+            }
+
+            bool isHero = agent.Character?.IsHero == true;
+            if (!isHero && Settings?.NPCApplyToRegularTroops != true)
+            {
+                return false;
+            }
+
+            return !agent.IsEnemyOf(mainAgent);
         }
 
         /// <inheritdoc />
@@ -62,7 +75,7 @@ namespace BannerWand.Behaviors.Handlers
             for (int i = 0; i < agents.Count; i++)
             {
                 Agent agent = agents[i];
-                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                if (!IsAlliedAgentOnPlayerSide(agent, mainAgent))
                 {
                     continue;
                 }
@@ -92,7 +105,7 @@ namespace BannerWand.Behaviors.Handlers
             for (int i = 0; i < agents.Count; i++)
             {
                 Agent agent = agents[i];
-                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                if (!IsAlliedAgentOnPlayerSide(agent, mainAgent))
                 {
                     continue;
                 }
@@ -124,7 +137,7 @@ namespace BannerWand.Behaviors.Handlers
             for (int i = 0; i < agents.Count; i++)
             {
                 Agent agent = agents[i];
-                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                if (!IsAlliedAgentOnPlayerSide(agent, mainAgent))
                 {
                     continue;
                 }
@@ -155,7 +168,7 @@ namespace BannerWand.Behaviors.Handlers
             for (int i = 0; i < agents.Count; i++)
             {
                 Agent agent = agents[i];
-                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                if (!IsAlliedAgentOnPlayerSide(agent, mainAgent))
                 {
                     continue;
                 }
@@ -195,7 +208,7 @@ namespace BannerWand.Behaviors.Handlers
             for (int i = 0; i < agents.Count; i++)
             {
                 Agent agent = agents[i];
-                if (!IsAlliedHeroOnPlayerSide(agent, mainAgent))
+                if (!IsAlliedAgentOnPlayerSide(agent, mainAgent))
                 {
                     continue;
                 }
