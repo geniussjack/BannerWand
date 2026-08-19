@@ -43,6 +43,12 @@ namespace BannerWand.Core
     public class SubModule : MBSubModuleBase
     {
         /// <summary>
+        /// Ticked from <see cref="OnApplicationTick"/> to poll BannerWand's custom hotkeys every
+        /// engine frame, regardless of campaign pause state.
+        /// </summary>
+        private readonly HotkeyCheatBehavior _hotkeyCheatBehavior = new();
+
+        /// <summary>
         /// Called when the mod module is loaded at the start of the game.
         /// This is the earliest entry point for initialization.
         /// </summary>
@@ -463,10 +469,6 @@ namespace BannerWand.Core
             campaignStarter.AddBehavior(new AutoBuildingQueueBehavior());
             ModLogger.LogBehaviorRegistration(nameof(AutoBuildingQueueBehavior), "Handles automatic building queue for settlements");
 
-            // Custom hotkeys (add gold, etc.)
-            campaignStarter.AddBehavior(new HotkeyCheatBehavior());
-            ModLogger.LogBehaviorRegistration(nameof(HotkeyCheatBehavior), "Handles BannerWand's custom rebindable hotkeys");
-
 
             ModLogger.Log("All campaign behaviors registered successfully");
         }
@@ -589,7 +591,8 @@ namespace BannerWand.Core
 
         /// <summary>
         /// Called every application frame tick.
-        /// Currently unused, reserved for future frame-based features.
+        /// Polls BannerWand's custom hotkeys, which need frame-accurate, pause-independent input
+        /// checks that campaign tick events cannot provide.
         /// </summary>
         /// <param name="dt">Delta time since last frame in seconds.</param>
         /// <remarks>
@@ -600,8 +603,7 @@ namespace BannerWand.Core
         {
             base.OnApplicationTick(dt);
 
-            // Reserved for future per-frame updates if needed
-            // Currently no frame-based cheats implemented
+            _hotkeyCheatBehavior.Tick(dt);
         }
 
         /// <summary>

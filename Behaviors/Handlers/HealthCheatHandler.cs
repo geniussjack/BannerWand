@@ -23,6 +23,14 @@ namespace BannerWand.Behaviors.Handlers
         private readonly Dictionary<int, bool> _infiniteHealthApplied = [];
 
         /// <summary>
+        /// The agent currently flagged invulnerable by <see cref="ApplyUnlimitedHealth"/>, if any.
+        /// Tracked so the flag can be toggled back off if the cheat is disabled mid-mission -
+        /// <see cref="Agent.ToggleInvulnerable"/> flips a boolean rather than setting it directly,
+        /// so calling it twice on the same agent restores the original state.
+        /// </summary>
+        private Agent? _invulnerableAgent;
+
+        /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
         private static CheatSettings? Settings => CheatSettings.Instance;
@@ -44,6 +52,7 @@ namespace BannerWand.Behaviors.Handlers
 
             if (!settings.UnlimitedHealth || !targetSettings.ApplyToPlayer)
             {
+                RevertInvulnerability();
                 return;
             }
 
@@ -52,12 +61,35 @@ namespace BannerWand.Behaviors.Handlers
                 return;
             }
 
+            // Agent.ToggleInvulnerable() makes the agent immune to damage outright, unlike the old
+            // approach of only topping HP back up after the fact - which could still lose the agent
+            // to a single hit dealing more damage than current HP in the same frame the topping-off
+            // logic runs. The HP top-off below is kept as a defensive fallback in case invulnerability
+            // does not cover every damage path (e.g. scripted/non-Blow damage).
+            if (_invulnerableAgent != agent)
+            {
+                agent.ToggleInvulnerable();
+                _invulnerableAgent = agent;
+            }
+
             if (agent.Health < agent.HealthLimit)
             {
-                float restoredFrom = agent.Health;
                 agent.Health = agent.HealthLimit;
-                ModLogger.DebugThrottled($"Unlimited Health: Restored health from {restoredFrom:F1} to {agent.HealthLimit:F1}");
             }
+        }
+
+        /// <summary>
+        /// Toggles invulnerability back off on <see cref="_invulnerableAgent"/> if it was set by
+        /// <see cref="ApplyUnlimitedHealth"/>, then clears the tracking field.
+        /// </summary>
+        private void RevertInvulnerability()
+        {
+            if (_invulnerableAgent?.IsActive() == true)
+            {
+                _invulnerableAgent.ToggleInvulnerable();
+            }
+
+            _invulnerableAgent = null;
         }
 
         /// <inheritdoc />
@@ -207,11 +239,14 @@ namespace BannerWand.Behaviors.Handlers
         }
 
         /// <summary>
-        /// Clears the infinite health applied tracking dictionary.
+        /// Clears the infinite health applied tracking dictionary and forgets the last agent
+        /// flagged invulnerable by <see cref="ApplyUnlimitedHealth"/> - a fresh mission spawns a
+        /// new <see cref="Agent"/> instance, so there is nothing left to toggle back off.
         /// </summary>
         public void ClearInfiniteHealthTracking()
         {
             _infiniteHealthApplied.Clear();
+            _invulnerableAgent = null;
         }
     }
 }
