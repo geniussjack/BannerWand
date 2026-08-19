@@ -146,6 +146,9 @@ namespace BannerWand.Behaviors
             _goldApplied = false;
             _influenceApplied = false;
             _maxAllRelationshipsApplied = false;
+
+            // Clear frozen ages from any previous campaign so Stop Aging starts fresh
+            Patches.AgingPatch.ResetTracking();
         }
 
         /// <summary>
