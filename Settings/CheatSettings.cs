@@ -210,6 +210,14 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 
+        /// <summary>
+        /// Whenever the player picks a perk that has an alternative, the alternative is granted
+        /// too - no save reload needed. Implemented in <see cref="Patches.BothPerksPatch"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_AllowBothPerks}Allow Both Perks", Order = 14, RequireRestart = false, HintText = "{=BW_Player_AllowBothPerks_Hint}Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool AllowBothPerks { get; set; } = false;
+
         #endregion
 
         #region NPC Category
