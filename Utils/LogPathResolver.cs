@@ -9,20 +9,21 @@ using System.IO;
 namespace BannerWand.Utils
 {
     /// <summary>
-    /// Default implementation of <see cref="ILogPathResolver"/> that resolves log paths
-    /// using the module directory (BannerWand\logs\BannerWand.log).
+    /// Default implementation of <see cref="ILogPathResolver"/> that resolves today's dated log file
+    /// path under the user's Documents folder (Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_yyyyMMdd.log).
     /// </summary>
     /// <remarks>
     /// <para>
     /// This implementation:
-    /// - Uses the module directory as the base (determined from assembly location)
-    /// - Creates logs subdirectory automatically
+    /// - Uses <see cref="Environment.SpecialFolder.MyDocuments"/> as the base, matching where
+    ///   ButterLib and other Bannerlord mods already write their own logs
+    /// - Creates the ModLogs subdirectory automatically
     /// - Validates write permissions before returning paths
     /// - Falls back to the current directory if the primary location is unavailable
     /// </para>
     /// <para>
-    /// Path structure: [GamePath]\Modules\BannerWand\logs\[LogFileName]
-    /// Example: D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\logs\BannerWand.log
+    /// Path structure: [MyDocuments]\Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_yyyyMMdd.log
+    /// Example: C:\Users\&lt;user&gt;\Documents\Mount and Blade II Bannerlord\Configs\ModLogs\BannerWand_20260819.log
     /// </para>
     /// </remarks>
     internal class LogPathResolver : ILogPathResolver
@@ -30,7 +31,7 @@ namespace BannerWand.Utils
         private string? _resolvedPath;
 
         /// <summary>
-        /// Resolves the full path to the log file.
+        /// Resolves the full path to today's log file.
         /// </summary>
         /// <returns>
         /// The full path to the log file, or null if the path cannot be determined.
@@ -45,41 +46,8 @@ namespace BannerWand.Utils
 
             try
             {
-                // Get module directory path from assembly location
-                // DLL is in: [GamePath]\Modules\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll
-                // Module path is: [GamePath]\Modules\BannerWand\
-                System.Reflection.Assembly executingAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-                string? assemblyLocation = executingAssembly.Location;
-
-                if (string.IsNullOrEmpty(assemblyLocation))
-                {
-                    TaleWorlds.Library.Debug.Print("[BannerWand] LogPathResolver: Assembly location is empty, using fallback");
-                    _resolvedPath = GetFallbackPath();
-                    return _resolvedPath;
-                }
-
-                // Get directory of DLL and navigate up to module root
-                // From: ...\Modules\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll
-                // To:   ...\Modules\BannerWand\
-                string? dllDirectory = Path.GetDirectoryName(assemblyLocation);
-                if (string.IsNullOrEmpty(dllDirectory))
-                {
-                    TaleWorlds.Library.Debug.Print("[BannerWand] LogPathResolver: DLL directory is empty, using fallback");
-                    _resolvedPath = GetFallbackPath();
-                    return _resolvedPath;
-                }
-
-                // Navigate up: bin\Win64_Shipping_Client -> bin -> BannerWand
-                string? moduleDirectory = Path.GetDirectoryName(Path.GetDirectoryName(dllDirectory));
-                if (string.IsNullOrEmpty(moduleDirectory))
-                {
-                    TaleWorlds.Library.Debug.Print("[BannerWand] LogPathResolver: Module directory is empty, using fallback");
-                    _resolvedPath = GetFallbackPath();
-                    return _resolvedPath;
-                }
-
-                // Create logs directory in module folder
-                string logDirectory = Path.Combine(moduleDirectory, "logs");
+                string documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string logDirectory = Path.Combine(documentsDirectory, LogConstants.LogSubdirectory, LogConstants.LogConfigsFolderName, LogConstants.LogsFolderName);
 
                 // Ensure log directory exists
                 try
@@ -92,7 +60,7 @@ namespace BannerWand.Utils
                     // Continue anyway - file creation will handle directory creation if needed
                 }
 
-                string logPath = Path.Combine(logDirectory, LogConstants.LogFileName);
+                string logPath = Path.Combine(logDirectory, string.Format(LogConstants.LogFileNameFormat, DateTime.Now));
 
                 // Validate that the path is writable
                 if (IsPathWritable(logPath))
@@ -150,7 +118,7 @@ namespace BannerWand.Utils
         {
             try
             {
-                return Path.Combine(Directory.GetCurrentDirectory(), LogConstants.LogFileName);
+                return Path.Combine(Directory.GetCurrentDirectory(), string.Format(LogConstants.LogFileNameFormat, DateTime.Now));
             }
             catch
             {

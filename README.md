@@ -218,10 +218,11 @@ Bannerlord's **stealth and disguise systems** may be affected by some cheats:
 
 ## 📝 Logging
 
-BannerWand writes a log file to:
+BannerWand writes a daily log file to:
 ```
-Modules/BannerWand/logs/BannerWand.log
+Documents/Mount and Blade II Bannerlord/Configs/ModLogs/BannerWand_yyyyMMdd.log
 ```
+Log files older than 14 days are cleaned up automatically.
 
 ---
 

@@ -55,28 +55,35 @@ namespace BannerWand.Constants
         #region Log File Configuration
 
         /// <summary>
-        /// Name of the log file.
+        /// Format string for the per-day log file name. Parameter {0} is the current date.
         /// </summary>
-        public const string LogFileName = "BannerWand.log";
+        public const string LogFileNameFormat = "BannerWand_{0:yyyyMMdd}.log";
 
         /// <summary>
-        /// Log file subdirectory path relative to CommonApplicationData folder.
+        /// Search pattern matching every dated log file this mod writes, for pruning old files.
+        /// </summary>
+        public const string LogFileSearchPattern = "BannerWand_*.log";
+
+        /// <summary>
+        /// Log subdirectory name directly under the user's Documents folder.
         /// </summary>
         public const string LogSubdirectory = "Mount and Blade II Bannerlord";
 
         /// <summary>
-        /// Logs folder name within the subdirectory.
+        /// Configs folder name within <see cref="LogSubdirectory"/>, shared with other Bannerlord mods
+        /// (e.g. ButterLib) that already write their own logs into the same parent folder.
         /// </summary>
-        public const string LogsFolderName = "logs";
+        public const string LogConfigsFolderName = "Configs";
 
         /// <summary>
-        /// Maximum size of log file before rotation (in bytes).
+        /// Logs folder name within <see cref="LogConfigsFolderName"/>.
         /// </summary>
-        /// <remarks>
-        /// Set to 10MB (10 * 1024 * 1024 bytes).
-        /// When exceeded, old log is renamed and new log is created.
-        /// </remarks>
-        public const long MaxLogFileSize = 10485760; // 10MB
+        public const string LogsFolderName = "ModLogs";
+
+        /// <summary>
+        /// Number of days a dated log file is kept before being deleted automatically.
+        /// </summary>
+        public const int LogRetentionDays = 14;
 
         #endregion
 
