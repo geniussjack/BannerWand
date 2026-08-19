@@ -1,7 +1,6 @@
 #nullable enable
 // System namespaces
 // Project namespaces
-using BannerWand.Interfaces;
 using BannerWand.Patches;
 using BannerWand.Settings;
 using BannerWand.Utils;
@@ -14,11 +13,7 @@ namespace BannerWand.Behaviors.Handlers
     /// <summary>
     /// Handles ammo-related cheats in combat.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates ammo cheat logic, making it easier to test
-    /// and maintain. It implements <see cref="IAmmoCheatHandler"/> for dependency injection.
-    /// </remarks>
-    public class AmmoCheatHandler : IAmmoCheatHandler
+    public class AmmoCheatHandler
     {
         /// <summary>
         /// Tracks whether unlimited ammo has been logged for current mission.
@@ -40,7 +35,10 @@ namespace BannerWand.Behaviors.Handlers
         /// </summary>
         private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited ammo to the player agent.
+        /// </summary>
+        /// <param name="agent">The player agent to apply the cheat to.</param>
         public void ApplyUnlimitedAmmo(Agent agent)
         {
             CheatSettings? settings = Settings;
@@ -121,7 +119,10 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Handles ammo restoration after consumption.
+        /// </summary>
+        /// <param name="agent">The agent whose ammo to restore.</param>
         public void RestoreAmmo(Agent agent)
         {
             ApplyUnlimitedAmmo(agent);

@@ -2,7 +2,6 @@
 // System namespaces
 // Project namespaces
 using BannerWand.Constants;
-using BannerWand.Interfaces;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System.Collections.Generic;
@@ -14,11 +13,7 @@ namespace BannerWand.Behaviors.Handlers
     /// <summary>
     /// Handles health-related cheats for the player in combat.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates health cheat logic, making it easier to test
-    /// and maintain. It implements <see cref="IHealthCheatHandler"/> for dependency injection.
-    /// </remarks>
-    public class HealthCheatHandler : IHealthCheatHandler
+    public class HealthCheatHandler
     {
         private readonly Dictionary<int, bool> _infiniteHealthApplied = [];
 
@@ -40,7 +35,10 @@ namespace BannerWand.Behaviors.Handlers
         /// </summary>
         private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited health to the player agent.
+        /// </summary>
+        /// <param name="agent">The player agent to apply the cheat to.</param>
         public void ApplyUnlimitedHealth(Agent agent)
         {
             CheatSettings? settings = Settings;
@@ -92,7 +90,10 @@ namespace BannerWand.Behaviors.Handlers
             _invulnerableAgent = null;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies infinite health (+9999 HP) to the player agent.
+        /// </summary>
+        /// <param name="agent">The player agent to apply the cheat to.</param>
         public void ApplyInfiniteHealth(Agent agent)
         {
             CheatSettings? settings = Settings;
@@ -115,7 +116,10 @@ namespace BannerWand.Behaviors.Handlers
             ApplyInfiniteHealthToAgent(agent);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited horse health to the player's mount.
+        /// </summary>
+        /// <param name="agent">The player agent whose mount to apply the cheat to.</param>
         public void ApplyUnlimitedHorseHealth(Agent agent)
         {
             CheatSettings? settings = Settings;
@@ -147,10 +151,13 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
-#pragma warning disable RCS1242 // Interface requires 'in Blow' parameter signature
-        public void OnAgentHit(Agent affectedAgent, Agent? affectorAgent, in Blow blow)
-#pragma warning restore RCS1242
+        /// <summary>
+        /// Handles health restoration after an agent is hit.
+        /// </summary>
+        /// <param name="affectedAgent">The agent that was hit.</param>
+        /// <param name="affectorAgent">The agent that dealt the damage.</param>
+        /// <param name="blow">Details about the blow.</param>
+        public void OnAgentHit(Agent affectedAgent, Agent? affectorAgent, Blow blow)
         {
             CheatSettings? settings = Settings;
             CheatTargetSettings? targetSettings = TargetSettings;

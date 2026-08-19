@@ -131,21 +131,18 @@ namespace BannerWand.Services
         /// <summary>
         /// Performance measurement scope that automatically records timing.
         /// </summary>
-        private class PerformanceScope : IDisposable
+        /// <param name="operationName">Name of the operation being measured.</param>
+        private class PerformanceScope(string operationName) : IDisposable
         {
-            private readonly string _operationName;
-            private readonly Stopwatch _stopwatch;
+            private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
 
-            public PerformanceScope(string operationName)
-            {
-                _operationName = operationName;
-                _stopwatch = Stopwatch.StartNew();
-            }
-
+            /// <summary>
+            /// Stops the stopwatch and records the elapsed time for <paramref name="operationName"/>.
+            /// </summary>
             public void Dispose()
             {
                 _stopwatch.Stop();
-                RecordOperation(_operationName, _stopwatch.ElapsedMilliseconds);
+                RecordOperation(operationName, _stopwatch.ElapsedMilliseconds);
             }
         }
     }
@@ -153,12 +150,13 @@ namespace BannerWand.Services
     /// <summary>
     /// Stores performance statistics for a specific operation.
     /// </summary>
-    public class OperationStats
+    /// <param name="operationName">Name of the operation being tracked.</param>
+    public class OperationStats(string operationName)
     {
         /// <summary>
         /// Name of the operation being tracked.
         /// </summary>
-        public string OperationName { get; }
+        public string OperationName { get; } = operationName;
 
         /// <summary>
         /// Total number of times this operation has been executed.
@@ -184,11 +182,6 @@ namespace BannerWand.Services
         /// Average execution time (milliseconds).
         /// </summary>
         public double AverageMs => ExecutionCount > 0 ? (double)TotalMs / ExecutionCount : 0;
-
-        public OperationStats(string operationName)
-        {
-            OperationName = operationName;
-        }
 
         /// <summary>
         /// Records a new execution of this operation.

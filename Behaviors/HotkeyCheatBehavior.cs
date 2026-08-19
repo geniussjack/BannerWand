@@ -68,8 +68,7 @@ namespace BannerWand.Behaviors
         /// Checks whether the "add gold" hotkey was just pressed and, if so, applies the
         /// configured gold amount. Intended to be called once per engine frame.
         /// </summary>
-        /// <param name="dt">Time in seconds since the last frame (unused, kept for symmetry with other per-frame hooks).</param>
-        public void Tick(float dt)
+        public void Tick()
         {
             try
             {

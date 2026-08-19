@@ -2,7 +2,6 @@
 // System namespaces
 // Project namespaces
 using BannerWand.Constants;
-using BannerWand.Interfaces;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System.Collections.Generic;
@@ -16,11 +15,7 @@ namespace BannerWand.Behaviors.Handlers
     /// <summary>
     /// Handles NPC-related cheats in combat.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates NPC cheat logic, making it easier to test
-    /// and maintain. It implements <see cref="INPCCheatHandler"/> for dependency injection.
-    /// </remarks>
-    public class NPCCheatHandler : INPCCheatHandler
+    public class NPCCheatHandler
     {
         /// <summary>
         /// Tracks whether Infinite Health bonus has been applied to NPC agents.
@@ -52,7 +47,10 @@ namespace BannerWand.Behaviors.Handlers
             return (isHero || (Settings?.NPCApplyToRegularTroops) == true) && !agent.IsEnemyOf(mainAgent);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited HP to allied NPC heroes.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyNPCUnlimitedHP(MBReadOnlyList<Agent> agents)
         {
             if (Settings?.NPCUnlimitedHP != true)
@@ -82,7 +80,10 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies infinite HP (+9999) to allied NPC heroes.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyNPCInfiniteHP(MBReadOnlyList<Agent> agents)
         {
             if (Settings?.NPCInfiniteHP != true)
@@ -114,7 +115,10 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited horse HP to allied NPC heroes.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyNPCUnlimitedHorseHP(MBReadOnlyList<Agent> agents)
         {
             if (Settings?.NPCUnlimitedHorseHP != true)
@@ -145,7 +149,10 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited shield HP to allied NPC heroes.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyNPCUnlimitedShieldHP(MBReadOnlyList<Agent> agents)
         {
             if (Settings?.NPCUnlimitedShieldHP != true)
@@ -185,7 +192,10 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies unlimited ammo to allied NPC heroes.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyNPCUnlimitedAmmo(MBReadOnlyList<Agent> agents)
         {
             if (Settings?.NPCUnlimitedAmmo != true)

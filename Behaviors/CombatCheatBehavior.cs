@@ -2,7 +2,6 @@
 // System namespaces
 // Project namespaces
 using BannerWand.Behaviors.Handlers;
-using BannerWand.Interfaces;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
@@ -32,9 +31,9 @@ namespace BannerWand.Behaviors
     /// For large battles (100+ agents), this can save significant CPU time.
     /// </para>
     /// <para>
-    /// This class uses handler classes (<see cref="IHealthCheatHandler"/>, <see cref="IShieldCheatHandler"/>,
-    /// <see cref="IOneHitKillHandler"/>, <see cref="IAmmoCheatHandler"/>, <see cref="INPCCheatHandler"/>)
-    /// to encapsulate cheat logic, improving modularity and testability.
+    /// This class delegates to handler classes (<see cref="HealthCheatHandler"/>, <see cref="ShieldCheatHandler"/>,
+    /// <see cref="OneHitKillHandler"/>, <see cref="AmmoCheatHandler"/>, <see cref="NPCCheatHandler"/>)
+    /// to encapsulate cheat logic and keep this class focused on mission event wiring.
     /// </para>
     /// </remarks>
     public class CombatCheatBehavior : MissionLogic
@@ -48,27 +47,27 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Handler for health-related cheats (unlimited health, infinite health, horse health).
         /// </summary>
-        private readonly IHealthCheatHandler _healthCheatHandler;
+        private readonly HealthCheatHandler _healthCheatHandler;
 
         /// <summary>
         /// Handler for shield-related cheats (unlimited shield durability).
         /// </summary>
-        private readonly IShieldCheatHandler _shieldCheatHandler;
+        private readonly ShieldCheatHandler _shieldCheatHandler;
 
         /// <summary>
         /// Handler for one-hit kill cheats.
         /// </summary>
-        private readonly IOneHitKillHandler _oneHitKillHandler;
+        private readonly OneHitKillHandler _oneHitKillHandler;
 
         /// <summary>
         /// Handler for ammo-related cheats (unlimited ammo).
         /// </summary>
-        private readonly IAmmoCheatHandler _ammoCheatHandler;
+        private readonly AmmoCheatHandler _ammoCheatHandler;
 
         /// <summary>
         /// Handler for NPC-related cheats (unlimited HP, infinite HP, horse HP, shield HP, ammo for allied heroes).
         /// </summary>
-        private readonly INPCCheatHandler _npcCheatHandler;
+        private readonly NPCCheatHandler _npcCheatHandler;
 
         #endregion
 
@@ -91,10 +90,6 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="CombatCheatBehavior"/> class.
         /// </summary>
-        /// <remarks>
-        /// Initializes all cheat handlers with their default implementations.
-        /// Handlers can be replaced with mock implementations for testing.
-        /// </remarks>
         public CombatCheatBehavior()
         {
             _healthCheatHandler = new HealthCheatHandler();
@@ -102,31 +97,6 @@ namespace BannerWand.Behaviors
             _oneHitKillHandler = new OneHitKillHandler();
             _ammoCheatHandler = new AmmoCheatHandler();
             _npcCheatHandler = new NPCCheatHandler();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CombatCheatBehavior"/> class with custom handlers.
-        /// </summary>
-        /// <param name="healthCheatHandler">Handler for health-related cheats.</param>
-        /// <param name="shieldCheatHandler">Handler for shield-related cheats.</param>
-        /// <param name="oneHitKillHandler">Handler for one-hit kill cheats.</param>
-        /// <param name="ammoCheatHandler">Handler for ammo-related cheats.</param>
-        /// <param name="npcCheatHandler">Handler for NPC-related cheats.</param>
-        /// <remarks>
-        /// This constructor allows dependency injection for testing purposes.
-        /// </remarks>
-        public CombatCheatBehavior(
-            IHealthCheatHandler healthCheatHandler,
-            IShieldCheatHandler shieldCheatHandler,
-            IOneHitKillHandler oneHitKillHandler,
-            IAmmoCheatHandler ammoCheatHandler,
-            INPCCheatHandler npcCheatHandler)
-        {
-            _healthCheatHandler = healthCheatHandler ?? throw new ArgumentNullException(nameof(healthCheatHandler));
-            _shieldCheatHandler = shieldCheatHandler ?? throw new ArgumentNullException(nameof(shieldCheatHandler));
-            _oneHitKillHandler = oneHitKillHandler ?? throw new ArgumentNullException(nameof(oneHitKillHandler));
-            _ammoCheatHandler = ammoCheatHandler ?? throw new ArgumentNullException(nameof(ammoCheatHandler));
-            _npcCheatHandler = npcCheatHandler ?? throw new ArgumentNullException(nameof(npcCheatHandler));
         }
 
         #endregion
@@ -145,20 +115,9 @@ namespace BannerWand.Behaviors
             Core.HarmonyManager.RemoveAmmoConsumptionPatch();
 
             // Reset handler tracking for next mission
-            if (_healthCheatHandler is HealthCheatHandler healthHandler)
-            {
-                healthHandler.ClearInfiniteHealthTracking();
-            }
-
-            if (_npcCheatHandler is NPCCheatHandler npcHandler)
-            {
-                npcHandler.ClearInfiniteHealthTracking();
-            }
-
-            if (_ammoCheatHandler is AmmoCheatHandler ammoHandler)
-            {
-                ammoHandler.ResetTracking();
-            }
+            _healthCheatHandler.ClearInfiniteHealthTracking();
+            _npcCheatHandler.ClearInfiniteHealthTracking();
+            _ammoCheatHandler.ResetTracking();
         }
 
         /// <summary>

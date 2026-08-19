@@ -211,7 +211,7 @@ namespace BannerWand.Core
                 }
 
                 // Step 1: Initialize cheat manager (silently, no duplicate messages - SubModule already showed init message)
-                CheatManager.Initialize(showMessage: false);
+                CheatManager.Initialize();
                 ModLogger.Log("CheatManager initialized successfully");
 
                 // Step 1.5: Remove GarrisonWagesPatch if it was applied (prevents TypeInitializationException)
@@ -535,7 +535,7 @@ namespace BannerWand.Core
                 }
 
                 // Re-initialize cheat manager for loaded game (silently, no duplicate messages)
-                CheatManager.Initialize(showMessage: false);
+                CheatManager.Initialize();
 
             }
             catch (Exception ex)
@@ -603,7 +603,7 @@ namespace BannerWand.Core
         {
             base.OnApplicationTick(dt);
 
-            _hotkeyCheatBehavior.Tick(dt);
+            _hotkeyCheatBehavior.Tick();
         }
 
         /// <summary>

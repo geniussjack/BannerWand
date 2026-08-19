@@ -2,7 +2,6 @@
 // Third-party namespaces
 // Project namespaces
 using BannerWand.Constants;
-using BannerWand.Interfaces;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using TaleWorlds.Library;
@@ -13,18 +12,17 @@ namespace BannerWand.Behaviors.Handlers
     /// <summary>
     /// Handles one-hit kill cheats in combat.
     /// </summary>
-    /// <remarks>
-    /// This class encapsulates one-hit kill logic, making it easier to test
-    /// and maintain. It implements <see cref="IOneHitKillHandler"/> for dependency injection.
-    /// </remarks>
-    public class OneHitKillHandler : IOneHitKillHandler
+    public class OneHitKillHandler
     {
         /// <summary>
         /// Gets the current cheat settings instance.
         /// </summary>
         private static CheatSettings? Settings => CheatSettings.Instance;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Applies one-hit kills to all enemy agents.
+        /// </summary>
+        /// <param name="agents">Collection of all agents in the mission.</param>
         public void ApplyOneHitKills(MBReadOnlyList<Agent> agents)
         {
             CheatSettings? settings = Settings;
@@ -72,10 +70,13 @@ namespace BannerWand.Behaviors.Handlers
             }
         }
 
-        /// <inheritdoc />
-#pragma warning disable RCS1242 // Interface requires 'in Blow' parameter signature
-        public void OnAgentHit(Agent affectedAgent, Agent? affectorAgent, in Blow blow)
-#pragma warning restore RCS1242
+        /// <summary>
+        /// Handles one-hit kill logic when an agent is hit.
+        /// </summary>
+        /// <param name="affectedAgent">The agent that was hit.</param>
+        /// <param name="affectorAgent">The agent that dealt the damage.</param>
+        /// <param name="blow">Details about the blow.</param>
+        public void OnAgentHit(Agent affectedAgent, Agent? affectorAgent, Blow blow)
         {
             if (Settings?.OneHitKills != true)
             {

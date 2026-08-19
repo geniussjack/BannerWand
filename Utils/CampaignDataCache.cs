@@ -27,11 +27,6 @@ namespace BannerWand.Utils
     /// Thread safety: All cached collections are read-only snapshots. The cache itself uses
     /// lazy initialization which is safe for single-threaded campaign execution.
     /// </para>
-    /// <para>
-    /// This static class provides the default implementation of campaign data caching.
-    /// For dependency injection scenarios, use <see cref="Interfaces.ICampaignDataCache"/> interface
-    /// with <see cref="CampaignDataCacheWrapper"/> wrapper class.
-    /// </para>
     /// </remarks>
     public static class CampaignDataCache
     {
