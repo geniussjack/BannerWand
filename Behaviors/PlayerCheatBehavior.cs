@@ -491,54 +491,70 @@ namespace BannerWand.Behaviors
             int targetAmount = settings.SmithyMaterialsQuantity;
             int threshold = targetAmount - 10; // Replenish when below this
 
-            // Replenish all smithing materials to user-configured amount
-            // Using CORRECT IDs for Bannerlord 1.3.x
+            // Replenish all smithing materials to user-configured amount.
+            // Each material lists every ID it has ever been known by across game versions;
+            // AddSmithingMaterialIfLow resolves the first one that actually exists in the
+            // currently installed game instead of assuming a single hardcoded ID is still
+            // correct (a stale ID could silently resolve to an unrelated item, which is how
+            // "Charcoal displayed as Hardwood" was reported).
 
             // Hardwood
-            AddSmithingMaterialIfLow(itemRoster, "hardwood", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "hardwood", "hard_wood");
 
             // Charcoal
-            AddSmithingMaterialIfLow(itemRoster, "charcoal", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "charcoal", "coal");
 
             // Iron Ore (raw material)
-            AddSmithingMaterialIfLow(itemRoster, "iron", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "iron_ore", "ironore", "crude_iron", "iron1", "iron");
 
             // Crude Iron (tier 1 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot1", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot1");
 
             // Wrought Iron (tier 2 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot2", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot2", "iron2", "wrought_iron");
 
             // Iron (tier 3 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot3", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot3", "iron3");
 
             // Steel (tier 4 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot4", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot4", "iron4", "steel");
 
             // Fine Steel (tier 5 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot5", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot5", "iron5", "fine_steel");
 
             // Thamaskene Steel (tier 6 ingot)
-            AddSmithingMaterialIfLow(itemRoster, "ironIngot6", targetAmount, threshold);
+            AddSmithingMaterialIfLow(itemRoster, targetAmount, threshold, "ironIngot6", "iron6", "thamaskene_steel");
         }
 
         /// <summary>
-        /// Adds smithing material to roster to maintain target amount.
+        /// Adds smithing material to roster to maintain target amount, resolving the item from
+        /// a list of candidate IDs (tried in order, first match wins) rather than a single ID
+        /// that may no longer exist under the currently installed game version.
         /// </summary>
         /// <param name="roster">The item roster to modify.</param>
-        /// <param name="itemId">The Bannerlord item ID (e.g., "iron", "charcoal").</param>
         /// <param name="targetAmount">The desired amount to maintain.</param>
         /// <param name="threshold">Replenish when stock falls below this threshold.</param>
+        /// <param name="itemIds">Candidate Bannerlord item IDs for this material, most likely first.</param>
         /// <remarks>
         /// This ensures materials are replenished when used during smithing sessions.
         /// </remarks>
-        private static void AddSmithingMaterialIfLow(ItemRoster roster, string itemId, int targetAmount, int threshold)
+        private static void AddSmithingMaterialIfLow(ItemRoster roster, int targetAmount, int threshold, params string[] itemIds)
         {
             try
             {
-                ItemObject? item = Game.Current?.ObjectManager.GetObject<ItemObject>(itemId);
+                ItemObject? item = null;
+                foreach (string itemId in itemIds)
+                {
+                    item = Game.Current?.ObjectManager.GetObject<ItemObject>(itemId);
+                    if (item is not null)
+                    {
+                        break;
+                    }
+                }
+
                 if (item is null)
                 {
+                    ModLogger.Warning($"[Smithing] Could not resolve any of the known IDs for this material: {string.Join(", ", itemIds)}");
                     return;
                 }
 
@@ -554,7 +570,7 @@ namespace BannerWand.Behaviors
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[Smithing] Could not add material '{itemId}': {ex.Message}", ex);
+                ModLogger.Error($"[Smithing] Could not add material '{string.Join(", ", itemIds)}': {ex.Message}", ex);
             }
         }
 
