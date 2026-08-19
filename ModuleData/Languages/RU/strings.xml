@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Русский" />
+	</tags>
+	<strings>
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Игрок" />
+		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Кузница" />
+		<string id="BW_Category_Social" text="Социальное" />
+		<string id="BW_Category_Inventory" text="Инвентарь" />
+		<string id="BW_Category_Stats" text="Характеристики" />
+		<string id="BW_Category_Enemies" text="Враги" />
+		<string id="BW_Category_Settlements" text="Поселения" />
+		<string id="BW_Category_Game" text="Игра" />
+		<string id="BW_Category_TargetPlayer" text="Цель: Игрок и клан" />
+		<string id="BW_Category_TargetKingdoms" text="Цель: Королевства" />
+		<string id="BW_Category_TargetMinorClans" text="Цель: Малые кланы" />
+		<string id="BW_Category_Debug" text="Отладка" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Режим отладки" />
+		<string id="BW_Debug_DebugMode_Hint" text="Включает подробное логирование для всех операций читов. Отключите для уменьшения размера файла логов." />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Бесконечное ХП" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Полоска здоровья не уменьшается. Можно умереть от урона, превышающего макс. ХП." />
+
+		<string id="BW_Player_InfiniteHealth" text="Бессмертие" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Добавляет +9999 ХП в начале боя. Предотвращает мгновенную смерть." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Бесконечное здоровье лошади" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Лошадь игрока не получает урон." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Бесконечная прочность щита" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Вступает в силу, когда вы блокируете атаки врагов." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Бесконечные боеприпасы" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Боеприпасы для луков, арбалетов и метательного оружия поддерживаются на уровне 999." />
+
+		<string id="BW_Player_MaxMorale" text="Максимальный моральный дух" />
+		<string id="BW_Player_MaxMorale_Hint" text="Отряд игрока всегда имеет максимальный моральный дух." />
+
+		<string id="BW_Player_MovementSpeed" text="Скорость передвижения" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Работает только на карте, не в бою. Изменения применяются на следующий игровой день." />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="Лимит компаньонов клана" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Добавляет бонус к лимиту компаньонов для клана игрока и NPC. Работает с модами, которые позволяют NPC нанимать компаньонов." />
+
+		<string id="BW_Player_PartySizeLimit" text="Бонус к размеру отряда" />
+		<string id="BW_Player_PartySizeLimit_Hint" text="Добавляет бонус к лимиту размера отряда только для партии игрока. Не влияет на отряды клана или NPC." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Торговля всегда принимается" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Все торговые предложения автоматически принимаются." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Бесконечная выносливость в кузнице" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Ковка не расходует выносливость." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Максимальные Отношения с Персонажем" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Любое положительное изменение отношений с игроком усиливается до +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Максимальные Отношения со Всеми" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Мгновенно устанавливает отношения на уровне 100 со всеми персонажами." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Бесконечное HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Полоса здоровья союзных героев NPC никогда не уменьшается. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_InfiniteHP" text="Бесконечное HP (+9999)" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Добавляет +9999 HP союзным героям NPC в начале боя. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Бесконечное HP лошади" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Лошади союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Бесконечное HP щита" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Щиты союзных героев NPC не получают урона. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Бесконечные боеприпасы" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Боеприпасы союзных героев NPC поддерживаются на максимуме. Применяется только к героям, сражающимся на стороне игрока, не к обычным солдатам." />
+		<string id="BW_NPC_MovementSpeed" text="Установить скорость передвижения" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Применяется ко всем отрядам на карте, не только к игроку. Изменения применяются на следующий игровой день." />
+		<string id="BW_NPC_EditGold" text="Изменить золото" />
+		<string id="BW_NPC_EditGold_Hint" text="Добавить или удалить золото для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditInfluence" text="Изменить влияние" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Добавить или удалить влияние для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditAttributePoints" text="Изменить очки атрибутов" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Добавить или удалить очки атрибутов для NPC (применяется один раз при изменении значения)." />
+		<string id="BW_NPC_EditFocusPoints" text="Изменить очки фокусировки" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Добавить или удалить очки фокусировки для NPC (применяется один раз при изменении значения)." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Изменить золото" />
+		<string id="BW_Inventory_EditGold_Hint" text="Добавить или удалить золото (применяется один раз при изменении значения)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Изменить влияние" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Добавить или удалить влияние (применяется один раз при изменении значения)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Бесконечная еда" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Еда в отряде никогда не уменьшается." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Предметы не уменьшаются при торговле" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Предметы остаются в инвентаре после торговли. Применяется только к предметам, которые вы отдаете, а не к тем, что получаете." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Максимальная грузоподъемность" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Отряд имеет неограниченную грузоподъемность." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Бесконечные материалы для ковки" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Работает только для материалов, которые у вас уже были, не действует на материалы, которых у вас не было." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Количество материалов для ковки" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Установить целевое количество материалов для ковки (100-9999). Работает только при включенной опции Бесконечные материалы для ковки." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Изменить очки атрибутов" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Вступает в силу при открытии меню персонажа дважды. Чтобы отключить эту опцию, нужно установить значение -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Изменить очки фокусировки" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Вступает в силу при открытии меню персонажа дважды. Чтобы отключить эту опцию, нужно установить значение -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Бесконечная известность" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Примечание: иногда вы можете не получить известность, даже если игра говорит, что вы получили. Особенно когда враги бегут. Это может быть ошибка игры. Вступает в силу при получении известности." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Множитель известности" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Умножает все получения известности (0 = отключено). Примечание: отображаемое значение может не отражать умноженную сумму, но фактически полученная известность умножается." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Бесконечный опыт навыков" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Вступает в силу, когда навык получает опыт. Примечание: навыки имеют ограничения уровня на основе скорости обучения, которая зависит от ваших атрибутов. Если скорость обучения навыка равна 0, он не будет получать опыт, нужно потратить очки атрибутов, чтобы повысить атрибуты и тем самым повысить скорость обучения." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Множитель опыта навыков" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Умножает получение опыта навыков (0 = отключено)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Бесконечный опыт войск" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Все войска получают опыт без ограничений." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Множитель опыта войск" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Умножает получение опыта войсками (0 = отключено)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Убийство одним ударом" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Все вражеские юниты умирают с одного удара." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Убеждение всегда успешно" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Все проверки убеждения и диалогов автоматически успешны." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Постройки за один день" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Только одно здание может быть построено за раз. Строительство/улучшение нескольких зданий все равно требует нескольких дней." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Мгновенное строительство осадных орудий" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Примечание: эта опция влияет на обе стороны." />
+
+		<string id="BW_Game_GameSpeed" text="Множитель скорости игры" />
+		<string id="BW_Game_GameSpeed_Hint" text="Умножает скорость кнопок Воспроизведение (1x) и Быстрая перемотка (4x). 1.0 = нормальная скорость, 2.0 = двойная скорость и т.д." />
+
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Множитель набора гарнизона" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Увеличивает количество солдат, нанимаемых в гарнизон каждый день. 0 = отключено, 1.0 = норма, 2.0 = двойной набор и т.д." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Множитель зарплаты гарнизона" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Управляет стоимостью гарнизона. 1.0 = норма, 0 = бесплатно, отрицательные значения = доход для владельца поселения." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Множитель набора ополчения" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Увеличивает количество ополченцев, нанимаемых каждый день. 0 = отключено, 1.0 = норма, 2.0 = двойной набор и т.д." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Шанс ветеранов ополчения" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Процент шанса появления ополченцев-ветеранов (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Бонус к росту еды" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту еды (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Бонус к росту процветания" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту процветания (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Бонус к росту очага" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту очага в деревнях (0-999). Очаг - это аналог процветания для деревень." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Бонус к росту лояльности" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту лояльности (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Бонус к росту безопасности" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Добавляет указанное значение к ежедневному росту безопасности (0-999)." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="Применить к игроку" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Применяет выбранные читы к персонажу игрока." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Применить к членам клана игрока" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Применяет выбранные читы ко всем членам клана игрока." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="Применить к правителям королевств" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Применяет выбранные читы к правителям всех королевств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Применить к правителю королевства игрока" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Применяет читы к правителю текущего королевства игрока." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Применить к вассалам королевств" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Применяет выбранные читы ко всем лидерам вассальных кланов любых королевств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Применить к вассалам королевства игрока" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Применяет выбранные читы ко всем лидерам вассальных кланов королевства игрока." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Применить к знати королевств" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Применяет выбранные читы ко всем знатным героям любых королевств." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Применить к знати королевства игрока" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Применяет выбранные читы ко всем знатным героям королевства игрока." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Применить к лидерам малых кланов" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Применяет выбранные читы к лидерам всех малых фракций." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Применить к членам малых кланов" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Применяет выбранные читы ко всем знатным героям из малых кланов." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="Несколько опций можно комбинировать. Дублирующие применения автоматически предотвращаются." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Ошибка настроек" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} успешно инициализирован" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Все битвы без ранений" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="В разработке, пока работает не полностью. Должно приводить к тому, что войска будут погибать вместо того, чтобы получать ранения или попадать в плен в каждой автоматически рассчитываемой полевой битве на карте, включая битвы, в которых вы лично не участвуете. Дополняет чит «Убийство с одного удара», который влияет только на битвы, где сражаетесь вы сами. Не затрагивает осады и захваченных в плен героев." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Включить горячую клавишу добавления золота" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Добавляет количество, указанное в «Изменить золото» выше, при каждом нажатии клавиши. По умолчанию Ctrl+X, можно переназначить в Настройки &gt; Привязка клавиш. Работает только на карте кампании, не в бою. Требует, чтобы «Изменить золото» было установлено в ненулевое значение." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Также применять к рядовым солдатам" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Расширяет включённые выше читы для NPC с союзных героев на всех союзных солдат, сражающихся на стороне игрока. Может заметно замедлить крупные битвы и затянуть их, поскольку каждого дружественного бойца становится трудно убить." />
+		<string id="BW_NPC_StopNPCAging" text="Остановить старение NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Не позволяет NPC стареть после достижения 21 года. Дети младше 21 года продолжают расти как обычно." />
+		<string id="BW_Player_AllowBothPerks" text="Разрешить оба перка" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Автоматически выдаёт альтернативный перк при выборе одного из пары, так что вы получаете оба - действует сразу, перезагрузка сохранения не требуется." />
+		<string id="BW_Player_InfiniteShipHealth" text="Бесконечное ХП корабля" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Корабли, принадлежащие партии игрока, никогда не получают повреждений. Требуется War Sails DLC." />
+		<string id="BW_Player_StopPlayerAging" text="Остановить старение игрока" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Не позволяет персонажу игрока стареть." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Разблокировать все детали кузницы" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Разблокирует все детали крафта для всех типов оружия, как будто вы уже открыли их через переплавку или заказы на крафт. Вступает в силу в течение одного игрового дня после включения." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Бонус вместимости гарнизона" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Увеличивает максимальное количество войск, которое может вместить гарнизон. 0 = отключено." />
+	</strings>
+</base>

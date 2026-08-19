@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="Italian" />
+	</tags>
+	<strings>
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Giocatore" />
+		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Fucina" />
+		<string id="BW_Category_Social" text="Sociale" />
+		<string id="BW_Category_Inventory" text="Inventario" />
+		<string id="BW_Category_Stats" text="Statistiche" />
+		<string id="BW_Category_Enemies" text="Nemici" />
+		<string id="BW_Category_Settlements" text="Insediamenti" />
+		<string id="BW_Category_Game" text="Gioco" />
+		<string id="BW_Category_TargetPlayer" text="Bersaglio: Giocatore e Clan" />
+		<string id="BW_Category_TargetKingdoms" text="Bersaglio: Regni" />
+		<string id="BW_Category_TargetMinorClans" text="Bersaglio: Clan Minori" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Modalità Debug" />
+		<string id="BW_Debug_DebugMode_Hint" text="Abilita la registrazione dettagliata per tutte le operazioni di cheat. Disabilita per ridurre la dimensione del file di log." />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="PS Illimitati" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="La barra della salute non diminuisce mai. Puoi ancora morire per danni che superano i PS massimi." />
+
+		<string id="BW_Player_InfiniteHealth" text="Salute Infinita" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Aggiunge +9999 PS all'inizio della battaglia. Previene le uccisioni con un colpo." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Salute del Cavallo Illimitata" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Il cavallo del giocatore non subisce danni." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Durabilità dello Scudo Illimitata" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Ha effetto quando blocchi gli attacchi nemici." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Munizioni Illimitate" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Le munizioni per archi, balestre e armi da lancio sono mantenute a 999." />
+
+		<string id="BW_Player_MaxMorale" text="Morale Massimo" />
+		<string id="BW_Player_MaxMorale_Hint" text="Il gruppo del giocatore ha sempre il morale massimo." />
+
+		<string id="BW_Player_MovementSpeed" text="Imposta Velocità di Movimento" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Funziona solo sulla mappa, non in battaglia. Le modifiche si applicano il giorno di gioco successivo." />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="Limite Compagni del Clan" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Aggiunge un bonus al limite di compagni per i clan del giocatore e NPC. Funziona con le mod che permettono agli NPC di reclutare compagni." />
+
+		<string id="BW_Player_PartySizeLimit" text="Bonus Limite Dimensione Gruppo" />
+		<string id="BW_Player_PartySizeLimit_Hint" text="Aggiunge un bonus al limite di dimensione del gruppo solo per il gruppo del giocatore. Non influisce sui gruppi del clan o sui gruppi NPC." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Offerte di Baratto Sempre Accettate" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Tutte le offerte di baratto sono automaticamente accettate." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Resistenza della Fucina Illimitata" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="La forgiatura non consuma mai resistenza." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Relazione Massima con Personaggio" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Qualsiasi cambiamento positivo di relazione con il giocatore è aumentato a +99." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Relazioni Massime con Tutti" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Imposta istantaneamente la relazione a 100 con tutti i personaggi." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="PS Illimitati" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="La barra della salute degli eroi NPC alleati non diminuisce mai. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_InfiniteHP" text="Salute Infinita" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Aggiunge +9999 PS agli eroi NPC alleati all'inizio della battaglia. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Salute del Cavallo Illimitata" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="I cavalli degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Durabilità dello Scudo Illimitata" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Gli scudi degli eroi NPC alleati non subiscono danni. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Munizioni Illimitate" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Le munizioni degli eroi NPC alleati sono mantenute al massimo. Si applica solo agli eroi che combattono dalla parte del giocatore, non ai soldati regolari." />
+		<string id="BW_NPC_MovementSpeed" text="Imposta Velocità di Movimento" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Si applica a tutti i gruppi sulla mappa, non solo al giocatore. Le modifiche si applicano il giorno di gioco successivo." />
+		<string id="BW_NPC_EditGold" text="Modifica Oro" />
+		<string id="BW_NPC_EditGold_Hint" text="Aggiungi o rimuovi oro per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditInfluence" text="Modifica Influenza" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Aggiungi o rimuovi influenza per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditAttributePoints" text="Modifica Punti Attributo" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Aggiungi o rimuovi punti attributo per gli NPC (applicato una volta quando il valore è modificato)." />
+		<string id="BW_NPC_EditFocusPoints" text="Modifica Punti Focus" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Aggiungi o rimuovi punti focus per gli NPC (applicato una volta quando il valore è modificato)." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Modifica Oro" />
+		<string id="BW_Inventory_EditGold_Hint" text="Aggiungi o rimuovi oro (applicato una volta quando il valore è modificato)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Modifica Influenza" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Aggiungi o rimuovi influenza (applicato una volta quando il valore è modificato)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Cibo Illimitato" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Il cibo del gruppo non diminuisce mai." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Oggetti di Scambio Non Diminuiscono" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Gli oggetti rimangono nel tuo inventario dopo averli scambiati. Si applica solo agli oggetti che dai, non a quelli che ricevi." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Capacità di Carico Massima" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Il gruppo ha capacità di carico illimitata." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Materiali della Fucina Illimitati" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Funziona solo per i materiali che possedevi già, non ha effetto sui materiali che non possedevi." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Quantità Materiali della Fucina" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Imposta la quantità target per i materiali della fucina (100-9999). Funziona solo quando Materiali della Fucina Illimitati è abilitato." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Modifica Punti Attributo" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Ha effetto quando apri il menu personaggio due volte. Per disabilitare questa opzione, devi impostare il valore a -1." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Modifica Punti Focus" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Ha effetto quando apri il menu personaggio due volte. Per disabilitare questa opzione, devi impostare il valore a -1." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Fama Illimitata" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Nota: a volte potresti non guadagnare fama anche se il gioco dice che hai guadagnato fama. Specialmente quando i nemici fuggono. Potrebbe essere un bug del gioco. Ha effetto quando guadagni fama." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Moltiplicatore Fama" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Moltiplica tutti i guadagni di fama (0 = disabilitato). Nota: Il valore visualizzato potrebbe non riflettere l'importo moltiplicato, ma la fama effettivamente guadagnata è moltiplicata." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="XP Abilità Illimitata" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Ha effetto quando un'abilità guadagna XP. Nota: le abilità hanno limiti di livello basati sul loro tasso di apprendimento che è influenzato dai tuoi attributi. Se il tasso di apprendimento di un'abilità è 0, non guadagnerà XP, devi spendere punti attributo per aumentare i tuoi attributi per aumentare il tasso di apprendimento." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Moltiplicatore XP Abilità" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Moltiplica i guadagni di XP abilità (0 = disabilitato)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="XP Truppe Illimitata" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Tutte le truppe guadagnano XP senza limite." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Moltiplicatore XP Truppe" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Moltiplica i guadagni di XP truppe (0 = disabilitato)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Uccisioni con Un Colpo" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Tutte le unità nemiche muoiono con un colpo." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasione/Conversazione Sempre Riuscita" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Tutte le verifiche di persuasione e conversazione riescono automaticamente." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Costruzione Insediamenti in Un Giorno" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Solo un edificio può essere costruito alla volta. Costruire/aggiornare più edifici richiede ancora più giorni." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Costruzione Assedio Istantanea" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Nota: questa opzione influisce su entrambi i lati." />
+
+		<string id="BW_Game_GameSpeed" text="Imposta Moltiplicatore Velocità Gioco" />
+		<string id="BW_Game_GameSpeed_Hint" text="Moltiplica la velocità dei pulsanti Riproduci (1x) e Avanti Veloce (4x). 1.0 = normale, 2.0 = doppia velocità, ecc." />
+
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Moltiplicatore Reclutamento Guarnigione" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Aumenta il numero di soldati reclutati nella guarnigione ogni giorno. 0 = disabilitato, 1.0 = normale, 2.0 = doppio, ecc." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Moltiplicatore Salari Guarnigione" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Controlla il costo dei salari della guarnigione. 1.0 = normale, 0 = gratuito, valori negativi = reddito per il proprietario dell'insediamento." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Moltiplicatore Reclutamento Milizia" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Aumenta il numero di miliziani reclutati ogni giorno. 0 = disabilitato, 1.0 = normale, 2.0 = doppio, ecc." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Probabilità Veterani Milizia" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Percentuale di probabilità di apparizione di miliziani veterani (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Bonus Cibo" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera del cibo (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Bonus Prosperità" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della prosperità (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Bonus Focolare" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera del focolare per i villaggi (0-999). Il focolare è l'equivalente della prosperità per i villaggi." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Bonus Lealtà" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della lealtà (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Bonus Sicurezza" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Aggiunge il valore specificato alla crescita giornaliera della sicurezza (0-999)." />
+
+		<!-- Target Settings -->
+		<string id="BW_Target_ApplyToPlayer" text="Applica al Giocatore" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Applica i cheat selezionati al personaggio del giocatore." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Applica ai Membri del Clan del Giocatore" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Applica i cheat selezionati a tutti i membri del clan del giocatore." />
+
+		<string id="BW_Target_ApplyToKingdomRulers" text="Applica ai Sovrani dei Regni" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Applica i cheat selezionati ai sovrani di tutti i regni." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Applica al Sovrano del Regno del Giocatore" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Applica i cheat al sovrano del regno attuale del giocatore." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Applica ai Vassalli dei Regni" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Applica i cheat selezionati a tutti i capi clan vassalli di qualsiasi regno." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Applica ai Vassalli del Regno del Giocatore" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Applica i cheat selezionati a tutti i capi clan vassalli del regno del giocatore." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Applica ai Nobili dei Regni" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Applica i cheat selezionati a tutti gli eroi nobili di qualsiasi regno." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Applica ai Nobili del Regno del Giocatore" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Applica i cheat selezionati a tutti gli eroi nobili del regno del giocatore." />
+
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Applica ai Capi dei Clan Minori" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Applica i cheat selezionati ai capi di tutte le fazioni minori." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Applica ai Membri dei Clan Minori" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Applica i cheat selezionati a tutti gli eroi nobili dei clan minori." />
+
+		<string id="BW_Target_InfoText" text="Più opzioni possono essere combinate. Le applicazioni duplicate sono automaticamente prevenute." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Errore Impostazioni" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inizializzato con successo" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Tutte le Battaglie Senza Ferite" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="In lavorazione, non funziona ancora completamente. Ha lo scopo di far morire le truppe invece di ferirle o catturarle in ogni battaglia campale risolta automaticamente sulla mappa, comprese le battaglie a cui non partecipi personalmente. Completa Uccisioni in Un Colpo, che riguarda solo le battaglie che combatti tu stesso. Non influisce sugli assedi né sugli eroi catturati." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Attiva Scorciatoia Aggiungi Oro" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Aggiunge l'importo impostato in Modifica Oro sopra ogni volta che la scorciatoia viene premuta. Predefinita su Ctrl+X, riassegnabile in Opzioni &gt; Tasti di Scelta Rapida. Funziona solo sulla mappa di campagna, non in battaglia. Richiede che Modifica Oro sia impostato su un valore diverso da zero." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Applica Anche ai Soldati Regolari" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Estende i cheat NPC abilitati sopra dai soli eroi alleati a ogni soldato alleato che combatte dalla parte del giocatore. Può rallentare notevolmente le grandi battaglie e farle trascinare, poiché ogni unità amica diventa difficile da uccidere." />
+		<string id="BW_NPC_StopNPCAging" text="Ferma l'Invecchiamento degli NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Impedisce agli NPC di invecchiare una volta raggiunti i 21 anni. I bambini sotto i 21 anni continueranno a crescere normalmente." />
+		<string id="BW_Player_AllowBothPerks" text="Consenti Entrambi i Talenti" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Concede automaticamente il talento alternativo ogni volta che ne scegli uno da una coppia, così finisci per averli entrambi - ha effetto immediato, non serve ricaricare il salvataggio." />
+		<string id="BW_Player_InfiniteShipHealth" text="PS Nave Infiniti" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Le navi possedute dal gruppo del giocatore non subiscono mai danni. Richiede il DLC War Sails." />
+		<string id="BW_Player_StopPlayerAging" text="Ferma l'Invecchiamento del Giocatore" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Impedisce al personaggio del giocatore di invecchiare." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Sblocca Tutti i Pezzi da Fabbro" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Sblocca ogni pezzo di fabbricazione per ogni tipo di arma, come se li avessi già scoperti fondendo armi o tramite ordini di fabbricazione. Richiede fino a un giorno di gioco per avere effetto dopo l'attivazione." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus Capacità Guarnigione" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Aggiunge al numero massimo di truppe che una guarnigione può contenere. 0 = disabilitato." />
+	</strings>
+</base>
