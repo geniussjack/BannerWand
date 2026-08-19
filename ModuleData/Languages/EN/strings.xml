@@ -189,6 +189,9 @@
 		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Security Increase Multiplier" />
 		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Adds the specified value to daily security growth (0-999)." />
 
+		<string id="BW_Settlements_GarrisonCapacity" text="Garrison Capacity Bonus" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Adds to the maximum number of troops a garrison can hold. 0 = disabled." />
+
 		<!-- Target Settings -->
 		<!-- Category: Player -->
 		<string id="BW_Target_ApplyToPlayer" text="Apply to Player" />

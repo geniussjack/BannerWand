@@ -211,8 +211,9 @@ namespace BannerWand.Core
                     patchesApplied++;
                 }
 
-                // AgingPatch is disabled - not working in current game version
-                // See ApplyAgingPatch() method for details (commented out)
+                // AgingPatch is applied automatically by PatchAll() - it has a class-level
+                // [HarmonyPatch] attribute again now that it targets Hero.get_Age instead of the
+                // no-longer-existent BirthDay setter, so no manual application is needed here
 
                 // NavalSpeedPatch is applied in OnAfterGameInitializationFinished because DLC loads later
                 // Don't apply it here in OnSubModuleLoad
@@ -1171,74 +1172,6 @@ namespace BannerWand.Core
                 return false;
             }
         }
-
-        /// <summary>
-        /// DISABLED: AgingPatch is currently disabled because aging prevention is not working
-        /// in the current game version. The functionality has been removed from the codebase.
-        /// </summary>
-        /// <remarks>
-        /// This method is kept for reference only. It is not called and the patch is not applied.
-        /// TODO: Re-implement aging prevention in the future when the game API supports it.
-        /// </remarks>
-        /*
-        private static bool ApplyAgingPatch()
-        {
-            try
-            {
-                if (Instance == null)
-                {
-                    ModLogger.Warning("[AgingPatch] Harmony Instance is null - cannot apply patch!");
-                    return false;
-                }
-
-                // Get the target method from the patch class
-                MethodBase? targetMethod = AgingPatch.TargetMethod();
-                if (targetMethod == null)
-                {
-                    ModLogger.Warning("[AgingPatch] TargetMethod() returned null - patch cannot be applied!");
-                    ModLogger.Warning("[AgingPatch] This is OK if the BirthDay property setter doesn't exist in this game version.");
-                    return false;
-                }
-
-                // Get the prefix method
-                MethodInfo? prefixMethod = typeof(AgingPatch).GetMethod("Prefix",
-                    BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (prefixMethod == null)
-                {
-                    ModLogger.Error("[AgingPatch] Prefix method not found!");
-                    return false;
-                }
-
-                // Check if patch is already applied (e.g., by PatchAll())
-                if (IsPatchAlreadyApplied(targetMethod, prefixMethod))
-                {
-                    ModLogger.Log("[AgingPatch] Patch already applied (likely by PatchAll()), skipping manual application");
-                    _patchLogger?.LogPatchApplication("Aging", targetMethod, true);
-                    return true;
-                }
-
-                // Apply the patch using PatchApplier
-                if (_patchApplier?.ApplyPatch(targetMethod, prefixMethod, "prefix") == true)
-                {
-                    _patchLogger?.LogPatchApplication("Aging", targetMethod, true);
-                    ModLogger.Log("[AgingPatch] Patch applied successfully via manual patching");
-                    return true;
-                }
-                else
-                {
-                    _patchLogger?.LogPatchApplication("Aging", targetMethod, false);
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[AgingPatch] Error applying patch: {ex.Message}");
-                ModLogger.Error($"Stack trace: {ex.StackTrace}");
-                return false;
-            }
-        }
-        */
 
         /// <summary>
         /// Manually applies the MobilePartySpeedPatch to add a fixed speed bonus.

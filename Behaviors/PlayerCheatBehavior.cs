@@ -149,6 +149,9 @@ namespace BannerWand.Behaviors
             _influenceApplied = false;
             _maxAllRelationshipsApplied = false;
 
+            // Clear frozen ages from any previous campaign so Stop Aging starts fresh
+            Patches.AgingPatch.ResetTracking();
+
             // Clear ship tracking from any previous campaign
             _invulnerableShips.Clear();
         }

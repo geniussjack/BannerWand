@@ -195,10 +195,18 @@ namespace BannerWand.Settings
         public bool MaxAllCharacterRelationships { get; set; } = false;
 
         /// <summary>
+        /// Freezes the player character's age at whatever it is when the cheat is enabled.
+        /// Implemented in <see cref="Patches.AgingPatch"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_StopPlayerAging}Stop Player Aging", Order = 12, RequireRestart = false, HintText = "{=BW_Player_StopPlayerAging_Hint}Prevents player character from aging.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool StopPlayerAging { get; set; } = false;
+
+        /// <summary>
         /// Player's ships never take damage (War Sails DLC).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_InfiniteShipHealth}Infinite Ship Health", Order = 12, RequireRestart = false, HintText = "{=BW_Player_InfiniteShipHealth_Hint}Ships owned by the player's party never take damage. Requires War Sails DLC.")]
+        [SettingPropertyBool("{=BW_Player_InfiniteShipHealth}Infinite Ship Health", Order = 13, RequireRestart = false, HintText = "{=BW_Player_InfiniteShipHealth_Hint}Ships owned by the player's party never take damage. Requires War Sails DLC.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 
@@ -290,6 +298,16 @@ namespace BannerWand.Settings
         [SettingPropertyInteger("{=BW_NPC_EditFocusPoints}Edit Focus Points", -1000, 1000, Order = 10, RequireRestart = false, HintText = "{=BW_NPC_EditFocusPoints_Hint}Add or remove focus points for NPCs (applied once when value changed).")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public int NPCEditFocusPoints { get; set; } = 0;
+
+        /// <summary>
+        /// Freezes every NPC hero's age at whatever it is when the cheat is enabled, once they
+        /// reach <see cref="Constants.GameConstants.MinimumAgeForStopAging"/>. Applies campaign-wide,
+        /// not just to heroes fighting alongside the player.
+        /// Implemented in <see cref="Patches.AgingPatch"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_NPC_StopNPCAging}Stop NPC Aging", Order = 11, RequireRestart = false, HintText = "{=BW_NPC_StopNPCAging_Hint}Prevents NPCs from aging once they reach 21 years old. Children under 21 will continue to grow normally.")]
+        [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
+        public bool StopNPCAging { get; set; } = false;
 
         #endregion
 
@@ -573,6 +591,14 @@ namespace BannerWand.Settings
         [SettingPropertyBool("{=BW_Game_OneDaySettlementsConstruction}One Day Settlements Construction", Order = 10, RequireRestart = false, HintText = "{=BW_Game_OneDaySettlementsConstruction_Hint}Only one building can be constructed at a time. Building/upgrading multiple buildings still requires multiple days.")]
         [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
         public bool OneDaySettlementsConstruction { get; set; } = false;
+
+        /// <summary>
+        /// Additive bonus to the maximum number of troops a garrison can hold (0-999).
+        /// Implemented in <see cref="Models.CustomPartyLimitModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_GarrisonCapacity}Garrison Capacity Bonus", 0, 999, Order = 11, RequireRestart = false, HintText = "{=BW_Settlements_GarrisonCapacity_Hint}Adds to the maximum number of troops a garrison can hold. 0 = disabled.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int GarrisonCapacity { get; set; } = 0;
 
         #endregion
 
