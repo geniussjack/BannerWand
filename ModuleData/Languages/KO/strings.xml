@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="한국어" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - 대상" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="플레이어" />
+		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Inventory" text="인벤토리" />
+		<string id="BW_Category_Stats" text="통계" />
+		<string id="BW_Category_Enemies" text="적" />
+		<string id="BW_Category_Game" text="게임" />
+		<string id="BW_Category_Settlements" text="정착지" />
+		<string id="BW_Category_CheatTargets" text="치트 대상" />
+		<string id="BW_Category_Kingdoms" text="왕국" />
+		<string id="BW_Category_MinorClans" text="소규모 클랜" />
+		<string id="BW_Category_Info" text="정보" />
+		<string id="BW_Category_Debug" text="디버그" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="디버그 모드" />
+		<string id="BW_Debug_DebugMode_Hint" text="모든 치트 작업에 대한 상세한 디버그 로깅을 활성화합니다. 로그 파일 크기를 줄이려면 비활성화하세요." />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="무제한 HP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="체력 바가 감소하지 않습니다. 최대 HP를 초과하는 피해로 사망할 수 있습니다." />
+
+		<string id="BW_Player_InfiniteHealth" text="무한 체력" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="전투 시작 시 +9999 HP를 추가합니다. 원샷 킬을 방지합니다." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="무제한 말 체력" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="플레이어의 말이 피해를 받지 않습니다." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="무제한 방패 내구도" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="적의 공격을 막을 때 효과가 발동합니다." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="무제한 탄약" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="활, 석궁 및 투척 무기의 탄약이 999로 유지됩니다." />
+
+		<string id="BW_Player_MaxMorale" text="최대 사기" />
+		<string id="BW_Player_MaxMorale_Hint" text="플레이어의 파티가 항상 최대 사기를 가집니다." />
+
+		<string id="BW_Player_MovementSpeed" text="이동 속도 설정" />
+		<string id="BW_Player_MovementSpeed_Hint" text="지도에서만 작동하며 전투에서는 작동하지 않습니다. 변경 사항은 다음 게임 내 날에 적용됩니다." />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="클랜 동료 한도" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="플레이어 및 NPC 클랜의 동료 한도에 보너스를 추가합니다. NPC가 동료를 모집할 수 있게 하는 모드와 함께 작동합니다." />
+
+		<string id="BW_Player_PartySizeLimit" text="파티 크기 제한 보너스" />
+		<string id="BW_Player_PartySizeLimit_Hint" text="플레이어 파티에만 파티 크기 제한 보너스를 추가합니다. 클랜 파티나 NPC 파티에는 영향을 주지 않습니다." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="거래 항상 수락" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="모든 거래 제안이 자동으로 수락됩니다." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="무제한 대장간 체력" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="대장간 작업이 체력을 소모하지 않습니다." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="최대 캐릭터 관계" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="플레이어와의 긍정적인 관계 변화가 +99로 증가합니다." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="모든 캐릭터 관계 최대화" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="모든 캐릭터와의 관계를 즉시 100으로 설정합니다." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="무제한 HP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="동맹 NPC 영웅의 체력 바가 감소하지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_InfiniteHP" text="무한 체력" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="전투 시작 시 동맹 NPC 영웅에게 +9999 HP를 추가합니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="무제한 말 체력" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="동맹 NPC 영웅의 말이 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="무제한 방패 내구도" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="동맹 NPC 영웅의 방패가 피해를 받지 않습니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_UnlimitedAmmo" text="무제한 탄약" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="동맹 NPC 영웅의 탄약이 최대값으로 유지됩니다. 플레이어 편에서 싸우는 영웅에게만 적용되며 일반 병사에게는 적용되지 않습니다." />
+		<string id="BW_NPC_MovementSpeed" text="이동 속도 설정" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="지도상의 모든 그룹에 적용되며 플레이어에게만 적용되지 않습니다. 변경 사항은 다음 게임 내 날에 적용됩니다." />
+		<string id="BW_NPC_EditGold" text="금 편집" />
+		<string id="BW_NPC_EditGold_Hint" text="NPC의 금을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditInfluence" text="영향력 편집" />
+		<string id="BW_NPC_EditInfluence_Hint" text="NPC의 영향을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditAttributePoints" text="속성 포인트 편집" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="NPC의 속성 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+		<string id="BW_NPC_EditFocusPoints" text="포커스 포인트 편집" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="NPC의 포커스 포인트를 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="금 편집" />
+		<string id="BW_Inventory_EditGold_Hint" text="금을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+
+		<string id="BW_Inventory_EditInfluence" text="영향력 편집" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="영향력을 추가하거나 제거합니다 (값이 변경될 때 한 번 적용됩니다)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="무제한 음식" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="파티 음식이 감소하지 않습니다." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="거래/교환 아이템 감소 안 함" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="거래 후에도 아이템이 인벤토리에 남아 있습니다. 주는 아이템에만 적용되며 받는 아이템에는 적용되지 않습니다." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="최대 운반 능력" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="파티가 무제한 운반 능력을 가집니다." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="무제한 대장간 재료" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="이미 소유한 재료에만 작동합니다. 소유하지 않은 재료에는 효과가 없습니다." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="대장간 재료 수량" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="대장간 재료의 목표 수량을 설정합니다（100-9999）。무제한 대장간 재료가 활성화된 경우에만 작동합니다." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="속성 포인트 편집" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="캐릭터 메뉴를 두 번 열면 적용됩니다. 이 옵션을 비활성화하려면 값을 -1로 설정해야 합니다." />
+
+		<string id="BW_Stats_EditFocusPoints" text="집중 포인트 편집" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="캐릭터 메뉴를 두 번 열면 적용됩니다. 이 옵션을 비활성화하려면 값을 -1로 설정해야 합니다." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="무제한 명성" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="참고: 때로는 게임이 명성을 얻었다고 해도 실제로는 얻지 못할 수 있습니다. 특히 적이 도망칠 때. 이것은 게임 버그일 수 있습니다. 명성을 얻을 때 효과가 발동합니다." />
+
+		<string id="BW_Stats_RenownMultiplier" text="명성 배율" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="모든 명성 획득을 배가합니다 (0 = 비활성화). 참고: 표시된 값은 배가된 양을 반영하지 않을 수 있지만, 실제로 획득한 명성은 배가됩니다." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="무제한 스킬 경험치" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="스킬이 경험치를 얻을 때 효과가 발동합니다. 참고: 스킬은 속성의 영향을 받는 학습률을 기반으로 레벨 제한이 있습니다. 스킬의 학습률이 0이면 경험치를 얻지 못합니다. 학습률을 높이기 위해 속성 포인트를 소비하여 속성을 높여야 합니다." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="스킬 경험치 배율" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="스킬 경험치 획득을 배가합니다 (0 = 비활성화)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="무제한 부대 경험치" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="모든 부대가 제한 없이 경험치를 획득합니다." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="부대 경험치 배율" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="부대 경험치 획득을 배가합니다 (0 = 비활성화)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="원샷 킬" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="모든 적 유닛이 한 방에 죽습니다." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="설득/대화 항상 성공" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="모든 설득 및 대화 체크가 자동으로 성공합니다." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="1일 정착지 건설" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="한 번에 하나의 건물만 건설할 수 있습니다. 여러 건물을 건설/업그레이드하려면 여전히 여러 일이 필요합니다." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="즉시 공성 건설" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="참고: 이 옵션은 양쪽 모두에 영향을 미칩니다." />
+
+		<string id="BW_Game_GameSpeed" text="게임 속도 배율 설정" />
+		<string id="BW_Game_GameSpeed_Hint" text="재생 (1x) 및 빠른 진행 (4x) 버튼의 속도를 배가합니다. 1.0 = 정상 속도, 2.0 = 두 배 속도 등." />
+
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="수비대 모병 배율" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="매일 수비대에 모병되는 병사 수를 증가시킵니다. 0 = 비활성화, 1.0 = 정상, 2.0 = 두 배 등." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="수비대 급여 배율" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="수비대 급여 비용을 제어합니다. 1.0 = 정상, 0 = 무료, 음수 값 = 정착지 소유자의 수입." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="민병대 모병 배율" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="매일 모병되는 민병대원 수를 증가시킵니다. 0 = 비활성화, 1.0 = 정상, 2.0 = 두 배 등." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="민병대 베테랑 확률" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="민병대 베테랑이 나타날 확률의 백분율 (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="식량 보너스" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="지정된 값을 매일 식량 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="번영 보너스" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="지정된 값을 매일 번영 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="화로 보너스" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="마을의 매일 화로 성장에 지정된 값을 추가합니다 (0-999). 화로는 마을의 번영에 해당합니다." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="충성도 보너스" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="지정된 값을 매일 충성도 성장에 추가합니다 (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="보안 보너스" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="지정된 값을 매일 보안 성장에 추가합니다 (0-999)." />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="플레이어에 적용" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="선택한 치트를 플레이어 캐릭터에 적용합니다." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="플레이어 클랜 멤버에 적용" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="선택한 치트를 플레이어 클랜의 모든 멤버에 적용합니다." />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="왕국 통치자에 적용" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="선택한 치트를 모든 왕국의 통치자에 적용합니다." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="플레이어 왕국 통치자에 적용" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="플레이어의 현재 왕국 통치자에 치트를 적용합니다." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="왕국 봉신에 적용" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="선택한 치트를 모든 왕국의 모든 봉신 클랜 리더에 적용합니다." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="플레이어 왕국 봉신에 적용" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="선택한 치트를 플레이어 왕국의 모든 봉신 클랜 리더에 적용합니다." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="왕국 귀족에 적용" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="선택한 치트를 모든 왕국의 모든 귀족 영웅에 적용합니다." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="플레이어 왕국 귀족에 적용" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="선택한 치트를 플레이어 왕국의 모든 귀족 영웅에 적용합니다." />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="소규모 클랜 리더에 적용" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="선택한 치트를 모든 소규모 파벌의 리더에 적용합니다." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="소규모 클랜 멤버에 적용" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="선택한 치트를 소규모 클랜의 모든 귀족 영웅에 적용합니다." />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="여러 옵션을 결합할 수 있습니다. 중복 적용은 자동으로 방지됩니다." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: 설정 오류" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 성공적으로 초기화됨" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} 치트 성공적으로 초기화됨" />
+		<string id="BW_Message_GoldChanged" text="골드 {AMOUNT} 변경됨" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT}명의 영웅 골드 {AMOUNT} 변경됨" />
+		<string id="BW_Message_InfluenceChanged" text="영향력 {AMOUNT} 변경됨" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT}개 클랜 영향력 {AMOUNT} 변경됨" />
+		<string id="BW_Message_AttributePointsChanged" text="속성 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT}명의 영웅 속성 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_FocusPointsChanged" text="집중 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT}명의 영웅 집중 포인트 {AMOUNT} 변경됨" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT}명의 부상 병사 치료됨" />
+		<string id="BW_Message_NoCheatsActive" text="활성화된 치트 없음" />
+		<string id="BW_Message_ActiveCheats" text="활성화된 치트: {LIST}" />
+		<string id="BW_Message_Added" text="추가됨" />
+		<string id="BW_Message_Removed" text="제거됨" />
+	</strings>
+</base>

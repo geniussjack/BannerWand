@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="繁體中文" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - 目標" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="玩家" />
+		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Inventory" text="物品欄" />
+		<string id="BW_Category_Stats" text="屬性" />
+		<string id="BW_Category_Enemies" text="敵人" />
+		<string id="BW_Category_Game" text="遊戲" />
+		<string id="BW_Category_Settlements" text="定居點" />
+		<string id="BW_Category_CheatTargets" text="作弊目標" />
+		<string id="BW_Category_Kingdoms" text="王國" />
+		<string id="BW_Category_MinorClans" text="小氏族" />
+		<string id="BW_Category_Info" text="資訊" />
+		<string id="BW_Category_Debug" text="除錯" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="除錯模式" />
+		<string id="BW_Debug_DebugMode_Hint" text="為所有作弊操作啟用詳細的除錯日誌記錄。停用以減少日誌檔案大小。" />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="無限生命值" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="生命條永不減少。仍可能因超過最大生命值的傷害而死亡。" />
+
+		<string id="BW_Player_InfiniteHealth" text="無限生命" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="戰鬥開始時增加+9999生命值。防止一擊必殺。" />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="無限馬匹生命值" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="玩家的馬匹不會受到傷害。" />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="無限盾牌耐久度" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="當你格擋敵人攻擊時生效。" />
+
+		<string id="BW_Player_UnlimitedAmmo" text="無限彈藥" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="弓、弩和投擲武器的彈藥保持在999。" />
+
+		<string id="BW_Player_MaxMorale" text="最大士氣" />
+		<string id="BW_Player_MaxMorale_Hint" text="玩家的隊伍始終保持最大士氣。" />
+
+		<string id="BW_Player_MovementSpeed" text="設置移動速度" />
+		<string id="BW_Player_MovementSpeed_Hint" text="僅在地圖上有效，戰鬥中無效。更改在下一個遊戲日生效。" />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="家族同伴上限" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="為玩家和NPC家族添加同伴上限獎勵。與允許NPC招募同伴的模組兼容。" />
+
+		<string id="BW_Player_PartySizeLimit" text="隊伍規模上限獎勵" />
+		<string id="BW_Player_PartySizeLimit_Hint" text="僅為玩家隊伍添加隊伍規模上限獎勵。不影響家族隊伍或NPC隊伍。" />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="交易總是被接受" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="所有交易提議都會自動接受。" />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="無限鍛造耐力" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="鍛造永不消耗耐力。" />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="最大角色關係" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="與玩家的任何正面關係變化都會提升到+99。" />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="最大化所有角色關係" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="立即將所有角色的關係設置為100。" />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="無限生命值" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="盟友NPC英雄的生命條永不減少。僅適用於在玩家一方戰鬥的英雄，不適用於普通士兵。" />
+		<string id="BW_NPC_InfiniteHP" text="無限生命" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="戰鬥開始時為盟友NPC英雄增加+9999生命值。僅適用於在玩家一方戰鬥的英雄，不適用於普通士兵。" />
+		<string id="BW_NPC_UnlimitedHorseHP" text="無限馬匹生命值" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="盟友NPC英雄的馬匹不會受到傷害。僅適用於在玩家一方戰鬥的英雄，不適用於普通士兵。" />
+		<string id="BW_NPC_UnlimitedShieldHP" text="無限盾牌耐久度" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="盟友NPC英雄的盾牌不會受到傷害。僅適用於在玩家一方戰鬥的英雄，不適用於普通士兵。" />
+		<string id="BW_NPC_UnlimitedAmmo" text="無限彈藥" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="盟友NPC英雄的彈藥保持在最大值。僅適用於在玩家一方戰鬥的英雄，不適用於普通士兵。" />
+		<string id="BW_NPC_MovementSpeed" text="設置移動速度" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="適用於地圖上的所有隊伍，不僅僅是玩家。更改在下一個遊戲日生效。" />
+		<string id="BW_NPC_EditGold" text="編輯金幣" />
+		<string id="BW_NPC_EditGold_Hint" text="為NPC添加或移除金幣（當值改變時應用一次）。" />
+		<string id="BW_NPC_EditInfluence" text="編輯影響力" />
+		<string id="BW_NPC_EditInfluence_Hint" text="為NPC添加或移除影響力（當值改變時應用一次）。" />
+		<string id="BW_NPC_EditAttributePoints" text="編輯屬性點" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="為NPC添加或移除屬性點（當值改變時應用一次）。" />
+		<string id="BW_NPC_EditFocusPoints" text="編輯專注點" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="為NPC添加或移除專注點（當值改變時應用一次）。" />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="編輯金幣" />
+		<string id="BW_Inventory_EditGold_Hint" text="添加或移除金幣（當值改變時應用一次）。" />
+
+		<string id="BW_Inventory_EditInfluence" text="編輯影響力" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="添加或移除影響力（當值改變時應用一次）。" />
+
+		<string id="BW_Inventory_UnlimitedFood" text="無限食物" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="隊伍食物永不減少。" />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="交易/交換物品不減少" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="交易後物品仍保留在物品欄中。僅適用於你給出的物品，不適用於你收到的物品。" />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="最大載重" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="隊伍擁有無限載重。" />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="無限鍛造材料" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="僅適用於你已經擁有的材料，對你沒有擁有的材料沒有效果。" />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="鍛造材料數量" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="設置鍛造材料的目標數量（100-9999）。僅在啟用無限鍛造材料時有效。" />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="編輯屬性點" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="打開角色菜單兩次後生效。要禁用此選項，你需要將值設置為-1。" />
+
+		<string id="BW_Stats_EditFocusPoints" text="編輯專精點" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="打開角色菜單兩次後生效。要禁用此選項，你需要將值設置為-1。" />
+
+		<string id="BW_Stats_UnlimitedRenown" text="無限聲望" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="注意：有時即使遊戲說你獲得了聲望，你也可能沒有獲得聲望。特別是當敵人逃跑時。這可能是遊戲錯誤。獲得聲望時生效。" />
+
+		<string id="BW_Stats_RenownMultiplier" text="聲望倍數" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="倍增所有聲望獲得（0 = 禁用）。注意：顯示值可能不反映倍增後的數量，但實際獲得的聲望會被倍增。" />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="無限技能經驗" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="當技能獲得經驗時生效。注意：技能有基於其學習率的等級上限，學習率受你的屬性影響。如果技能的學習率為0，它將不會獲得經驗，你需要花費屬性點來提高你的屬性以提高學習率。" />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="技能經驗倍數" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="倍增技能經驗獲得（0 = 禁用）。" />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="無限部隊經驗" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="所有部隊無限制獲得經驗。" />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="部隊經驗倍數" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="倍增部隊經驗獲得（0 = 禁用）。" />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="一擊必殺" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="所有敵方單位一擊必死。" />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="說服/對話總是成功" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="所有說服和對話檢查自動成功。" />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="一天完成定居點建設" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="一次只能建造一個建築。建造/升級多個建築仍然需要多天。" />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="即時攻城建設" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="注意：此選項影響雙方。" />
+
+		<string id="BW_Game_GameSpeed" text="設置遊戲速度倍數" />
+		<string id="BW_Game_GameSpeed_Hint" text="倍增播放（1x）和快進（4x）按鈕的速度。1.0 = 正常速度，2.0 = 雙倍速度等。" />
+
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="駐軍招募倍數" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="增加每天招募到駐軍的士兵數量。0 = 禁用，1.0 = 正常，2.0 = 雙倍等。" />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="駐軍工資倍數" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="控制駐軍工資成本。1.0 = 正常，0 = 免費，負值 = 定居點所有者的收入。" />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="民兵招募倍數" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="增加每天招募的民兵數量。0 = 禁用，1.0 = 正常，2.0 = 雙倍等。" />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="民兵老兵機率" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="民兵老兵出現的機率百分比（0-100%）。" />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="食物加成" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="將指定值添加到每日食物增長（0-999）。" />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="繁榮加成" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="將指定值添加到每日繁榮增長（0-999）。" />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="爐床加成" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="將指定值添加到村莊的每日爐床增長（0-999）。爐床是村莊的繁榮等價物。" />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="忠誠度加成" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="將指定值添加到每日忠誠度增長（0-999）。" />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="安全加成" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="將指定值添加到每日安全增長（0-999）。" />
+
+		<!-- Target Settings -->
+		<!-- Category: Player -->
+		<string id="BW_Target_ApplyToPlayer" text="應用於玩家" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="將選定的作弊應用於玩家角色。" />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="應用於玩家氏族成員" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="將選定的作弊應用於玩家氏族的所有成員。" />
+
+		<!-- Category: Kingdoms -->
+		<string id="BW_Target_ApplyToKingdomRulers" text="應用於王國統治者" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="將選定的作弊應用於所有王國的統治者。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="應用於玩家王國統治者" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="將作弊應用於玩家當前王國的統治者。" />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="應用於王國家臣" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="將選定的作弊應用於任何王國的所有家臣氏族領袖。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="應用於玩家王國家臣" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="將選定的作弊應用於玩家王國的所有家臣氏族領袖。" />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="應用於王國貴族" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="將選定的作弊應用於任何王國的所有貴族英雄。" />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="應用於玩家王國貴族" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="將選定的作弊應用於玩家王國的所有貴族英雄。" />
+
+		<!-- Category: Minor Clans -->
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="應用於小氏族領袖" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="將選定的作弊應用於所有小派系的領袖。" />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="應用於小氏族成員" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="將選定的作弊應用於小氏族的所有貴族英雄。" />
+
+		<!-- Info Text -->
+		<string id="BW_Target_InfoText" text="可以組合多個選項。重複應用會自動防止。" />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: 設定錯誤" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 成功初始化" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} 個作弊成功初始化" />
+		<string id="BW_Message_GoldChanged" text="金幣已更改 {AMOUNT}" />
+		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} 個英雄的金幣已更改 {AMOUNT}" />
+		<string id="BW_Message_InfluenceChanged" text="影響力已更改 {AMOUNT}" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} 個家族的影響力已更改 {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChanged" text="屬性點已更改 {AMOUNT}" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} 個英雄的屬性點已更改 {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChanged" text="專精點已更改 {AMOUNT}" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} 個英雄的專精點已更改 {AMOUNT}" />
+		<string id="BW_Message_WoundedTroopsHealed" text="已治癒 {COUNT} 名受傷士兵" />
+		<string id="BW_Message_NoCheatsActive" text="沒有啟用的作弊" />
+		<string id="BW_Message_ActiveCheats" text="啟用的作弊: {LIST}" />
+		<string id="BW_Message_Added" text="已新增" />
+		<string id="BW_Message_Removed" text="已移除" />
+	</strings>
+</base>
