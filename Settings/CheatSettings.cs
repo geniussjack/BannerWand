@@ -483,6 +483,15 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Enemies}Enemies", GroupOrder = 3)]
         public bool OneHitKills { get; set; } = false;
 
+        /// <summary>
+        /// Troops die instead of being wounded/captured in every auto-resolved field battle on
+        /// the map, not just battles the player personally fights.
+        /// Implemented in <see cref="Models.CustomCombatSimulationModel"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Enemies_AllBattlesNoWounding}All Battles: No Wounding (Always Kill)", Order = 2, RequireRestart = false, HintText = "{=BW_Enemies_AllBattlesNoWounding_Hint}Troops die instead of being wounded/captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges.")]
+        [SettingPropertyGroup("{=BW_Category_Enemies}Enemies", GroupOrder = 3)]
+        public bool AllBattlesNoWounding { get; set; } = false;
+
         #endregion
 
         #region Game Category

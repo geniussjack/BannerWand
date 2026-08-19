@@ -133,6 +133,7 @@
     <Compile Include="Interfaces\IVersionReader.cs" />
     <Compile Include="Models\CustomBarterModel.cs" />
     <Compile Include="Models\CustomBuildingConstructionModel.cs" />
+    <Compile Include="Models\CustomCombatSimulationModel.cs" />
     <Compile Include="Models\CustomCombatXpModel.cs" />
     <Compile Include="Models\CustomGenericXpModel.cs" />
     <Compile Include="Models\CustomPartyTrainingModel.cs" />
