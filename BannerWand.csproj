@@ -190,48 +190,30 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <PreBuildEvent>
-REM Очищаем старые папки bin перед сборкой
-if exist "$(ProjectDir)bin\Debug" rmdir /S /Q "$(ProjectDir)bin\Debug" 2&gt;nul
-if exist "$(ProjectDir)bin\Release" rmdir /S /Q "$(ProjectDir)bin\Release" 2&gt;nul
-    </PreBuildEvent>
-    <PostBuildEvent>
-REM Удаляем лишние файлы из Win64_Shipping_Client
-del /F /Q "$(TargetDir)*.pdb" 2&gt;nul
-del /F /Q "$(TargetDir)*.xml" 2&gt;nul
-del /F /Q "$(TargetDir)TaleWorlds.*.dll" 2&gt;nul
-REM Очищаем старую папку bin/BannerWand перед копированием
-if exist "$(ProjectDir)bin\BannerWand" rmdir /S /Q "$(ProjectDir)bin\BannerWand" 2&gt;nul
-REM Создаём структуру папок в bin/BannerWand
-if not exist "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client" mkdir "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client"
-if not exist "$(ProjectDir)bin\BannerWand\ModuleData\Languages" mkdir "$(ProjectDir)bin\BannerWand\ModuleData\Languages"
-REM Копируем DLL
-copy /Y "$(TargetDir)BannerWand.dll" "$(ProjectDir)bin\BannerWand\bin\Win64_Shipping_Client\BannerWand.dll"
-REM Копируем SubModule.xml из папки проекта
-copy /Y "$(MSBuildProjectDirectory)\SubModule.xml" "$(MSBuildProjectDirectory)\bin\BannerWand\SubModule.xml"
-REM Копируем ModuleData
-xcopy /Y /E /I "$(ProjectDir)ModuleData\Languages" "$(ProjectDir)bin\BannerWand\ModuleData\Languages\"
-    </PostBuildEvent>
+  <PropertyGroup>
+    <!--
+      Deploy target directory: a local staging copy under bin\BannerWand for Debug,
+      the actual game Modules folder for Release. $(ProjectDir) contains an ampersand
+      (".../Mount & Blade II Bannerlord/...") - deliberately not resolved through a
+      PostBuildEvent/xcopy batch script, since cmd.exe treats an unescaped "&" as a
+      command separator and silently breaks the copy. MakeDir/Copy/Delete below operate
+      on plain string values, so the ampersand is never parsed as shell syntax.
+    -->
+    <DeployRoot Condition="'$(Configuration)' == 'Debug'">$(ProjectDir)bin\BannerWand\</DeployRoot>
+    <DeployRoot Condition="'$(Configuration)' == 'Release'">D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand\</DeployRoot>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PostBuildEvent>
-REM Удаляем лишние файлы из Win64_Shipping_Client
-del /F /Q "$(TargetDir)*.pdb" 2&gt;nul
-del /F /Q "$(TargetDir)*.xml" 2&gt;nul
-del /F /Q "$(TargetDir)TaleWorlds.*.dll" 2&gt;nul
-REM Копируем файлы в папку игры Bannerlord
-set "GAME_MODULES_PATH=D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\BannerWand"
-REM Создаём структуру папок
-if not exist "%GAME_MODULES_PATH%\bin\Win64_Shipping_Client" mkdir "%GAME_MODULES_PATH%\bin\Win64_Shipping_Client"
-if not exist "%GAME_MODULES_PATH%\ModuleData\Languages" mkdir "%GAME_MODULES_PATH%\ModuleData\Languages"
-REM Копируем DLL
-copy /Y "$(TargetDir)BannerWand.dll" "%GAME_MODULES_PATH%\bin\Win64_Shipping_Client\BannerWand.dll"
-REM Копируем SubModule.xml
-copy /Y "$(MSBuildProjectDirectory)\SubModule.xml" "%GAME_MODULES_PATH%\SubModule.xml"
-REM Копируем ModuleData\Languages
-xcopy /Y /E /I "$(ProjectDir)ModuleData\Languages" "%GAME_MODULES_PATH%\ModuleData\Languages\"
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="DeployModule" AfterTargets="Build">
+    <ItemGroup>
+      <ExtraOutputFiles Include="$(TargetDir)*.pdb;$(TargetDir)*.xml;$(TargetDir)TaleWorlds.*.dll" />
+      <LanguageFiles Include="$(ProjectDir)ModuleData\Languages\**\*.*" />
+    </ItemGroup>
+    <Delete Files="@(ExtraOutputFiles)" ContinueOnError="true" />
+    <RemoveDir Directories="$(DeployRoot)" Condition="'$(Configuration)' == 'Debug' And Exists('$(DeployRoot)')" />
+    <MakeDir Directories="$(DeployRoot)bin\Win64_Shipping_Client" />
+    <MakeDir Directories="$(DeployRoot)ModuleData\Languages" />
+    <Copy SourceFiles="$(TargetDir)BannerWand.dll" DestinationFolder="$(DeployRoot)bin\Win64_Shipping_Client" />
+    <Copy SourceFiles="$(ProjectDir)SubModule.xml" DestinationFolder="$(DeployRoot)" />
+    <Copy SourceFiles="@(LanguageFiles)" DestinationFolder="$(DeployRoot)ModuleData\Languages\%(RecursiveDir)" />
+  </Target>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
