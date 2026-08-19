@@ -32,7 +32,7 @@ namespace BannerWand.Core
     /// by game models alone, such as gold/influence editing and relationship management.
     /// </para>
     /// <para>
-    /// Compatible with .NET Framework 4.7.2 and Bannerlord 1.3.x. The mod version is read from
+    /// Compatible with .NET Framework 4.7.2 and Bannerlord 1.4.8. The mod version is read from
     /// SubModule.xml at runtime via <see cref="VersionReader"/>, not hardcoded here.
     /// </para>
     /// </remarks>
@@ -69,9 +69,9 @@ namespace BannerWand.Core
             {
                 // Fallback if version detection fails
                 ModLogger.Warning($"Failed to detect game version: {ex.Message}. Using fallback.");
-                ModLogger.Log("Game Version: 1.3.x (fallback)");
+                ModLogger.Log("Game Version: 1.4.8 (fallback)");
             }
-            ModLogger.Log("Build Configuration: VERSION_1_3_X");
+            ModLogger.Log("Build Configuration: VERSION_1_4_8");
             ModLogger.Log("=================================");
             ModLogger.Log("BannerWand mod loading...");
             ModLogger.Log("Using Bannerlord's Game Model system + Harmony patches for advanced features");

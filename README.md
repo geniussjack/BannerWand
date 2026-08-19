@@ -4,7 +4,7 @@
 ![.NET Framework](https://img.shields.io/badge/.NET_Framework-4.7.2-512BD4?style=for-the-badge&logo=dotnet)
 ![Harmony](https://img.shields.io/badge/Harmony-2.3.6-red?style=for-the-badge)
 ![MCM](https://img.shields.io/badge/MCM-v5-orange?style=for-the-badge)
-![Bannerlord](https://img.shields.io/badge/Bannerlord-1.3.x-2E5A87?style=for-the-badge)
+![Bannerlord](https://img.shields.io/badge/Bannerlord-1.4.8-2E5A87?style=for-the-badge)
 
 **BannerWand** is a cheat mod for **Mount & Blade II: Bannerlord**, configured entirely through **Mod Configuration Menu (MCM)**. Every cheat can be toggled or tuned in-game, without editing files or restarting.
 
