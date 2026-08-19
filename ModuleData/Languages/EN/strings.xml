@@ -91,6 +91,9 @@
 		<string id="BW_Player_MaxAllCharacterRelationships" text="Max All Character Relationships" />
 		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Instantly sets relationship to 100 with all characters." />
 
+		<string id="BW_Player_InfiniteShipHealth" text="Infinite Ship Health" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Ships owned by the player's party never take damage. Requires War Sails DLC." />
+
 		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
 		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />
 

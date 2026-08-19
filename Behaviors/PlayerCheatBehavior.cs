@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 // Third-party namespaces
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Naval;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 
@@ -146,6 +148,9 @@ namespace BannerWand.Behaviors
             _goldApplied = false;
             _influenceApplied = false;
             _maxAllRelationshipsApplied = false;
+
+            // Clear ship tracking from any previous campaign
+            _invulnerableShips.Clear();
         }
 
         /// <summary>
@@ -165,6 +170,9 @@ namespace BannerWand.Behaviors
 
             // Trade items restoration - check and restore removed items
             CheckAndRestoreTradeItems();
+
+            // Ship health - keep the player's ships invulnerable while the cheat is enabled
+            ApplyInfiniteShipHealth();
         }
 
         /// <summary>
@@ -782,6 +790,83 @@ namespace BannerWand.Behaviors
             catch (Exception ex)
             {
                 LogException(ex, nameof(CheckAndRestoreTradeItems));
+            }
+        }
+
+        #endregion
+
+        #region Ship Health
+
+        /// <summary>
+        /// Tracks ships this behavior made invulnerable, so the cheat can be turned back off
+        /// without touching ships that were invulnerable for some other reason (e.g. a quest ship).
+        /// </summary>
+        private static readonly HashSet<Ship> _invulnerableShips = [];
+
+        /// <summary>
+        /// Keeps the player's ships invulnerable and topped up while Infinite Ship Health is enabled,
+        /// and releases ships this behavior marked invulnerable once the cheat is turned back off.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Ship.IsInvulnerable"/> and <see cref="Ship.HitPoints"/> both have public
+        /// setters, so this can set them directly rather than needing a Harmony patch or a custom
+        /// <c>CampaignShipDamageModel</c> override.
+        /// </remarks>
+        private static void ApplyInfiniteShipHealth()
+        {
+            try
+            {
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                MobileParty? mainParty = MobileParty.MainParty;
+                if (mainParty?.Ships is null)
+                {
+                    return;
+                }
+
+                bool cheatEnabled = settings.InfiniteShipHealth && targetSettings.ApplyToPlayer;
+
+                foreach (Ship ship in mainParty.Ships)
+                {
+                    if (ship is null)
+                    {
+                        continue;
+                    }
+
+                    if (cheatEnabled)
+                    {
+                        if (!ship.IsInvulnerable)
+                        {
+                            ship.IsInvulnerable = true;
+                        }
+
+                        if (ship.HitPoints < ship.MaxHitPoints)
+                        {
+                            ship.HitPoints = ship.MaxHitPoints;
+                        }
+
+                        if (ship.SailHitPoints < ship.MaxSailHitPoints)
+                        {
+                            ship.SailHitPoints = ship.MaxSailHitPoints;
+                        }
+
+                        _ = _invulnerableShips.Add(ship);
+                    }
+                    else if (_invulnerableShips.Remove(ship))
+                    {
+                        // Only revert ships we made invulnerable ourselves
+                        ship.IsInvulnerable = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[PlayerCheatBehavior] Error in {nameof(ApplyInfiniteShipHealth)}: {ex.Message}", ex);
             }
         }
 
