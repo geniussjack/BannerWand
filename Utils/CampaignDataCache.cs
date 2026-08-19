@@ -140,7 +140,7 @@ namespace BannerWand.Utils
         /// Read-only list of kingdoms. Cache is refreshed each campaign tick.
         /// </returns>
         /// <remarks>
-        /// Used for kingdom-related target filtering in CheatTargetSettings.
+        /// Used for kingdom-related target filtering in CheatSettings.
         /// </remarks>
 #pragma warning disable CS9266 // field keyword requires .NET 10, but project targets .NET Framework 4.7.2. Explicit backing field is correct.
         public static List<Kingdom>? AllKingdoms

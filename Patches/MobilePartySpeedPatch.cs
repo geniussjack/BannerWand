@@ -38,7 +38,7 @@ namespace BannerWand.Patches
     public static class MobilePartySpeedPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the speed bonus for a mobile party if the cheat is enabled.

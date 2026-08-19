@@ -46,7 +46,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Text object for party size bonus description (cached to avoid allocations).

@@ -36,7 +36,7 @@ namespace BannerWand.Patches
     public static class BarterableValuePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
         private static bool _firstLogDone = false;
 
         /// <summary>

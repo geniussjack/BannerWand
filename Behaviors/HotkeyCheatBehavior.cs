@@ -41,7 +41,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Input context used to poll BannerWand's hotkeys. <see cref="HotKey"/>/<see cref="GameKey"/>
@@ -70,7 +70,7 @@ namespace BannerWand.Behaviors
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;

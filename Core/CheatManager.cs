@@ -21,7 +21,7 @@ namespace BannerWand.Core
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Initializes the cheat manager when a campaign starts.

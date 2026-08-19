@@ -40,7 +40,7 @@ namespace BannerWand.Patches
     public static class AmmoConsumptionPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Flag to track if restoration is in progress (to avoid blocking our own restore calls).

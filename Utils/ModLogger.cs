@@ -526,7 +526,7 @@ namespace BannerWand.Utils
             try
             {
                 Settings.CheatSettings? settings = Settings.CheatSettings.Instance;
-                Settings.CheatTargetSettings? targetSettings = Settings.CheatTargetSettings.Instance;
+                Settings.CheatSettings? targetSettings = Settings.CheatSettings.Instance;
 
                 if (settings == null || targetSettings == null)
                 {

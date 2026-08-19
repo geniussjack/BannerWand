@@ -54,7 +54,7 @@ namespace BannerWand.Utils
             }
 
             // Early exit if target settings are null
-            CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+            CheatSettings? targetSettings = CheatSettings.Instance;
             if (targetSettings == null)
             {
                 return false;

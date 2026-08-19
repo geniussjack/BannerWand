@@ -52,7 +52,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the energy cost for smithing an item, with cheat override for zero cost (PLAYER ONLY).

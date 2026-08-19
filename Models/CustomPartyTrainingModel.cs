@@ -50,7 +50,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Calculates XP gain from battles with Troops XP Multiplier applied.

@@ -152,7 +152,6 @@
     <Compile Include="Patches\RenownMultiplierPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\CheatSettings.cs" />
-    <Compile Include="Settings\CheatTargetSettings.cs" />
     <Compile Include="Services\CacheService.cs" />
     <Compile Include="Services\PerformanceMonitor.cs" />
     <Compile Include="Utils\CampaignDataCache.cs" />

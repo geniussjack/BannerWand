@@ -30,7 +30,7 @@ namespace BannerWand.Behaviors.Handlers
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Applies unlimited ammo to the player agent.
@@ -39,7 +39,7 @@ namespace BannerWand.Behaviors.Handlers
         public void ApplyUnlimitedAmmo(Agent agent)
         {
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;

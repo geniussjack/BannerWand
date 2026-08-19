@@ -40,7 +40,7 @@ namespace BannerWand.Models
     public class CustomPartySpeedModel : DefaultPartySpeedCalculatingModel
     {
         private CheatSettings? Settings => CheatSettings.Instance;
-        private CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks the last desired speed value to detect changes for logging.

@@ -32,7 +32,7 @@ namespace BannerWand.Patches
     public static class NavalSpeedPatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks the last desired speed value to detect changes for logging.

@@ -31,7 +31,7 @@ namespace BannerWand.Patches
     public static class ItemRosterTradePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Thread-local backup of player's inventory before AddToCounts is called.

@@ -58,7 +58,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the XP multiplier for a hero with cheat overrides applied.

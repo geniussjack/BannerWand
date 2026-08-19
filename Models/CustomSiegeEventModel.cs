@@ -46,7 +46,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the construction progress per hour for siege engines with cheat overrides.
@@ -84,7 +84,7 @@ namespace BannerWand.Models
                 float baseProgress = base.GetConstructionProgressPerHour(siegeEngineType, siegeEvent, siegeEventSide);
 
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return baseProgress;
@@ -155,7 +155,7 @@ namespace BannerWand.Models
             }
 
             // Early exit if settings are null
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (targetSettings is null)
             {
                 return false;
@@ -193,7 +193,7 @@ namespace BannerWand.Models
             }
 
             // Early exit if settings are null
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (targetSettings is null)
             {
                 return false;

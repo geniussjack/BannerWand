@@ -33,7 +33,7 @@ namespace BannerWand.Patches
     public static class ItemBarterablePatch
     {
         private static CheatSettings? Settings => CheatSettings.Instance;
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Thread-local backup of player's inventory before barter is applied.

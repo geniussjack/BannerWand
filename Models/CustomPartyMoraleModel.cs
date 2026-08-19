@@ -48,7 +48,7 @@ namespace BannerWand.Models
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Gets the effective morale for a mobile party with cheat overrides applied.
@@ -85,7 +85,7 @@ namespace BannerWand.Models
             {
                 // Early exit for null or unconfigured settings
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null || mobileParty == null)
                 {
                     return base.GetEffectivePartyMorale(mobileParty, includeDescription);
@@ -148,7 +148,7 @@ namespace BannerWand.Models
         private bool ShouldApplyMaxMoraleToParty(MobileParty mobileParty)
         {
             // Early exit if settings are null
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (targetSettings is null)
             {
                 return false;

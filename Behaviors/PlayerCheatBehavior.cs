@@ -43,7 +43,7 @@ namespace BannerWand.Behaviors
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Tracks whether gold has been applied to prevent repeated application.
@@ -221,7 +221,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -372,7 +372,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -486,7 +486,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -681,7 +681,7 @@ namespace BannerWand.Behaviors
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;
@@ -774,7 +774,7 @@ namespace BannerWand.Behaviors
         {
             // Early exit if settings are null
             CheatSettings? settings = Settings;
-            CheatTargetSettings? targetSettings = TargetSettings;
+            CheatSettings? targetSettings = TargetSettings;
             if (settings is null || targetSettings is null)
             {
                 return;
@@ -810,7 +810,7 @@ namespace BannerWand.Behaviors
             {
                 // Early exit if settings are null
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;
@@ -915,7 +915,7 @@ namespace BannerWand.Behaviors
             try
             {
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null)
                 {
                     return;

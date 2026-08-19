@@ -47,7 +47,7 @@ namespace BannerWand.Patches
         /// <summary>
         /// Gets the current target settings instance.
         /// </summary>
-        private static CheatTargetSettings? TargetSettings => CheatTargetSettings.Instance;
+        private static CheatSettings? TargetSettings => CheatSettings.Instance;
 
         /// <summary>
         /// Cached reflection handle for the internal <c>Hero.SetPerkValueInternal(PerkObject, bool)</c>
@@ -80,7 +80,7 @@ namespace BannerWand.Patches
                 }
 
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null || !settings.AllowBothPerks)
                 {
                     return;
@@ -142,7 +142,7 @@ namespace BannerWand.Patches
                 }
 
                 CheatSettings? settings = Settings;
-                CheatTargetSettings? targetSettings = TargetSettings;
+                CheatSettings? targetSettings = TargetSettings;
                 if (settings is null || targetSettings is null || !settings.AllowBothPerks)
                 {
                     return true;

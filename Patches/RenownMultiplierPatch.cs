@@ -135,7 +135,7 @@ namespace BannerWand.Patches
             try
             {
                 CheatSettings? settings = CheatSettings.Instance;
-                CheatTargetSettings? targetSettings = CheatTargetSettings.Instance;
+                CheatSettings? targetSettings = CheatSettings.Instance;
 
                 if (settings == null || targetSettings == null)
                 {
