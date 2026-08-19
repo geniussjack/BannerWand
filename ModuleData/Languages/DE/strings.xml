@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+	<tags>
+		<tag language="German" />
+	</tags>
+	<strings>
+		<!-- MCM Display Names -->
+		<string id="BW_ModName" text="BannerWand" />
+		<string id="BW_ModName_Targets" text="BannerWand - Ziele" />
+
+		<!-- Category Names -->
+		<string id="BW_Category_Player" text="Spieler" />
+		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Inventory" text="Inventar" />
+		<string id="BW_Category_Stats" text="Statistiken" />
+		<string id="BW_Category_Enemies" text="Feinde" />
+		<string id="BW_Category_Game" text="Spiel" />
+		<string id="BW_Category_Settlements" text="Siedlungen" />
+		<string id="BW_Category_CheatTargets" text="Cheat-Ziele" />
+		<string id="BW_Category_Kingdoms" text="Königreiche" />
+		<string id="BW_Category_MinorClans" text="Kleine Clans" />
+		<string id="BW_Category_Info" text="Info" />
+		<string id="BW_Category_Debug" text="Debug" />
+
+		<!-- Debug Category -->
+		<string id="BW_Debug_DebugMode" text="Debug-Modus" />
+		<string id="BW_Debug_DebugMode_Hint" text="Aktiviert detaillierte Debug-Protokollierung für alle Cheat-Operationen. Deaktivieren, um die Protokolldateigröße zu reduzieren." />
+
+		<!-- Player Category -->
+		<string id="BW_Player_UnlimitedHealth" text="Unbegrenzte LP" />
+		<string id="BW_Player_UnlimitedHealth_Hint" text="Gesundheitsbalken nimmt nie ab. Kann immer noch durch Schaden über maximalen LP sterben." />
+
+		<string id="BW_Player_InfiniteHealth" text="Unendliche Gesundheit" />
+		<string id="BW_Player_InfiniteHealth_Hint" text="Fügt +9999 LP zu Kampfbeginn hinzu. Verhindert Ein-Schlag-Tötungen." />
+
+		<string id="BW_Player_UnlimitedHorseHealth" text="Unbegrenzte Pferdegesundheit" />
+		<string id="BW_Player_UnlimitedHorseHealth_Hint" text="Das Pferd des Spielers nimmt keinen Schaden." />
+
+		<string id="BW_Player_UnlimitedShieldDurability" text="Unbegrenzte Schildhaltbarkeit" />
+		<string id="BW_Player_UnlimitedShieldDurability_Hint" text="Wirkt, wenn du feindliche Angriffe blockierst." />
+
+		<string id="BW_Player_UnlimitedAmmo" text="Unbegrenzte Munition" />
+		<string id="BW_Player_UnlimitedAmmo_Hint" text="Munition für Bögen, Armbrüste und Wurfwaffen wird auf 999 gehalten." />
+
+		<string id="BW_Player_MaxMorale" text="Maximale Moral" />
+		<string id="BW_Player_MaxMorale_Hint" text="Die Gruppe des Spielers hat immer maximale Moral." />
+
+		<string id="BW_Player_MovementSpeed" text="Bewegungsgeschwindigkeit setzen" />
+		<string id="BW_Player_MovementSpeed_Hint" text="Funktioniert nur auf der Karte, nicht im Kampf. Änderungen werden am nächsten Spieltag angewendet." />
+
+		<string id="BW_Player_ClanCompanionsLimit" text="Clan-Gefährtenlimit" />
+		<string id="BW_Player_ClanCompanionsLimit_Hint" text="Fügt einen Bonus zum Gefährtenlimit für Spieler- und NPC-Clans hinzu. Funktioniert mit Mods, die es NPCs ermöglichen, Gefährten zu rekrutieren." />
+
+		<string id="BW_Player_PartySizeLimit" text="Parteigrößen-Limit-Bonus" />
+		<string id="BW_Player_PartySizeLimit_Hint" text="Fügt einen Bonus zum Parteigrößen-Limit nur für die Gruppe des Spielers hinzu. Betrifft keine Clan-Gruppen oder NPC-Gruppen." />
+
+		<string id="BW_Player_BarterAlwaysAccepted" text="Tauschangebot immer angenommen" />
+		<string id="BW_Player_BarterAlwaysAccepted_Hint" text="Alle Tauschangebote werden automatisch angenommen." />
+
+		<string id="BW_Player_UnlimitedSmithyStamina" text="Unbegrenzte Schmiede-Ausdauer" />
+		<string id="BW_Player_UnlimitedSmithyStamina_Hint" text="Schmieden verbraucht nie Ausdauer." />
+
+		<string id="BW_Player_MaxCharacterRelationship" text="Maximale Charakterbeziehung" />
+		<string id="BW_Player_MaxCharacterRelationship_Hint" text="Jede positive Beziehungsänderung mit dem Spieler wird auf +99 erhöht." />
+
+		<string id="BW_Player_MaxAllCharacterRelationships" text="Maximale Beziehungen zu allen" />
+		<string id="BW_Player_MaxAllCharacterRelationships_Hint" text="Setzt sofort die Beziehung zu allen Charakteren auf 100." />
+
+		<!-- NPC Cheats -->
+		<string id="BW_NPC_UnlimitedHP" text="Unbegrenzte LP" />
+		<string id="BW_NPC_UnlimitedHP_Hint" text="Gesundheitsbalken verbündeter NPC-Helden nimmt nie ab. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_InfiniteHP" text="Unendliche Gesundheit" />
+		<string id="BW_NPC_InfiniteHP_Hint" text="Fügt verbündeten NPC-Helden zu Kampfbeginn +9999 LP hinzu. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedHorseHP" text="Unbegrenzte Pferdegesundheit" />
+		<string id="BW_NPC_UnlimitedHorseHP_Hint" text="Pferde verbündeter NPC-Helden nehmen keinen Schaden. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedShieldHP" text="Unbegrenzte Schildhaltbarkeit" />
+		<string id="BW_NPC_UnlimitedShieldHP_Hint" text="Schilde verbündeter NPC-Helden nehmen keinen Schaden. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_UnlimitedAmmo" text="Unbegrenzte Munition" />
+		<string id="BW_NPC_UnlimitedAmmo_Hint" text="Munition verbündeter NPC-Helden wird auf Maximum gehalten. Gilt nur für Helden, die auf der Seite des Spielers kämpfen, nicht für normale Soldaten." />
+		<string id="BW_NPC_MovementSpeed" text="Bewegungsgeschwindigkeit setzen" />
+		<string id="BW_NPC_MovementSpeed_Hint" text="Gilt für alle Gruppen auf der Karte, nicht nur für den Spieler. Änderungen werden am nächsten Spieltag angewendet." />
+		<string id="BW_NPC_EditGold" text="Gold bearbeiten" />
+		<string id="BW_NPC_EditGold_Hint" text="Gold für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditInfluence" text="Einfluss bearbeiten" />
+		<string id="BW_NPC_EditInfluence_Hint" text="Einfluss für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditAttributePoints" text="Attributspunkte bearbeiten" />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Attributspunkte für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+		<string id="BW_NPC_EditFocusPoints" text="Fokusspunkte bearbeiten" />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Fokusspunkte für NPCs hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+
+		<!-- Inventory Category -->
+		<string id="BW_Inventory_EditGold" text="Gold bearbeiten" />
+		<string id="BW_Inventory_EditGold_Hint" text="Gold hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+
+		<string id="BW_Inventory_EditInfluence" text="Einfluss bearbeiten" />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Einfluss hinzufügen oder entfernen (wird einmal angewendet, wenn sich der Wert ändert)." />
+
+		<string id="BW_Inventory_UnlimitedFood" text="Unbegrenztes Essen" />
+		<string id="BW_Inventory_UnlimitedFood_Hint" text="Gruppenessen nimmt nie ab." />
+
+		<string id="BW_Inventory_TradeItemsNoDecrease" text="Handels-/Tauschgegenstände nehmen nicht ab" />
+		<string id="BW_Inventory_TradeItemsNoDecrease_Hint" text="Gegenstände bleiben nach dem Handel in deinem Inventar. Gilt nur für Gegenstände, die du gibst, nicht für die, die du erhältst." />
+
+		<string id="BW_Inventory_MaxCarryingCapacity" text="Maximale Tragfähigkeit" />
+		<string id="BW_Inventory_MaxCarryingCapacity_Hint" text="Gruppe hat unbegrenzte Tragfähigkeit." />
+
+		<string id="BW_Inventory_UnlimitedSmithyMaterials" text="Unbegrenzte Schmiedematerialien" />
+		<string id="BW_Inventory_UnlimitedSmithyMaterials_Hint" text="Funktioniert nur für Materialien, die du bereits besessen hast, hat keine Wirkung auf Materialien, die du nicht besessen hast." />
+
+		<string id="BW_Inventory_SmithyMaterialsQuantity" text="Schmiedematerialien-Menge" />
+		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Lege die Zielmenge für Schmiedematerialien fest (100-9999). Funktioniert nur, wenn Unbegrenzte Schmiedematerialien aktiviert ist." />
+
+		<!-- Stats Category -->
+		<string id="BW_Stats_EditAttributePoints" text="Attributspunkte bearbeiten" />
+		<string id="BW_Stats_EditAttributePoints_Hint" text="Wirkt, wenn das Charaktermenü zweimal geöffnet wird. Zum Deaktivieren dieser Option musst du den Wert auf -1 setzen." />
+
+		<string id="BW_Stats_EditFocusPoints" text="Fokusspunkte bearbeiten" />
+		<string id="BW_Stats_EditFocusPoints_Hint" text="Wirkt, wenn das Charaktermenü zweimal geöffnet wird. Zum Deaktivieren dieser Option musst du den Wert auf -1 setzen." />
+
+		<string id="BW_Stats_UnlimitedRenown" text="Unbegrenzter Ruhm" />
+		<string id="BW_Stats_UnlimitedRenown_Hint" text="Hinweis: Manchmal erhältst du möglicherweise keinen Ruhm, obwohl das Spiel sagt, dass du Ruhm erhalten hast. Besonders wenn Feinde fliehen. Dies könnte ein Spielfehler sein. Wirkt, wenn Ruhm erhalten wird." />
+
+		<string id="BW_Stats_RenownMultiplier" text="Ruhm-Multiplikator" />
+		<string id="BW_Stats_RenownMultiplier_Hint" text="Multipliziert alle Ruhmgewinne (0 = deaktiviert). Hinweis: Der angezeigte Wert spiegelt möglicherweise nicht den multiplizierten Betrag wider, aber der tatsächlich erhaltene Ruhm wird multipliziert." />
+
+		<string id="BW_Stats_UnlimitedSkillXP" text="Unbegrenzte Fertigkeits-EP" />
+		<string id="BW_Stats_UnlimitedSkillXP_Hint" text="Wirkt, wenn eine Fertigkeit EP erhält. Hinweis: Fertigkeiten haben Level-Obergrenzen basierend auf ihrer Lernrate, die von deinen Attributen beeinflusst wird. Wenn die Lernrate einer Fertigkeit 0 ist, erhält sie keine EP, du musst Attributspunkte ausgeben, um deine Attribute zu erhöhen, um die Lernrate zu erhöhen." />
+
+		<string id="BW_Stats_SkillXPMultiplier" text="Fertigkeits-EP-Multiplikator" />
+		<string id="BW_Stats_SkillXPMultiplier_Hint" text="Fertigkeits-EP-Gewinne multiplizieren (0 = deaktiviert)." />
+
+		<string id="BW_Stats_UnlimitedTroopsXP" text="Unbegrenzte Truppen-EP" />
+		<string id="BW_Stats_UnlimitedTroopsXP_Hint" text="Alle Truppen erhalten EP ohne Limit." />
+
+		<string id="BW_Stats_TroopsXPMultiplier" text="Truppen-EP-Multiplikator" />
+		<string id="BW_Stats_TroopsXPMultiplier_Hint" text="Truppen-EP-Gewinne multiplizieren (0 = deaktiviert)." />
+
+		<!-- Enemies Category -->
+		<string id="BW_Enemies_OneHitKills" text="Ein-Schlag-Tötungen" />
+		<string id="BW_Enemies_OneHitKills_Hint" text="Alle feindlichen Einheiten sterben mit einem Schlag." />
+
+		<!-- Game Category -->
+		<string id="BW_Game_PersuasionAlwaysSucceed" text="Überredung/Gespräch immer erfolgreich" />
+		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="Alle Überredungs- und Gesprächsprüfungen sind automatisch erfolgreich." />
+
+		<string id="BW_Game_OneDaySettlementsConstruction" text="Siedlungsbau in einem Tag" />
+		<string id="BW_Game_OneDaySettlementsConstruction_Hint" text="Nur ein Gebäude kann gleichzeitig gebaut werden. Das Bauen/Verbessern mehrerer Gebäude erfordert immer noch mehrere Tage." />
+
+		<string id="BW_Game_InstantSiegeConstruction" text="Sofortiger Belagerungsbau" />
+		<string id="BW_Game_InstantSiegeConstruction_Hint" text="Hinweis: Diese Option betrifft beide Seiten." />
+
+		<string id="BW_Game_GameSpeed" text="Spielgeschwindigkeits-Multiplikator setzen" />
+		<string id="BW_Game_GameSpeed_Hint" text="Multipliziert die Geschwindigkeit der Wiedergabe- (1x) und Schnellvorlauf- (4x) Tasten. 1.0 = normal, 2.0 = doppelte Geschwindigkeit usw." />
+
+		<!-- Settlements Category -->
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier" text="Garnisons-Rekrutierungs-Multiplikator" />
+		<string id="BW_Settlements_GarrisonRecruitmentMultiplier_Hint" text="Erhöht die Anzahl der Soldaten, die täglich in die Garnison rekrutiert werden. 0 = deaktiviert, 1.0 = normal, 2.0 = doppelt usw." />
+
+		<string id="BW_Settlements_GarrisonWagesMultiplier" text="Garnisons-Lohn-Multiplikator" />
+		<string id="BW_Settlements_GarrisonWagesMultiplier_Hint" text="Steuert die Garnisonslohnkosten. 1.0 = normal, 0 = kostenlos, negative Werte = Einkommen für den Siedlungsbesitzer." />
+
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier" text="Miliz-Rekrutierungs-Multiplikator" />
+		<string id="BW_Settlements_MilitiaRecruitmentMultiplier_Hint" text="Erhöht die Anzahl der täglich rekrutierten Milizionäre. 0 = deaktiviert, 1.0 = normal, 2.0 = doppelt usw." />
+
+		<string id="BW_Settlements_MilitiaVeteranChance" text="Miliz-Veteranen-Chance" />
+		<string id="BW_Settlements_MilitiaVeteranChance_Hint" text="Prozentuale Chance für das Erscheinen von Miliz-Veteranen (0-100%)." />
+
+		<string id="BW_Settlements_FoodIncreaseMultiplier" text="Nahrungs-Bonus" />
+		<string id="BW_Settlements_FoodIncreaseMultiplier_Hint" text="Fügt den angegebenen Wert zum täglichen Nahrungswachstum hinzu (0-999)." />
+
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier" text="Wohlstands-Bonus" />
+		<string id="BW_Settlements_ProsperityIncreaseMultiplier_Hint" text="Fügt den angegebenen Wert zum täglichen Wohlstandswachstum hinzu (0-999)." />
+
+		<string id="BW_Settlements_HearthIncreaseMultiplier" text="Herd-Bonus" />
+		<string id="BW_Settlements_HearthIncreaseMultiplier_Hint" text="Fügt den angegebenen Wert zum täglichen Herdwachstum für Dörfer hinzu (0-999). Herd ist das Äquivalent zu Wohlstand für Dörfer." />
+
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier" text="Loyalitäts-Bonus" />
+		<string id="BW_Settlements_LoyaltyIncreaseMultiplier_Hint" text="Fügt den angegebenen Wert zum täglichen Loyalitätswachstum hinzu (0-999)." />
+
+		<string id="BW_Settlements_SecurityIncreaseMultiplier" text="Sicherheits-Bonus" />
+		<string id="BW_Settlements_SecurityIncreaseMultiplier_Hint" text="Fügt den angegebenen Wert zum täglichen Sicherheitswachstum hinzu (0-999)." />
+
+		<!-- Target Settings -->
+		<string id="BW_Target_ApplyToPlayer" text="Auf Spieler anwenden" />
+		<string id="BW_Target_ApplyToPlayer_Hint" text="Wendet ausgewählte Cheats auf den Spielercharakter an." />
+
+		<string id="BW_Target_ApplyToPlayerClanMembers" text="Auf Clansmitglieder des Spielers anwenden" />
+		<string id="BW_Target_ApplyToPlayerClanMembers_Hint" text="Wendet ausgewählte Cheats auf alle Mitglieder des Clans des Spielers an." />
+
+		<string id="BW_Target_ApplyToKingdomRulers" text="Auf Könige der Königreiche anwenden" />
+		<string id="BW_Target_ApplyToKingdomRulers_Hint" text="Wendet ausgewählte Cheats auf die Herrscher aller Königreiche an." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomRuler" text="Auf König des Spielerkönigreichs anwenden" />
+		<string id="BW_Target_ApplyToPlayerKingdomRuler_Hint" text="Wendet Cheats auf den Herrscher des aktuellen Königreichs des Spielers an." />
+
+		<string id="BW_Target_ApplyToKingdomVassals" text="Auf Vasallen der Königreiche anwenden" />
+		<string id="BW_Target_ApplyToKingdomVassals_Hint" text="Wendet ausgewählte Cheats auf alle Vasallenclanführer eines Königreichs an." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomVassals" text="Auf Vasallen des Spielerkönigreichs anwenden" />
+		<string id="BW_Target_ApplyToPlayerKingdomVassals_Hint" text="Wendet ausgewählte Cheats auf alle Vasallenclanführer des Königreichs des Spielers an." />
+
+		<string id="BW_Target_ApplyToKingdomNobles" text="Auf Adel der Königreiche anwenden" />
+		<string id="BW_Target_ApplyToKingdomNobles_Hint" text="Wendet ausgewählte Cheats auf alle adligen Helden eines Königreichs an." />
+
+		<string id="BW_Target_ApplyToPlayerKingdomNobles" text="Auf Adel des Spielerkönigreichs anwenden" />
+		<string id="BW_Target_ApplyToPlayerKingdomNobles_Hint" text="Wendet ausgewählte Cheats auf alle adligen Helden des Königreichs des Spielers an." />
+
+		<string id="BW_Target_ApplyToMinorClanLeaders" text="Auf Führer kleiner Clans anwenden" />
+		<string id="BW_Target_ApplyToMinorClanLeaders_Hint" text="Wendet ausgewählte Cheats auf die Führer aller kleinen Fraktionen an." />
+
+		<string id="BW_Target_ApplyToMinorClanMembers" text="Auf Mitglieder kleiner Clans anwenden" />
+		<string id="BW_Target_ApplyToMinorClanMembers_Hint" text="Wendet ausgewählte Cheats auf alle adligen Helden aus kleinen Clans an." />
+
+		<string id="BW_Target_InfoText" text="Mehrere Optionen können kombiniert werden. Doppelte Anwendungen werden automatisch verhindert." />
+
+		<!-- User Messages -->
+		<string id="BW_Message_SettingsError" text="BannerWand: Einstellungsfehler" />
+		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} erfolgreich initialisiert" />
+		<string id="BW_Message_CheatsInitialized" text="{COUNT} Cheats erfolgreich initialisiert" />
+		<string id="BW_Message_GoldChanged" text="Gold um {AMOUNT} geändert" />
+		<string id="BW_Message_GoldChangedMultiple" text="Gold um {AMOUNT} für {COUNT} Helden geändert" />
+		<string id="BW_Message_InfluenceChanged" text="Einfluss um {AMOUNT} geändert" />
+		<string id="BW_Message_InfluenceChangedMultiple" text="Einfluss um {AMOUNT} für {COUNT} Clans geändert" />
+		<string id="BW_Message_AttributePointsChanged" text="Attributspunkte um {AMOUNT} geändert" />
+		<string id="BW_Message_AttributePointsChangedMultiple" text="Attributspunkte um {AMOUNT} für {COUNT} Helden geändert" />
+		<string id="BW_Message_FocusPointsChanged" text="Fokusspunkte um {AMOUNT} geändert" />
+		<string id="BW_Message_FocusPointsChangedMultiple" text="Fokusspunkte um {AMOUNT} für {COUNT} Helden geändert" />
+		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} verwundete Truppen geheilt" />
+		<string id="BW_Message_NoCheatsActive" text="Keine Cheats aktiv" />
+		<string id="BW_Message_ActiveCheats" text="Aktive Cheats: {LIST}" />
+		<string id="BW_Message_Added" text="hinzugefügt" />
+		<string id="BW_Message_Removed" text="entfernt" />
+	</strings>
+</base>
