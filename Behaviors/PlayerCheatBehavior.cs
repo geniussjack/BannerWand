@@ -729,7 +729,7 @@ namespace BannerWand.Behaviors
 
                     foreach (CraftingPiece piece in template.Pieces)
                     {
-                        if (piece is null || piece.IsEmptyPiece || craftingBehavior.IsOpened(piece, template))
+                        if (piece?.IsEmptyPiece != false || craftingBehavior.IsOpened(piece, template))
                         {
                             continue;
                         }

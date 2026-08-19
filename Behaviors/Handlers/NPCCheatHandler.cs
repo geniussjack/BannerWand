@@ -49,12 +49,7 @@ namespace BannerWand.Behaviors.Handlers
             }
 
             bool isHero = agent.Character?.IsHero == true;
-            if (!isHero && Settings?.NPCApplyToRegularTroops != true)
-            {
-                return false;
-            }
-
-            return !agent.IsEnemyOf(mainAgent);
+            return (isHero || (Settings?.NPCApplyToRegularTroops) == true) && !agent.IsEnemyOf(mainAgent);
         }
 
         /// <inheritdoc />

@@ -115,7 +115,7 @@ namespace BannerWand.Patches
             }
 
             Type? navalDlcType = GetNavalDlcModelType();
-            return navalDlcType != null && navalDlcType.IsAssignableFrom(instance.GetType());
+            return navalDlcType?.IsAssignableFrom(instance.GetType()) == true;
         }
 
         /// <summary>

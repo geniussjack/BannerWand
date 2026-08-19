@@ -236,10 +236,7 @@ namespace BannerWand.Services
         {
             _cachedAliveHeroes = new List<Hero>(capacity: 500);
 
-            foreach (Hero hero in Hero.AllAliveHeroes)
-            {
-                _cachedAliveHeroes.Add(hero);
-            }
+            _cachedAliveHeroes.AddRange(Hero.AllAliveHeroes);
 
             _lastHeroesUpdate = CampaignTime.Now;
             ModLogger.Debug($"[CacheService] Heroes cache refreshed: {_cachedAliveHeroes.Count} heroes");
@@ -252,10 +249,7 @@ namespace BannerWand.Services
         {
             _cachedAllClans = new List<Clan>(capacity: 100);
 
-            foreach (Clan clan in Clan.All)
-            {
-                _cachedAllClans.Add(clan);
-            }
+            _cachedAllClans.AddRange(Clan.All);
 
             _lastClansUpdate = CampaignTime.Now;
             ModLogger.Debug($"[CacheService] Clans cache refreshed: {_cachedAllClans.Count} clans");
@@ -268,10 +262,7 @@ namespace BannerWand.Services
         {
             _cachedAllSettlements = new List<Settlement>(capacity: 100);
 
-            foreach (Settlement settlement in Settlement.All)
-            {
-                _cachedAllSettlements.Add(settlement);
-            }
+            _cachedAllSettlements.AddRange(Settlement.All);
 
             _lastSettlementsUpdate = CampaignTime.Now;
             ModLogger.Debug($"[CacheService] Settlements cache refreshed: {_cachedAllSettlements.Count} settlements");
@@ -284,10 +275,7 @@ namespace BannerWand.Services
         {
             _cachedAllParties = new List<MobileParty>(capacity: 500);
 
-            foreach (MobileParty party in MobileParty.All)
-            {
-                _cachedAllParties.Add(party);
-            }
+            _cachedAllParties.AddRange(MobileParty.All);
 
             _lastPartiesUpdate = CampaignTime.Now;
             ModLogger.Debug($"[CacheService] Parties cache refreshed: {_cachedAllParties.Count} parties");

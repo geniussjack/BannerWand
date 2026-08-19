@@ -159,12 +159,7 @@ namespace BannerWand.Patches
                 // If this perk's alternative is currently active, this pair was granted by us -
                 // do not let it be cleared back to false.
                 PerkObject? alternative = perk.AlternativePerk;
-                if (alternative is not null && __instance.GetPerkValue(alternative))
-                {
-                    return false;
-                }
-
-                return true;
+                return alternative is null || !__instance.GetPerkValue(alternative);
             }
             catch (Exception ex)
             {

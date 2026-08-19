@@ -195,8 +195,7 @@ namespace BannerWand.Patches
                 // Optimized null checks using pattern matching (C# 14)
                 // Combines multiple checks into single expression for better performance
                 if (Mission.Current?.MainAgent == null ||
-                    __instance == null ||
-                    !__instance.IsMainAgent ||
+                    __instance?.IsMainAgent != true ||
                     !__instance.IsActive())
                 {
                     return true; // No mission, no main agent, or not main agent - skip patch
@@ -283,8 +282,7 @@ namespace BannerWand.Patches
             {
                 // Optimized null checks using pattern matching (C# 14)
                 if (Mission.Current?.MainAgent == null ||
-                    __instance == null ||
-                    !__instance.IsMainAgent ||
+                    __instance?.IsMainAgent != true ||
                     !__instance.IsActive())
                 {
                     return true;

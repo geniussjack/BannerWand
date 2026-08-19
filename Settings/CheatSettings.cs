@@ -210,6 +210,7 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 
+        /// <summary>
         /// Whenever the player picks a perk that has an alternative, the alternative is granted
         /// too - no save reload needed. Implemented in <see cref="Patches.BothPerksPatch"/>.
         /// </summary>
