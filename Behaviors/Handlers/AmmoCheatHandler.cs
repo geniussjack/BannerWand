@@ -5,7 +5,6 @@ using BannerWand.Interfaces;
 using BannerWand.Patches;
 using BannerWand.Settings;
 using BannerWand.Utils;
-using System.Collections.Generic;
 // Third-party namespaces
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -25,11 +24,6 @@ namespace BannerWand.Behaviors.Handlers
         /// Tracks whether unlimited ammo has been logged for current mission.
         /// </summary>
         private bool _unlimitedAmmoLogged;
-
-        /// <summary>
-        /// Tracks maximum ammo per weapon slot to restore when it drops.
-        /// </summary>
-        private readonly Dictionary<EquipmentIndex, short> _ammoMaxBySlot = [];
 
         /// <summary>
         /// Ensures we log restoration only once per mission to avoid spam.
@@ -81,30 +75,24 @@ namespace BannerWand.Behaviors.Handlers
             {
                 MissionWeapon weapon = agent.Equipment[i];
 
-                // Skip empty slots or weapons without ammo
-                if (weapon.IsEmpty || weapon.CurrentUsageItem == null || weapon.ModifiedMaxAmount <= 0)
+                // Skip empty slots, shields (SetWeaponAmountInSlot is for stackable ammo/throwables
+                // only - calling it on a shield slot has been observed to also repair the shield,
+                // making Unlimited Shield Durability trigger even when that cheat is disabled),
+                // and weapons without ammo
+                if (weapon.IsEmpty || weapon.CurrentUsageItem == null ||
+                    weapon.CurrentUsageItem?.IsShield == true || weapon.ModifiedMaxAmount <= 0)
                 {
-                    _ = _ammoMaxBySlot.Remove(i);
                     continue;
                 }
 
-                // Track max ammo for this slot (account for buffs)
+                // Always restore to the weapon's current max, never a remembered historical
+                // value: some weapon/loadout combinations (e.g. certain throwing weapons in
+                // arena fights) briefly report an anomalously high ModifiedMaxAmount, and
+                // caching "the highest value ever seen" would lock that in for the rest of
+                // the mission, ballooning ammo counts (and encumbrance) far past normal.
                 short maxAmmo = weapon.ModifiedMaxAmount;
-                if (_ammoMaxBySlot.TryGetValue(i, out short existingMax))
-                {
-                    if (maxAmmo < existingMax)
-                    {
-                        maxAmmo = existingMax;
-                    }
-                    _ammoMaxBySlot[i] = maxAmmo;
-                }
-                else
-                {
-                    _ammoMaxBySlot[i] = maxAmmo;
-                }
-
                 short currentAmmo = weapon.Amount;
-                if (currentAmmo < _ammoMaxBySlot[i])
+                if (currentAmmo < maxAmmo)
                 {
                     bool patchApplied = AmmoConsumptionPatch.IsPatchApplied;
                     if (patchApplied)
@@ -113,7 +101,7 @@ namespace BannerWand.Behaviors.Handlers
                     }
                     try
                     {
-                        agent.SetWeaponAmountInSlot(i, _ammoMaxBySlot[i], true);
+                        agent.SetWeaponAmountInSlot(i, maxAmmo, true);
                     }
                     finally
                     {
@@ -127,7 +115,7 @@ namespace BannerWand.Behaviors.Handlers
                     {
                         _ammoRestoredLogged = true;
                         string weaponName = weapon.Item?.Name?.ToString() ?? "Unknown";
-                        ModLogger.Log($"[UnlimitedAmmo] Restored ammo to max via tick: {weaponName} ({currentAmmo} -> {_ammoMaxBySlot[i]})");
+                        ModLogger.Log($"[UnlimitedAmmo] Restored ammo to max via tick: {weaponName} ({currentAmmo} -> {maxAmmo})");
                     }
                 }
             }
@@ -146,7 +134,6 @@ namespace BannerWand.Behaviors.Handlers
         {
             _unlimitedAmmoLogged = false;
             _ammoRestoredLogged = false;
-            _ammoMaxBySlot.Clear();
         }
     }
 }
