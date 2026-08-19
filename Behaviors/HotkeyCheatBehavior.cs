@@ -15,15 +15,26 @@ using TaleWorlds.MountAndBlade;
 namespace BannerWand.Behaviors
 {
     /// <summary>
-    /// Campaign behavior that polls BannerWand's custom hotkeys (registered via
-    /// <see cref="BannerWandHotkeyCategory"/>) and applies the matching cheat when pressed.
+    /// Polls BannerWand's custom hotkeys (registered via <see cref="BannerWandHotkeyCategory"/>)
+    /// and applies the matching cheat when pressed.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Mirrors Mount &amp; Blade: Warband's cheat_mode hotkeys (Ctrl+X for an instant gold top-up),
     /// but implemented through the game's native rebindable hotkey system instead of a hardcoded
     /// key check, so the player can rebind it from Options -&gt; Key Bindings.
+    /// </para>
+    /// <para>
+    /// This is a plain class ticked from <see cref="Core.SubModule.OnApplicationTick"/>, not a
+    /// <see cref="CampaignBehaviorBase"/>: <see cref="CampaignEvents.TickEvent"/> and
+    /// <see cref="CampaignEvents.HourlyTickEvent"/> only fire while campaign time is actually
+    /// running, so a hotkey wired to either of them silently stops responding whenever the
+    /// campaign is paused (e.g. in a menu screen) - exactly where a player is most likely to want
+    /// to use one. <c>OnApplicationTick</c> fires every engine frame regardless of campaign pause
+    /// state, matching how the game's own cheat hotkeys behave.
+    /// </para>
     /// </remarks>
-    public class HotkeyCheatBehavior : CampaignBehaviorBase
+    public class HotkeyCheatBehavior
     {
         /// <summary>
         /// Gets the current cheat settings instance.
@@ -53,31 +64,12 @@ namespace BannerWand.Behaviors
         /// </summary>
         private bool _hotkeyCategoryRegistered;
 
-        /// <inheritdoc />
-        public override void RegisterEvents()
-        {
-            try
-            {
-                CampaignEvents.TickEvent.AddNonSerializedListener(this, OnTick);
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"[HotkeyCheatBehavior] Error in RegisterEvents: {ex.Message}", ex);
-            }
-        }
-
-        /// <inheritdoc />
-        public override void SyncData(IDataStore dataStore)
-        {
-            // No persistent data to sync - hotkey state is derived from settings and input each frame.
-        }
-
         /// <summary>
-        /// Called every real-time frame while the campaign map is active. Checks whether the
-        /// "add gold" hotkey was just pressed and, if so, applies the configured gold amount.
+        /// Checks whether the "add gold" hotkey was just pressed and, if so, applies the
+        /// configured gold amount. Intended to be called once per engine frame.
         /// </summary>
-        /// <param name="dt">Time in seconds since the last frame (unused, required by the event signature).</param>
-        private void OnTick(float dt)
+        /// <param name="dt">Time in seconds since the last frame (unused, kept for symmetry with other per-frame hooks).</param>
+        public void Tick(float dt)
         {
             try
             {
@@ -93,10 +85,9 @@ namespace BannerWand.Behaviors
                     return;
                 }
 
-                // Hotkeys are only meaningful on the campaign map - a Mission (battle, dialogue
-                // scene, etc.) has its own input handling and CampaignEvents.TickEvent does not
-                // fire in one anyway, but the check is kept explicit to match the documented
-                // "not in battle" behavior even if that assumption ever changes.
+                // Hotkeys are only meaningful on the campaign map. Hero.MainHero is null outside
+                // an active campaign (main menu, character creation), and Mission.Current is set
+                // while a battle/dialogue/other scene is running.
                 if (Mission.Current is not null || Hero.MainHero is null)
                 {
                     return;
@@ -125,7 +116,7 @@ namespace BannerWand.Behaviors
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"[HotkeyCheatBehavior] Error in {nameof(OnTick)}: {ex.Message}", ex);
+                ModLogger.Error($"[HotkeyCheatBehavior] Error in {nameof(Tick)}: {ex.Message}", ex);
             }
         }
     }
