@@ -94,6 +94,9 @@
 		<string id="BW_Player_InfiniteShipHealth" text="Infinite Ship Health" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Ships owned by the player's party never take damage. Requires War Sails DLC." />
 
+		<string id="BW_Player_AllowBothPerks" text="Allow Both Perks" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed." />
+
 		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
 		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />
 
