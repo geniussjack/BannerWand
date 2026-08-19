@@ -1,6 +1,4 @@
 #nullable enable
-// Third-party namespaces
-// Project namespaces
 using BannerWand.Settings;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;

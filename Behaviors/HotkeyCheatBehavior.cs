@@ -1,12 +1,9 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Input;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
@@ -29,8 +26,8 @@ namespace BannerWand.Behaviors
     /// <see cref="CampaignBehaviorBase"/>: <see cref="CampaignEvents.TickEvent"/> and
     /// <see cref="CampaignEvents.HourlyTickEvent"/> only fire while campaign time is actually
     /// running, so a hotkey wired to either of them silently stops responding whenever the
-    /// campaign is paused (e.g. in a menu screen) - exactly where a player is most likely to want
-    /// to use one. <c>OnApplicationTick</c> fires every engine frame regardless of campaign pause
+    /// campaign is paused - in a menu screen, for instance, exactly where a player is most likely
+    /// to want to use one. <c>OnApplicationTick</c> fires every engine frame regardless of campaign pause
     /// state, matching how the game's own cheat hotkeys behave.
     /// </para>
     /// </remarks>

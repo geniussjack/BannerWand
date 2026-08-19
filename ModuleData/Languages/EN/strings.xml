@@ -59,13 +59,13 @@
 		<string id="BW_NPC_MovementSpeed" text="Set Movement Speed" />
 		<string id="BW_NPC_MovementSpeed_Hint" text="Applies to all parties on the map, not just player. Changes apply on the next in-game day." />
 		<string id="BW_NPC_EditGold" text="Edit Gold" />
-		<string id="BW_NPC_EditGold_Hint" text="Add or remove gold for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditGold_Hint" text="Add or remove gold for NPCs. Applied once when the value changes." />
 		<string id="BW_NPC_EditInfluence" text="Edit Influence" />
-		<string id="BW_NPC_EditInfluence_Hint" text="Add or remove influence for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditInfluence_Hint" text="Add or remove influence for NPCs. Applied once when the value changes." />
 		<string id="BW_NPC_EditAttributePoints" text="Edit Attribute Points" />
-		<string id="BW_NPC_EditAttributePoints_Hint" text="Add or remove attribute points for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditAttributePoints_Hint" text="Add or remove attribute points for NPCs. Applied once when the value changes." />
 		<string id="BW_NPC_EditFocusPoints" text="Edit Focus Points" />
-		<string id="BW_NPC_EditFocusPoints_Hint" text="Add or remove focus points for NPCs (applied once when value changed)." />
+		<string id="BW_NPC_EditFocusPoints_Hint" text="Add or remove focus points for NPCs. Applied once when the value changes." />
 
 		<string id="BW_NPC_StopNPCAging" text="Stop NPC Aging" />
 		<string id="BW_NPC_StopNPCAging_Hint" text="Prevents NPCs from aging once they reach 21 years old. Children under 21 will continue to grow normally." />
@@ -97,7 +97,7 @@
 		<string id="BW_Player_InfiniteShipHealth" text="Infinite Ship Health" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Ships owned by the player's party never take damage. Requires War Sails DLC." />
 		<string id="BW_Player_UnlockAllSmithyParts" text="Unlock All Smithy Parts" />
-		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders." />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders. Takes up to one in-game day to take effect after enabling." />
 
 		<string id="BW_Player_AllowBothPerks" text="Allow Both Perks" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed." />
@@ -107,10 +107,10 @@
 
 		<!-- Inventory Category -->
 		<string id="BW_Inventory_EditGold" text="Edit Gold" />
-		<string id="BW_Inventory_EditGold_Hint" text="Add or remove gold (applied once when value changed)." />
+		<string id="BW_Inventory_EditGold_Hint" text="Add or remove gold. Applied once when the value changes." />
 
 		<string id="BW_Inventory_EditInfluence" text="Edit Influence" />
-		<string id="BW_Inventory_EditInfluence_Hint" text="Add or remove influence (applied once when value changed)." />
+		<string id="BW_Inventory_EditInfluence_Hint" text="Add or remove influence. Applied once when the value changes." />
 
 		<string id="BW_Inventory_UnlimitedFood" text="Unlimited Food" />
 		<string id="BW_Inventory_UnlimitedFood_Hint" text="Party food never decreases." />
@@ -128,7 +128,7 @@
 		<string id="BW_Inventory_SmithyMaterialsQuantity_Hint" text="Set the target amount for smithy materials (100-9999). Only works when Unlimited Smithy Materials is enabled." />
 
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Enable Add Gold Hotkey" />
-		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adds the amount set in Edit Gold above every time the hotkey is pressed (default Ctrl+X, rebindable in Options &gt; Key Bindings). Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value." />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adds the amount set in Edit Gold above every time the hotkey is pressed. Default is Ctrl+X, rebindable in Options &gt; Key Bindings. Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value." />
 
 		<!-- Stats Category -->
 		<string id="BW_Stats_EditAttributePoints" text="Edit Attribute Points" />
@@ -159,8 +159,8 @@
 		<string id="BW_Enemies_OneHitKills" text="One-Hit Kills" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="All enemy units die in one hit." />
 
-		<string id="BW_Enemies_AllBattlesNoWounding" text="All Battles: No Wounding (Always Kill)" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Troops die instead of being wounded/captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] All Battles No Wounding" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Work in progress, does not fully work yet. Intended to make troops die instead of being wounded or captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges or captured heroes." />
 
 		<!-- Game Category -->
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasion/Conversation Always Succeed" />

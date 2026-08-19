@@ -1,8 +1,6 @@
 #nullable enable
-// System namespaces
 using System;
 
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 

@@ -1,10 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Core.Harmony;
 using BannerWand.Patches;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Linq;
@@ -38,18 +35,18 @@ namespace BannerWand.Core
     /// - InventoryCapacityPatch: Patches inventory capacity calculations
     /// - ItemBarterablePatch: Prevents item loss during barter transactions
     /// - ItemRosterTradePatch: Patches ItemRoster.AddToCounts() to prevent item removal during all trade types (towns, villages, caravans, etc.)
-    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
-    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead, since
+    ///   Harmony patching DefaultPartyWageModel causes TypeInitializationException
     /// </para>
     /// <para>
     /// Patches applied via HarmonyTargetMethod (require manual application):
     /// - RenownMultiplierPatch: Patches Clan.AddRenown() to multiply renown gains
     /// - AmmoConsumptionPatch: Prevents ammo decrease for player when Unlimited Ammo enabled
     /// - ItemBarterablePatch: Prevents item loss during barter/trade transactions
-    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead
-    ///   (Harmony patching DefaultPartyWageModel causes TypeInitializationException)
-    /// - NavalSpeedPatch: Patches naval speed calculations for War Sails DLC
-    ///   (Applied in OnAfterGameInitializationFinished because DLC loads later)
+    /// - Note: GarrisonWagesPatch is deprecated - we now use CustomPartyWageModel instead, since
+    ///   Harmony patching DefaultPartyWageModel causes TypeInitializationException
+    /// - NavalSpeedPatch: Patches naval speed calculations for War Sails DLC, applied in
+    ///   OnAfterGameInitializationFinished since the DLC loads later
     /// </para>
     /// <para>
     /// This class delegates to <see cref="PatchApplier"/>, <see cref="PatchValidator"/>, and

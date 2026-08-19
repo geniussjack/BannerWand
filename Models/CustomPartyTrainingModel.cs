@@ -1,10 +1,7 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using Helpers;
 using System;
 using TaleWorlds.CampaignSystem;

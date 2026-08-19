@@ -1,4 +1,3 @@
-// Third-party namespaces
 using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;
@@ -223,7 +222,7 @@ namespace BannerWand.Settings
         /// each one had already been discovered through smelting or completing crafting orders.
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_UnlockAllSmithyParts}Unlock All Smithy Parts", Order = 15, RequireRestart = false, HintText = "{=BW_Player_UnlockAllSmithyParts_Hint}Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders.")]
+        [SettingPropertyBool("{=BW_Player_UnlockAllSmithyParts}Unlock All Smithy Parts", Order = 15, RequireRestart = false, HintText = "{=BW_Player_UnlockAllSmithyParts_Hint}Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders. Takes up to one in-game day to take effect after enabling.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool UnlockAllSmithyParts { get; set; } = false;
 
@@ -304,7 +303,7 @@ namespace BannerWand.Settings
         /// Add or remove gold for NPCs (applies once when value changed).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_NPC_EditGold}Edit Gold", -1000000, 1000000, Order = 7, RequireRestart = false, HintText = "{=BW_NPC_EditGold_Hint}Add or remove gold for NPCs (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_NPC_EditGold}Edit Gold", -1000000, 1000000, Order = 7, RequireRestart = false, HintText = "{=BW_NPC_EditGold_Hint}Add or remove gold for NPCs. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public int NPCEditGold { get; set; } = 0;
 
@@ -312,7 +311,7 @@ namespace BannerWand.Settings
         /// Add or remove clan influence for NPCs (applies once when value changed).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_NPC_EditInfluence}Edit Influence", -10000, 10000, Order = 8, RequireRestart = false, HintText = "{=BW_NPC_EditInfluence_Hint}Add or remove influence for NPCs (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_NPC_EditInfluence}Edit Influence", -10000, 10000, Order = 8, RequireRestart = false, HintText = "{=BW_NPC_EditInfluence_Hint}Add or remove influence for NPCs. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public int NPCEditInfluence { get; set; } = 0;
 
@@ -320,7 +319,7 @@ namespace BannerWand.Settings
         /// Add or remove unspent attribute points for NPCs (applies once when value changed).
         /// Implemented in <see cref="Behaviors.NPCCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_NPC_EditAttributePoints}Edit Attribute Points", -1000, 1000, Order = 9, RequireRestart = false, HintText = "{=BW_NPC_EditAttributePoints_Hint}Add or remove attribute points for NPCs (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_NPC_EditAttributePoints}Edit Attribute Points", -1000, 1000, Order = 9, RequireRestart = false, HintText = "{=BW_NPC_EditAttributePoints_Hint}Add or remove attribute points for NPCs. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public int NPCEditAttributePoints { get; set; } = 0;
 
@@ -328,7 +327,7 @@ namespace BannerWand.Settings
         /// Add or remove unspent focus points for NPCs (applies once when value changed).
         /// Implemented in <see cref="Behaviors.NPCCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_NPC_EditFocusPoints}Edit Focus Points", -1000, 1000, Order = 10, RequireRestart = false, HintText = "{=BW_NPC_EditFocusPoints_Hint}Add or remove focus points for NPCs (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_NPC_EditFocusPoints}Edit Focus Points", -1000, 1000, Order = 10, RequireRestart = false, HintText = "{=BW_NPC_EditFocusPoints_Hint}Add or remove focus points for NPCs. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_NPC}NPC", GroupOrder = 4)]
         public int NPCEditFocusPoints { get; set; } = 0;
 
@@ -350,7 +349,7 @@ namespace BannerWand.Settings
         /// Add or remove gold (applies once when value changed).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_Inventory_EditGold}Edit Gold", -1000000, 1000000, Order = 0, RequireRestart = false, HintText = "{=BW_Inventory_EditGold_Hint}Add or remove gold (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_Inventory_EditGold}Edit Gold", -1000000, 1000000, Order = 0, RequireRestart = false, HintText = "{=BW_Inventory_EditGold_Hint}Add or remove gold. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public int EditGold { get; set; } = 0;
 
@@ -358,7 +357,7 @@ namespace BannerWand.Settings
         /// Add or remove clan influence (applies once when value changed).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyInteger("{=BW_Inventory_EditInfluence}Edit Influence", -10000, 10000, Order = 1, RequireRestart = false, HintText = "{=BW_Inventory_EditInfluence_Hint}Add or remove influence (applied once when value changed).")]
+        [SettingPropertyInteger("{=BW_Inventory_EditInfluence}Edit Influence", -10000, 10000, Order = 1, RequireRestart = false, HintText = "{=BW_Inventory_EditInfluence_Hint}Add or remove influence. Applied once when the value changes.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public int EditInfluence { get; set; } = 0;
 
@@ -407,7 +406,7 @@ namespace BannerWand.Settings
         /// <see cref="EditGold"/> whenever pressed on the campaign map, mirroring Mount &amp; Blade:
         /// Warband's cheat_mode hotkeys. Implemented in <see cref="Behaviors.HotkeyCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Inventory_EnableAddGoldHotkey}Enable Add Gold Hotkey", Order = 7, RequireRestart = false, HintText = "{=BW_Inventory_EnableAddGoldHotkey_Hint}Adds the amount set in Edit Gold above every time the hotkey is pressed (default Ctrl+X, rebindable in Options > Key Bindings). Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value.")]
+        [SettingPropertyBool("{=BW_Inventory_EnableAddGoldHotkey}Enable Add Gold Hotkey", Order = 7, RequireRestart = false, HintText = "{=BW_Inventory_EnableAddGoldHotkey_Hint}Adds the amount set in Edit Gold above every time the hotkey is pressed. Default is Ctrl+X, rebindable in Options > Key Bindings. Only works on the campaign map, not in battle. Requires Edit Gold to be set to a non-zero value.")]
         [SettingPropertyGroup("{=BW_Category_Inventory}Inventory", GroupOrder = 1)]
         public bool EnableAddGoldHotkey { get; set; } = false;
 
@@ -497,7 +496,7 @@ namespace BannerWand.Settings
         /// the map, not just battles the player personally fights.
         /// Implemented in <see cref="Models.CustomCombatSimulationModel"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Enemies_AllBattlesNoWounding}All Battles: No Wounding (Always Kill)", Order = 2, RequireRestart = false, HintText = "{=BW_Enemies_AllBattlesNoWounding_Hint}Troops die instead of being wounded/captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges.")]
+        [SettingPropertyBool("{=BW_Enemies_AllBattlesNoWounding}[WIP] All Battles No Wounding", Order = 2, RequireRestart = false, HintText = "{=BW_Enemies_AllBattlesNoWounding_Hint}Work in progress, does not fully work yet. Intended to make troops die instead of being wounded or captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges or captured heroes.")]
         [SettingPropertyGroup("{=BW_Category_Enemies}Enemies", GroupOrder = 3)]
         public bool AllBattlesNoWounding { get; set; } = false;
 

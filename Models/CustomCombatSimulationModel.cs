@@ -1,7 +1,5 @@
 #nullable enable
-// Project namespaces
 using BannerWand.Settings;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.MapEvents;

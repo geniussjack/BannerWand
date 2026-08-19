@@ -1,6 +1,4 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Behaviors;
 using BannerWand.Constants;
 using BannerWand.Input;
@@ -10,7 +8,6 @@ using BannerWand.Utils;
 using System;
 using System.Linq;
 using System.Reflection;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -612,7 +609,7 @@ namespace BannerWand.Core
         /// <remarks>
         /// <para>
         /// This method removes the Harmony patch for DefaultPartyWageModel.GetTotalWage
-        /// if it was applied (e.g., by PatchAll() before we removed the [HarmonyPatch] attribute).
+        /// if it was applied, for example by PatchAll() before we removed the [HarmonyPatch] attribute.
         /// We now use CustomPartyWageModel instead, so the patch is no longer needed.
         /// </para>
         /// <para>

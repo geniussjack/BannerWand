@@ -70,8 +70,8 @@ namespace BannerWand.Constants
         public const string LogSubdirectory = "Mount and Blade II Bannerlord";
 
         /// <summary>
-        /// Configs folder name within <see cref="LogSubdirectory"/>, shared with other Bannerlord mods
-        /// (e.g. ButterLib) that already write their own logs into the same parent folder.
+        /// Configs folder name within <see cref="LogSubdirectory"/>, shared with other Bannerlord mods,
+        /// such as ButterLib, that already write their own logs into the same parent folder.
         /// </summary>
         public const string LogConfigsFolderName = "Configs";
 

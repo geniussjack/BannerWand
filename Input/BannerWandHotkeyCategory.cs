@@ -1,5 +1,4 @@
 #nullable enable
-// Third-party namespaces
 using TaleWorlds.InputSystem;
 
 namespace BannerWand.Input

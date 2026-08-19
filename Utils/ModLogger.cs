@@ -1,6 +1,4 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using System;
 using System.Diagnostics;
@@ -256,7 +254,7 @@ namespace BannerWand.Utils
 
         /// <summary>
         /// Default throttle interval for debug messages (1 second).
-        /// Prevents log spam when methods are called frequently (e.g., every frame/tick).
+        /// Prevents log spam when methods are called frequently, such as every frame or tick.
         /// </summary>
         private static readonly TimeSpan _defaultThrottleInterval = TimeSpan.FromSeconds(1);
 

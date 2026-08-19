@@ -1,9 +1,7 @@
 #nullable enable
-// System namespaces
 using System;
 using System.Collections.Generic;
 
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 
@@ -182,7 +180,7 @@ namespace BannerWand.Utils
         /// </para>
         /// <para>
         /// Thread safety: Uses lock to prevent race conditions when multiple threads
-        /// access the cache simultaneously (though rare in Bannerlord's single-threaded campaign).
+        /// access the cache simultaneously, though that's rare in Bannerlord's single-threaded campaign.
         /// </para>
         /// </remarks>
         private static void RefreshCacheIfNeeded()

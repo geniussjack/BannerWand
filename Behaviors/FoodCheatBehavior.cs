@@ -1,12 +1,9 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
@@ -24,8 +21,8 @@ namespace BannerWand.Behaviors
     /// </para>
     /// <para>
     /// Why both approaches:
-    /// - Model override: Prevents automatic food consumption (most important)
-    /// - This behavior: Safety net that adds food if it somehow gets low (backup)
+    /// - Model override: the primary mechanism, prevents automatic food consumption
+    /// - This behavior: a backup safety net that adds food if it somehow gets low
     /// </para>
     /// <para>
     /// Performance: Runs every in-game hour, but only adds food when below threshold.

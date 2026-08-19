@@ -1,8 +1,5 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Utils;
-// Third-party namespaces
 using MCM.Abstractions.Attributes;
 using MCM.Abstractions.Attributes.v2;
 using MCM.Abstractions.Base.Global;

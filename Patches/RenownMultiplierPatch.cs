@@ -1,9 +1,6 @@
 #nullable enable
-// System namespaces
-// Project namespaces
 using BannerWand.Settings;
 using BannerWand.Utils;
-// Third-party namespaces
 using HarmonyLib;
 using System;
 using System.Collections.Generic;

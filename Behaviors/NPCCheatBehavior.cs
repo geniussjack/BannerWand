@@ -1,13 +1,10 @@
 #nullable enable
 #pragma warning disable CS0169 // Fields _npcAttributePointsApplied and _npcFocusPointsApplied are used in conditional logic
-// System namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
-// Third-party namespaces
 using TaleWorlds.CampaignSystem;
 
 namespace BannerWand.Behaviors

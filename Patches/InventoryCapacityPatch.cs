@@ -1,6 +1,4 @@
 #nullable enable
-// Third-party namespaces
-// Project namespaces
 using BannerWand.Constants;
 using BannerWand.Settings;
 using BannerWand.Utils;
