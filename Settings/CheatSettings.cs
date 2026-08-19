@@ -566,6 +566,14 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
         public bool OneDaySettlementsConstruction { get; set; } = false;
 
+        /// <summary>
+        /// Additive bonus to the maximum number of troops a garrison can hold (0-999).
+        /// Implemented in <see cref="Models.CustomPartyLimitModel"/>.
+        /// </summary>
+        [SettingPropertyInteger("{=BW_Settlements_GarrisonCapacity}Garrison Capacity Bonus", 0, 999, Order = 11, RequireRestart = false, HintText = "{=BW_Settlements_GarrisonCapacity_Hint}Adds to the maximum number of troops a garrison can hold. 0 = disabled.")]
+        [SettingPropertyGroup("{=BW_Category_Settlements}Settlements", GroupOrder = 5)]
+        public int GarrisonCapacity { get; set; } = 0;
+
         #endregion
 
     }

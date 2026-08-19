@@ -8,12 +8,13 @@ using BannerWand.Utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 
 namespace BannerWand.Models
 {
     /// <summary>
-    /// Custom party limit model that adds bonus to party size limit for player's party.
+    /// Custom party limit model that adds bonuses to party size limit and garrison capacity.
     /// Extends <see cref="DefaultPartySizeLimitModel"/> to add cheat functionality.
     /// </summary>
     /// <remarks>
@@ -25,6 +26,7 @@ namespace BannerWand.Models
     /// <para>
     /// Cheat features provided:
     /// - Party Size Limit Bonus: Adds bonus to party size limit for player's main party only
+    /// - Garrison Capacity Bonus: Adds bonus to the maximum troops a settlement's garrison can hold
     /// </para>
     /// <para>
     /// Base game behavior:
@@ -53,6 +55,11 @@ namespace BannerWand.Models
         /// Text object for party size bonus description (cached to avoid allocations).
         /// </summary>
         private static readonly TextObject PartySizeBonusText = new("BannerWand Party Size Bonus");
+
+        /// <summary>
+        /// Text object for garrison capacity bonus description (cached to avoid allocations).
+        /// </summary>
+        private static readonly TextObject GarrisonCapacityBonusText = new("BannerWand Garrison Capacity Bonus");
 
         /// <summary>
         /// Calculates the party size limit for a party.
@@ -122,6 +129,49 @@ namespace BannerWand.Models
                 ModLogger.Error($"[CustomPartyLimitModel] Error in GetPartyMemberSizeLimit: {ex.Message}");
                 ModLogger.Error($"Stack trace: {ex.StackTrace}");
                 return base.GetPartyMemberSizeLimit(party, includeDescriptions);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the maximum number of troops a settlement's garrison can hold.
+        /// Adds the configured bonus if enabled and the settlement qualifies.
+        /// </summary>
+        /// <param name="settlement">The settlement to calculate garrison capacity for. Cannot be null.</param>
+        /// <param name="includeDescriptions">Whether to include detailed explanations in the result.</param>
+        /// <returns>
+        /// An <see cref="ExplainedNumber"/> containing the garrison size limit.
+        /// Base value from settlement type/level/buildings, plus configured bonus if enabled.
+        /// </returns>
+        /// <remarks>
+        /// Applies to player-owned settlements and targeted NPC settlements, matching the pattern
+        /// used by the other Settlements-category cheats (garrison recruitment, loyalty, etc.) via
+        /// <see cref="SettlementCheatHelper"/>.
+        /// </remarks>
+        public override ExplainedNumber CalculateGarrisonPartySizeLimit(Settlement settlement, bool includeDescriptions = false)
+        {
+            try
+            {
+                ExplainedNumber baseLimit = base.CalculateGarrisonPartySizeLimit(settlement, includeDescriptions);
+
+                if (Settings == null || settlement == null)
+                {
+                    return baseLimit;
+                }
+
+                if (Settings.GarrisonCapacity > 0 && SettlementCheatHelper.ShouldApplyCheatToSettlement(settlement))
+                {
+                    int bonus = Settings.GarrisonCapacity;
+                    baseLimit.Add(bonus, GarrisonCapacityBonusText);
+                    ModLogger.DebugThrottled($"[CustomPartyLimitModel] Applied garrison capacity bonus +{bonus} to {settlement.Name}: {baseLimit.ResultNumber:F0}");
+                }
+
+                return baseLimit;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[CustomPartyLimitModel] Error in CalculateGarrisonPartySizeLimit: {ex.Message}");
+                ModLogger.Error($"Stack trace: {ex.StackTrace}");
+                return base.CalculateGarrisonPartySizeLimit(settlement, includeDescriptions);
             }
         }
     }
