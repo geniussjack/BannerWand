@@ -4,9 +4,6 @@
 		<tag language="Română" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Ținte" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Jucător" />
@@ -16,10 +13,8 @@
 		<string id="BW_Category_Enemies" text="Inamici" />
 		<string id="BW_Category_Game" text="Joc" />
 		<string id="BW_Category_Settlements" text="Așezări" />
-		<string id="BW_Category_CheatTargets" text="Ținte Cheat" />
 		<string id="BW_Category_Kingdoms" text="Regate" />
 		<string id="BW_Category_MinorClans" text="Clanuri Minore" />
-		<string id="BW_Category_Info" text="Informații" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->
@@ -220,19 +215,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Eroare Setări" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inițializat cu succes" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} cheat-uri inițializate cu succes" />
-		<string id="BW_Message_GoldChanged" text="Aur modificat cu {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Aur modificat cu {AMOUNT} pentru {COUNT} eroi" />
-		<string id="BW_Message_InfluenceChanged" text="Influență modificată cu {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Influență modificată cu {AMOUNT} pentru {COUNT} clanuri" />
-		<string id="BW_Message_AttributePointsChanged" text="Puncte atribut modificate cu {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Puncte atribut modificate cu {AMOUNT} pentru {COUNT} eroi" />
-		<string id="BW_Message_FocusPointsChanged" text="Puncte focus modificate cu {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Puncte focus modificate cu {AMOUNT} pentru {COUNT} eroi" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} trupe rănite vindecate" />
-		<string id="BW_Message_NoCheatsActive" text="Niciun cheat activ" />
-		<string id="BW_Message_ActiveCheats" text="Cheat-uri active: {LIST}" />
-		<string id="BW_Message_Added" text="adăugat" />
-		<string id="BW_Message_Removed" text="eliminat" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Toate Luptele Fără Rănire" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="În lucru, nu funcționează încă pe deplin. Are scopul de a face trupele să moară în loc să fie rănite sau capturate în fiecare luptă de câmp rezolvată automat pe hartă, inclusiv luptele la care nu participi personal. Completează Uciderea Dintr-o Lovitură, care afectează doar luptele purtate chiar de tine. Nu afectează asediile sau eroii capturați." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Activează Comanda Rapidă pentru Adăugare Aur" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adaugă suma setată la Editează Aur mai sus de fiecare dată când este apăsată comanda rapidă. Implicit Ctrl+X, poate fi reasignată din Opțiuni &gt; Asocieri Taste. Funcționează doar pe harta campaniei, nu în luptă. Necesită ca Editează Aur să fie setat la o valoare diferită de zero." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Aplică și Soldaților Obișnuiți" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Extinde cheat-urile NPC activate mai sus de la eroii aliați doar la fiecare soldat aliat care luptă de partea jucătorului. Poate încetini vizibil luptele mari și le poate prelungi, deoarece fiecare unitate prietenă devine greu de ucis." />
+		<string id="BW_NPC_StopNPCAging" text="Oprește Îmbătrânirea NPC-urilor" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Împiedică NPC-urile să îmbătrânească odată ce ajung la 21 de ani. Copiii sub 21 de ani vor continua să crească normal." />
+		<string id="BW_Player_AllowBothPerks" text="Permite Ambele Perk-uri" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Acordă automat perk-ul alternativ de fiecare dată când alegi unul dintr-o pereche, astfel încât să ajungi cu ambele - efect imediat, fără a fi nevoie să reîncarci salvarea." />
+		<string id="BW_Player_InfiniteShipHealth" text="HP Infinit al Navei" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Navele deținute de grupul jucătorului nu suferă niciodată daune. Necesită DLC-ul War Sails." />
+		<string id="BW_Player_StopPlayerAging" text="Oprește Îmbătrânirea Jucătorului" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Împiedică personajul jucătorului să îmbătrânească." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Deblochează Toate Piesele de Fierărie" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Deblochează fiecare piesă de fabricație pentru fiecare tip de armă, ca și cum le-ai fi descoperit deja prin topire sau comenzi de fabricație. Durează până la o zi de joc pentru a avea efect după activare." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus de Capacitate a Garnizoanei" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Adaugă la numărul maxim de trupe pe care le poate găzdui o garnizoană. 0 = dezactivat." />
 	</strings>
 </base>

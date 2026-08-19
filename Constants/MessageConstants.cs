@@ -136,12 +136,6 @@ namespace BannerWand.Constants
         public const string CheatManagerCleanup = "CheatManager cleanup completed";
 
         /// <summary>
-        /// Format string for active cheats count log.
-        /// Parameters: {0} = count
-        /// </summary>
-        public const string ActiveCheatsCountFormat = "Active cheats count: {0}";
-
-        /// <summary>
         /// Header for localization check section in logs.
         /// </summary>
         public const string LocalizationCheckHeader = "=== Localization Check ===";

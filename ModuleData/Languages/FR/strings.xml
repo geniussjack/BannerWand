@@ -4,9 +4,6 @@
 		<tag language="French" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Cibles" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Joueur" />
@@ -16,10 +13,8 @@
 		<string id="BW_Category_Enemies" text="Ennemis" />
 		<string id="BW_Category_Game" text="Jeu" />
 		<string id="BW_Category_Settlements" text="Colonies" />
-		<string id="BW_Category_CheatTargets" text="Cibles des Tricheries" />
 		<string id="BW_Category_Kingdoms" text="Royaumes" />
 		<string id="BW_Category_MinorClans" text="Clans Mineurs" />
-		<string id="BW_Category_Info" text="Info" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->
@@ -216,19 +211,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Erreur de configuration" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} initialisé avec succès" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} triches initialisées avec succès" />
-		<string id="BW_Message_GoldChanged" text="Or modifié de {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Or modifié de {AMOUNT} pour {COUNT} héros" />
-		<string id="BW_Message_InfluenceChanged" text="Influence modifiée de {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Influence modifiée de {AMOUNT} pour {COUNT} clans" />
-		<string id="BW_Message_AttributePointsChanged" text="Points d'attribut modifiés de {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Points d'attribut modifiés de {AMOUNT} pour {COUNT} héros" />
-		<string id="BW_Message_FocusPointsChanged" text="Points de focus modifiés de {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Points de focus modifiés de {AMOUNT} pour {COUNT} héros" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} troupes blessées soignées" />
-		<string id="BW_Message_NoCheatsActive" text="Aucune triche active" />
-		<string id="BW_Message_ActiveCheats" text="Triches actives: {LIST}" />
-		<string id="BW_Message_Added" text="ajouté" />
-		<string id="BW_Message_Removed" text="retiré" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Toutes les Batailles Sans Blessure" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="En cours de développement, ne fonctionne pas encore complètement. Vise à faire mourir les troupes au lieu d'être blessées ou capturées dans chaque bataille de campagne résolue automatiquement sur la carte, y compris les batailles auxquelles vous ne participez pas personnellement. Complète Morts en Un Coup, qui n'affecte que les batailles que vous menez vous-même. N'affecte pas les sièges ni les héros capturés." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Activer le Raccourci d'Ajout d'Or" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Ajoute le montant défini dans Modifier l'Or ci-dessus à chaque pression du raccourci. Par défaut Ctrl+X, réassignable dans Options &gt; Raccourcis Clavier. Fonctionne uniquement sur la carte de campagne, pas en bataille. Nécessite que Modifier l'Or soit réglé sur une valeur non nulle." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Appliquer Aussi aux Soldats Réguliers" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Étend les cheats PNJ activés ci-dessus des héros alliés uniquement à tous les soldats alliés combattant du côté du joueur. Peut ralentir sensiblement les grandes batailles et les faire traîner en longueur, car chaque unité amie devient difficile à tuer." />
+		<string id="BW_NPC_StopNPCAging" text="Arrêter le Vieillissement des PNJ" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Empêche les PNJ de vieillir une fois qu'ils atteignent 21 ans. Les enfants de moins de 21 ans continuent de grandir normalement." />
+		<string id="BW_Player_AllowBothPerks" text="Autoriser les Deux Talents" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Accorde automatiquement le talent alternatif chaque fois que vous en choisissez un dans une paire, afin d'obtenir les deux - effet immédiat, aucun rechargement de sauvegarde nécessaire." />
+		<string id="BW_Player_InfiniteShipHealth" text="PV de Navire Infinis" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Les navires appartenant au groupe du joueur ne subissent jamais de dégâts. Nécessite le DLC War Sails." />
+		<string id="BW_Player_StopPlayerAging" text="Arrêter le Vieillissement du Joueur" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Empêche le personnage du joueur de vieillir." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Débloquer Toutes les Pièces de Forge" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Débloque chaque pièce de fabrication pour chaque type d'arme, comme si vous les aviez déjà découvertes par fonte ou commandes de fabrication. Prend jusqu'à un jour de jeu pour prendre effet après activation." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus de Capacité de Garnison" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Augmente le nombre maximum de troupes qu'une garnison peut contenir. 0 = désactivé." />
 	</strings>
 </base>

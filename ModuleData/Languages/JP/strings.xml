@@ -4,9 +4,6 @@
 		<tag language="日本語" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - ターゲット" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="プレイヤー" />
@@ -16,10 +13,8 @@
 		<string id="BW_Category_Enemies" text="敵" />
 		<string id="BW_Category_Game" text="ゲーム" />
 		<string id="BW_Category_Settlements" text="集落" />
-		<string id="BW_Category_CheatTargets" text="チートターゲット" />
 		<string id="BW_Category_Kingdoms" text="王国" />
 		<string id="BW_Category_MinorClans" text="小氏族" />
-		<string id="BW_Category_Info" text="情報" />
 		<string id="BW_Category_Debug" text="デバッグ" />
 
 		<!-- Debug Category -->
@@ -220,19 +215,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: 設定エラー" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} が正常に初期化されました" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} のチートが正常に初期化されました" />
-		<string id="BW_Message_GoldChanged" text="ゴールドが {AMOUNT} 変更されました" />
-		<string id="BW_Message_GoldChangedMultiple" text="{COUNT} 人のヒーローのゴールドが {AMOUNT} 変更されました" />
-		<string id="BW_Message_InfluenceChanged" text="影響力が {AMOUNT} 変更されました" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="{COUNT} のクランの影響力が {AMOUNT} 変更されました" />
-		<string id="BW_Message_AttributePointsChanged" text="属性ポイントが {AMOUNT} 変更されました" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="{COUNT} 人のヒーローの属性ポイントが {AMOUNT} 変更されました" />
-		<string id="BW_Message_FocusPointsChanged" text="フォーカスポイントが {AMOUNT} 変更されました" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="{COUNT} 人のヒーローのフォーカスポイントが {AMOUNT} 変更されました" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} 人の負傷した部隊が治療されました" />
-		<string id="BW_Message_NoCheatsActive" text="アクティブなチートはありません" />
-		<string id="BW_Message_ActiveCheats" text="アクティブなチート: {LIST}" />
-		<string id="BW_Message_Added" text="追加" />
-		<string id="BW_Message_Removed" text="削除" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] 全戦闘で負傷なし" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="開発中、まだ完全には機能しません。マップ上で自動解決されるすべての野戦（プレイヤーが直接参加しない戦闘を含む）で、部隊が負傷や捕虜になる代わりに死亡するようにすることを目的としています。プレイヤー自身が戦う戦闘にのみ影響する「一撃必殺」と組み合わせて使用します。攻城戦や捕らえられた英雄には影響しません。" />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="金貨追加ホットキーを有効化" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="ホットキーを押すたびに、上の「金貨を編集」で設定した金額を追加します。デフォルトはCtrl+Xで、オプション &gt; キー割り当てで再設定できます。マップ上でのみ機能し、戦闘中は機能しません。「金貨を編集」を0以外の値に設定する必要があります。" />
+		<string id="BW_NPC_ApplyToRegularTroops" text="一般兵にも適用" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="上記で有効にしたNPCチートを、味方の英雄だけでなくプレイヤー側で戦うすべての味方兵士に拡張します。すべての味方ユニットが倒しにくくなるため、大規模な戦闘が著しく遅くなる場合があります。" />
+		<string id="BW_NPC_StopNPCAging" text="NPCの老化を停止" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="NPCが21歳に達すると老化しなくなります。21歳未満の子供は通常通り成長し続けます。" />
+		<string id="BW_Player_AllowBothPerks" text="両方のパークを許可" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="ペアの中から一方を選ぶたびに、もう一方のパークも自動的に付与され、両方を得られるようになります - 即座に効果が発生し、セーブの再読み込みは不要です。" />
+		<string id="BW_Player_InfiniteShipHealth" text="船の無限HP" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="プレイヤーの部隊が所有する船は決してダメージを受けません。War Sails DLCが必要です。" />
+		<string id="BW_Player_StopPlayerAging" text="プレイヤーの老化を停止" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="プレイヤーキャラクターが老化しなくなります。" />
+		<string id="BW_Player_UnlockAllSmithyParts" text="すべての鍛冶パーツを解放" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="すでに製錬や製作依頼で発見済みであるかのように、すべての武器タイプのすべての製作パーツを解放します。有効化後、効果が出るまで最大1ゲーム日かかります。" />
+		<string id="BW_Settlements_GarrisonCapacity" text="駐屯部隊収容数ボーナス" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="駐屯部隊が保持できる最大兵力数を増加させます。0 = 無効。" />
 	</strings>
 </base>

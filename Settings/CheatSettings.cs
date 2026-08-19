@@ -205,7 +205,7 @@ namespace BannerWand.Settings
         /// Player's ships never take damage (War Sails DLC).
         /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Player_InfiniteShipHealth}Infinite Ship Health", Order = 13, RequireRestart = false, HintText = "{=BW_Player_InfiniteShipHealth_Hint}Ships owned by the player's party never take damage. Requires War Sails DLC.")]
+        [SettingPropertyBool("{=BW_Player_InfiniteShipHealth}Infinite Ship HP", Order = 13, RequireRestart = false, HintText = "{=BW_Player_InfiniteShipHealth_Hint}Ships owned by the player's party never take damage. Requires War Sails DLC.")]
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 

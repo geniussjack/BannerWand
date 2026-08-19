@@ -4,9 +4,6 @@
 		<tag language="Русский" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Цели" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Игрок" />
@@ -16,10 +13,8 @@
 		<string id="BW_Category_Enemies" text="Враги" />
 		<string id="BW_Category_Game" text="Игра" />
 		<string id="BW_Category_Settlements" text="Поселения" />
-		<string id="BW_Category_CheatTargets" text="Цели читов" />
 		<string id="BW_Category_Kingdoms" text="Королевства" />
 		<string id="BW_Category_MinorClans" text="Малые кланы" />
-		<string id="BW_Category_Info" text="Информация" />
 		<string id="BW_Category_Debug" text="Отладка" />
 
 		<!-- Debug Category -->
@@ -220,19 +215,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Ошибка настроек" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} успешно инициализирован" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} читов успешно инициализировано" />
-		<string id="BW_Message_GoldChanged" text="Золото изменено на {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Золото изменено на {AMOUNT} для {COUNT} героев" />
-		<string id="BW_Message_InfluenceChanged" text="Влияние изменено на {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Влияние изменено на {AMOUNT} для {COUNT} кланов" />
-		<string id="BW_Message_AttributePointsChanged" text="Очки атрибутов изменены на {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Очки атрибутов изменены на {AMOUNT} для {COUNT} героев" />
-		<string id="BW_Message_FocusPointsChanged" text="Очки фокусировки изменены на {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Очки фокусировки изменены на {AMOUNT} для {COUNT} героев" />
-		<string id="BW_Message_WoundedTroopsHealed" text="Вылечено {COUNT} раненых войск" />
-		<string id="BW_Message_NoCheatsActive" text="Нет активных читов" />
-		<string id="BW_Message_ActiveCheats" text="Активные читы: {LIST}" />
-		<string id="BW_Message_Added" text="добавлено" />
-		<string id="BW_Message_Removed" text="удалено" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Все битвы без ранений" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="В разработке, пока работает не полностью. Должно приводить к тому, что войска будут погибать вместо того, чтобы получать ранения или попадать в плен в каждой автоматически рассчитываемой полевой битве на карте, включая битвы, в которых вы лично не участвуете. Дополняет чит «Убийство с одного удара», который влияет только на битвы, где сражаетесь вы сами. Не затрагивает осады и захваченных в плен героев." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Включить горячую клавишу добавления золота" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Добавляет количество, указанное в «Изменить золото» выше, при каждом нажатии клавиши. По умолчанию Ctrl+X, можно переназначить в Настройки &gt; Привязка клавиш. Работает только на карте кампании, не в бою. Требует, чтобы «Изменить золото» было установлено в ненулевое значение." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Также применять к рядовым солдатам" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Расширяет включённые выше читы для NPC с союзных героев на всех союзных солдат, сражающихся на стороне игрока. Может заметно замедлить крупные битвы и затянуть их, поскольку каждого дружественного бойца становится трудно убить." />
+		<string id="BW_NPC_StopNPCAging" text="Остановить старение NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Не позволяет NPC стареть после достижения 21 года. Дети младше 21 года продолжают расти как обычно." />
+		<string id="BW_Player_AllowBothPerks" text="Разрешить оба перка" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Автоматически выдаёт альтернативный перк при выборе одного из пары, так что вы получаете оба - действует сразу, перезагрузка сохранения не требуется." />
+		<string id="BW_Player_InfiniteShipHealth" text="Бесконечное ХП корабля" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Корабли, принадлежащие партии игрока, никогда не получают повреждений. Требуется War Sails DLC." />
+		<string id="BW_Player_StopPlayerAging" text="Остановить старение игрока" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Не позволяет персонажу игрока стареть." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Разблокировать все детали кузницы" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Разблокирует все детали крафта для всех типов оружия, как будто вы уже открыли их через переплавку или заказы на крафт. Вступает в силу в течение одного игрового дня после включения." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Бонус вместимости гарнизона" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Увеличивает максимальное количество войск, которое может вместить гарнизон. 0 = отключено." />
 	</strings>
 </base>

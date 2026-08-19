@@ -4,9 +4,6 @@
 		<tag language="Polish" />
 	</tags>
 	<strings>
-		<!-- MCM Display Names -->
-		<string id="BW_ModName" text="BannerWand" />
-		<string id="BW_ModName_Targets" text="BannerWand - Cele" />
 
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Gracz" />
@@ -16,10 +13,8 @@
 		<string id="BW_Category_Enemies" text="Wrogowie" />
 		<string id="BW_Category_Game" text="Gra" />
 		<string id="BW_Category_Settlements" text="Osady" />
-		<string id="BW_Category_CheatTargets" text="Cele Cheatów" />
 		<string id="BW_Category_Kingdoms" text="Królestwa" />
 		<string id="BW_Category_MinorClans" text="Mniejsze Klany" />
-		<string id="BW_Category_Info" text="Info" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->
@@ -216,19 +211,25 @@
 		<!-- User Messages -->
 		<string id="BW_Message_SettingsError" text="BannerWand: Błąd Ustawień" />
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} pomyślnie zainicjalizowany" />
-		<string id="BW_Message_CheatsInitialized" text="{COUNT} cheatów pomyślnie zainicjalizowanych" />
-		<string id="BW_Message_GoldChanged" text="Złoto zmienione o {AMOUNT}" />
-		<string id="BW_Message_GoldChangedMultiple" text="Złoto zmienione o {AMOUNT} dla {COUNT} bohaterów" />
-		<string id="BW_Message_InfluenceChanged" text="Wpływ zmieniony o {AMOUNT}" />
-		<string id="BW_Message_InfluenceChangedMultiple" text="Wpływ zmieniony o {AMOUNT} dla {COUNT} klanów" />
-		<string id="BW_Message_AttributePointsChanged" text="Punkty atrybutów zmienione o {AMOUNT}" />
-		<string id="BW_Message_AttributePointsChangedMultiple" text="Punkty atrybutów zmienione o {AMOUNT} dla {COUNT} bohaterów" />
-		<string id="BW_Message_FocusPointsChanged" text="Punkty skupienia zmienione o {AMOUNT}" />
-		<string id="BW_Message_FocusPointsChangedMultiple" text="Punkty skupienia zmienione o {AMOUNT} dla {COUNT} bohaterów" />
-		<string id="BW_Message_WoundedTroopsHealed" text="{COUNT} rannych żołnierzy wyleczonych" />
-		<string id="BW_Message_NoCheatsActive" text="Brak aktywnych cheatów" />
-		<string id="BW_Message_ActiveCheats" text="Aktywne cheaty: {LIST}" />
-		<string id="BW_Message_Added" text="dodano" />
-		<string id="BW_Message_Removed" text="usunięto" />
+
+		<!-- New cheats (added after 1.1.1.0) -->
+		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Wszystkie Bitwy Bez Ranienia" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="W trakcie tworzenia, jeszcze nie działa w pełni. Ma sprawiać, że oddziały giną zamiast zostać ranne lub wzięte do niewoli w każdej automatycznie rozstrzyganej bitwie polowej na mapie, w tym w bitwach, w których nie bierzesz osobiście udziału. Uzupełnia Zabójstwa Jednym Ciosem, które dotyczy tylko bitew, w których walczysz sam. Nie wpływa na oblężenia ani schwytanych bohaterów." />
+		<string id="BW_Inventory_EnableAddGoldHotkey" text="Włącz Skrót Dodawania Złota" />
+		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Dodaje kwotę ustawioną w Edytuj Złoto powyżej za każdym razem, gdy naciśniesz skrót. Domyślnie Ctrl+X, można przypisać ponownie w Opcje &gt; Przypisania Klawiszy. Działa tylko na mapie kampanii, nie w bitwie. Wymaga ustawienia Edytuj Złoto na wartość różną od zera." />
+		<string id="BW_NPC_ApplyToRegularTroops" text="Zastosuj Także do Zwykłych Żołnierzy" />
+		<string id="BW_NPC_ApplyToRegularTroops_Hint" text="Rozszerza włączone powyżej cheaty dla NPC z sojuszniczych bohaterów na każdego sojuszniczego żołnierza walczącego po stronie gracza. Może zauważalnie spowolnić duże bitwy i je przeciągnąć, ponieważ każda sojusznicza jednostka staje się trudna do zabicia." />
+		<string id="BW_NPC_StopNPCAging" text="Zatrzymaj Starzenie NPC" />
+		<string id="BW_NPC_StopNPCAging_Hint" text="Zapobiega starzeniu się NPC po osiągnięciu 21 lat. Dzieci poniżej 21 roku życia nadal rosną normalnie." />
+		<string id="BW_Player_AllowBothPerks" text="Zezwól na Oba Talenty" />
+		<string id="BW_Player_AllowBothPerks_Hint" text="Automatycznie przyznaje alternatywny talent za każdym razem, gdy wybierzesz jeden z pary, dzięki czemu otrzymujesz oba - działa natychmiast, bez konieczności wczytywania zapisu." />
+		<string id="BW_Player_InfiniteShipHealth" text="Nieskończone HP Statku" />
+		<string id="BW_Player_InfiniteShipHealth_Hint" text="Statki należące do drużyny gracza nigdy nie otrzymują obrażeń. Wymaga dodatku War Sails." />
+		<string id="BW_Player_StopPlayerAging" text="Zatrzymaj Starzenie Gracza" />
+		<string id="BW_Player_StopPlayerAging_Hint" text="Zapobiega starzeniu się postaci gracza." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Odblokuj Wszystkie Części Kowalskie" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Odblokowuje każdą część rzemieślniczą dla każdego typu broni, tak jakbyś już je odkrył poprzez przetapianie lub zamówienia rzemieślnicze. Zadziała w ciągu jednego dnia w grze od włączenia." />
+		<string id="BW_Settlements_GarrisonCapacity" text="Bonus Pojemności Garnizonu" />
+		<string id="BW_Settlements_GarrisonCapacity_Hint" text="Zwiększa maksymalną liczbę oddziałów, jaką może pomieścić garnizon. 0 = wyłączone." />
 	</strings>
 </base>
