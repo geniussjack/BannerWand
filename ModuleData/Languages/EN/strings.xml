@@ -93,6 +93,8 @@
 
 		<string id="BW_Player_InfiniteShipHealth" text="Infinite Ship Health" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Ships owned by the player's party never take damage. Requires War Sails DLC." />
+		<string id="BW_Player_UnlockAllSmithyParts" text="Unlock All Smithy Parts" />
+		<string id="BW_Player_UnlockAllSmithyParts_Hint" text="Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders." />
 
 		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
 		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />

@@ -210,6 +210,15 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool InfiniteShipHealth { get; set; } = false;
 
+        /// <summary>
+        /// Unlocks every crafting piece for every weapon template in the Smithy screen, as if
+        /// each one had already been discovered through smelting or completing crafting orders.
+        /// Implemented in <see cref="Behaviors.PlayerCheatBehavior"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_UnlockAllSmithyParts}Unlock All Smithy Parts", Order = 14, RequireRestart = false, HintText = "{=BW_Player_UnlockAllSmithyParts_Hint}Unlocks every crafting piece for every weapon type, as if you had already discovered them through smelting or crafting orders.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool UnlockAllSmithyParts { get; set; } = false;
+
         #endregion
 
         #region NPC Category
