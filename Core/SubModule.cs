@@ -346,6 +346,10 @@ namespace BannerWand.Core
             campaignStarter.AddModel(new CustomSmithingModel());
             ModLogger.LogModelRegistration(nameof(CustomSmithingModel), "Controls smithing stamina consumption");
 
+            // Combat simulation - replaces DefaultCombatSimulationModel
+            campaignStarter.AddModel(new CustomCombatSimulationModel());
+            ModLogger.LogModelRegistration(nameof(CustomCombatSimulationModel), "Controls whether auto-resolved field battles can wound instead of kill");
+
             // Prisoner recruitment - DISABLED due to API changes in Bannerlord 1.2.12+
             // GetDailyRecruitedPrisoners method no longer exists in DefaultPrisonerRecruitmentCalculationModel
             // NOTE: Prisoner recruitment control is handled via CustomPersuasionModel

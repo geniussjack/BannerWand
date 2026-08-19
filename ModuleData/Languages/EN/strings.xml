@@ -148,6 +148,9 @@
 		<string id="BW_Enemies_OneHitKills" text="One-Hit Kills" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="All enemy units die in one hit." />
 
+		<string id="BW_Enemies_AllBattlesNoWounding" text="All Battles: No Wounding (Always Kill)" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Troops die instead of being wounded/captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges." />
+
 		<!-- Game Category -->
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasion/Conversation Always Succeed" />
 		<string id="BW_Game_PersuasionAlwaysSucceed_Hint" text="All persuasion and conversation checks automatically succeed." />
