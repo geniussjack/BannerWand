@@ -6,8 +6,10 @@ using BannerWand.Settings;
 using BannerWand.Utils;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 // Third-party namespaces
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Naval;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -82,6 +84,11 @@ namespace BannerWand.Behaviors
         /// </summary>
         private static bool _smithingMaterialsLogged = false;
 
+        /// <summary>
+        /// Flag to track if Unlock All Smithy Parts has been applied.
+        /// </summary>
+        private static bool _smithyPartsUnlocked;
+
         #endregion
 
         #region Event Registration
@@ -154,6 +161,9 @@ namespace BannerWand.Behaviors
 
             // Clear ship tracking from any previous campaign
             _invulnerableShips.Clear();
+
+            // Allow Unlock All Smithy Parts to run again for the newly loaded campaign
+            _smithyPartsUnlocked = false;
         }
 
         /// <summary>
@@ -176,6 +186,9 @@ namespace BannerWand.Behaviors
 
             // Ship health - keep the player's ships invulnerable while the cheat is enabled
             ApplyInfiniteShipHealth();
+
+            // Smithy parts - unlock every crafting piece for every weapon template
+            ApplyUnlockAllSmithyParts();
         }
 
         /// <summary>
@@ -649,6 +662,91 @@ namespace BannerWand.Behaviors
             ModLogger.Log("====================================================");
 
             _smithingMaterialsLogged = true;
+        }
+
+        /// <summary>
+        /// Cached reflection handle for the private <see cref="CraftingCampaignBehavior.OpenPart"/>
+        /// method. The game only exposes crafting-piece unlocking through gameplay flows (smelting
+        /// a weapon that has pieces you don't own, completing crafting orders); there is no public
+        /// bulk-unlock API, so this drives the same private method the game itself calls.
+        /// </summary>
+        private static readonly MethodInfo? _openPartMethod = typeof(CraftingCampaignBehavior).GetMethod(
+            "OpenPart", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        /// <summary>
+        /// Unlocks every crafting piece for every weapon template, as if each one had already
+        /// been discovered through smelting or completing crafting orders. Runs once per session
+        /// after the cheat is enabled; unlocked pieces are persisted by the game's own crafting
+        /// save data, so there is nothing to revert if the cheat is turned back off.
+        /// </summary>
+        private static void ApplyUnlockAllSmithyParts()
+        {
+            try
+            {
+                CheatSettings? settings = Settings;
+                CheatTargetSettings? targetSettings = TargetSettings;
+                if (settings is null || targetSettings is null)
+                {
+                    return;
+                }
+
+                if (!settings.UnlockAllSmithyParts || !targetSettings.ApplyToPlayer)
+                {
+                    // Reset flag when cheat is disabled so it can be reapplied
+                    if (!settings.UnlockAllSmithyParts)
+                    {
+                        _smithyPartsUnlocked = false;
+                    }
+                    return;
+                }
+
+                // Only apply once per session (flag system)
+                if (_smithyPartsUnlocked)
+                {
+                    return;
+                }
+
+                if (_openPartMethod is null)
+                {
+                    ModLogger.Warning("[SmithyParts] Could not resolve CraftingCampaignBehavior.OpenPart via reflection.");
+                    return;
+                }
+
+                CraftingCampaignBehavior? craftingBehavior = Campaign.Current?.GetCampaignBehavior<CraftingCampaignBehavior>();
+                if (craftingBehavior is null)
+                {
+                    return;
+                }
+
+                int unlockedCount = 0;
+
+                foreach (CraftingTemplate template in CraftingTemplate.All)
+                {
+                    if (template?.Pieces is null)
+                    {
+                        continue;
+                    }
+
+                    foreach (CraftingPiece piece in template.Pieces)
+                    {
+                        if (piece is null || piece.IsEmptyPiece || craftingBehavior.IsOpened(piece, template))
+                        {
+                            continue;
+                        }
+
+                        _ = _openPartMethod.Invoke(craftingBehavior, [piece, template, false]);
+                        unlockedCount++;
+                    }
+                }
+
+                _smithyPartsUnlocked = true;
+
+                ModLogger.LogCheat("Unlock All Smithy Parts", true, unlockedCount, "crafting pieces");
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"[PlayerCheatBehavior] Error in {nameof(ApplyUnlockAllSmithyParts)}: {ex.Message}", ex);
+            }
         }
 
         #endregion
