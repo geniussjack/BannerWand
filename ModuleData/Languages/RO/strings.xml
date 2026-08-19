@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Jucător" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Fierărie" />
+		<string id="BW_Category_Social" text="Social" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statistici" />
 		<string id="BW_Category_Enemies" text="Inamici" />
-		<string id="BW_Category_Game" text="Joc" />
 		<string id="BW_Category_Settlements" text="Așezări" />
-		<string id="BW_Category_Kingdoms" text="Regate" />
-		<string id="BW_Category_MinorClans" text="Clanuri Minore" />
+		<string id="BW_Category_Game" text="Joc" />
+		<string id="BW_Category_TargetPlayer" text="Țintă: Jucător și Clan" />
+		<string id="BW_Category_TargetKingdoms" text="Țintă: Regate" />
+		<string id="BW_Category_TargetMinorClans" text="Țintă: Clanuri Minore" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->

@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="플레이어" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="대장간" />
+		<string id="BW_Category_Social" text="사교" />
 		<string id="BW_Category_Inventory" text="인벤토리" />
 		<string id="BW_Category_Stats" text="통계" />
 		<string id="BW_Category_Enemies" text="적" />
-		<string id="BW_Category_Game" text="게임" />
 		<string id="BW_Category_Settlements" text="정착지" />
-		<string id="BW_Category_Kingdoms" text="왕국" />
-		<string id="BW_Category_MinorClans" text="소규모 클랜" />
+		<string id="BW_Category_Game" text="게임" />
+		<string id="BW_Category_TargetPlayer" text="대상: 플레이어 및 클랜" />
+		<string id="BW_Category_TargetKingdoms" text="대상: 왕국" />
+		<string id="BW_Category_TargetMinorClans" text="대상: 소규모 클랜" />
 		<string id="BW_Category_Debug" text="디버그" />
 
 		<!-- Debug Category -->

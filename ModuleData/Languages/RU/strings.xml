@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Игрок" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Кузница" />
+		<string id="BW_Category_Social" text="Социальное" />
 		<string id="BW_Category_Inventory" text="Инвентарь" />
 		<string id="BW_Category_Stats" text="Характеристики" />
 		<string id="BW_Category_Enemies" text="Враги" />
-		<string id="BW_Category_Game" text="Игра" />
 		<string id="BW_Category_Settlements" text="Поселения" />
-		<string id="BW_Category_Kingdoms" text="Королевства" />
-		<string id="BW_Category_MinorClans" text="Малые кланы" />
+		<string id="BW_Category_Game" text="Игра" />
+		<string id="BW_Category_TargetPlayer" text="Цель: Игрок и клан" />
+		<string id="BW_Category_TargetKingdoms" text="Цель: Королевства" />
+		<string id="BW_Category_TargetMinorClans" text="Цель: Малые кланы" />
 		<string id="BW_Category_Debug" text="Отладка" />
 
 		<!-- Debug Category -->

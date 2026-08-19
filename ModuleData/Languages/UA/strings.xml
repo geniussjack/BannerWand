@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Гравець" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Кузня" />
+		<string id="BW_Category_Social" text="Соціальне" />
 		<string id="BW_Category_Inventory" text="Інвентар" />
 		<string id="BW_Category_Stats" text="Характеристики" />
 		<string id="BW_Category_Enemies" text="Вороги" />
-		<string id="BW_Category_Game" text="Гра" />
 		<string id="BW_Category_Settlements" text="Поселення" />
-		<string id="BW_Category_Kingdoms" text="Королівства" />
-		<string id="BW_Category_MinorClans" text="Малі клани" />
+		<string id="BW_Category_Game" text="Гра" />
+		<string id="BW_Category_TargetPlayer" text="Ціль: Гравець і клан" />
+		<string id="BW_Category_TargetKingdoms" text="Ціль: Королівства" />
+		<string id="BW_Category_TargetMinorClans" text="Ціль: Малі клани" />
 		<string id="BW_Category_Debug" text="Відладка" />
 
 		<!-- Debug Category -->

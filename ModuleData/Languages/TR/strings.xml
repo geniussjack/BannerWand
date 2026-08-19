@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Oyuncu" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Demircilik" />
+		<string id="BW_Category_Social" text="Sosyal" />
 		<string id="BW_Category_Inventory" text="Envanter" />
 		<string id="BW_Category_Stats" text="İstatistikler" />
 		<string id="BW_Category_Enemies" text="Düşmanlar" />
-		<string id="BW_Category_Game" text="Oyun" />
 		<string id="BW_Category_Settlements" text="Yerleşimler" />
-		<string id="BW_Category_Kingdoms" text="Krallıklar" />
-		<string id="BW_Category_MinorClans" text="Küçük Klanlar" />
+		<string id="BW_Category_Game" text="Oyun" />
+		<string id="BW_Category_TargetPlayer" text="Hedef: Oyuncu ve Klan" />
+		<string id="BW_Category_TargetKingdoms" text="Hedef: Krallıklar" />
+		<string id="BW_Category_TargetMinorClans" text="Hedef: Küçük Klanlar" />
 		<string id="BW_Category_Debug" text="Hata Ayıklama" />
 
 		<!-- Debug Category -->

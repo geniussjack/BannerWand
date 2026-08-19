@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Giocatore" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Fucina" />
+		<string id="BW_Category_Social" text="Sociale" />
 		<string id="BW_Category_Inventory" text="Inventario" />
 		<string id="BW_Category_Stats" text="Statistiche" />
 		<string id="BW_Category_Enemies" text="Nemici" />
-		<string id="BW_Category_Game" text="Gioco" />
 		<string id="BW_Category_Settlements" text="Insediamenti" />
-		<string id="BW_Category_Kingdoms" text="Regni" />
-		<string id="BW_Category_MinorClans" text="Clan Minori" />
+		<string id="BW_Category_Game" text="Gioco" />
+		<string id="BW_Category_TargetPlayer" text="Bersaglio: Giocatore e Clan" />
+		<string id="BW_Category_TargetKingdoms" text="Bersaglio: Regni" />
+		<string id="BW_Category_TargetMinorClans" text="Bersaglio: Clan Minori" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->

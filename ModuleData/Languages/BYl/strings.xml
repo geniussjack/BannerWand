@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Huliec" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Kuźnia" />
+		<string id="BW_Category_Social" text="Sacyjalnaje" />
 		<string id="BW_Category_Inventory" text="Inventar" />
 		<string id="BW_Category_Stats" text="Statystyka" />
 		<string id="BW_Category_Enemies" text="Varazhyny" />
-		<string id="BW_Category_Game" text="Hulnia" />
 		<string id="BW_Category_Settlements" text="Pasielishchy" />
-		<string id="BW_Category_Kingdoms" text="Karaleustvy" />
-		<string id="BW_Category_MinorClans" text="Malyja klany" />
+		<string id="BW_Category_Game" text="Hulnia" />
+		<string id="BW_Category_TargetPlayer" text="Meta: Huliec i klan" />
+		<string id="BW_Category_TargetKingdoms" text="Meta: Karaleustvy" />
+		<string id="BW_Category_TargetMinorClans" text="Meta: Malyja klany" />
 		<string id="BW_Category_Debug" text="Adładka" />
 
 		<!-- Debug Category -->

@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Jogador" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Forja" />
+		<string id="BW_Category_Social" text="Social" />
 		<string id="BW_Category_Inventory" text="Inventário" />
 		<string id="BW_Category_Stats" text="Estatísticas" />
 		<string id="BW_Category_Enemies" text="Inimigos" />
-		<string id="BW_Category_Game" text="Jogo" />
 		<string id="BW_Category_Settlements" text="Assentamentos" />
-		<string id="BW_Category_Kingdoms" text="Reinos" />
-		<string id="BW_Category_MinorClans" text="Clãs Menores" />
+		<string id="BW_Category_Game" text="Jogo" />
+		<string id="BW_Category_TargetPlayer" text="Alvo: Jogador e Clã" />
+		<string id="BW_Category_TargetKingdoms" text="Alvo: Reinos" />
+		<string id="BW_Category_TargetMinorClans" text="Alvo: Clãs Menores" />
 		<string id="BW_Category_Debug" text="Debug" />
 
 		<!-- Debug Category -->

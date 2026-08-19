@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="プレイヤー" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="鍛冶" />
+		<string id="BW_Category_Social" text="社交" />
 		<string id="BW_Category_Inventory" text="インベントリ" />
 		<string id="BW_Category_Stats" text="統計" />
 		<string id="BW_Category_Enemies" text="敵" />
-		<string id="BW_Category_Game" text="ゲーム" />
 		<string id="BW_Category_Settlements" text="集落" />
-		<string id="BW_Category_Kingdoms" text="王国" />
-		<string id="BW_Category_MinorClans" text="小氏族" />
+		<string id="BW_Category_Game" text="ゲーム" />
+		<string id="BW_Category_TargetPlayer" text="対象：プレイヤーと氏族" />
+		<string id="BW_Category_TargetKingdoms" text="対象：王国" />
+		<string id="BW_Category_TargetMinorClans" text="対象：小氏族" />
 		<string id="BW_Category_Debug" text="デバッグ" />
 
 		<!-- Debug Category -->

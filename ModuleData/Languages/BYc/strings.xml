@@ -8,13 +8,16 @@
 		<!-- Category Names -->
 		<string id="BW_Category_Player" text="Гулец" />
 		<string id="BW_Category_NPC" text="NPC" />
+		<string id="BW_Category_Smithy" text="Кузня" />
+		<string id="BW_Category_Social" text="Сацыяльнае" />
 		<string id="BW_Category_Inventory" text="Інвентар" />
 		<string id="BW_Category_Stats" text="Статыстыка" />
 		<string id="BW_Category_Enemies" text="Воражыны" />
-		<string id="BW_Category_Game" text="Гульня" />
 		<string id="BW_Category_Settlements" text="Паселішчы" />
-		<string id="BW_Category_Kingdoms" text="Каралеўствы" />
-		<string id="BW_Category_MinorClans" text="Малыя кланы" />
+		<string id="BW_Category_Game" text="Гульня" />
+		<string id="BW_Category_TargetPlayer" text="Мэта: Гулец і клан" />
+		<string id="BW_Category_TargetKingdoms" text="Мэта: Каралеўствы" />
+		<string id="BW_Category_TargetMinorClans" text="Мэта: Малыя кланы" />
 		<string id="BW_Category_Debug" text="Адладка" />
 
 		<!-- Debug Category -->
