@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="NPC가 21세에 도달하면 더 이상 나이를 먹지 않습니다. 21세 미만의 어린이는 계속 정상적으로 성장합니다." />
 		<string id="BW_Player_AllowBothPerks" text="두 특성 모두 허용" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="한 쌍 중 하나를 선택할 때마다 대체 특성도 자동으로 부여되어 결국 둘 다 얻게 됩니다 - 즉시 적용되며 저장 파일을 다시 불러올 필요가 없습니다." />
+
+		<string id="BW_Player_PartyRegeneration" text="부대 재생" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="대상 부대의 부상당한 병사와 영웅이 며칠에 걸쳐서가 아니라 당일에 완전히 회복됩니다. 전투 사이의 부상 회복에만 영향을 주며 전투 중 체력에는 영향을 주지 않습니다." />
 		<string id="BW_Player_InfiniteShipHealth" text="선박 무한 HP" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="플레이어 부대가 소유한 선박은 절대 피해를 입지 않습니다. War Sails DLC가 필요합니다." />
 		<string id="BW_Player_StopPlayerAging" text="플레이어 노화 정지" />

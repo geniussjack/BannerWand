@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="NPCが21歳に達すると老化しなくなります。21歳未満の子供は通常通り成長し続けます。" />
 		<string id="BW_Player_AllowBothPerks" text="両方のパークを許可" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="ペアの中から一方を選ぶたびに、もう一方のパークも自動的に付与され、両方を得られるようになります - 即座に効果が発生し、セーブの再読み込みは不要です。" />
+
+		<string id="BW_Player_PartyRegeneration" text="部隊再生" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="対象の部隊にいる負傷した部隊と英雄は、数日かけてではなくその日のうちに完全に回復します。戦闘間の負傷回復にのみ影響し、戦闘中の体力には影響しません。" />
 		<string id="BW_Player_InfiniteShipHealth" text="船の無限HP" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="プレイヤーの部隊が所有する船は決してダメージを受けません。War Sails DLCが必要です。" />
 		<string id="BW_Player_StopPlayerAging" text="プレイヤーの老化を停止" />

@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Impede que os NPCs envelheçam ao atingirem 21 anos. Crianças com menos de 21 anos continuarão a crescer normalmente." />
 		<string id="BW_Player_AllowBothPerks" text="Permitir Ambas as Perícias" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Concede automaticamente a perícia alternativa sempre que você escolhe uma de um par, para que você fique com as duas - o efeito é imediato, sem necessidade de recarregar o save." />
+
+		<string id="BW_Player_PartyRegeneration" text="Regeneração do Grupo" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Tropas e heróis feridos nos grupos-alvo se recuperam totalmente dos ferimentos no mesmo dia, em vez de vários dias. Afeta apenas a recuperação de ferimentos entre batalhas, não a saúde em combate." />
 		<string id="BW_Player_InfiniteShipHealth" text="HP de Navio Infinito" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Os navios do grupo do jogador nunca sofrem dano. Requer a DLC War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Parar Envelhecimento do Jogador" />

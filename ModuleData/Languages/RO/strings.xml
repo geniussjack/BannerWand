@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Împiedică NPC-urile să îmbătrânească odată ce ajung la 21 de ani. Copiii sub 21 de ani vor continua să crească normal." />
 		<string id="BW_Player_AllowBothPerks" text="Permite Ambele Perk-uri" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Acordă automat perk-ul alternativ de fiecare dată când alegi unul dintr-o pereche, astfel încât să ajungi cu ambele - efect imediat, fără a fi nevoie să reîncarci salvarea." />
+
+		<string id="BW_Player_PartyRegeneration" text="Regenerarea Grupului" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Trupele și eroii răniți din grupurile vizate își revin complet din răni chiar în aceeași zi, în loc de mai multe zile. Afectează doar recuperarea din răni între lupte, nu sănătatea în luptă." />
 		<string id="BW_Player_InfiniteShipHealth" text="HP Infinit al Navei" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Navele deținute de grupul jucătorului nu suferă niciodată daune. Necesită DLC-ul War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Oprește Îmbătrânirea Jucătorului" />

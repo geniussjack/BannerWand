@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Не дазваляе NPC старэць пасля дасягнення 21 года. Дзеці да 21 года працягваюць рост звычайна." />
 		<string id="BW_Player_AllowBothPerks" text="Дазволіць абодва перкі" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Аўтаматычна дае альтэрнатыўны перк кожны раз, калі вы выбіраеце адзін з пары, каб у выніку атрымаць абодва - дзейнічае адразу, без неабходнасці перазагрузкі захавання." />
+
+		<string id="BW_Player_PartyRegeneration" text="Рэгенерацыя атрада" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Параненыя войскі і героі ў мэтавых атрадах поўнасцю адужваюцца ад раненняў у той жа дзень замест некалькіх дзён. Уплывае толькі на аднаўленне пасля раненняў паміж бітвамі, а не на здароўе падчас бою." />
 		<string id="BW_Player_InfiniteShipHealth" text="Бясконцае ХП карабля" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Караблі партыі гульца ніколі не атрымліваюць пашкоджанняў. Патрабуе War Sails DLC." />
 		<string id="BW_Player_StopPlayerAging" text="Спыніць старэнне гульца" />

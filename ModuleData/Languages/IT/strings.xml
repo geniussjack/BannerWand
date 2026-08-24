@@ -226,6 +226,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Impedisce agli NPC di invecchiare una volta raggiunti i 21 anni. I bambini sotto i 21 anni continueranno a crescere normalmente." />
 		<string id="BW_Player_AllowBothPerks" text="Consenti Entrambi i Talenti" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Concede automaticamente il talento alternativo ogni volta che ne scegli uno da una coppia, così finisci per averli entrambi - ha effetto immediato, non serve ricaricare il salvataggio." />
+
+		<string id="BW_Player_PartyRegeneration" text="Rigenerazione del Gruppo" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Le truppe e gli eroi feriti nei gruppi bersaglio guariscono completamente dalle ferite lo stesso giorno invece che in più giorni. Influisce solo sul recupero delle ferite tra le battaglie, non sulla salute in combattimento." />
 		<string id="BW_Player_InfiniteShipHealth" text="PS Nave Infiniti" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Le navi possedute dal gruppo del giocatore non subiscono mai danni. Richiede il DLC War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Ferma l'Invecchiamento del Giocatore" />

@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="NPC 達到 21 歲後不再衰老。21 歲以下的兒童將繼續正常成長。" />
 		<string id="BW_Player_AllowBothPerks" text="允許同時獲得兩個天賦" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="每當你從一對天賦中選擇一個時，自動授予其對應的另一個天賦，讓你兩者兼得——立即生效，無需重新載入存檔。" />
+
+		<string id="BW_Player_PartyRegeneration" text="隊伍再生" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="目標隊伍中受傷的部隊和英雄將在當天完全康復，而不是需要數天時間。僅影響戰鬥之間的傷勢恢復，不影響戰鬥中的生命值。" />
 		<string id="BW_Player_InfiniteShipHealth" text="無限船隻生命值" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="玩家隊伍擁有的船隻永不受損。需要 War Sails DLC。" />
 		<string id="BW_Player_StopPlayerAging" text="停止玩家角色衰老" />
