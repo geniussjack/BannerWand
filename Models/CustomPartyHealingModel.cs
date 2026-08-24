@@ -1,5 +1,7 @@
 #nullable enable
+using BannerWand.Constants;
 using BannerWand.Settings;
+using BannerWand.Utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -8,9 +10,9 @@ using TaleWorlds.Core;
 namespace BannerWand.Models
 {
     /// <summary>
-    /// Custom party healing model that can force every simulated battle casualty to die outright,
-    /// completing the "All Battles No Wounding" cheat that <see cref="CustomCombatSimulationModel"/>
-    /// alone cannot fully deliver. Extends <see cref="DefaultPartyHealingModel"/>.
+    /// Custom party healing model providing two independent cheats: forcing every simulated battle
+    /// casualty to die outright ("All Battles No Wounding"), and instant wound recovery for targeted
+    /// parties ("Party Regeneration"). Extends <see cref="DefaultPartyHealingModel"/>.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -19,8 +21,8 @@ namespace BannerWand.Models
     /// uses this model instead of the default for all party healing calculations.
     /// </para>
     /// <para>
-    /// <b>Why <see cref="CustomCombatSimulationModel"/> is not enough on its own:</b> during
-    /// auto-resolved (simulated) map battles, <see cref="TaleWorlds.CampaignSystem.MapEvents.MapEventSide"/>
+    /// <b>All Battles No Wounding - why <see cref="CustomCombatSimulationModel"/> is not enough on its
+    /// own:</b> during auto-resolved (simulated) map battles, <see cref="TaleWorlds.CampaignSystem.MapEvents.MapEventSide"/>
     /// decides per-hit whether a struck troop is wounded or killed in two steps. First it asks
     /// <see cref="TaleWorlds.CampaignSystem.ComponentInterfaces.CombatSimulationModel.GetBluntDamageChance"/>
     /// for a Blunt/Cut damage type; <see cref="CustomCombatSimulationModel"/> forces this to Cut. But Cut
@@ -32,12 +34,20 @@ namespace BannerWand.Models
     /// performs for both heroes and regular troops always resolves to death while the cheat is enabled.
     /// </para>
     /// <para>
-    /// <b>Scope:</b> <see cref="GetSurvivalChance"/> is only ever called from
+    /// <b>Scope of <see cref="GetSurvivalChance"/>:</b> only ever called from
     /// <see cref="TaleWorlds.CampaignSystem.MapEvents.MapEventSide"/> while resolving a simulated hit, for
     /// every <see cref="TaleWorlds.CampaignSystem.MapEvents.MapEvent"/> type (field battles, sieges, and
     /// raids all share that same code path) - it plays no part in the player's own real-time mission
     /// combat (handled separately by "One-Hit Kills") or in post-battle prisoner-taking for heroes who
     /// were never struck this tick.
+    /// </para>
+    /// <para>
+    /// <b>Party Regeneration:</b> <see cref="GetDailyHealingForRegulars"/> and
+    /// <see cref="GetDailyHealingHpForHeroes"/> govern between-battle wound recovery only - how many
+    /// wounded regular troops return to healthy each campaign day, and how much HP wounded heroes (the
+    /// player included) recover each day. Neither has anything to do with in-combat health, which the
+    /// existing Unlimited/Infinite HP cheats already cover. Targeting reuses <see cref="TargetFilter.ShouldApplyCheatToParty"/>,
+    /// the same hero/clan/kingdom target settings every other targetable cheat in the mod uses.
     /// </para>
     /// </remarks>
     public class CustomPartyHealingModel : DefaultPartyHealingModel
@@ -63,6 +73,56 @@ namespace BannerWand.Models
             return Settings?.AllBattlesNoWounding == true
                 ? 0f
                 : base.GetSurvivalChance(party, character, damageType, canDamageKillEvenIfBlunt, enemyParty);
+        }
+
+        /// <summary>
+        /// Returns how many wounded regular troops recover to healthy in the party this campaign day.
+        /// Boosted to guarantee full recovery of the whole roster while Party Regeneration is enabled
+        /// and the party is a valid cheat target.
+        /// </summary>
+        /// <param name="party">The party whose regulars to calculate healing for.</param>
+        /// <param name="isPrisoners">Whether this calculates healing for the party's prisoners instead of its own troops.</param>
+        /// <param name="includeDescriptions">Whether to include human-readable modifier descriptions.</param>
+        /// <returns>The base game's result with a large bonus added while the cheat applies to this party.</returns>
+        /// <remarks>
+        /// Prisoner recovery (<paramref name="isPrisoners"/> true) is left untouched - Party
+        /// Regeneration is about a party's own wounded members, not the captives it is holding.
+        /// </remarks>
+        public override ExplainedNumber GetDailyHealingForRegulars(PartyBase party, bool isPrisoners, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = base.GetDailyHealingForRegulars(party, isPrisoners, includeDescriptions);
+
+            if (!isPrisoners && Settings?.PartyRegeneration == true && party?.IsMobile == true && TargetFilter.ShouldApplyCheatToParty(party.MobileParty))
+            {
+                result.Add(GameConstants.InstantRegenerationAmount);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns how much HP wounded heroes in the party - including the player - recover this
+        /// campaign day. Boosted to guarantee full recovery while Party Regeneration is enabled and
+        /// the party is a valid cheat target.
+        /// </summary>
+        /// <param name="party">The party whose heroes to calculate healing for.</param>
+        /// <param name="isPrisoners">Whether this calculates healing for the party's prisoners instead of its own heroes.</param>
+        /// <param name="includeDescriptions">Whether to include human-readable modifier descriptions.</param>
+        /// <returns>The base game's result with a large bonus added while the cheat applies to this party.</returns>
+        /// <remarks>
+        /// Prisoner recovery (<paramref name="isPrisoners"/> true) is left untouched, for the same
+        /// reason as in <see cref="GetDailyHealingForRegulars"/>.
+        /// </remarks>
+        public override ExplainedNumber GetDailyHealingHpForHeroes(PartyBase party, bool isPrisoners, bool includeDescriptions = false)
+        {
+            ExplainedNumber result = base.GetDailyHealingHpForHeroes(party, isPrisoners, includeDescriptions);
+
+            if (!isPrisoners && Settings?.PartyRegeneration == true && party?.IsMobile == true && TargetFilter.ShouldApplyCheatToParty(party.MobileParty))
+            {
+                result.Add(GameConstants.InstantRegenerationAmount);
+            }
+
+            return result;
         }
     }
 }

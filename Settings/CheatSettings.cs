@@ -178,6 +178,16 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool AllowBothPerks { get; set; } = false;
 
+        /// <summary>
+        /// Wounded party members - the player and regular troops alike - fully recover the same
+        /// campaign day instead of over several days. Only affects wound recovery between battles,
+        /// not in-combat health (see Unlimited/Infinite HP above for that).
+        /// Implemented in <see cref="Models.CustomPartyHealingModel"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_PartyRegeneration}Party Regeneration", Order = 12, RequireRestart = false, HintText = "{=BW_Player_PartyRegeneration_Hint}Wounded troops and heroes in targeted parties fully recover from wounds the same day instead of over several days. Only affects wound recovery between battles, not in-combat health.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool PartyRegeneration { get; set; } = false;
+
         #endregion
 
         #region NPC Category

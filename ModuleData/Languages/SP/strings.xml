@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Evita que los PNJ envejezcan al cumplir 21 años. Los niños menores de 21 años seguirán creciendo con normalidad." />
 		<string id="BW_Player_AllowBothPerks" text="Permitir Ambas Habilidades" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Otorga automáticamente la habilidad alternativa cada vez que eliges una de un par, de modo que terminas con ambas - efecto inmediato, sin necesidad de recargar la partida." />
+
+		<string id="BW_Player_PartyRegeneration" text="Regeneración del Grupo" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Las tropas y héroes heridos en los grupos objetivo se recuperan por completo de sus heridas el mismo día en lugar de varios días. Solo afecta a la recuperación de heridas entre batallas, no a la salud en combate." />
 		<string id="BW_Player_InfiniteShipHealth" text="PV de Nave Infinitos" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Las naves propiedad del grupo del jugador nunca sufren daño. Requiere el DLC War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Detener el Envejecimiento del Jugador" />

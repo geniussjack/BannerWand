@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Nie dazvaliaje NPC starać paslia dasiahnennia 21 hoda. Dzieci da 21 hoda praciahvajuć rost zvyčajna." />
 		<string id="BW_Player_AllowBothPerks" text="Dazvolić abodva perki" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Aŭtamatyčna daje alternatyŭny perk kožny raz, kali vy vybirajecie adzin z pary, kab u vyniku atrymać abodva - dziejničaje adrazu, biez neabchodnaści pierazahruzki zachavannia." />
+
+		<string id="BW_Player_PartyRegeneration" text="Rehieneracyja partyi" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Paranienyja vojski i herojі ŭ metavych partyjach poŭnasciu adnaŭlajucca ad raniennjaŭ u toj ža dzień zamiest niekalkich dzion. Uplyvaje tolki na adnaŭlenne ad raniennjaŭ pamiž bitvami, a nie na zdaroŭje ŭ chodzie boju." />
 		<string id="BW_Player_InfiniteShipHealth" text="Biaskoncaje ChP karablia" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Karabli partyi hulca nikoli nie atrymlivajuć paškodžannaŭ. Patrabuje War Sails DLC." />
 		<string id="BW_Player_StopPlayerAging" text="Spynić stareńnie hulca" />

@@ -12,7 +12,7 @@
 
 ## Features
 
-- **Player** - health, ammo, movement speed, morale, relationships, aging, smithing, ships, perks
+- **Player** - health, regeneration, ammo, movement speed, morale, relationships, aging, smithing, ships, perks
 - **NPC** - the same combat and stat cheats, targetable at allied heroes or regular troops
 - **Inventory** - gold, influence, food, carrying capacity, smithing materials, a rebindable add-gold hotkey
 - **Stats** - attribute/focus points, renown, skill and troop XP

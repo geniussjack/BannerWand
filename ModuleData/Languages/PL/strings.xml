@@ -226,6 +226,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Zapobiega starzeniu się NPC po osiągnięciu 21 lat. Dzieci poniżej 21 roku życia nadal rosną normalnie." />
 		<string id="BW_Player_AllowBothPerks" text="Zezwól na Oba Talenty" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Automatycznie przyznaje alternatywny talent za każdym razem, gdy wybierzesz jeden z pary, dzięki czemu otrzymujesz oba - działa natychmiast, bez konieczności wczytywania zapisu." />
+
+		<string id="BW_Player_PartyRegeneration" text="Regeneracja Oddziału" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Ranni żołnierze i bohaterowie w docelowych oddziałach w pełni wyzdrowieją tego samego dnia zamiast po kilku dniach. Wpływa tylko na regenerację ran między bitwami, nie na zdrowie podczas walki." />
 		<string id="BW_Player_InfiniteShipHealth" text="Nieskończone HP Statku" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Statki należące do drużyny gracza nigdy nie otrzymują obrażeń. Wymaga dodatku War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Zatrzymaj Starzenie Gracza" />
