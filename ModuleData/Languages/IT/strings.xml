@@ -216,8 +216,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inizializzato con successo" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Tutte le Battaglie Senza Ferite" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="In lavorazione, non funziona ancora completamente. Ha lo scopo di far morire le truppe invece di ferirle o catturarle in ogni battaglia campale risolta automaticamente sulla mappa, comprese le battaglie a cui non partecipi personalmente. Completa Uccisioni in Un Colpo, che riguarda solo le battaglie che combatti tu stesso. Non influisce sugli assedi né sugli eroi catturati." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Tutte le Battaglie Senza Ferite" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Le truppe muoiono invece di essere ferite o catturate in ogni battaglia risolta automaticamente sulla mappa - battaglie campali, assedi e incursioni comprese -, incluse le battaglie a cui non partecipi personalmente. Completa Uccisioni in Un Colpo, che riguarda solo le battaglie che combatti tu stesso." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Attiva Scorciatoia Aggiungi Oro" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Aggiunge l'importo impostato in Modifica Oro sopra ogni volta che la scorciatoia viene premuta. Predefinita su Ctrl+X, riassegnabile in Opzioni &gt; Tasti di Scelta Rapida. Funziona solo sulla mappa di campagna, non in battaglia. Richiede che Modifica Oro sia impostato su un valore diverso da zero." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Applica Anche ai Soldati Regolari" />

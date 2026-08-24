@@ -20,11 +20,17 @@ namespace BannerWand.Models
     /// </para>
     /// <para>
     /// <b>Scope:</b> This only affects <see cref="TaleWorlds.CampaignSystem.BattleSimulation"/>, the
-    /// system the campaign uses to auto-resolve field battles between AI-controlled parties (and the
-    /// AI-controlled portion of battles the player does not personally join). It covers every field
-    /// battle on the map, not just the player's own. It does not cover the player's own real-time
-    /// mission combat (handled separately by the existing "One-Hit Kills" cheat) or siege casualties
-    /// (governed by a separate <see cref="TaleWorlds.CampaignSystem.ComponentInterfaces.SiegeEventModel"/>).
+    /// system the campaign uses to auto-resolve battles between AI-controlled parties (and the
+    /// AI-controlled portion of battles the player does not personally join). It covers every simulated
+    /// battle on the map - field battles, sieges, and raids alike, since they all share the same
+    /// simulation code path - but not the player's own real-time mission combat (handled separately by
+    /// the existing "One-Hit Kills" cheat).
+    /// </para>
+    /// <para>
+    /// <b>Forcing Cut damage here is necessary but not sufficient</b> to guarantee a kill: the struck
+    /// troop still rolls a normal survival chance afterwards. <see cref="CustomPartyHealingModel"/>
+    /// forces that roll to fail too, and together the two models make the "All Battles No Wounding"
+    /// cheat actually kill instead of wound/capture.
     /// </para>
     /// </remarks>
     public class CustomCombatSimulationModel : DefaultCombatSimulationModel

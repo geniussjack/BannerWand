@@ -157,8 +157,8 @@
 		<string id="BW_Enemies_OneHitKills" text="One-Hit Kills" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="All enemy units die in one hit." />
 
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] All Battles No Wounding" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Work in progress, does not fully work yet. Intended to make troops die instead of being wounded or captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges or captured heroes." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="All Battles No Wounding" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Troops die instead of being wounded or captured in every auto-resolved battle on the map - field battles, sieges, and raids alike - including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself." />
 
 		<!-- Game Category -->
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasion/Conversation Always Succeed" />

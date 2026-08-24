@@ -216,8 +216,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} pomyślnie zainicjalizowany" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Wszystkie Bitwy Bez Ranienia" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="W trakcie tworzenia, jeszcze nie działa w pełni. Ma sprawiać, że oddziały giną zamiast zostać ranne lub wzięte do niewoli w każdej automatycznie rozstrzyganej bitwie polowej na mapie, w tym w bitwach, w których nie bierzesz osobiście udziału. Uzupełnia Zabójstwa Jednym Ciosem, które dotyczy tylko bitew, w których walczysz sam. Nie wpływa na oblężenia ani schwytanych bohaterów." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Wszystkie Bitwy Bez Ranienia" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Oddziały giną zamiast zostać ranne lub wzięte do niewoli w każdej automatycznie rozstrzyganej bitwie na mapie - bitwach polowych, oblężeniach i najazdach - w tym w bitwach, w których nie bierzesz osobiście udziału. Uzupełnia Zabójstwa Jednym Ciosem, które dotyczy tylko bitew, w których walczysz sam." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Włącz Skrót Dodawania Złota" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Dodaje kwotę ustawioną w Edytuj Złoto powyżej za każdym razem, gdy naciśniesz skrót. Domyślnie Ctrl+X, można przypisać ponownie w Opcje &gt; Przypisania Klawiszy. Działa tylko na mapie kampanii, nie w bitwie. Wymaga ustawienia Edytuj Złoto na wartość różną od zera." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Zastosuj Także do Zwykłych Żołnierzy" />

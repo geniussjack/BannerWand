@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inițializat cu succes" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Toate Luptele Fără Rănire" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="În lucru, nu funcționează încă pe deplin. Are scopul de a face trupele să moară în loc să fie rănite sau capturate în fiecare luptă de câmp rezolvată automat pe hartă, inclusiv luptele la care nu participi personal. Completează Uciderea Dintr-o Lovitură, care afectează doar luptele purtate chiar de tine. Nu afectează asediile sau eroii capturați." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Toate Luptele Fără Rănire" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Trupele mor în loc să fie rănite sau capturate în fiecare luptă rezolvată automat pe hartă — bătălii de câmp, asedii și raiduri deopotrivă —, inclusiv luptele la care nu participi personal. Completează Uciderea Dintr-o Lovitură, care afectează doar luptele purtate chiar de tine." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Activează Comanda Rapidă pentru Adăugare Aur" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adaugă suma setată la Editează Aur mai sus de fiecare dată când este apăsată comanda rapidă. Implicit Ctrl+X, poate fi reasignată din Opțiuni &gt; Asocieri Taste. Funcționează doar pe harta campaniei, nu în luptă. Necesită ca Editează Aur să fie setat la o valoare diferită de zero." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Aplică și Soldaților Obișnuiți" />

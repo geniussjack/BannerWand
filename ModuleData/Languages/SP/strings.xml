@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inicializado exitosamente" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Todas las Batallas Sin Heridas" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="En desarrollo, aún no funciona completamente. Su objetivo es que las tropas mueran en lugar de resultar heridas o capturadas en cada batalla de campo resuelta automáticamente en el mapa, incluidas las batallas en las que no participas personalmente. Complementa Muertes de un Golpe, que solo afecta a las batallas que libras tú mismo. No afecta a los asedios ni a los héroes capturados." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Todas las Batallas Sin Heridas" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Las tropas mueren en lugar de resultar heridas o capturadas en cada batalla resuelta automáticamente en el mapa -batallas de campo, asedios e incursiones por igual-, incluidas las batallas en las que no participas personalmente. Complementa Muerte de Un Solo Golpe, que solo afecta a las batallas que libras tú mismo." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Activar Atajo de Añadir Oro" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Añade la cantidad establecida en Modificar Oro arriba cada vez que se pulsa el atajo. Por defecto es Ctrl+X, reasignable en Opciones &gt; Atajos de Teclado. Solo funciona en el mapa de campaña, no en batalla. Requiere que Modificar Oro esté establecido en un valor distinto de cero." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Aplicar También a Soldados Regulares" />
