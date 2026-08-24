@@ -298,6 +298,7 @@ namespace BannerWand.Core
         /// 15. <see cref="CustomSettlementSecurityModel"/> - Controls security growth bonus
         /// 16. <see cref="CustomPartyWageModel"/> - Controls garrison wages multiplier
         /// 17. <see cref="CustomClanTierModel"/> - Controls clan companion limit bonus
+        /// 18. <see cref="CustomPartyHealingModel"/> - Controls survival chance for simulated battle casualties
         /// </para>
         /// </remarks>
         private void RegisterCustomModels(CampaignGameStarter campaignStarter)
@@ -375,7 +376,13 @@ namespace BannerWand.Core
 
             // Combat simulation - replaces DefaultCombatSimulationModel
             campaignStarter.AddModel(new CustomCombatSimulationModel());
-            ModLogger.LogModelRegistration(nameof(CustomCombatSimulationModel), "Controls whether auto-resolved field battles can wound instead of kill");
+            ModLogger.LogModelRegistration(nameof(CustomCombatSimulationModel), "Controls whether auto-resolved battles can wound instead of kill");
+
+            // Party healing - replaces DefaultPartyHealingModel
+            // Works together with CustomCombatSimulationModel: forcing Cut damage alone still lets
+            // struck troops roll a normal survival chance, so this model forces that roll to fail too.
+            campaignStarter.AddModel(new CustomPartyHealingModel());
+            ModLogger.LogModelRegistration(nameof(CustomPartyHealingModel), "Controls whether simulated battle casualties can survive as wounded/captured instead of dying");
 
             // Prisoner recruitment - DISABLED due to API changes in Bannerlord 1.2.12+
             // GetDailyRecruitedPrisoners method no longer exists in DefaultPrisonerRecruitmentCalculationModel

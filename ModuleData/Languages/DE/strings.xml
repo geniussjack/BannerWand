@@ -216,8 +216,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} erfolgreich initialisiert" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Alle Schlachten ohne Verwundung" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="In Arbeit, funktioniert noch nicht vollständig. Soll bewirken, dass Truppen sterben statt verwundet oder gefangen genommen zu werden, in jeder automatisch abgewickelten Feldschlacht auf der Karte, einschließlich Schlachten, an denen Sie nicht persönlich teilnehmen. Ergänzt Ein-Treffer-Tötungen, das nur Schlachten betrifft, die Sie selbst bestreiten. Betrifft keine Belagerungen oder gefangene Helden." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Alle Schlachten ohne Verwundung" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Truppen sterben statt verwundet oder gefangen genommen zu werden, in jeder automatisch abgewickelten Schlacht auf der Karte - Feldschlachten, Belagerungen und Überfällen gleichermaßen -, einschließlich Schlachten, an denen Sie nicht persönlich teilnehmen. Ergänzt Ein-Schlag-Tötungen, das nur Schlachten betrifft, die Sie selbst bestreiten." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Hotkey zum Hinzufügen von Gold aktivieren" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Fügt den oben unter Gold bearbeiten festgelegten Betrag jedes Mal hinzu, wenn der Hotkey gedrückt wird. Standard ist Strg+X, neu belegbar unter Optionen &gt; Tastenbelegung. Funktioniert nur auf der Kampagnenkarte, nicht im Kampf. Erfordert, dass Gold bearbeiten auf einen Wert ungleich null gesetzt ist." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Auch auf einfache Soldaten anwenden" />

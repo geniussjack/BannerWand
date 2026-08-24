@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 成功初始化" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] 所有战斗不再受伤" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="开发中，尚未完全生效。旨在让部队在地图上每一场自动结算的野战中战死，而不是受伤或被俘，包括你没有亲自参与的战斗。与「一击必杀」互补，后者只影响你亲自参与的战斗。不影响围城战或被俘的英雄。" />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="所有战斗不再受伤" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="在地图上每一场自动结算的战斗中——野战、围城战和突袭皆然——部队将直接战死，而不是受伤或被俘，包括你没有亲自参与的战斗。与「一击必杀」互补，后者只影响你亲自参与的战斗。" />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="启用添加金币快捷键" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="每次按下快捷键时，增加上方「编辑金币」设置的数额。默认按键为 Ctrl+X，可在 选项 &gt; 按键绑定 中重新绑定。仅在战役地图上生效，战斗中无效。需要将「编辑金币」设置为非零值。" />
 		<string id="BW_NPC_ApplyToRegularTroops" text="同时应用于普通士兵" />
