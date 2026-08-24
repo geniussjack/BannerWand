@@ -6,6 +6,9 @@
 # dotenv files
 .env
 
+# Nexus Mods page draft notes (working material, not part of the repo)
+NEXUS.md
+
 # User-specific files
 *.rsuser
 *.suo
