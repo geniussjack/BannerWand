@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} paśpiachova ini cyjalizavany" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Usie bitvy biez paraniennaŭ" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="U raspracoŭcy, pakul nie pracuje całkam. Maje na mecie rabić tak, kab vojski hinuli, a nie atrymlivali raniennia ci trapliali ŭ palon u kožnaj aŭtamatyčna različanaj bitvie na karcie, uklučajučy bitvy, u jakich vy asabista nie ŭdzielničajecie. Dapaŭniaje čyt Zabojstva z adnaho ŭdaru, jaki dziejničaje tolki ŭ bitvach, dzie vy ŭdzielničajecie sami. Nie ŭplyvaje na abłohi ci zachoplenych herojaŭ." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Usie bitvy biez paraniennaŭ" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Vojski hinuć zamiest taho, kab atrymlivać raniennia ci trapliać u palon u kožnaj aŭtamatyčna raźličanaj bitvie na karcie — palavych bitvach, abłohach i nabiehach, — uklučajučy bitvy, u jakich vy asabista nie ŭdzielničajecie. Dapaŭniaje čyt Zabojstva z adnaho ŭdaru, jaki dziejničaje tolki ŭ bitvach, dzie vy ŭdzielničajecie sami." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Uklučyć chutkuju klavišu dadannia złota" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Dadaje kolkaść, ustaliavanuju ŭ Zmianić złota vyšej, pry kožnym naciśnie klavišy. Pa zmaŭčanni Ctrl+X, možna pieranaznačyć u Opcyi &gt; Pryviazki klavišaŭ. Pracuje tolki na karcie kampanii, nie ŭ boi. Patrabuje, kab Zmianić złota było ŭstaliavana ŭ nienulavoje značennie." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Taksama prymianiać da zvyčajnych sałdat" />
@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Nie dazvaliaje NPC starać paslia dasiahnennia 21 hoda. Dzieci da 21 hoda praciahvajuć rost zvyčajna." />
 		<string id="BW_Player_AllowBothPerks" text="Dazvolić abodva perki" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Aŭtamatyčna daje alternatyŭny perk kožny raz, kali vy vybirajecie adzin z pary, kab u vyniku atrymać abodva - dziejničaje adrazu, biez neabchodnaści pierazahruzki zachavannia." />
+
+		<string id="BW_Player_PartyRegeneration" text="Rehieneracyja partyi" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Paranienyja vojski i herojі ŭ metavych partyjach poŭnasciu adnaŭlajucca ad raniennjaŭ u toj ža dzień zamiest niekalkich dzion. Uplyvaje tolki na adnaŭlenne ad raniennjaŭ pamiž bitvami, a nie na zdaroŭje ŭ chodzie boju." />
 		<string id="BW_Player_InfiniteShipHealth" text="Biaskoncaje ChP karablia" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Karabli partyi hulca nikoli nie atrymlivajuć paškodžannaŭ. Patrabuje War Sails DLC." />
 		<string id="BW_Player_StopPlayerAging" text="Spynić stareńnie hulca" />

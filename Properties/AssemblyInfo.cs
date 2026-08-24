@@ -17,5 +17,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("4aa06df7-57fa-46aa-b6e2-980d6cdfe41b")]
 
 // Matches the four-part version shown by the Bannerlord launcher (SubModule.xml Version value).
-[assembly: AssemblyVersion("1.1.1.1")]
-[assembly: AssemblyFileVersion("1.1.1.1")]
+[assembly: AssemblyVersion("1.1.1.2")]
+[assembly: AssemblyFileVersion("1.1.1.2")]

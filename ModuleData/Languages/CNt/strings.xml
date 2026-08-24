@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} 成功初始化" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] 所有戰鬥不再受傷" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="開發中，尚未完全生效。旨在讓部隊在地圖上每一場自動結算的野戰中戰死，而不是受傷或被俘，包括你沒有親自參與的戰鬥。與「一擊必殺」互補，後者只影響你親自參與的戰鬥。不影響圍城戰或被俘的英雄。" />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="所有戰鬥不再受傷" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="在地圖上每一場自動結算的戰鬥中——野戰、圍城戰和突襲皆然——部隊將直接戰死，而不是受傷或被俘，包括你沒有親自參與的戰鬥。與「一擊必殺」互補，後者只影響你親自參與的戰鬥。" />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="啟用新增金幣快捷鍵" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="每次按下快捷鍵時，增加上方「編輯金幣」設定的數額。預設按鍵為 Ctrl+X，可在 選項 &gt; 按鍵綁定 中重新綁定。僅在戰役地圖上生效，戰鬥中無效。需要將「編輯金幣」設定為非零值。" />
 		<string id="BW_NPC_ApplyToRegularTroops" text="同時套用於普通士兵" />
@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="NPC 達到 21 歲後不再衰老。21 歲以下的兒童將繼續正常成長。" />
 		<string id="BW_Player_AllowBothPerks" text="允許同時獲得兩個天賦" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="每當你從一對天賦中選擇一個時，自動授予其對應的另一個天賦，讓你兩者兼得——立即生效，無需重新載入存檔。" />
+
+		<string id="BW_Player_PartyRegeneration" text="隊伍再生" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="目標隊伍中受傷的部隊和英雄將在當天完全康復，而不是需要數天時間。僅影響戰鬥之間的傷勢恢復，不影響戰鬥中的生命值。" />
 		<string id="BW_Player_InfiniteShipHealth" text="無限船隻生命值" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="玩家隊伍擁有的船隻永不受損。需要 War Sails DLC。" />
 		<string id="BW_Player_StopPlayerAging" text="停止玩家角色衰老" />

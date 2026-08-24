@@ -171,6 +171,18 @@ namespace BannerWand.Constants
         public const float InfiniteHealthBonus = 9999f;
 
         /// <summary>
+        /// Daily wound-recovery bonus for the Party Regeneration cheat.
+        /// </summary>
+        /// <remarks>
+        /// Added on top of a party's normal daily healing rate for both wounded regular troops
+        /// (<see cref="Models.CustomPartyHealingModel.GetDailyHealingForRegulars"/>) and wounded
+        /// heroes' HP (<see cref="Models.CustomPartyHealingModel.GetDailyHealingHpForHeroes"/>).
+        /// Large enough to guarantee every wounded troop/hero in the party recovers fully the
+        /// same day regardless of roster size or HP deficit.
+        /// </remarks>
+        public const float InstantRegenerationAmount = 999999f;
+
+        /// <summary>
         /// Minimum health threshold for one-hit kill enemies.
         /// </summary>
         public const float OneHitKillHealthThreshold = 1f;

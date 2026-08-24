@@ -100,6 +100,9 @@
 		<string id="BW_Player_AllowBothPerks" text="Allow Both Perks" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Grants the alternative perk automatically whenever you pick one from a pair, so you end up with both - takes effect immediately, no save reload needed." />
 
+		<string id="BW_Player_PartyRegeneration" text="Party Regeneration" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Wounded troops and heroes in targeted parties fully recover from wounds the same day instead of over several days. Only affects wound recovery between battles, not in-combat health." />
+
 		<string id="BW_Player_StopPlayerAging" text="Stop Player Aging" />
 		<string id="BW_Player_StopPlayerAging_Hint" text="Prevents player character from aging." />
 
@@ -157,8 +160,8 @@
 		<string id="BW_Enemies_OneHitKills" text="One-Hit Kills" />
 		<string id="BW_Enemies_OneHitKills_Hint" text="All enemy units die in one hit." />
 
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] All Battles No Wounding" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Work in progress, does not fully work yet. Intended to make troops die instead of being wounded or captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges or captured heroes." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="All Battles No Wounding" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Troops die instead of being wounded or captured in every auto-resolved battle on the map - field battles, sieges, and raids alike - including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself." />
 
 		<!-- Game Category -->
 		<string id="BW_Game_PersuasionAlwaysSucceed" text="Persuasion/Conversation Always Succeed" />

@@ -216,8 +216,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} initialisé avec succès" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Toutes les Batailles Sans Blessure" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="En cours de développement, ne fonctionne pas encore complètement. Vise à faire mourir les troupes au lieu d'être blessées ou capturées dans chaque bataille de campagne résolue automatiquement sur la carte, y compris les batailles auxquelles vous ne participez pas personnellement. Complète Morts en Un Coup, qui n'affecte que les batailles que vous menez vous-même. N'affecte pas les sièges ni les héros capturés." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Toutes les Batailles Sans Blessure" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Les troupes meurent au lieu d'être blessées ou capturées dans chaque bataille résolue automatiquement sur la carte - batailles rangées, sièges et raids compris -, y compris les batailles auxquelles vous ne participez pas personnellement. Complète Morts en Un Coup, qui n'affecte que les batailles que vous menez vous-même." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Activer le Raccourci d'Ajout d'Or" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Ajoute le montant défini dans Modifier l'Or ci-dessus à chaque pression du raccourci. Par défaut Ctrl+X, réassignable dans Options &gt; Raccourcis Clavier. Fonctionne uniquement sur la carte de campagne, pas en bataille. Nécessite que Modifier l'Or soit réglé sur une valeur non nulle." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Appliquer Aussi aux Soldats Réguliers" />
@@ -226,6 +226,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Empêche les PNJ de vieillir une fois qu'ils atteignent 21 ans. Les enfants de moins de 21 ans continuent de grandir normalement." />
 		<string id="BW_Player_AllowBothPerks" text="Autoriser les Deux Talents" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Accorde automatiquement le talent alternatif chaque fois que vous en choisissez un dans une paire, afin d'obtenir les deux - effet immédiat, aucun rechargement de sauvegarde nécessaire." />
+
+		<string id="BW_Player_PartyRegeneration" text="Régénération du Groupe" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Les troupes et héros blessés des groupes ciblés se rétablissent complètement de leurs blessures le jour même au lieu de plusieurs jours. N'affecte que la récupération des blessures entre les batailles, pas la santé en combat." />
 		<string id="BW_Player_InfiniteShipHealth" text="PV de Navire Infinis" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Les navires appartenant au groupe du joueur ne subissent jamais de dégâts. Nécessite le DLC War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Arrêter le Vieillissement du Joueur" />

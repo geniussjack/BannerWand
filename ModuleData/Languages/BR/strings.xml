@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} inicializado com sucesso" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Todas as Batalhas Sem Ferimentos" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Em desenvolvimento, ainda não funciona completamente. Destinado a fazer com que as tropas morram em vez de ficarem feridas ou serem capturadas em toda batalha de campo resolvida automaticamente no mapa, incluindo batalhas das quais você não participa pessoalmente. Complementa Mortes em Um Golpe, que afeta apenas as batalhas que você mesmo luta. Não afeta cercos nem heróis capturados." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Todas as Batalhas Sem Ferimentos" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="As tropas morrem em vez de ficarem feridas ou serem capturadas em toda batalha resolvida automaticamente no mapa — batalhas de campo, cercos e ataques igualmente —, incluindo batalhas das quais você não participa pessoalmente. Complementa Mortes em Um Golpe, que afeta apenas as batalhas que você mesmo luta." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Ativar Atalho de Adicionar Ouro" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Adiciona a quantidade definida em Editar Ouro acima toda vez que o atalho é pressionado. O padrão é Ctrl+X, pode ser reatribuído em Opções &gt; Atalhos de Teclado. Funciona apenas no mapa da campanha, não em batalha. Requer que Editar Ouro esteja definido com um valor diferente de zero." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Também Aplicar a Soldados Regulares" />
@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="Impede que os NPCs envelheçam ao atingirem 21 anos. Crianças com menos de 21 anos continuarão a crescer normalmente." />
 		<string id="BW_Player_AllowBothPerks" text="Permitir Ambas as Perícias" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Concede automaticamente a perícia alternativa sempre que você escolhe uma de um par, para que você fique com as duas - o efeito é imediato, sem necessidade de recarregar o save." />
+
+		<string id="BW_Player_PartyRegeneration" text="Regeneração do Grupo" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Tropas e heróis feridos nos grupos-alvo se recuperam totalmente dos ferimentos no mesmo dia, em vez de vários dias. Afeta apenas a recuperação de ferimentos entre batalhas, não a saúde em combate." />
 		<string id="BW_Player_InfiniteShipHealth" text="HP de Navio Infinito" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Os navios do grupo do jogador nunca sofrem dano. Requer a DLC War Sails." />
 		<string id="BW_Player_StopPlayerAging" text="Parar Envelhecimento do Jogador" />

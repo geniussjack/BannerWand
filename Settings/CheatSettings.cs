@@ -178,6 +178,16 @@ namespace BannerWand.Settings
         [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
         public bool AllowBothPerks { get; set; } = false;
 
+        /// <summary>
+        /// Wounded party members - the player and regular troops alike - fully recover the same
+        /// campaign day instead of over several days. Only affects wound recovery between battles,
+        /// not in-combat health (see Unlimited/Infinite HP above for that).
+        /// Implemented in <see cref="Models.CustomPartyHealingModel"/>.
+        /// </summary>
+        [SettingPropertyBool("{=BW_Player_PartyRegeneration}Party Regeneration", Order = 12, RequireRestart = false, HintText = "{=BW_Player_PartyRegeneration_Hint}Wounded troops and heroes in targeted parties fully recover from wounds the same day instead of over several days. Only affects wound recovery between battles, not in-combat health.")]
+        [SettingPropertyGroup("{=BW_Category_Player}Player", GroupOrder = 0)]
+        public bool PartyRegeneration { get; set; } = false;
+
         #endregion
 
         #region NPC Category
@@ -500,11 +510,11 @@ namespace BannerWand.Settings
         public bool OneHitKills { get; set; } = false;
 
         /// <summary>
-        /// Troops die instead of being wounded/captured in every auto-resolved field battle on
-        /// the map, not just battles the player personally fights.
-        /// Implemented in <see cref="Models.CustomCombatSimulationModel"/>.
+        /// Troops die instead of being wounded/captured in every auto-resolved battle on the map -
+        /// field battles, sieges, and raids alike - not just battles the player personally fights.
+        /// Implemented in <see cref="Models.CustomCombatSimulationModel"/> and <see cref="Models.CustomPartyHealingModel"/>.
         /// </summary>
-        [SettingPropertyBool("{=BW_Enemies_AllBattlesNoWounding}[WIP] All Battles No Wounding", Order = 1, RequireRestart = false, HintText = "{=BW_Enemies_AllBattlesNoWounding_Hint}Work in progress, does not fully work yet. Intended to make troops die instead of being wounded or captured in every auto-resolved field battle on the map, including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself. Does not affect sieges or captured heroes.")]
+        [SettingPropertyBool("{=BW_Enemies_AllBattlesNoWounding}All Battles No Wounding", Order = 1, RequireRestart = false, HintText = "{=BW_Enemies_AllBattlesNoWounding_Hint}Troops die instead of being wounded or captured in every auto-resolved battle on the map - field battles, sieges, and raids alike - including battles you don't personally fight. Complements One-Hit Kills, which only affects battles you fight yourself.")]
         [SettingPropertyGroup("{=BW_Category_Enemies}Enemies", GroupOrder = 6)]
         public bool AllBattlesNoWounding { get; set; } = false;
 

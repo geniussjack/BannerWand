@@ -220,8 +220,8 @@
 		<string id="BW_Message_ModInitialized" text="BannerWand {VERSION} başarıyla başlatıldı" />
 
 		<!-- New cheats (added after 1.1.1.0) -->
-		<string id="BW_Enemies_AllBattlesNoWounding" text="[WIP] Tüm Savaşlarda Yaralanma Yok" />
-		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Geliştirme aşamasında, henüz tam olarak çalışmıyor. Haritadaki otomatik çözülen her tarla savaşında -kişisel olarak katılmadığınız savaşlar dahil- birliklerin yaralanmak veya esir alınmak yerine ölmesini sağlamayı amaçlar. Yalnızca kendi savaştığınız çarpışmaları etkileyen Tek Vuruşta Öldürme özelliğini tamamlar. Kuşatmaları veya esir alınan kahramanları etkilemez." />
+		<string id="BW_Enemies_AllBattlesNoWounding" text="Tüm Savaşlarda Yaralanma Yok" />
+		<string id="BW_Enemies_AllBattlesNoWounding_Hint" text="Haritadaki otomatik çözülen her savaşta -tarla savaşları, kuşatmalar ve akınlar dahil- birlikler yaralanmak veya esir alınmak yerine ölür, buna kişisel olarak katılmadığınız savaşlar da dahildir. Yalnızca kendi savaştığınız çarpışmaları etkileyen Tek Vuruşta Öldürme özelliğini tamamlar." />
 		<string id="BW_Inventory_EnableAddGoldHotkey" text="Altın Ekleme Kısayolunu Etkinleştir" />
 		<string id="BW_Inventory_EnableAddGoldHotkey_Hint" text="Kısayola her basıldığında yukarıdaki Altını Düzenle ayarında belirlenen miktarı ekler. Varsayılan olarak Ctrl+X'tir, Seçenekler &gt; Tuş Atamaları bölümünden yeniden atanabilir. Sadece kampanya haritasında çalışır, savaşta çalışmaz. Altını Düzenle değerinin sıfırdan farklı olmasını gerektirir." />
 		<string id="BW_NPC_ApplyToRegularTroops" text="Sıradan Askerlere de Uygula" />
@@ -230,6 +230,9 @@
 		<string id="BW_NPC_StopNPCAging_Hint" text="NPC'lerin 21 yaşına ulaştıktan sonra yaşlanmasını engeller. 21 yaşın altındaki çocuklar normal şekilde büyümeye devam eder." />
 		<string id="BW_Player_AllowBothPerks" text="Her İki Yeteneği de Ver" />
 		<string id="BW_Player_AllowBothPerks_Hint" text="Bir çiftten birini her seçtiğinizde alternatif yeteneği otomatik olarak verir, böylece ikisine de sahip olursunuz - anında etkilidir, kayıt yeniden yüklemeye gerek yoktur." />
+
+		<string id="BW_Player_PartyRegeneration" text="Birlik Yenilenmesi" />
+		<string id="BW_Player_PartyRegeneration_Hint" text="Hedeflenen birliklerdeki yaralı askerler ve kahramanlar, birkaç gün yerine aynı gün içinde yaralarından tamamen iyileşir. Yalnızca savaşlar arasındaki yara iyileşmesini etkiler, savaş sırasındaki canı etkilemez." />
 		<string id="BW_Player_InfiniteShipHealth" text="Sonsuz Gemi Canı" />
 		<string id="BW_Player_InfiniteShipHealth_Hint" text="Oyuncu grubuna ait gemiler asla hasar almaz. War Sails DLC'sini gerektirir." />
 		<string id="BW_Player_StopPlayerAging" text="Oyuncu Yaşlanmasını Durdur" />
